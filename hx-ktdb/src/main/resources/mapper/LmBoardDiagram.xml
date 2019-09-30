@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.LmBoardDiagramMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.LmBoardDiagram">
+        <id column="id" property="id" />
+        <result column="redline_num" property="redlineNum" />
+        <result column="redline_id" property="redlineId" />
+        <result column="code" property="code" />
+        <result column="content" property="content" />
+        <result column="number" property="number" />
+        <result column="proof_lon" property="proofLon" />
+        <result column="proof_lat" property="proofLat" />
+        <result column="longitude" property="longitude" />
+        <result column="file_url" property="fileUrl" />
+        <result column="type" property="type" />
+        <result column="latitude" property="latitude" />
+        <result column="create_date" property="createDate" />
+        <result column="create_by" property="createBy" />
+        <result column="verify_by" property="verifyBy" />
+        <result column="save_date" property="saveDate" />
+        <result column="verify_date" property="verifyDate" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_date" property="updateDate" />
+        <result column="del_flag" property="delFlag" />
+        <result column="remarks" property="remarks" />
+    </resultMap>
+
+    <!--导出分布图-->
+
+    <select id="selectBoardDiagramListForAll" resultType="com.gistone.entity.EXCEL.LmBoardDiagramVO">
+        SELECT
+        a.id,
+        redline_num,
+        redline_id,
+        content,
+        a.code,
+        number,
+        proof_lon,
+        proof_lat,
+        longitude,
+        latitude,
+        type,
+        verify_person as verifyPerson,
+        create_date,
+        create_by,
+        save_date,
+        update_by,
+        update_date,
+        del_flag,
+        remarks,
+        verify_by,
+        verify_date as verifyDate,
+        b.srld_number AS redlineName,
+        c.COM_NAME AS placeName,
+        d.real_name AS createUser,
+        e.real_name AS verifyUser
+        FROM
+        lm_board_diagram a
+        LEFT JOIN data_redline_register b ON a.redline_id = b.srld_id
+        LEFT JOIN sys_company c ON a.`code` = c.COM_CODE
+        LEFT JOIN sys_mobile_user d ON a.create_by = d.user_id
+        LEFT JOIN sys_mobile_user e ON a.verify_by = e.user_id
+        WHERE
+        a.del_flag = 1	AND a.type = 1
+        <if test="code!=null and code !='' ">
+            and a.code like concat( #{code}, '%')
+        </if>
+        <if test="param!=null and param !='' ">
+            and (b.srld_name=#{param} or a.number = #{param})
+        </if>
+    </select>
+</mapper>

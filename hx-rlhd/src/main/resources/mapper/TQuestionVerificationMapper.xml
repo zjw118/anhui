@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gistone.mapper.TQuestionVerificationMapper" >
+  <resultMap id="BaseResultMap" type="com.gistone.entity.TQuestionVerification" >
+    <id column="tqv_id" property="tqvId" jdbcType="INTEGER" />
+    <result column="tqv_question" property="tqvQuestion" jdbcType="VARCHAR" />
+    <result column="tqv_serival_number" property="tqvSerivalNumber" jdbcType="VARCHAR" />
+    <result column="tqv_facility_name" property="tqvFacilityName" jdbcType="VARCHAR" />
+    <result column="tqv_facility_type" property="tqvFacilityType" jdbcType="VARCHAR" />
+    <result column="tqv_sectorization" property="tqvSectorization" jdbcType="VARCHAR" />
+    <result column="tqv_area" property="tqvArea" jdbcType="VARCHAR" />
+    <result column="tqv_change_type" property="tqvChangeType" jdbcType="VARCHAR" />
+    <result column="tqv_facility_status" property="tqvFacilityStatus" jdbcType="VARCHAR" />
+    <result column="tqv_build_time" property="tqvBuildTime" jdbcType="TIMESTAMP" />
+    <result column="tqv_formalities" property="tqvFormalities" jdbcType="VARCHAR" />
+    <result column="tqv_proof" property="tqvProof" jdbcType="VARCHAR" />
+    <result column="tqv_influence" property="tqvInfluence" jdbcType="VARCHAR" />
+    <result column="tqv_result" property="tqvResult" jdbcType="VARCHAR" />
+    <result column="tqv_bz_id" property="tqvBzId" jdbcType="INTEGER" />
+    <result column="tqv_xh_id" property="tqvXhId" jdbcType="INTEGER" />
+    <result column="tqv_add_time" property="tqvAddTime" jdbcType="TIMESTAMP" />
+    <result column="tqv_check_unit" property="tqvCheckUnit" jdbcType="VARCHAR" />
+    <result column="tqv_check_time" property="tqvCheckTime" jdbcType="TIMESTAMP" />
+    <result column="tqv_check_people" property="tqvCheckPeople" jdbcType="VARCHAR" />
+    <result column="tqv_contact_way" property="tqvContactWay" jdbcType="VARCHAR" />
+    <result column="tqv_preparer" property="tqvPreparer" jdbcType="VARCHAR" />
+    <result column="tqv_verifier" property="tqvVerifier" jdbcType="VARCHAR" />
+    <result column="tqv_lng" property="tqvLng" jdbcType="VARCHAR" />
+    <result column="tqv_lat" property="tqvLat" jdbcType="VARCHAR" />
+    <result column="tqv_image" property="tqvImage" jdbcType="VARCHAR" />
+    <result column="tqv_remote_same" property="tqvRemoteSame" jdbcType="VARCHAR" />
+    <result column="tqv_env_evaluate" property="tqvEnvEvaluate" jdbcType="VARCHAR" />
+    <result column="tqv_point_type" property="tqvPointType" jdbcType="VARCHAR" />
+    <result column="tqv_remark" property="tqvRemark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    tqv_id, tqv_question, tqv_serival_number, tqv_facility_name, tqv_facility_type, tqv_sectorization,
+    tqv_area, tqv_change_type, tqv_facility_status, tqv_build_time, tqv_formalities,
+    tqv_proof, tqv_influence, tqv_result, tqv_bz_id, tqv_xh_id, tqv_add_time, tqv_check_unit,
+    tqv_check_time, tqv_check_people, tqv_contact_way, tqv_preparer, tqv_verifier, tqv_lng,
+    tqv_lat, tqv_image, tqv_remote_same, tqv_env_evaluate, tqv_point_type, tqv_remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from t_question_verification
+    where tqv_id = #{tqvId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_question_verification
+    where tqv_id = #{tqvId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gistone.entity.TQuestionVerification" >
+    insert into t_question_verification (tqv_id, tqv_question, tqv_serival_number,
+      tqv_facility_name, tqv_facility_type, tqv_sectorization,
+      tqv_area, tqv_change_type, tqv_facility_status,
+      tqv_build_time, tqv_formalities, tqv_proof,
+      tqv_influence, tqv_result, tqv_bz_id,
+      tqv_xh_id, tqv_add_time, tqv_check_unit,
+      tqv_check_time, tqv_check_people, tqv_contact_way,
+      tqv_preparer, tqv_verifier, tqv_lng,
+      tqv_lat, tqv_image, tqv_remote_same,
+      tqv_env_evaluate, tqv_point_type, tqv_remark
+      )
+    values (#{tqvId,jdbcType=INTEGER}, #{tqvQuestion,jdbcType=VARCHAR}, #{tqvSerivalNumber,jdbcType=VARCHAR},
+      #{tqvFacilityName,jdbcType=VARCHAR}, #{tqvFacilityType,jdbcType=VARCHAR}, #{tqvSectorization,jdbcType=VARCHAR},
+      #{tqvArea,jdbcType=VARCHAR}, #{tqvChangeType,jdbcType=VARCHAR}, #{tqvFacilityStatus,jdbcType=VARCHAR},
+      #{tqvBuildTime,jdbcType=TIMESTAMP}, #{tqvFormalities,jdbcType=VARCHAR}, #{tqvProof,jdbcType=VARCHAR},
+      #{tqvInfluence,jdbcType=VARCHAR}, #{tqvResult,jdbcType=VARCHAR}, #{tqvBzId,jdbcType=INTEGER},
+      #{tqvXhId,jdbcType=INTEGER}, #{tqvAddTime,jdbcType=TIMESTAMP}, #{tqvCheckUnit,jdbcType=VARCHAR},
+      #{tqvCheckTime,jdbcType=TIMESTAMP}, #{tqvCheckPeople,jdbcType=VARCHAR}, #{tqvContactWay,jdbcType=VARCHAR},
+      #{tqvPreparer,jdbcType=VARCHAR}, #{tqvVerifier,jdbcType=VARCHAR}, #{tqvLng,jdbcType=VARCHAR},
+      #{tqvLat,jdbcType=VARCHAR}, #{tqvImage,jdbcType=VARCHAR}, #{tqvRemoteSame,jdbcType=VARCHAR},
+      #{tqvEnvEvaluate,jdbcType=VARCHAR}, #{tqvPointType,jdbcType=VARCHAR}, #{tqvRemark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gistone.entity.TQuestionVerification" >
+    insert into t_question_verification
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tqvId != null" >
+        tqv_id,
+      </if>
+      <if test="tqvQuestion != null" >
+        tqv_question,
+      </if>
+      <if test="tqvSerivalNumber != null" >
+        tqv_serival_number,
+      </if>
+      <if test="tqvFacilityName != null" >
+        tqv_facility_name,
+      </if>
+      <if test="tqvFacilityType != null" >
+        tqv_facility_type,
+      </if>
+      <if test="tqvSectorization != null" >
+        tqv_sectorization,
+      </if>
+      <if test="tqvArea != null" >
+        tqv_area,
+      </if>
+      <if test="tqvChangeType != null" >
+        tqv_change_type,
+      </if>
+      <if test="tqvFacilityStatus != null" >
+        tqv_facility_status,
+      </if>
+      <if test="tqvBuildTime != null" >
+        tqv_build_time,
+      </if>
+      <if test="tqvFormalities != null" >
+        tqv_formalities,
+      </if>
+      <if test="tqvProof != null" >
+        tqv_proof,
+      </if>
+      <if test="tqvInfluence != null" >
+        tqv_influence,
+      </if>
+      <if test="tqvResult != null" >
+        tqv_result,
+      </if>
+      <if test="tqvBzId != null" >
+        tqv_bz_id,
+      </if>
+      <if test="tqvXhId != null" >
+        tqv_xh_id,
+      </if>
+      <if test="tqvAddTime != null" >
+        tqv_add_time,
+      </if>
+      <if test="tqvCheckUnit != null" >
+        tqv_check_unit,
+      </if>
+      <if test="tqvCheckTime != null" >
+        tqv_check_time,
+      </if>
+      <if test="tqvCheckPeople != null" >
+        tqv_check_people,
+      </if>
+      <if test="tqvContactWay != null" >
+        tqv_contact_way,
+      </if>
+      <if test="tqvPreparer != null" >
+        tqv_preparer,
+      </if>
+      <if test="tqvVerifier != null" >
+        tqv_verifier,
+      </if>
+      <if test="tqvLng != null" >
+        tqv_lng,
+      </if>
+      <if test="tqvLat != null" >
+        tqv_lat,
+      </if>
+      <if test="tqvImage != null" >
+        tqv_image,
+      </if>
+      <if test="tqvRemoteSame != null" >
+        tqv_remote_same,
+      </if>
+      <if test="tqvEnvEvaluate != null" >
+        tqv_env_evaluate,
+      </if>
+      <if test="tqvPointType != null" >
+        tqv_point_type,
+      </if>
+      <if test="tqvRemark != null" >
+        tqv_remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tqvId != null" >
+        #{tqvId,jdbcType=INTEGER},
+      </if>
+      <if test="tqvQuestion != null" >
+        #{tqvQuestion,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvSerivalNumber != null" >
+        #{tqvSerivalNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvFacilityName != null" >
+        #{tqvFacilityName,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvFacilityType != null" >
+        #{tqvFacilityType,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvSectorization != null" >
+        #{tqvSectorization,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvArea != null" >
+        #{tqvArea,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvChangeType != null" >
+        #{tqvChangeType,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvFacilityStatus != null" >
+        #{tqvFacilityStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvBuildTime != null" >
+        #{tqvBuildTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tqvFormalities != null" >
+        #{tqvFormalities,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvProof != null" >
+        #{tqvProof,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvInfluence != null" >
+        #{tqvInfluence,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvResult != null" >
+        #{tqvResult,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvBzId != null" >
+        #{tqvBzId,jdbcType=INTEGER},
+      </if>
+      <if test="tqvXhId != null" >
+        #{tqvXhId,jdbcType=INTEGER},
+      </if>
+      <if test="tqvAddTime != null" >
+        #{tqvAddTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tqvCheckUnit != null" >
+        #{tqvCheckUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvCheckTime != null" >
+        #{tqvCheckTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tqvCheckPeople != null" >
+        #{tqvCheckPeople,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvContactWay != null" >
+        #{tqvContactWay,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvPreparer != null" >
+        #{tqvPreparer,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvVerifier != null" >
+        #{tqvVerifier,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvLng != null" >
+        #{tqvLng,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvLat != null" >
+        #{tqvLat,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvImage != null" >
+        #{tqvImage,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvRemoteSame != null" >
+        #{tqvRemoteSame,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvEnvEvaluate != null" >
+        #{tqvEnvEvaluate,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvPointType != null" >
+        #{tqvPointType,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvRemark != null" >
+        #{tqvRemark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gistone.entity.TQuestionVerification" >
+    update t_question_verification
+    <set >
+      <if test="tqvQuestion != null" >
+        tqv_question = #{tqvQuestion,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvSerivalNumber != null" >
+        tqv_serival_number = #{tqvSerivalNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvFacilityName != null" >
+        tqv_facility_name = #{tqvFacilityName,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvFacilityType != null" >
+        tqv_facility_type = #{tqvFacilityType,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvSectorization != null" >
+        tqv_sectorization = #{tqvSectorization,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvArea != null" >
+        tqv_area = #{tqvArea,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvChangeType != null" >
+        tqv_change_type = #{tqvChangeType,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvFacilityStatus != null" >
+        tqv_facility_status = #{tqvFacilityStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvBuildTime != null" >
+        tqv_build_time = #{tqvBuildTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tqvFormalities != null" >
+        tqv_formalities = #{tqvFormalities,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvProof != null" >
+        tqv_proof = #{tqvProof,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvInfluence != null" >
+        tqv_influence = #{tqvInfluence,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvResult != null" >
+        tqv_result = #{tqvResult,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvBzId != null" >
+        tqv_bz_id = #{tqvBzId,jdbcType=INTEGER},
+      </if>
+      <if test="tqvXhId != null" >
+        tqv_xh_id = #{tqvXhId,jdbcType=INTEGER},
+      </if>
+      <if test="tqvAddTime != null" >
+        tqv_add_time = #{tqvAddTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tqvCheckUnit != null" >
+        tqv_check_unit = #{tqvCheckUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvCheckTime != null" >
+        tqv_check_time = #{tqvCheckTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tqvCheckPeople != null" >
+        tqv_check_people = #{tqvCheckPeople,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvContactWay != null" >
+        tqv_contact_way = #{tqvContactWay,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvPreparer != null" >
+        tqv_preparer = #{tqvPreparer,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvVerifier != null" >
+        tqv_verifier = #{tqvVerifier,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvLng != null" >
+        tqv_lng = #{tqvLng,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvLat != null" >
+        tqv_lat = #{tqvLat,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvImage != null" >
+        tqv_image = #{tqvImage,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvRemoteSame != null" >
+        tqv_remote_same = #{tqvRemoteSame,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvEnvEvaluate != null" >
+        tqv_env_evaluate = #{tqvEnvEvaluate,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvPointType != null" >
+        tqv_point_type = #{tqvPointType,jdbcType=VARCHAR},
+      </if>
+      <if test="tqvRemark != null" >
+        tqv_remark = #{tqvRemark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where tqv_id = #{tqvId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gistone.entity.TQuestionVerification" >
+    update t_question_verification
+    set tqv_question = #{tqvQuestion,jdbcType=VARCHAR},
+      tqv_serival_number = #{tqvSerivalNumber,jdbcType=VARCHAR},
+      tqv_facility_name = #{tqvFacilityName,jdbcType=VARCHAR},
+      tqv_facility_type = #{tqvFacilityType,jdbcType=VARCHAR},
+      tqv_sectorization = #{tqvSectorization,jdbcType=VARCHAR},
+      tqv_area = #{tqvArea,jdbcType=VARCHAR},
+      tqv_change_type = #{tqvChangeType,jdbcType=VARCHAR},
+      tqv_facility_status = #{tqvFacilityStatus,jdbcType=VARCHAR},
+      tqv_build_time = #{tqvBuildTime,jdbcType=TIMESTAMP},
+      tqv_formalities = #{tqvFormalities,jdbcType=VARCHAR},
+      tqv_proof = #{tqvProof,jdbcType=VARCHAR},
+      tqv_influence = #{tqvInfluence,jdbcType=VARCHAR},
+      tqv_result = #{tqvResult,jdbcType=VARCHAR},
+      tqv_bz_id = #{tqvBzId,jdbcType=INTEGER},
+      tqv_xh_id = #{tqvXhId,jdbcType=INTEGER},
+      tqv_add_time = #{tqvAddTime,jdbcType=TIMESTAMP},
+      tqv_check_unit = #{tqvCheckUnit,jdbcType=VARCHAR},
+      tqv_check_time = #{tqvCheckTime,jdbcType=TIMESTAMP},
+      tqv_check_people = #{tqvCheckPeople,jdbcType=VARCHAR},
+      tqv_contact_way = #{tqvContactWay,jdbcType=VARCHAR},
+      tqv_preparer = #{tqvPreparer,jdbcType=VARCHAR},
+      tqv_verifier = #{tqvVerifier,jdbcType=VARCHAR},
+      tqv_lng = #{tqvLng,jdbcType=VARCHAR},
+      tqv_lat = #{tqvLat,jdbcType=VARCHAR},
+      tqv_image = #{tqvImage,jdbcType=VARCHAR},
+      tqv_remote_same = #{tqvRemoteSame,jdbcType=VARCHAR},
+      tqv_env_evaluate = #{tqvEnvEvaluate,jdbcType=VARCHAR},
+      tqv_point_type = #{tqvPointType,jdbcType=VARCHAR},
+      tqv_remark = #{tqvRemark,jdbcType=VARCHAR}
+    where tqv_id = #{tqvId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByBzid" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from t_question_verification
+    where tqv_bz_id = #{tqvBzId,jdbcType=INTEGER}
+  </select>
+  <select id="findAll" resultMap="BaseResultMap" parameterType="com.gistone.entity.TQuestionVerification" >
+    select
+    <include refid="Base_Column_List" />
+    from t_question_verification
+    where 1=1
+    <if test="tqvSerivalNumber != null" >
+      and  tqv_serival_number like '%${tqvSerivalNumber}%'
+    </if>
+    order by tqv_id asc
+    <if test="pageNumber != null and pageSize!=null " >
+      limit #{pageNumber},#{pageSize}
+    </if>
+  </select>
+</mapper>

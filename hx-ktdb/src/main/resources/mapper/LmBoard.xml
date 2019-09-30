@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.LmBoardMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.LmBoard">
+        <id column="id" property="id" />
+        <result column="redline_id" property="redlineId" />
+        <result column="name" property="name" />
+        <result column="content" property="content" />
+        <result column="number" property="number" />
+        <result column="proof_lon" property="proofLon" />
+        <result column="proof_lat" property="proofLat" />
+        <result column="longitude" property="longitude" />
+        <result column="latitude" property="latitude" />
+        <result column="create_date" property="createDate" />
+        <result column="create_by" property="createBy" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_date" property="updateDate" />
+        <result column="del_flag" property="delFlag" />
+        <result column="remarks" property="remarks" />
+    </resultMap>
+
+    <!--查询标识牌所在地-->
+    <select id="selectPlaceName" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT
+           IFNULL(COM_NAME,'')
+        FROM
+            `sys_company`
+
+        WHERE
+        COM_CODE = #{code}
+    </select>
+
+    <!--查询用户名-->
+    <select id="selectUserName" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT
+            real_name
+        FROM
+            sys_mobile_user
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <!--导出预设-->
+    <select id="selectPreBoardListForAll" resultType="com.gistone.entity.EXCEL.LmBoardVO">
+            SELECT
+                a.id,
+                redline_num,
+                c.COM_NAME AS CODE,
+                redline_id,
+                content,
+                number,
+                proof_lon,
+                proof_lat,
+                longitude,
+                latitude,
+                type,
+                create_date,
+                create_by,
+                save_date,
+                update_by,
+                update_date,
+                del_flag,
+                remarks,
+                verify_by,
+                verify_date,
+                b.srld_number AS redlineName,
+                c.COM_NAME AS placeName,
+                d.real_name AS createUser,
+                e.real_name AS verifyUser
+            FROM
+                lm_board a
+            LEFT JOIN data_redline_register b ON a.redline_id = b.srld_id
+            LEFT JOIN sys_company c ON a.`code` = c.COM_CODE
+            LEFT JOIN sys_mobile_user d ON a.create_by = d.user_id
+            LEFT JOIN sys_mobile_user e ON a.verify_by = e.user_id
+            WHERE
+            a.del_flag = 1	AND a.type = 0
+        <if test="code!=null and code !='' ">
+            and a.code like concat( #{code}, '%')
+        </if>
+        <if test="param!=null and param !='' ">
+            and (b.srld_name=#{param} or a.number = #{param})
+        </if>
+    </select>
+
+    <!--导出实际-->
+    <select id="selectBoardListForAll" resultType="com.gistone.entity.EXCEL.LmBoardVO">
+        SELECT
+        a.id,
+        redline_num,
+        redline_id,
+        content,
+        a.code,
+        number,
+        proof_lon,
+        proof_lat,
+        longitude,
+        latitude,
+        type,
+        verify_person as verifyPerson,
+        create_date,
+        create_by,
+        save_date,
+        update_by,
+        update_date,
+        del_flag,
+        remarks,
+        verify_by,
+        verify_date as verifyDate,
+        b.srld_number AS redlineName,
+        c.COM_NAME AS placeName,
+        d.real_name AS createUser,
+        e.real_name AS verifyUser
+        FROM
+        lm_board a
+        LEFT JOIN data_redline_register b ON a.redline_id = b.srld_id
+        LEFT JOIN sys_company c ON a.`code` = c.COM_CODE
+        LEFT JOIN sys_mobile_user d ON a.create_by = d.user_id
+        LEFT JOIN sys_mobile_user e ON a.verify_by = e.user_id
+        WHERE
+        a.del_flag = 1	AND a.type = 1
+        <if test="code!=null and code !='' ">
+            and a.code like concat( #{code}, '%')
+        </if>
+        <if test="param!=null and param !='' ">
+            and (b.srld_name=#{param} or a.number = #{param})
+        </if>
+    </select>
+
+    <!--删除所有预置标识牌-->
+    <update id="deleteAll">
+        update lm_board
+        set del_flag = 0
+        where type = 0
+    </update>
+
+</mapper>

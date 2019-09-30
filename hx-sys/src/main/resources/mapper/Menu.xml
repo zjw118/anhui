@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.MenuMapper">
+
+
+
+    <select id="getMenuList" resultType="com.gistone.entity.Menu">
+        SELECT
+            PK_ID as value,
+            COM_NAME as label,
+            COM_CODE as comCode,
+            COM_F_PKID as comFpkid
+        FROM
+            sys_company
+    </select>
+
+    <select id="getCodeMenuList" resultType="com.gistone.entity.CodeMenu">
+         SELECT
+            PK_ID as id,
+            COM_NAME as label,
+            COM_CODE as value,
+            COM_F_PKID as comFpkid
+        FROM
+            sys_company
+    </select>
+
+</mapper>

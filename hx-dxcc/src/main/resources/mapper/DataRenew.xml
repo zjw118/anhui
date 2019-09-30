@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.DataRenewMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.DataRenew">
+        <id column="pk_id" property="pkId" />
+        <result column="sft_path" property="sftPath" />
+        <result column="db_path" property="dbPath" />
+        <result column="type" property="type" />
+        <result column="version" property="version" />
+        <result column="renew_remark" property="renewRemark" />
+        <result column="add_time" property="addTime" />
+        <result column="add_uid" property="addUid" />
+        <result column="ps01" property="ps01" />
+        <result column="ps02" property="ps02" />
+    </resultMap>
+	
+	<!-- 根据移动端传的版本查询数据 -->
+	<select id="selectRenewVer" resultType="hashMap" parameterType="java.lang.String">
+		SELECT * FROM data_renew WHERE version = #{version} ORDER BY pk_id DESC
+	</select>
+	
+	<!-- 得到最大pkId -->
+	<select id="selectMaxId" resultType="java.lang.String">
+		select max(pk_id) from data_renew
+	</select>
+	
+</mapper>

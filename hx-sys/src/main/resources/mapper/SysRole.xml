@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.SysRoleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.SysRole">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+
+    </resultMap>
+
+    <select id="getRoleListByUserId" parameterType="java.lang.Integer" resultType="com.gistone.entity.SysRole">
+      SELECT
+            b.*
+      FROM
+            sys_user_role a
+      LEFT JOIN sys_role b ON a.role_id = b.id
+      WHERE  a.user_id = #{userId}
+    </select>
+
+    <!--获取角色列表-->
+    <select id="selectRoleList" resultType="com.gistone.entity.SysRole" >
+        select
+          a.*,
+          b.username as createUser,
+          c.username as updateUser
+         from
+            sys_role a
+         left join sys_user b on a.create_by = b.id
+         left join sys_user c on a.update_by = b.id
+
+         where
+          1= 1
+        <if test="name!=null and name !='' ">
+            and a.name like concat( #{name}, '%')
+        </if>
+        limit #{startNum},#{pageSize}
+
+    </select>
+
+    <select id="selectRoleListCount" resultType="java.lang.Integer">
+        select
+        count(*)
+        from
+        sys_role a
+        left join sys_user b on a.create_by = b.id
+        left join sys_user c on a.update_by = b.id
+
+        where
+        1= 1
+        <if test="name!=null and name !='' ">
+            and a.name like concat( #{name}, '%')
+        </if>
+
+    </select>
+
+    <!--通过roleId获取资源-->
+    <select id="getResourceByRoleId" resultType="com.gistone.entity.SysResources">
+        SELECT
+            b.*
+        FROM
+            sys_role_resources a
+        LEFT JOIN sys_resources b ON a.resources_id = b.id
+        WHERE
+            b.del_flag = 1 and a.role_id = #{roleId}
+    </select>
+
+</mapper>

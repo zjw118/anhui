@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gistone.mapper.TXunhuBiaozhuPhoMapper" >
+  <resultMap id="BaseResultMap" type="com.gistone.entity.TXunhuBiaozhuPho" >
+    <id column="pho_id" property="phoId" jdbcType="DECIMAL" />
+    <result column="pho_url" property="phoUrl" jdbcType="VARCHAR" />
+    <result column="pho_bz_id" property="phoBzId" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    pho_id, pho_url, pho_bz_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_xunhu_biaozhu_pho
+    where pho_id = #{phoId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_xunhu_biaozhu_pho
+    where pho_id = #{phoId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.gistone.entity.TXunhuBiaozhuPho" >
+    insert into t_xunhu_biaozhu_pho (pho_id, pho_url, pho_bz_id
+      )
+    values (#{phoId,jdbcType=DECIMAL}, #{phoUrl,jdbcType=VARCHAR}, #{phoBzId,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gistone.entity.TXunhuBiaozhuPho" >
+    insert into t_xunhu_biaozhu_pho
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="phoId != null" >
+        pho_id,
+      </if>
+      <if test="phoUrl != null" >
+        pho_url,
+      </if>
+      <if test="phoBzId != null" >
+        pho_bz_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="phoId != null" >
+        #{phoId,jdbcType=DECIMAL},
+      </if>
+      <if test="phoUrl != null" >
+        #{phoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="phoBzId != null" >
+        #{phoBzId,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gistone.entity.TXunhuBiaozhuPho" >
+    update t_xunhu_biaozhu_pho
+    <set >
+      <if test="phoUrl != null" >
+        pho_url = #{phoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="phoBzId != null" >
+        pho_bz_id = #{phoBzId,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where pho_id = #{phoId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gistone.entity.TXunhuBiaozhuPho" >
+    update t_xunhu_biaozhu_pho
+    set pho_url = #{phoUrl,jdbcType=VARCHAR},
+      pho_bz_id = #{phoBzId,jdbcType=DECIMAL}
+    where pho_id = #{phoId,jdbcType=DECIMAL}
+  </update>
+</mapper>

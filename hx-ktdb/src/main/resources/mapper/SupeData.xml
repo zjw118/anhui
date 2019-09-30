@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.SupeDataMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.SupeData">
+        <id column="sd_id" property="sdId" />
+        <result column="sd_redline_id" property="sdRedlineId" />
+        <result column="sd_name" property="sdName" />
+        <result column="sd_x" property="sdX" />
+        <result column="sd_y" property="sdY" />
+        <result column="sd_type" property="sdType" />
+        <result column="sd_population" property="sdPopulation" />
+        <result column="sd_area" property="sdArea" />
+        <result column="sd_jjnum" property="sdJjnum" />
+        <result column="sd_c_user" property="sdCUser" />
+        <result column="sd_c_time" property="sdCTime" />
+        <result column="sd_address" property="sdAddress" />
+        <result column="sd_add_uid" property="sdAddUid" />
+        <result column="sd_add_time" property="sdAddTime" />
+        <result column="sd_upd_uid" property="sdUpdUid" />
+        <result column="sd_upd_time" property="sdUpdTime" />
+        <result column="sd_is_del" property="sdIsDel" />
+        <result column="sd_remark" property="sdRemark" />
+    </resultMap>
+
+</mapper>

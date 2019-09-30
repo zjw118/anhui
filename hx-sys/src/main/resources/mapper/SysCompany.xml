@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.SysCompanyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.SysCompany">
+        <id column="PK_ID" property="pkId" />
+        <result column="COM_NAME" property="comName" />
+        <result column="COM_CODE" property="comCode" />
+        <result column="COM_LEVEL" property="comLevel" />
+        <result column="COM_F_CODE" property="comFCode" />
+        <result column="COM_F_PKID" property="comFPkid" />
+        <result column="LAT" property="lat" />
+        <result column="LON" property="lon" />
+    </resultMap>
+
+    <select id="getCodeMsg" parameterType="java.lang.Integer" resultType="com.gistone.entity.SysCompany">
+        SELECT
+            b.COM_CODE as comCode,
+            b.COM_NAME as comName,
+            b.COM_LEVEL as comLevel
+        FROM
+            sys_user a
+            LEFT JOIN sys_company b ON a.username = b.COM_CODE
+        WHERE
+            a.id = #{userId}
+    </select>
+
+</mapper>

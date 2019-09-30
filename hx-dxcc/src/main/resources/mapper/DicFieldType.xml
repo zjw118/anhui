@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.DicFieldTypeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.DicFieldType">
+        <id column="pk_id" property="pkId" />
+        <result column="fk_index_item_id" property="fkIndexItemId" />
+        <result column="max" property="max" />
+        <result column="min" property="min" />
+        <result column="decimal_point" property="decimalPoint" />
+        <result column="string_length" property="stringLength" />
+        <result column="rediao_type" property="rediaoType" />
+        <result column="single_select" property="singleSelect" />
+        <result column="multiple_select" property="multipleSelect" />
+        <result column="time_limit" property="timeLimit" />
+        <result column="data_status" property="dataStatus" />
+    </resultMap>
+
+	<!-- 保存字段值信息 -->
+	<insert id="saveFiledValueBatch" parameterType="java.util.List">
+		INSERT INTO dic_field_type (fk_index_item_id, rediao_type, single_select, multiple_select, data_status) 
+		VALUES 
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.fkIndexItemId,jdbcType=INTEGER},#{item.rediaoType,jdbcType=VARCHAR},#{item.singleSelect,jdbcType=VARCHAR},#{item.multipleSelect,jdbcType=VARCHAR}, 0)
+		</foreach>
+	</insert>
+
+	<!-- 更新字段值表关联字段id -->
+	<update id="updateFiledTypeById" parameterType="hashMap">
+		UPDATE dic_field_type SET data_status = '1' WHERE fk_index_item_id in (${pkId})
+	</update>
+
+    <!--查询某张表所拥有的字段-->
+    <select id="selectFiledMap" resultType="java.util.Map" parameterType="java.lang.Integer">
+
+        SELECT
+            a.pk_id,
+            a.filed_name
+        FROM
+            data_survey_json b
+        INNER JOIN dic_item_table c ON b.index_item_id = c.pk_id
+        INNER JOIN dic_index_item a ON a.index_item_id = c.pk_id
+        WHERE
+            a.data_status = 0
+             and    b.pk_id = #{id}
+    </select>
+
+    <!--查询调查表类型-->
+    <select id="selectFiledTypeById" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT
+            filed_type
+        FROM
+            dic_index_item
+        WHERE
+            pk_id = #{id}
+    </select>
+
+    <!--根据id查单选框表字段的值-->
+    <select id="selectSingleValue" resultType="java.lang.String" parameterType="java.lang.Integer">
+        SELECT
+            single_select
+        FROM
+            dic_field_type
+        WHERE
+            pk_id = #{id}
+    </select>
+
+    <!--根据id查询单选按钮的值-->
+    <select id="selectRadioValue" resultType="java.lang.String" parameterType="java.lang.Integer">
+        SELECT
+            rediao_type
+        FROM
+            dic_field_type
+        WHERE
+            pk_id = #{id}
+    </select>
+
+    <!--根据id查询多选下拉框的值-->
+    <select id="getMutilValue" parameterType="java.util.List" resultType="java.lang.String">
+        SELECT
+            multiple_select
+        FROM
+            dic_field_type
+        WHERE
+            pk_id in
+        <foreach collection="ids" item="id" open="(" close=")"
+                 separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+
+</mapper>

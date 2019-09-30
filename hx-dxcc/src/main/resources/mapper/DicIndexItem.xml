@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.DicIndexItemMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.DicIndexItem">
+        <id column="pk_id" property="pkId"/>
+        <result column="index_item" property="indexItem"/>
+        <result column="filed_name" property="filedName"/>
+        <result column="filed_type" property="filedType"/>
+    </resultMap>
+
+    <!-- 得到字典信息 -->
+    <select id="getAllList" resultType="hashMap" parameterType="com.gistone.entity.DicIndexItem">
+        <!-- SELECT index_item,index_item_id,CONCAT('[',
+              GROUP_CONCAT(CONCAT('{"pkid":"',t.pk_id,'"'),',',CONCAT('"filed_name":"',filed_name,'"'),',',CONCAT('"filed_type":"',filed_type,'"'),
+              ',',CONCAT('"is_must":"',IFNULL(is_must,''),'"'),CONCAT(',"filedValue":',filedValue),'}')
+                ,']') AS field FROM (
+                SELECT t1.pk_id,index_item,index_item_id,filed_name,filed_type,is_must,(CASE filed_type
+                    WHEN '1' THEN CONCAT('[',GROUP_CONCAT(CONCAT('{"length":"',string_length),'"}'),']')
+                    WHEN '2' THEN CONCAT('[',GROUP_CONCAT('{',IF(ISNULL(max) || LENGTH(trim(max))&lt;1,'',CONCAT('"max":"',max,'",')),
+                    IF(ISNULL(min) || LENGTH(trim(min))&lt;1,'',CONCAT('"min":"',min)),'"}'),']')
+                    WHEN '3' THEN CONCAT('[',GROUP_CONCAT('{',IF(ISNULL(max) || LENGTH(trim(max))&lt;1,'',CONCAT('"max":"',max,'",')),
+                    IF(ISNULL(min) || LENGTH(trim(min))&lt;1,'',CONCAT('"min":"',min,'"')),CONCAT(',"decimal_point":"',decimal_point),'"}'),']')
+                    WHEN '4' THEN CONCAT('[',GROUP_CONCAT(CONCAT('{"pk_id":"',t2.pk_id,'"'),CONCAT(',"single_select":"',single_select),'"}'),']')
+                    WHEN '5' THEN CONCAT('[',GROUP_CONCAT(CONCAT('{"pk_id":"',t2.pk_id,'"'),CONCAT(',"multiple_select":"',multiple_select),'"}'),']')
+                    WHEN '6' THEN CONCAT('[',GROUP_CONCAT(CONCAT('{"checked":"',rediao_type,'"'),'"}'),']')
+                    WHEN '7' THEN CONCAT('[',GROUP_CONCAT(CONCAT('{"time":"',time_limit,'"'),'"}'),']')
+                    ELSE ''
+                    END
+                ) AS filedValue FROM (SELECT filed_name,index_item_id,index_item,is_must,filed_type,di.pk_id FROM dic_item_table dit INNER JOIN dic_index_item di ON dit.pk_id = index_item_id WHERE is_del = 0 AND data_status = 0
+            ) t1 LEFT JOIN dic_field_type t2 ON t1.pk_id = fk_index_item_id WHERE data_status = 0 GROUP BY t1.pk_id
+        ) t GROUP BY index_item_id -->
+        SELECT filed_name,index_item_id,index_item,is_must,filed_type,t1.pk_id AS pkId,t2.* FROM (
+        SELECT filed_name,index_item_id,index_item,is_must,filed_type,di.pk_id FROM dic_item_table dit INNER JOIN
+        dic_index_item di ON dit.pk_id = index_item_id WHERE is_del = 0 AND data_status = 0) t1
+        LEFT JOIN dic_field_type t2 ON t1.pk_id = fk_index_item_id WHERE data_status = 0
+    </select>
+
+    <!-- 保存字段信息 -->
+    <insert id="saveFiled" parameterType="hashMap">
+		INSERT INTO dic_index_item (index_item_id, filed_name, filed_type, is_must,sort,data_status )
+		VALUES (#{map.indexItemId}, #{map.filedName}, #{map.filedType}, #{map.isMust},#{map.sort},0)
+	</insert>
+
+    <!-- 得到最新字段主键 -->
+    <select id="getPkId" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT MAX(pk_id) pkid from dic_index_item WHERE data_status = 0
+	</select>
+
+    <!-- 得到最新子表主键 -->
+    <select id="getTablePkId" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT MAX(pk_id) pkid from dic_item_table WHERE is_del = 0
+	</select>
+
+    <!-- 更新字段表关联子表id -->
+    <update id="updateFiledById" parameterType="hashMap">
+		UPDATE dic_index_item SET index_item_id = #{map.indexItemId} WHERE index_item_id = #{map.pkId}
+	</update>
+
+    <!-- web端得到调查子表信息 -->
+    <select id="selectSonTableList" parameterType="hashMap" resultType="hashMap">
+        SELECT pk_id,index_item,IFNULL(remark,'') AS remark FROM dic_item_table
+        WHERE is_del = 0
+        <if test="map.tableName != null">
+            AND index_item LIKE '%${map.tableName}%'
+        </if>
+        order by pk_id
+        limit ${map.number},${map.size}
+    </select>
+
+    <!-- 总数 -->
+    <select id="selectSonTableListCount" parameterType="hashMap" resultType="int">
+        SELECT COUNT(*) FROM dic_item_table
+        WHERE is_del = 0
+        <if test="map.tableName != null">
+            AND index_item LIKE '%${map.tableName}%'
+        </if>
+    </select>
+
+    <!-- 添加子表信息 -->
+    <insert id="saveSonTable" parameterType="hashMap">
+		INSERT INTO dic_item_table (index_item, remark, is_del)
+		VALUES (#{map.tableName},#{map.remark},0)
+	</insert>
+
+    <!-- 根据子表id查询该表的字段信息 -->
+    <select id="selectFiledList" parameterType="hashMap" resultType="hashMap">
+		SELECT * FROM dic_index_item
+		 WHERE data_status = 0 AND index_item_id = #{map.indexItemId}
+		limit ${map.number},${map.size}	
+	</select>
+
+    <!-- 根据子表id查询该表的字段信息总数 -->
+    <select id="selectFiledCount" parameterType="hashMap" resultType="int">
+		SELECT COUNT(*) FROM dic_index_item WHERE data_status = 0 AND index_item_id = #{map.indexItemId} 
+	</select>
+
+    <!-- 删除字段 -->
+    <update id="deleteFiled" parameterType="hashMap">
+		UPDATE dic_index_item SET data_status = '1' WHERE pk_id in (${pkId})
+	</update>
+
+    <!-- 查询子表是否存储 -->
+    <select id="selectSonTableInfo" parameterType="hashMap" resultType="hashMap">
+		SELECT * FROM data_survey_json WHERE index_item_id in (${pkId})
+	</select>
+
+    <!-- 删除子表 -->
+    <update id="deleteSonTable" parameterType="hashMap">
+		UPDATE dic_item_table SET is_del = '1' WHERE pk_id in (${pkId})
+	</update>
+
+    <!-- 删除子表字段 -->
+    <update id="deleteFiledType" parameterType="hashMap">
+		UPDATE dic_index_item SET data_status = '1' WHERE index_item_id in (${pkId})
+	</update>
+
+    <!-- 删除子表字段 -->
+    <update id="deleteFiledTypeById" parameterType="hashMap">
+		UPDATE dic_index_item SET data_status = '1' WHERE pk_id in (${pkId})
+	</update>
+
+    <!--查询调查表集合-->
+    <select id="selectSurveyTableList" resultType="java.util.HashMap">
+        SELECT
+            b.survey_id,
+            a.pk_id,
+            b.survey_name,
+            b.survey_time,
+            c.srld_code,
+            e.index_item
+        FROM
+            data_survey_json a
+        left JOIN data_survey b ON b.survey_id = a.fk_survey_id
+        left JOIN data_redline_register c ON b.user_id = c.srld_id
+        left JOIN dic_item_table e ON e.pk_id = a.index_item_id
+        WHERE
+        1=1
+
+        <if test="redlineName!=null and redlineName !='' ">
+            and c.srld_name like concat( #{redlineName}, '%')
+        </if>
+
+        <if test="tableName!=null and tableName !='' ">
+            and  e.index_item = #{tableName}
+        </if>
+        order by b.survey_time desc
+
+        limit #{startNum},#{pageSize}
+    </select>
+
+    <!--查询调查表列表总数-->
+    <select id="selectTotal" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+        count(*)
+        FROM
+        data_survey_json a
+        left JOIN data_survey b ON b.survey_id = a.fk_survey_id
+        left JOIN data_redline_register c ON b.user_id = c.srld_id
+        left JOIN dic_item_table e ON e.pk_id = a.index_item_id
+        WHERE
+        1=1
+
+        <if test="redlineName!=null and redlineName !='' ">
+            and c.srld_name like concat( #{redlineName}, '%')
+        </if>
+
+        <if test="tableName!=null and tableName !='' ">
+            and  e.index_item = #{tableName}
+        </if>
+
+    </select>
+
+    <!--查询单个调查表信息-->
+    <select id="selectTableInfo" parameterType="java.lang.Integer" resultType="java.util.HashMap">
+        SELECT
+            a.survey_jsonData,
+            b.survey_altitude,
+            b.survey_lat,
+            b.survey_lon,
+            b.survey_temperature,
+            b.survey_weather
+        FROM
+            data_survey_json a
+        LEFT JOIN data_survey b ON a.fk_survey_id = b.survey_id
+        WHERE
+            pk_id = #{id}
+    </select>
+
+    <!--查询表字段名-->
+    <select id="selectName" resultType="java.lang.String" parameterType="java.lang.Integer">
+        SELECT
+            filed_name
+        FROM
+            dic_index_item
+        WHERE
+            pk_id = #{id}
+    </select>
+
+    <select id="selectFileds" parameterType="java.lang.Integer" resultType="com.gistone.VO.SurveyTableInfoVO">
+         SELECT
+            a.pk_id AS id,
+            filed_name AS filedName,
+            filed_type AS filedType,
+            a.is_must AS isMust,
+            a.sort,
+            b.max,
+            b.min,
+            b.decimal_point AS deciamlPoint,
+            b.string_length AS stringLength,
+            b.rediao_type AS rediaoType,
+            b.single_select AS singleSelect,
+            b.multiple_select AS multipleSelect,
+            b.time_limit AS timeLimit
+        FROM
+            dic_index_item a
+        LEFT JOIN dic_field_type b ON a.pk_id = b.fk_index_item_id
+        WHERE
+            a.data_status = 0
+        AND b.data_status = 0
+        AND a.index_item_id = #{id}
+
+        order by a.sort
+    </select>
+
+    <!--删除表字段，物理删除-->
+    <update id="deleteFileds"  parameterType="java.lang.Integer">
+        UPDATE dic_index_item
+        SET data_status = 1
+        WHERE
+            pk_id = #{id}
+    </update>
+    <!--删除表字段值，物理删除-->
+    <update id="deleteFiledValues">
+       UPDATE dic_field_type
+       SET data_status = 1
+       WHERE
+        fk_index_item_id = #{id}
+
+    </update>
+
+    <!--更新表字段-->
+    <update id="updateSort" parameterType="java.util.Map">
+       UPDATE dic_index_item
+       SET sort = #{sort}
+       WHERE
+            pk_id = #{id}
+    </update>
+
+    <!--查询插入数据的id-->
+    <select id="selectId"  resultType="java.lang.Integer">
+        select
+            max(pk_id)
+        from
+           dic_index_item
+    </select>
+
+</mapper>

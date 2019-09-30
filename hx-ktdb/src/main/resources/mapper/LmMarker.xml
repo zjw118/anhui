@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.LmMarkerMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.LmMarker">
+        <id column="lm_id" property="lmId" />
+        <result column="lm_srld_id" property="lmSrldId" />
+        <result column="lm_lp_id" property="lmLpId" />
+        <result column="lm_jzkh" property="lmJzkh" />
+        <result column="lm_szd" property="lmSzd" />
+        <result column="lm_sffbsp" property="lmSffbsp" />
+        <result column="lm_jzwzlt" property="lmJzwzlt" />
+        <result column="lm_jzwzlt_name" property="lmJzwzltName" />
+        <result column="lm_jzxczp" property="lmJzxczp" />
+        <result column="lm_jzxczp_name" property="lmJzxczpName" />
+        <result column="lm_beizhu" property="lmBeizhu" />
+        <result column="lm_jsfzr" property="lmJsfzr" />
+        <result column="lm_setTime" property="lmSettime" />
+        <result column="lm_add_uid" property="lmAddUid" />
+        <result column="lm_add_time" property="lmAddTime" />
+        <result column="lm_upd_uid" property="lmUpdUid" />
+        <result column="lm_upd_time" property="lmUpdTime" />
+        <result column="lm_id_del" property="lmIdDel" />
+    </resultMap>
+
+	<!-- 查询界碑数据列表 -->
+	<select id="seleteLmMarkerList" resultType="hashMap" parameterType="hashMap">
+	 	SELECT
+			IFNULL(t3.srld_name,'') srld_name,
+		    IFNULL(t3.srld_code,'') srld_code,
+			IFNULL(lm_id,'') lm_id,
+			IFNULL(lm_srld_id,'') lm_srld_id,
+			IFNULL(lm_lp_id,'') lm_lp_id,
+			IFNULL(lm_jzkh,'') lm_jzkh,
+			IFNULL(lm_szd,'') lm_szd,
+			(CASE lm_sffbsp
+				WHEN '0' THEN '否'
+				WHEN '1' THEN '是'
+				ELSE '否'
+				END
+			) AS lm_sffbsp,
+			IFNULL(lm_jzwzlt,'') lm_jzwzlt,
+			IFNULL(lm_jzxczp,'') lm_jzxczp,
+			IFNULL(lm_jzwzlt_name,'') lm_jzwzlt_name,
+			IFNULL(lm_jzxczp_name,'') lm_jzxczp_name,
+			IFNULL(lm_beizhu,'') lm_beizhu,
+			IFNULL(lm_add_time,'') lm_add_time,
+			IFNULL(lm_jsfzr,'') lm_jsfzr,
+			DATE_FORMAT(lm_setTime,'%Y-%m-%d') lm_setTime
+		 FROM (SELECT * FROM lm_marker WHERE lm_id_del = 0) t1 
+		 INNER JOIN (SELECT * FROM lm_point WHERE lp_id_del = 0) t2 
+		 ON t1.lm_lp_id = t2.lp_id
+		 INNER JOIN (SELECT * FROM data_redline_register) t3
+		 ON t3.srld_id = t2.lp_srld_id
+		WHERE 1=1 
+		<if test="lmJzkh !=null">
+			AND lm_jzkh = '${lmJzkh}' 
+	   	</if>
+		<if test="lmSzd !=null">
+			AND lm_szd LIKE '%${lmSzd}%' 
+	   	</if>
+		<if test="startTime !=null">
+			AND lm_setTime	&gt;='${startTime} 00:00:00' 
+	   	</if>
+		<if test="endTime !=null">
+			AND lm_setTime &lt;='${endTime} 23:59:59'
+	   	</if>
+	   	order by lm_add_time desc
+	   	<if test="map.limit == 1">
+			limit ${number},${size}
+	   	</if>
+	</select>
+
+	<!-- 总数 -->
+	<select id="selectLmMarkerCount" resultType="int" parameterType="hashMap">
+		SELECT COUNT(*)
+		 FROM (SELECT * FROM lm_marker WHERE lm_id_del = 0) t1 
+		 INNER JOIN (SELECT * FROM lm_point WHERE lp_id_del = 0) t2 
+		 ON t1.lm_lp_id = t2.lp_id
+		 INNER JOIN (SELECT * FROM data_redline_register) t3
+		 ON t3.srld_id = t2.lp_srld_id
+		WHERE 1=1 
+		<if test="lmJzkh !=null">
+			AND lm_jzkh = '${lmJzkh}' 
+	   	</if>
+		<if test="lmSzd !=null">
+			AND lm_szd LIKE '%${lmSzd}%' 
+	   	</if>
+		<if test="startTime !=null">
+			AND lm_setTime	&gt;='${startTime} 00:00:00' 
+	   	</if>
+		<if test="endTime !=null">
+			AND lm_setTime &lt;='${endTime} 23:59:59'
+	   	</if>
+	   	order by lm_add_time desc
+	</select>
+
+	<!-- 根据刻号查询是否重复添加 -->
+	<select id="selectLmMarkerInfor" resultType="hashMap" parameterType="com.gistone.entity.LmMarker">
+  		select * from lm_marker where lm_jzkh = #{lmJzkh} AND lm_id_del = 0
+  	</select>
+
+	<!-- 新增 -->
+	<insert id="insertLmMarkerInfor" parameterType="com.gistone.entity.LmMarker"  useGeneratedKeys="true"
+		keyProperty="lmId">
+	  	INSERT lm_marker
+			(lm_srld_id,lm_lp_id,lm_jzkh,lm_szd,lm_sffbsp,lm_jzwzlt,lm_jzxczp,lm_beizhu,lm_jsfzr,lm_setTime,
+			lm_add_uid,lm_add_time,lm_id_del)
+			VALUES 
+			(#{lmSrldId},#{lmLpId},#{lmJzkh},#{lmSzd},#{lmSffbsp},#{lmJzwzlt},#{lmJzxczp},#{lmBeizhu},#{lmJsfzr},
+			#{lmSettime},#{lmAddUid},#{lmAddTime},#{lmIdDel})
+  </insert>
+  
+  <!-- 修改 -->
+  <update id="updateLmMarkerInfor" parameterType="hashMap">
+  	UPDATE  lm_marker SET 
+  		lm_srld_id=#{lmSrldId},
+		lm_lp_id = #{lmlpId},lm_jzkh = #{lmJzkh},lm_szd = #{lmSzd},lm_sffbsp = #{lmSffbsp},lm_jzwzlt = #{lmJzwzlt},
+		lm_jzxczp = #{lmJzxczp},lm_beizhu = #{lmBeizhu},lm_jsfzr = #{lmJsfzr},lm_setTime = #{lmSettime},
+		lm_upd_uid = #{lmUpduid},lm_upd_time = #{lmUpdtime}
+		where lm_id = #{lmId}
+  </update>
+  
+  <!-- 删除 -->
+  <update id="deleteByLmId" parameterType="java.lang.String">
+  	UPDATE lm_marker SET lm_id_del = '1' WHERE lm_id IN (${lmId})
+  </update>	
+
+
+</mapper>

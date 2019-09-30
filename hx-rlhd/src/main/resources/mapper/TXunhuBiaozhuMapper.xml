@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gistone.mapper.TXunhuBiaozhuMapper" >
+  <resultMap id="BaseResultMap" type="com.gistone.entity.TXunhuBiaozhu" >
+    <id column="bz_id" property="bzId" jdbcType="INTEGER" />
+    <result column="bz_xhid" property="bzXhid" jdbcType="INTEGER" />
+    <result column="bz_xhlid" property="bzXhlid" jdbcType="INTEGER" />
+    <result column="bz_didian" property="bzDidian" jdbcType="VARCHAR" />
+    <result column="bz_tianqi" property="bzTianqi" jdbcType="VARCHAR" />
+    <result column="bz_shengjing" property="bzShengjing" jdbcType="VARCHAR" />
+    <result column="bz_haiba" property="bzHaiba" jdbcType="VARCHAR" />
+    <result column="bz_dongwu" property="bzDongwu" jdbcType="VARCHAR" />
+    <result column="bz_dongwu_shuliang" property="bzDongwuShuliang" jdbcType="VARCHAR" />
+    <result column="bz_dongwu_nianling" property="bzDongwuNianling" jdbcType="VARCHAR" />
+    <result column="bz_dongwu_xingbie" property="bzDongwuXingbie" jdbcType="VARCHAR" />
+    <result column="bz_dongwu_henji" property="bzDongwuHenji" jdbcType="VARCHAR" />
+    <result column="bz_dongwu_beizhu" property="bzDongwuBeizhu" jdbcType="VARCHAR" />
+    <result column="bz_zhiwu" property="bzZhiwu" jdbcType="VARCHAR" />
+    <result column="bz_zhiwu_beizhu" property="bzZhiwuBeizhu" jdbcType="VARCHAR" />
+    <result column="bz_renlei" property="bzRenlei" jdbcType="VARCHAR" />
+    <result column="bz_renlei_beizhu" property="bzRenleiBeizhu" jdbcType="VARCHAR" />
+    <result column="bz_beizhu" property="bzBeizhu" jdbcType="VARCHAR" />
+    <result column="bz_lng" property="bzLng" jdbcType="VARCHAR" />
+    <result column="bz_lat" property="bzLat" jdbcType="VARCHAR" />
+    <result column="bz_tupian" property="bzTupian" jdbcType="VARCHAR" />
+    <result column="bz_luyin" property="bzLuyin" jdbcType="VARCHAR" />
+    <result column="Bz_tijiao" property="bzTijiao" jdbcType="VARCHAR" />
+    <result column="bz_zhiwu_num" property="bzZhiwuNum" jdbcType="VARCHAR" />
+    <result column="bz_preview_image" property="bzPreviewImage" jdbcType="VARCHAR" />
+    <association property="tQuestionVerification" javaType="com.gistone.entity.TQuestionVerification" >
+		    <id column="tqv_id" property="tqvId" jdbcType="INTEGER" />
+		    <result column="tqv_question" property="tqvQuestion" jdbcType="VARCHAR" />
+		    <result column="tqv_serival_number" property="tqvSerivalNumber" jdbcType="VARCHAR" />
+		    <result column="tqv_facility_name" property="tqvFacilityName" jdbcType="VARCHAR" />
+		    <result column="tqv_facility_type" property="tqvFacilityType" jdbcType="VARCHAR" />
+		    <result column="tqv_sectorization" property="tqvSectorization" jdbcType="VARCHAR" />
+		    <result column="tqv_area" property="tqvArea" jdbcType="VARCHAR" />
+		    <result column="tqv_change_type" property="tqvChangeType" jdbcType="VARCHAR" />
+		    <result column="tqv_facility_status" property="tqvFacilityStatus" jdbcType="VARCHAR" />
+		    <result column="tqv_build_time" property="tqvBuildTime" jdbcType="TIMESTAMP" />
+		    <result column="tqv_formalities" property="tqvFormalities" jdbcType="VARCHAR" />
+		    <result column="tqv_proof" property="tqvProof" jdbcType="VARCHAR" />
+		    <result column="tqv_influence" property="tqvInfluence" jdbcType="VARCHAR" />
+		    <result column="tqv_result" property="tqvResult" jdbcType="VARCHAR" />
+		    <result column="tqv_bz_id" property="tqvBzId" jdbcType="INTEGER" />
+		    <result column="tqv_xh_id" property="tqvXhId" jdbcType="INTEGER" />
+		    <result column="tqv_add_time" property="tqvAddTime" jdbcType="TIMESTAMP" />
+		    <result column="tqv_check_unit" property="tqvCheckUnit" jdbcType="VARCHAR" />
+		    <result column="tqv_check_time" property="tqvCheckTime" jdbcType="TIMESTAMP" />
+		    <result column="tqv_check_people" property="tqvCheckPeople" jdbcType="VARCHAR" />
+		    <result column="tqv_contact_way" property="tqvContactWay" jdbcType="VARCHAR" />
+		    <result column="tqv_preparer" property="tqvPreparer" jdbcType="VARCHAR" />
+		    <result column="tqv_verifier" property="tqvVerifier" jdbcType="VARCHAR" />
+		    <result column="tqv_lng" property="tqvLng" jdbcType="VARCHAR" />
+		    <result column="tqv_lat" property="tqvLat" jdbcType="VARCHAR" />
+		    <result column="tqv_image" property="tqvImage" jdbcType="VARCHAR" />
+
+	 </association>
+    <!-- 盐城湿地珍禽保护区 -->
+    <!-- <result column="bz_fengxiang" property="bzFengXiang" jdbcType="VARCHAR"/>
+    <result column="bz_fengli" property="bzFengLi" jdbcType="VARCHAR"/>
+    <result column="bz_wendu" property="bzWenDu" jdbcType="VARCHAR"/>
+    <result column="bz_shijian" property="bzShiJian" jdbcType="VARCHAR"/> -->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    bz_id, bz_xhid, bz_xhlid, bz_didian, bz_tianqi, bz_shengjing, bz_haiba, bz_dongwu, 
+    bz_dongwu_shuliang, bz_dongwu_nianling, bz_dongwu_xingbie, bz_dongwu_henji, bz_dongwu_beizhu, 
+    bz_zhiwu, bz_zhiwu_beizhu, bz_renlei, bz_renlei_beizhu, bz_beizhu, bz_lng, bz_lat, 
+    bz_tupian, bz_luyin, Bz_tijiao, bz_zhiwu_num, bz_preview_image
+  </sql>
+  <sql id="Base_Column_List2" >
+    tqv_id, tqv_question, tqv_serival_number, tqv_facility_name, tqv_facility_type, tqv_sectorization,
+    tqv_area, tqv_change_type, tqv_facility_status, tqv_build_time, tqv_formalities,
+    tqv_proof, tqv_influence, tqv_result, tqv_bz_id, tqv_xh_id, tqv_add_time, tqv_check_unit,
+    tqv_check_time, tqv_check_people, tqv_contact_way, tqv_preparer, tqv_verifier, tqv_lng,
+    tqv_lat, tqv_image
+  </sql>
+
+
+   <select id="showWayPoint" resultMap="BaseResultMap" parameterType="com.gistone.entity.TXunhuBiaozhu" >
+       select 
+       <include refid="Base_Column_List" />
+       <include refid="Base_Column_List2" />
+       from t_xunhu_biaozhu b left join  t_question_verification p on b.bz_id=p.tqv_bz_id  
+       where  bz_only_point=1
+       <if test="bzDidian != null" >
+        and bz_didian like '%${bzDidian}%'
+      </if>
+      <if test="bzId != null" >
+        and bz_id = #{bzId,jdbcType=INTEGER} 
+      </if> 
+      order by bz_id desc 
+      <if test="pageNumber != null and pageSize!= null" >
+        limit #{pageNumber},#{pageSize}
+      </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_xunhu_biaozhu
+    where bz_id = #{bzId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_xunhu_biaozhu
+    where bz_id = #{bzId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gistone.entity.TXunhuBiaozhu" >
+    insert into t_xunhu_biaozhu (bz_id, bz_xhid, bz_xhlid, 
+      bz_didian, bz_tianqi, bz_shengjing, 
+      bz_haiba, bz_dongwu, bz_dongwu_shuliang, 
+      bz_dongwu_nianling, bz_dongwu_xingbie, bz_dongwu_henji, 
+      bz_dongwu_beizhu, bz_zhiwu, bz_zhiwu_beizhu, 
+      bz_renlei, bz_renlei_beizhu, bz_beizhu, 
+      bz_lng, bz_lat, bz_tupian, 
+      bz_luyin, Bz_tijiao, bz_zhiwu_num
+      )
+    values (#{bzId,jdbcType=INTEGER}, #{bzXhid,jdbcType=INTEGER}, #{bzXhlid,jdbcType=INTEGER}, 
+      #{bzDidian,jdbcType=VARCHAR}, #{bzTianqi,jdbcType=VARCHAR}, #{bzShengjing,jdbcType=VARCHAR}, 
+      #{bzHaiba,jdbcType=VARCHAR}, #{bzDongwu,jdbcType=VARCHAR}, #{bzDongwuShuliang,jdbcType=VARCHAR}, 
+      #{bzDongwuNianling,jdbcType=VARCHAR}, #{bzDongwuXingbie,jdbcType=VARCHAR}, #{bzDongwuHenji,jdbcType=VARCHAR}, 
+      #{bzDongwuBeizhu,jdbcType=VARCHAR}, #{bzZhiwu,jdbcType=VARCHAR}, #{bzZhiwuBeizhu,jdbcType=VARCHAR}, 
+      #{bzRenlei,jdbcType=VARCHAR}, #{bzRenleiBeizhu,jdbcType=VARCHAR}, #{bzBeizhu,jdbcType=VARCHAR}, 
+      #{bzLng,jdbcType=VARCHAR}, #{bzLat,jdbcType=VARCHAR}, #{bzTupian,jdbcType=VARCHAR}, 
+      #{bzLuyin,jdbcType=VARCHAR}, #{bzTijiao,jdbcType=VARCHAR}, #{bzZhiwuNum,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gistone.entity.TXunhuBiaozhu" useGeneratedKeys="true" keyProperty="bzId">
+    insert into t_xunhu_biaozhu
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bzId != null" >
+        bz_id,
+      </if>
+      <if test="bzXhid != null" >
+        bz_xhid,
+      </if>
+      <if test="bzXhlid != null" >
+        bz_xhlid,
+      </if>
+      <if test="bzDidian != null" >
+        bz_didian,
+      </if>
+      <if test="bzTianqi != null" >
+        bz_tianqi,
+      </if>
+      <if test="bzShengjing != null" >
+        bz_shengjing,
+      </if>
+      <if test="bzHaiba != null" >
+        bz_haiba,
+      </if>
+      <if test="bzDongwu != null" >
+        bz_dongwu,
+      </if>
+      <if test="bzDongwuShuliang != null" >
+        bz_dongwu_shuliang,
+      </if>
+      <if test="bzDongwuNianling != null" >
+        bz_dongwu_nianling,
+      </if>
+      <if test="bzDongwuXingbie != null" >
+        bz_dongwu_xingbie,
+      </if>
+      <if test="bzDongwuHenji != null" >
+        bz_dongwu_henji,
+      </if>
+      <if test="bzDongwuBeizhu != null" >
+        bz_dongwu_beizhu,
+      </if>
+      <if test="bzZhiwu != null" >
+        bz_zhiwu,
+      </if>
+      <if test="bzZhiwuBeizhu != null" >
+        bz_zhiwu_beizhu,
+      </if>
+      <if test="bzRenlei != null" >
+        bz_renlei,
+      </if>
+      <if test="bzRenleiBeizhu != null" >
+        bz_renlei_beizhu,
+      </if>
+      <if test="bzBeizhu != null" >
+        bz_beizhu,
+      </if>
+      <if test="bzLng != null" >
+        bz_lng,
+      </if>
+      <if test="bzLat != null" >
+        bz_lat,
+      </if>
+      <if test="bzTupian != null" >
+        bz_tupian,
+      </if>
+      <if test="bzLuyin != null" >
+        bz_luyin,
+      </if>
+      <if test="bzTijiao != null" >
+        Bz_tijiao,
+      </if>
+      <if test="bzZhiwuNum != null" >
+        bz_zhiwu_num,
+      </if>
+      <if test="bzPreviewImage != null" >
+        bz_preview_image,
+      </if>
+      <if test="bzOnlyPoint != null" >
+        bz_only_point,
+      </if>
+      <if test="bzXhryid != null" >
+        bz_xhryid,
+      </if>
+      <!-- 盐城湿地珍禽保护区系统 -->
+      <!-- <if test="bzFengXiang != null">
+      	bz_fengxiang,
+      </if>
+      <if test="bzFengLi != null">
+      	bz_fengli,
+      </if>
+      <if test="bzWenDu != null">
+      	bz_wendu,
+      </if>
+      <if test="bzShiJian != null">
+      	bz_shijian,
+      </if> -->
+      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bzId != null" >
+        #{bzId,jdbcType=INTEGER},
+      </if>
+      <if test="bzXhid != null" >
+        #{bzXhid,jdbcType=INTEGER},
+      </if>
+      <if test="bzXhlid != null" >
+        #{bzXhlid,jdbcType=INTEGER},
+      </if>
+      <if test="bzDidian != null" >
+        #{bzDidian,jdbcType=VARCHAR},
+      </if>
+      <if test="bzTianqi != null" >
+        #{bzTianqi,jdbcType=VARCHAR},
+      </if>
+      <if test="bzShengjing != null" >
+        #{bzShengjing,jdbcType=VARCHAR},
+      </if>
+      <if test="bzHaiba != null" >
+        #{bzHaiba,jdbcType=VARCHAR},
+      </if>
+      <if test="bzDongwu != null" >
+        #{bzDongwu,jdbcType=VARCHAR},
+      </if>
+      <if test="bzDongwuShuliang != null" >
+        #{bzDongwuShuliang,jdbcType=VARCHAR},
+      </if>
+      <if test="bzDongwuNianling != null" >
+        #{bzDongwuNianling,jdbcType=VARCHAR},
+      </if>
+      <if test="bzDongwuXingbie != null" >
+        #{bzDongwuXingbie,jdbcType=VARCHAR},
+      </if>
+      <if test="bzDongwuHenji != null" >
+        #{bzDongwuHenji,jdbcType=VARCHAR},
+      </if>
+      <if test="bzDongwuBeizhu != null" >
+        #{bzDongwuBeizhu,jdbcType=VARCHAR},
+      </if>
+      <if test="bzZhiwu != null" >
+        #{bzZhiwu,jdbcType=VARCHAR},
+      </if>
+      <if test="bzZhiwuBeizhu != null" >
+        #{bzZhiwuBeizhu,jdbcType=VARCHAR},
+      </if>
+      <if test="bzRenlei != null" >
+        #{bzRenlei,jdbcType=VARCHAR},
+      </if>
+      <if test="bzRenleiBeizhu != null" >
+        #{bzRenleiBeizhu,jdbcType=VARCHAR},
+      </if>
+      <if test="bzBeizhu != null" >
+        #{bzBeizhu,jdbcType=VARCHAR},
+      </if>
+      <if test="bzLng != null" >
+        #{bzLng,jdbcType=VARCHAR},
+      </if>
+      <if test="bzLat != null" >
+        #{bzLat,jdbcType=VARCHAR},
+      </if>
+      <if test="bzTupian != null" >
+        #{bzTupian,jdbcType=VARCHAR},
+      </if>
+      <if test="bzLuyin != null" >
+        #{bzLuyin,jdbcType=VARCHAR},
+      </if>
+      <if test="bzTijiao != null" >
+        #{bzTijiao,jdbcType=VARCHAR},
+      </if>
+      <if test="bzZhiwuNum != null" >
+        #{bzZhiwuNum,jdbcType=VARCHAR},
+      </if>
+      <if test="bzPreviewImage != null" >
+        #{bzPreviewImage,jdbcType=VARCHAR},
+      </if>
+       <if test="bzOnlyPoint != null" >
+        #{bzOnlyPoint},
+      </if>
+      <if test="bzXhryid != null" >
+        #{bzXhryid},
+      </if>
+      <!-- 盐城湿地珍禽自然保护区 -->
+      <!-- <if test="bzFengXiang !=null">
+      	#{bzFengXiang,jdbcType=VARCHAR},
+      </if>
+      <if test="bzFengLi !=null">
+      	#{bzFengLi,jdbcType=VARCHAR},
+      </if>
+      <if test="bzWenDu !=null">
+      	#{bzWenDu,jdbcType=VARCHAR},
+      </if>
+      <if test="bzShiJian !=null">
+      	#{bzShiJian,jdbcType=VARCHAR},
+      </if> -->
+      
+    </trim>
+     <selectKey resultType="int" order="AFTER" keyProperty="bzId">   
+            SELECT LAST_INSERT_ID()   
+        </selectKey> 
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gistone.entity.TXunhuBiaozhu" >
+    update t_xunhu_biaozhu
+    <set >
+      <if test="bzXhid != null" >
+        bz_xhid = #{bzXhid,jdbcType=INTEGER},
+      </if>
+      <if test="bzXhlid != null" >
+        bz_xhlid = #{bzXhlid,jdbcType=INTEGER},
+      </if>
+      <if test="bzDidian != null" >
+        bz_didian = #{bzDidian,jdbcType=VARCHAR},
+      </if>
+      <if test="bzTianqi != null" >
+        bz_tianqi = #{bzTianqi,jdbcType=VARCHAR},
+      </if>
+      <if test="bzShengjing != null" >
+        bz_shengjing = #{bzShengjing,jdbcType=VARCHAR},
+      </if>
+      <if test="bzHaiba != null" >
+        bz_haiba = #{bzHaiba,jdbcType=VARCHAR},
+      </if>
+      <if test="bzDongwu != null" >
+        bz_dongwu = #{bzDongwu,jdbcType=VARCHAR},
+      </if>
+      <if test="bzDongwuShuliang != null" >
+        bz_dongwu_shuliang = #{bzDongwuShuliang,jdbcType=VARCHAR},
+      </if>
+      <if test="bzDongwuNianling != null" >
+        bz_dongwu_nianling = #{bzDongwuNianling,jdbcType=VARCHAR},
+      </if>
+      <if test="bzDongwuXingbie != null" >
+        bz_dongwu_xingbie = #{bzDongwuXingbie,jdbcType=VARCHAR},
+      </if>
+      <if test="bzDongwuHenji != null" >
+        bz_dongwu_henji = #{bzDongwuHenji,jdbcType=VARCHAR},
+      </if>
+      <if test="bzDongwuBeizhu != null" >
+        bz_dongwu_beizhu = #{bzDongwuBeizhu,jdbcType=VARCHAR},
+      </if>
+      <if test="bzZhiwu != null" >
+        bz_zhiwu = #{bzZhiwu,jdbcType=VARCHAR},
+      </if>
+      <if test="bzZhiwuBeizhu != null" >
+        bz_zhiwu_beizhu = #{bzZhiwuBeizhu,jdbcType=VARCHAR},
+      </if>
+      <if test="bzRenlei != null" >
+        bz_renlei = #{bzRenlei,jdbcType=VARCHAR},
+      </if>
+      <if test="bzRenleiBeizhu != null" >
+        bz_renlei_beizhu = #{bzRenleiBeizhu,jdbcType=VARCHAR},
+      </if>
+      <if test="bzBeizhu != null" >
+        bz_beizhu = #{bzBeizhu,jdbcType=VARCHAR},
+      </if>
+      <if test="bzLng != null" >
+        bz_lng = #{bzLng,jdbcType=VARCHAR},
+      </if>
+      <if test="bzLat != null" >
+        bz_lat = #{bzLat,jdbcType=VARCHAR},
+      </if>
+      <if test="bzTupian != null" >
+        bz_tupian = #{bzTupian,jdbcType=VARCHAR},
+      </if>
+      <if test="bzLuyin != null" >
+        bz_luyin = #{bzLuyin,jdbcType=VARCHAR},
+      </if>
+      <if test="bzTijiao != null" >
+        Bz_tijiao = #{bzTijiao,jdbcType=VARCHAR},
+      </if>
+      <if test="bzZhiwuNum != null" >
+        bz_zhiwu_num = #{bzZhiwuNum,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where bz_id = #{bzId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gistone.entity.TXunhuBiaozhu" >
+    update t_xunhu_biaozhu
+    set bz_xhid = #{bzXhid,jdbcType=INTEGER},
+      bz_xhlid = #{bzXhlid,jdbcType=INTEGER},
+      bz_didian = #{bzDidian,jdbcType=VARCHAR},
+      bz_tianqi = #{bzTianqi,jdbcType=VARCHAR},
+      bz_shengjing = #{bzShengjing,jdbcType=VARCHAR},
+      bz_haiba = #{bzHaiba,jdbcType=VARCHAR},
+      bz_dongwu = #{bzDongwu,jdbcType=VARCHAR},
+      bz_dongwu_shuliang = #{bzDongwuShuliang,jdbcType=VARCHAR},
+      bz_dongwu_nianling = #{bzDongwuNianling,jdbcType=VARCHAR},
+      bz_dongwu_xingbie = #{bzDongwuXingbie,jdbcType=VARCHAR},
+      bz_dongwu_henji = #{bzDongwuHenji,jdbcType=VARCHAR},
+      bz_dongwu_beizhu = #{bzDongwuBeizhu,jdbcType=VARCHAR},
+      bz_zhiwu = #{bzZhiwu,jdbcType=VARCHAR},
+      bz_zhiwu_beizhu = #{bzZhiwuBeizhu,jdbcType=VARCHAR},
+      bz_renlei = #{bzRenlei,jdbcType=VARCHAR},
+      bz_renlei_beizhu = #{bzRenleiBeizhu,jdbcType=VARCHAR},
+      bz_beizhu = #{bzBeizhu,jdbcType=VARCHAR},
+      bz_lng = #{bzLng,jdbcType=VARCHAR},
+      bz_lat = #{bzLat,jdbcType=VARCHAR},
+      bz_tupian = #{bzTupian,jdbcType=VARCHAR},
+      bz_luyin = #{bzLuyin,jdbcType=VARCHAR},
+      Bz_tijiao = #{bzTijiao,jdbcType=VARCHAR},
+      bz_zhiwu_num = #{bzZhiwuNum,jdbcType=VARCHAR}
+    where bz_id = #{bzId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.LmFilesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.LmFiles">
+        <id column="lf_id" property="lfId" />
+        <result column="lf_board_id" property="lfBoardId" />
+        <result column="lf_path" property="lfPath" />
+        <result column="lf_name" property="lfName" />
+        <result column="lf_filePath" property="lfFilepath" />
+        <result column="lf_type" property="lfType" />
+    </resultMap>
+
+	<!-- 插入图片 -->
+	<insert id="insertBatch" parameterType="java.util.List">
+	  	INSERT INTO lm_files (lf_board_id,lf_path,lf_name,lf_filePath,lf_type) VALUES
+	  	<foreach collection="list" item="item" index="index" separator=",">
+	  		(#{item.lfBoardId,jdbcType=INTEGER},#{item.lfPath,jdbcType=VARCHAR},#{item.lfName,jdbcType=VARCHAR},
+	  		 #{item.lfFilepath,jdbcType=VARCHAR},#{item.lfType,jdbcType=VARCHAR})
+	  	</foreach>
+  	</insert>
+  	
+  	<!-- 删除 -->
+	<delete id="deleteBatch" parameterType="java.lang.String">
+		DELETE FROM lm_files WHERE lf_board_id = #{lfBoardId}
+	</delete>
+
+</mapper>

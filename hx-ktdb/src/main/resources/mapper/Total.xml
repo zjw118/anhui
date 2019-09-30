@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.TotalMapper">
+
+    <!--查询行政区划下的红线总数-->
+    <select id="selectRedlineTotal" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+            count( * )
+        FROM
+            data_redline_register
+        WHERE
+            srld_is_del = 0 AND srld_code like concat( #{code}, '%')
+    </select>
+
+    <!--查询行政区划下的界桩总数-->
+    <select id="selectMarkerTotal" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT
+            count( * )
+        FROM
+            lm_marker_mobile
+        WHERE
+            type =1 and del_flag = 1 and code like concat( #{code}, '%')
+    </select>
+
+    <!--查询行政区划下的红线区总面积-->
+    <select id="selectSumArea" resultType="java.lang.Double" parameterType="java.lang.String">
+        SELECT
+            sum(srld_area)
+        FROM
+            data_redline_register
+        WHERE
+            srld_code like concat( #{code}, '%')
+        </select>
+    <!--查询行政区划下的拐点总数-->
+    <select id="selectPointTotal" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT
+            count( a.lp_id )
+        FROM
+            lm_point a
+            LEFT JOIN data_redline_register b ON a.lp_srld_id = b.srld_id
+        WHERE
+        a.lp_id_del =0 AND b.srld_code like concat( #{code}, '%')
+
+    </select>
+
+    <!--查询行政区划下的标识牌总数-->
+    <select id="selectBoardTotal" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT
+            count( a.id )
+        FROM
+            lm_board a
+            LEFT JOIN data_redline_register b ON a.redline_id = b.srld_id
+        WHERE
+        a.del_flag = 1 and b.srld_code like concat( #{code}, '%')
+    </select>
+
+    <!--查询行政区划下的调查表总数-->
+    <select id="selectSurveyTotal" parameterType="java.lang.String" resultType="java.lang.Integer">
+       SELECT
+            COUNT(*)
+        FROM
+            data_survey_json a
+        LEFT JOIN data_survey b ON b.survey_id = a.fk_survey_id
+        LEFT JOIN data_redline_register c ON b.user_id = c.srld_id
+        WHERE
+            c.srld_code like concat( #{code}, '%')
+    </select>
+
+    <!--查询界桩和标识牌数量按地区-->
+    <select id="selectMarkerAndBoardCount" resultType="java.util.Map">
+        <if test="level==1 ">
+            SELECT
+                IFNULL(SUM(b), 0) AS boardCount,
+                IFNULL(SUM(c), 0) AS markerCount,
+                COM_NAME
+            FROM
+            (
+                SELECT
+                    *
+                FROM
+                (
+                    SELECT
+                        COUNT(*) AS b,
+                        0 AS c,
+                        1 AS a,
+                        CODE
+                    FROM
+                        lm_board
+                    WHERE
+                          type = 1
+                    GROUP BY
+                            CODE
+                    UNION ALL
+
+                    SELECT
+                        0 AS b,
+                        COUNT(*) AS c,
+                        2 AS a,
+                        CODE
+                    FROM
+                        lm_marker_mobile
+                    WHERE
+                        type = 1
+                    GROUP BY
+                        CODE
+                ) s1
+            INNER JOIN (
+                    SELECT
+                          COM_CODE,
+                          COM_F_CODE
+                    FROM
+                          sys_company
+                    ) s2 ON s2.COM_CODE = s1. CODE
+            ) t1
+            RIGHT JOIN (
+                    SELECT
+                          COM_CODE,
+                          COM_NAME,
+                          COM_F_CODE
+                    FROM
+                        sys_company
+                    WHERE
+                         COM_LEVEL = 2
+                    AND COM_F_CODE = #{code}
+            ) t2 ON t2.COM_CODE = t1.COM_F_CODE
+            GROUP BY
+                   t2.COM_CODE
+        </if>
+
+        <if test="level==2 ">
+            SELECT
+                IFNULL(SUM(b), 0) AS boardCount,
+                IFNULL(SUM(c), 0) AS markerCount,
+                COM_NAME
+            FROM
+            (
+                SELECT
+                      *
+                FROM
+                (
+                    SELECT
+                        COUNT(*) AS b,
+                        0 AS c,
+                        1 AS a,
+                        CODE
+                    FROM
+                        lm_board
+                    WHERE
+                        type = 1
+                    GROUP BY
+                        CODE
+                    UNION ALL
+                    SELECT
+                        0 AS b,
+                        COUNT(*) AS c,
+                        2 AS a,
+                        CODE
+                    FROM
+                        lm_marker_mobile
+                    WHERE
+                        type = 1
+                    GROUP BY
+                        CODE
+            ) s1
+            RIGHT JOIN (
+                SELECT
+                    COM_NAME,
+                    COM_CODE,
+                    COM_F_CODE
+                FROM
+                    sys_company
+                WHERE
+                    COM_F_CODE = #{code}
+            ) s2 ON s2.COM_CODE = s1. CODE
+            ) t1
+            GROUP BY
+                t1.COM_CODE
+        </if>
+    </select>
+
+    <!--查询面积-->
+    <select id="selectAreas" resultType="java.util.Map">
+        <if test="level==1 ">
+            SELECT
+                COM_NAME as name ,
+                IFNULL(ROUND(SUM(a),2),0) as area,
+                IFNULL(SUM(b),0) as redlineSum
+            FROM
+            (
+                SELECT
+                      *
+                FROM
+                    (
+                    SELECT
+                         srld_code,
+                         COUNT(1) AS b,
+                         SUM(srld_area) as a
+                    FROM
+                         data_redline_register
+                    GROUP BY
+                          srld_code
+                    ) t1
+                INNER JOIN (
+                    SELECT
+                          COM_CODE,
+                          COM_F_CODE
+                    FROM
+                          sys_company
+                ) t2 ON t1.srld_code = t2.COM_CODE
+            ) s1
+            RIGHT JOIN (
+                    SELECT
+                         COM_NAME,
+                         COM_CODE
+                    FROM
+                         sys_company
+                    WHERE
+                        COM_LEVEL=2 and COM_F_CODE = #{code}
+            ) s2 ON s1.COM_F_CODE = s2.COM_CODE
+            GROUP BY
+                   s2.COM_CODE
+        </if>
+
+        <if test="level==2 ">
+            SELECT
+                  COM_NAME AS NAME,
+                  IFNULL(ROUND(a, 2), '') AS area,
+                  IFNULL(SUM(b), 0) AS redlineSum
+            FROM
+            (
+                SELECT
+                      *
+                FROM
+                (
+                    SELECT
+                          srld_code,
+                          COUNT(1) AS b,
+                          SUM(srld_area) AS a
+                    FROM
+                          data_redline_register
+                    GROUP BY
+                          srld_code
+                ) t1
+                RIGHT JOIN (
+                    SELECT
+                          COM_NAME,
+                          COM_CODE,
+                          COM_F_CODE
+                    FROM
+                          sys_company
+                    WHERE
+                          COM_F_CODE = #{code}
+                ) t2 ON t1.srld_code = t2.COM_CODE
+            ) s1
+            GROUP BY
+                    s1.COM_CODE
+
+        </if>
+
+
+    </select>
+
+    <!--统计界桩数-->
+    <select id="selectCount" resultType="java.util.Map">
+        SELECT
+           COUNT(*) as sum,
+	      substring(create_time, 6, 5) AS date
+        FROM
+            `lm_marker_mobile`
+        WHERE
+        type =1 and del_flag = 1
+        AND create_time &lt;= #{currentTime}
+        AND create_time &gt;= #{beforeTime}
+
+        and code like concat( #{code}, '%')
+        GROUP BY
+        LEFT (create_time, 10)
+    </select>
+    <!--查询当前日期前十五天的界桩数-->
+    <select id="selectBeforeSum" resultType="java.lang.Integer">
+         SELECT
+           COUNT(*)
+        FROM
+            `lm_marker_mobile`
+        WHERE
+        type =1 and del_flag = 1
+        AND create_time &lt;= #{beforeTime}
+        and code like concat( #{code}, '%')
+    </select>
+
+    <!--统计表示牌-->
+    <select id="selectBoardCount" resultType="java.util.Map">
+         SELECT
+           COUNT(*) as sum,
+	      substring(create_date, 6, 5) AS date
+        FROM
+            `lm_board`
+        WHERE
+        type =1 and del_flag = 1
+        AND create_date &lt;= #{currentTime}
+        AND create_date &gt;= #{beforeTime}
+
+        and code like concat( #{code}, '%')
+        GROUP BY
+        LEFT (create_date, 10)
+    </select>
+
+    <!--查询当前日期前十五天的标识牌-->
+
+    <select id="selectBeforeCount" resultType="java.lang.Integer">
+         SELECT
+           COUNT(*)
+        FROM
+            `lm_board`
+        WHERE
+        type =1 and del_flag = 1
+        AND create_date &lt;= #{beforeTime}
+        and code like concat( #{code}, '%')
+    </select>
+
+    <!--统计调查表-->
+    <select id="selectSurveyCount" resultType="java.util.Map">
+        SELECT
+            COUNT(*) AS sum,
+           substring(b.survey_time, 6, 5) AS date
+        FROM
+            data_survey_json a
+        LEFT JOIN data_survey b ON b.survey_id = a.fk_survey_id
+        LEFT JOIN data_redline_register c ON b.user_id = c.srld_id
+        WHERE
+          c.srld_code like concat( #{code}, '%')
+        AND    b.survey_time &lt;= #{currentTime}
+        AND  b.survey_time &gt;= #{beforeTime}
+        GROUP BY
+          LEFT (b.survey_time, 10)
+    </select>
+
+
+
+
+    <!--各地区界桩统计-->
+    <select id="selectMarkerCount" resultType="java.util.Map">
+         SELECT
+            COM_NAME as name,
+            IFNULL(sum,'') as sum
+        FROM
+            (
+                SELECT
+                    count(*) AS sum,
+                    LEFT (code, #{sub}) AS CODE
+                FROM
+                    lm_marker_mobile
+                where type =1
+                GROUP BY
+                    LEFT (code, #{sub})
+            ) drl
+        RIGHT JOIN (
+            SELECT
+                COM_NAME,
+                LEFT (COM_CODE,  #{sub}) AS COM_CODE
+            FROM
+                sys_company
+            WHERE
+                COM_LEVEL = #{level}
+        ) sys ON drl. CODE = sys.COM_CODE
+        WHERE
+        COM_CODE LIKE concat( #{code}, '%')
+
+    </select>
+    <!--统计红线安用途的面积-->
+    <select id="selectUserArea" resultType="java.util.Map">
+        SELECT
+           IFNULL(ROUND(SUM(srld_area),2),'') AS area,
+            srld_target AS name
+        FROM
+            `data_redline_register`
+
+        WHERE
+            srld_code like concat( #{code}, '%')
+
+        GROUP BY
+            srld_target
+    </select>
+
+    <!--一张图调查表数统计-->
+    <select id="selectSurvey" resultType="java.util.Map">
+        <if test="type==1 ">
+            SELECT
+                COUNT(*) AS sum ,
+                substring(survey_time, 6, 5) AS date
+            FROM
+                data_survey_json a
+            INNER JOIN data_survey b ON a.fk_survey_id = b.survey_id
+            INNER JOIN dic_item_table d ON d.pk_id = a.index_item_id
+            INNER JOIN data_redline_register c ON b.user_id = c.srld_id
+            WHERE
+                 d.index_item = '自然背景调查' and d.is_del = 0
+            AND c.srld_code like concat( #{code}, '%')
+            AND    b.survey_time &lt;= #{currentTime}
+            AND  b.survey_time &gt;= #{beforeTime}
+            GROUP BY
+            LEFT (survey_time, 10)
+        </if>
+
+        <if test="type==2 ">
+            SELECT
+                COUNT(*) AS sum,
+                substring(survey_time, 6, 5) AS date
+            FROM
+                data_survey_json a
+            INNER JOIN data_survey b ON a.fk_survey_id = b.survey_id
+            INNER JOIN dic_item_table d ON d.pk_id = a.index_item_id
+            INNER JOIN data_redline_register c ON b.user_id = c.srld_id
+            WHERE
+                  d.index_item = '环境质量调查' and d.is_del = 0
+            AND c.srld_code like concat( #{code}, '%')
+            AND    b.survey_time &lt;= #{currentTime}
+            AND  b.survey_time &gt;= #{beforeTime}
+            GROUP BY
+            LEFT (survey_time, 10)
+        </if>
+        <if test="type==3 ">
+            SELECT
+                COUNT(*) AS sum,
+                substring(survey_time, 6, 5) AS date
+            FROM
+                data_survey_json a
+            INNER JOIN data_survey b ON a.fk_survey_id = b.survey_id
+            INNER JOIN dic_item_table d ON d.pk_id = a.index_item_id
+            INNER JOIN data_redline_register c ON b.user_id = c.srld_id
+            WHERE
+                d.index_item = '生态系统状况调查' and d.is_del = 0
+            AND c.srld_code like concat( #{code}, '%')
+            AND    b.survey_time &lt;= #{currentTime}
+            AND  b.survey_time &gt;= #{beforeTime}
+            GROUP BY
+            LEFT (survey_time, 10)
+        </if>
+        <if test="type==4 ">
+            SELECT
+                COUNT(*) AS sum,
+                substring(survey_time, 6, 5) AS date
+            FROM
+                data_survey_json a
+            INNER JOIN data_survey b ON a.fk_survey_id = b.survey_id
+            INNER JOIN dic_item_table d ON d.pk_id = a.index_item_id
+            INNER JOIN data_redline_register c ON b.user_id = c.srld_id
+            WHERE
+                d.index_item = '人为活动调查' and d.is_del = 0
+            AND c.srld_code like concat( #{code}, '%')
+            AND    b.survey_time &lt;= #{currentTime}
+            AND  b.survey_time &gt;= #{beforeTime}
+            GROUP BY
+            LEFT (survey_time, 10)
+        </if>
+
+
+    </select>
+
+    <!--一张图调查表当前日期15天之前的统计数-->
+    <select id="selectSurveySum" resultType="java.lang.Integer">
+        <if test="type==1 ">
+            SELECT
+            COUNT(*)
+            FROM
+            data_survey_json a
+            INNER JOIN data_survey b ON a.fk_survey_id = b.survey_id
+            INNER JOIN dic_item_table d ON d.pk_id = a.index_item_id
+            INNER JOIN data_redline_register c ON b.user_id = c.srld_id
+            WHERE
+            d.index_item = '自然背景调查' and d.is_del = 0
+            AND c.srld_code like concat( #{code}, '%')
+            AND  b.survey_time &lt;= #{beforeTime}
+
+        </if>
+
+        <if test="type==2 ">
+            SELECT
+            COUNT(*)
+            FROM
+            data_survey_json a
+            INNER JOIN data_survey b ON a.fk_survey_id = b.survey_id
+            INNER JOIN dic_item_table d ON d.pk_id = a.index_item_id
+            INNER JOIN data_redline_register c ON b.user_id = c.srld_id
+            WHERE
+            d.index_item = '环境质量调查' and d.is_del = 0
+            AND c.srld_code like concat( #{code}, '%')
+            AND  b.survey_time &lt;= #{beforeTime}
+
+        </if>
+
+        <if test="type==3 ">
+            SELECT
+            COUNT(*)
+            FROM
+            data_survey_json a
+            INNER JOIN data_survey b ON a.fk_survey_id = b.survey_id
+            INNER JOIN dic_item_table d ON d.pk_id = a.index_item_id
+            INNER JOIN data_redline_register c ON b.user_id = c.srld_id
+            WHERE
+            d.index_item = '生态系统状况调查' and d.is_del = 0
+            AND c.srld_code like concat( #{code}, '%')
+            AND  b.survey_time &lt;= #{beforeTime}
+
+        </if>
+
+        <if test="type==4 ">
+            SELECT
+            COUNT(*)
+            FROM
+            data_survey_json a
+            INNER JOIN data_survey b ON a.fk_survey_id = b.survey_id
+            INNER JOIN dic_item_table d ON d.pk_id = a.index_item_id
+            INNER JOIN data_redline_register c ON b.user_id = c.srld_id
+            WHERE
+            d.index_item = '人为活动调查' and d.is_del = 0
+            AND c.srld_code like concat( #{code}, '%')
+            AND  b.survey_time &lt;= #{beforeTime}
+
+        </if>
+
+    </select>
+
+</mapper>

@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.LmMarkerMobileMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.LmMarkerMobile">
+        <id column="id" property="id"/>
+        <result column="code" property="code"/>
+        <result column="is_jz" property="isJz"/>
+        <result column="coordinate" property="coordinate"/>
+        <result column="redline_id" property="redlineId"/>
+        <result column="redline_account" property="redlineAccount"/>
+        <result column="point_desc" property="pointDesc"/>
+        <result column="picture_url" property="pictureUrl"/>
+        <result column="proof_person" property="proofPerson"/>
+        <result column="proof_time" property="proofTime"/>
+        <result column="verify_person" property="verifyPerson"/>
+        <result column="verify_time" property="verifyTime"/>
+        <result column="proof_lon" property="proofLon"/>
+    </resultMap>
+
+    <!--查询红线所有界桩-->
+    <select id="getListByRedLineId" resultType="com.gistone.entity.LmMarkerMobile" parameterType="java.lang.Integer">
+        SELECT
+            a.id,
+            a.code,
+            is_jz as  isJz,
+            longitude,
+            latitude,
+            redline_account as redlineAccount,
+            point_desc as pointDesc,
+            picture_url as pictureUrl ,
+            proof_person as proofPerson,
+            a.proof_time as proofTime,
+            b.real_name AS createUser,
+            a.verify_person as verifyPerson,
+            a.create_time  as createTime
+        FROM
+            lm_marker_mobile a
+            INNER JOIN sys_mobile_user b ON a.user_id = b.user_id
+        WHERE
+            redline_id = #{redLineId}
+
+    </select>
+
+    <!--通过地方行政区划号查询界桩-->
+
+    <select id="getMarkerList" resultType="com.gistone.entity.LmMarkerMobile">
+        SELECT
+        a.id,
+        a.`code`,
+        a.landform,
+        a.jz_kh jzKh,
+        a.proof_lon,
+        a.proof_lat,
+        a.jz_number jzNumber,
+        a.longitude,
+        a.latitude,
+        a.position_picture positionPicture,
+        a.remark,
+        a.create_time as createTime,
+        b.real_name as createUserName,
+        c.srld_number as redlineName,
+        d.COM_NAME as placeName
+
+
+        FROM
+        lm_marker_mobile a
+        LEFT JOIN sys_mobile_user b ON a.create_user = b.user_id
+        LEFT JOIN data_redline_register c on c.srld_id = a.redline_id
+        LEFT JOIN sys_company d on d.COM_CODE = a.code
+
+        WHERE
+        a.type = 1 and a.del_flag = 1
+
+        <if test="code!=null and code !='' ">
+            and a.code like concat( #{code}, '%')
+        </if>
+
+        <if test="param!=null and param !='' ">
+            and (c.srld_name like concat( #{param}, '%') or a.jz_number like concat( #{param}, '%'))
+        </if>
+        order by create_time desc
+        limit #{startNum},#{pageSize}
+    </select>
+
+    <!--查询所有界桩-->
+    <select id="getAllMarkerList" resultType="com.gistone.entity.LmMarkerMobile">
+         SELECT
+                a.id,
+                a.`code`,
+                a.landform,
+                a.jz_kh jzKh,
+                a.jz_number jzNumber,
+                a.proof_lon as proofLon,
+                a.proof_lat as proofLat,
+                a.longitude,
+                a.latitude,
+                a.position_picture positionPicture,
+                a.remark,
+                a.create_time as createTime,
+                b.real_name as createUserName,
+                c.srld_number as redlineName,
+                d.COM_NAME as placeName
+
+
+        FROM
+              lm_marker_mobile a
+        LEFT JOIN sys_mobile_user b ON a.create_user = b.user_id
+        LEFT JOIN data_redline_register c on c.srld_id = a.redline_id
+        LEFT JOIN sys_company d on d.COM_CODE = a.code
+
+        WHERE
+        a.type = 1 and a.del_flag = 1
+    </select>
+
+    <!--查询界桩列表总数-->
+    <select id="getTotal" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+        count(a.id)
+        FROM
+        lm_marker_mobile a
+        LEFT JOIN sys_mobile_user b ON a.create_user = b.user_id
+        LEFT JOIN data_redline_register c on c.srld_id = a.redline_id
+
+        WHERE
+        a.type = 1 and a.del_flag = 1
+
+        <if test="code!=null and code !='' ">
+            and a.code like concat( #{code}, '%')
+        </if>
+
+        <if test="param!=null and param !='' ">
+            and (c.srld_name=#{param} or a.jz_number = #{param})
+        </if>
+
+    </select>
+
+    <!--查询预置界桩数据-->
+    <select id="getPreMarkerList" resultType="com.gistone.entity.LmMarkerMobile">
+        SELECT
+        a.id,
+        a.`code`,
+        a.jz_kh jzKh,
+        a.landform,
+        a.jz_number jzNumber,
+        a.longitude,
+        a.latitude,
+        a.position_picture positionPicture,
+        a.remark,
+        a.create_time as createTime,
+        b.real_name as createUserName,
+        c.srld_number as redlineName,
+        d.COM_NAME as placeName
+
+        FROM
+        lm_marker_mobile a
+        LEFT JOIN sys_mobile_user b ON a.create_user = b.user_id
+        LEFT JOIN data_redline_register c on c.srld_id = a.redline_id
+        LEFT JOIN sys_company d on d.COM_CODE = a.code
+
+        WHERE
+        a.type = 0 and del_flag = 1
+
+        <if test="code!=null and code !='' ">
+            and a.code like concat( #{code}, '%')
+        </if>
+
+        <if test="param!=null and param !='' ">
+            and (c.srld_name=#{param} or a.jz_number = #{param})
+        </if>
+
+        limit #{startNum},#{pageSize}
+    </select>
+
+    <!--查询查询预置界桩总数据不分页，不加参数-->
+    <select id="getAllPreMarkerList" resultType="com.gistone.entity.LmMarkerMobile">
+         SELECT
+        a.id,
+        a.`code`,
+        a.jz_kh jzKh,
+        a.landform,
+        a.jz_number jzNumber,
+        a.longitude,
+        a.latitude,
+        a.position_picture positionPicture,
+        a.remark,
+        a.create_time as createTime,
+        b.real_name as createUserName,
+        c.srld_number as redlineName,
+        d.COM_NAME as placeName
+
+        FROM
+        lm_marker_mobile a
+        LEFT JOIN sys_mobile_user b ON a.create_user = b.user_id
+        LEFT JOIN data_redline_register c on c.srld_id = a.redline_id
+        LEFT JOIN sys_company d on d.COM_CODE = a.code
+
+        WHERE
+        a.type = 0
+    </select>
+
+    <!--查询预置界桩列表总数-->
+
+    <select id="getPreTotal" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+        count(a.id)
+        FROM
+        lm_marker_mobile a
+        LEFT JOIN sys_mobile_user b ON a.create_user = b.user_id
+        LEFT JOIN data_redline_register c on c.srld_id = a.redline_id
+
+        WHERE
+        a.type = 0
+
+        <if test="code!=null and code !='' ">
+            and a.code like concat( #{code}, '%')
+        </if>
+        <if test="param!=null and param !='' ">
+            and (c.srld_name=#{param} or a.jz_number = #{param})
+        </if>
+    </select>
+
+    <!--根据id查询界桩信息-->
+    <select id="getMarkerById" resultType="com.gistone.entity.LmMarkerMobile" parameterType="java.lang.Integer">
+        SELECT
+            a.id,
+            a.is_bs as isBs,
+            a.jz_kh as jzKh,
+            a.file_url as fileUrl,
+            a.word_url as word_url,
+            a.jz_number as jzNumber,
+            a.code,
+            a.verify_person as verifyPerson,
+            a.landform,
+            a.proof_lon as proofLon,
+            a.proof_lat as proofLat,
+            a.longitude,
+            a.latitude,
+            a.remark,
+            a.position_picture as positionPicture,
+            a.create_time as createTime,
+            a.update_time as updateTime,
+            b.real_name AS createUserName,
+            c.username AS verifyPerson,
+            d.COM_NAME as placeName
+
+        FROM
+            lm_marker_mobile a
+            LEFT JOIN sys_mobile_user b ON a.create_user = b.user_id
+            LEFT JOIN sys_user c ON a.verify_person = c.id
+            LEFT JOIN sys_company d on d.COM_CODE = a.code
+        WHERE
+            a.id = #{id}
+    </select>
+
+    <select id="selectMarkerByCoordinate" resultType="com.gistone.entity.LmMarkerMobile">
+        SELECT
+            a.id,
+            jz_kh as jzKh,
+            jz_number as jzNumber,
+            a.code,
+            landform,
+            longitude,
+            latitude,
+            a.remark,
+            a.create_user,
+            a.position_picture as positionPicture,
+            a.create_time as createTime,
+            a.update_time as updateTime,
+            b.COM_NAME as placeName,
+            d.real_name as createUserName
+
+        FROM
+            lm_marker_mobile a
+
+            LEFT JOIN sys_company b on b.COM_CODE = a.code
+            LEFT JOIN sys_mobile_user d on d.user_id = a.create_user
+
+         where type = 1 and del_flag = 1
+        ORDER BY
+            round(
+                6378.138 * 2 * asin(
+                    sqrt(
+                        pow(
+                            sin(
+                                (
+                                    latitude * pi() / 180 - #{latitude} * pi() / 180
+                                ) / 2
+                            ),
+                            2
+                        ) + cos(latitude * pi() / 180) * cos(#{latitude} * pi() / 180) * pow(
+                            sin(
+                                (
+                                    longitude * pi() / 180 - #{longitude} * pi() / 180
+                                ) / 2
+                            ),
+                            2
+                        )
+                    )
+                ) * 1000
+            )
+        LIMIT 1
+    </select>
+
+
+    <select id="selectPreMarkerListForAll" resultType="com.gistone.entity.EXCEL.LmMarkerMobileVO">
+        SELECT
+        a.id,
+        a.`code`,
+        a.jz_kh jzKh,
+        a.landform,
+        a.jz_number jzNumber,
+        a.verify_person as verifyPerson,
+        a.save_time as saveTime,
+        a.longitude,
+        a.latitude,
+        a.position_picture positionPicture,
+        a.remark,
+        a.create_time as createTime,
+        b.real_name as createUserName,
+        c.srld_number as redlineName,
+        d.COM_NAME as placeName
+
+        FROM
+        lm_marker_mobile a
+        LEFT JOIN sys_mobile_user b ON a.create_user = b.user_id
+        LEFT JOIN data_redline_register c on c.srld_id = a.redline_id
+        LEFT JOIN sys_company d on d.COM_CODE = a.code
+        WHERE
+        a.type = 0 AND del_flag = 1
+        <if test="code!=null and code !='' ">
+            and a.code like concat( #{code}, '%')
+        </if>
+
+        <if test="param!=null and param !='' ">
+            and (c.srld_name=#{param} or a.jz_number = #{param})
+        </if>
+    </select>
+
+    <select id="selectMarkerListForAll" resultType="com.gistone.entity.EXCEL.LmMarkerMobileVO">
+        SELECT
+        a.id,
+        a.`code`,
+        a.landform,
+        a.verify_person as verifyPerson,
+        a.proof_lon as proofLon,
+        a.proof_lat as proofLat,
+        a.jz_kh jzKh,
+        a.jz_number jzNumber,
+        a.longitude,
+        a.latitude,
+        a.position_picture positionPicture,
+        a.remark,
+        a.create_time as createTime,
+        b.real_name as createUserName,
+        c.srld_number as redlineName,
+        d.COM_NAME as placeName,
+        a.save_time AS saveTime
+
+
+        FROM
+        lm_marker_mobile a
+        LEFT JOIN sys_mobile_user b ON a.create_user = b.user_id
+        LEFT JOIN data_redline_register c on c.srld_id = a.redline_id
+        LEFT JOIN sys_company d on d.COM_CODE = a.code
+        WHERE
+        a.type = 1 AND del_flag = 1
+        <if test="code!=null and code !='' ">
+            and a.code like concat( #{code}, '%')
+        </if>
+
+        <if test="param!=null and param !='' ">
+            and (c.srld_name=#{param} or a.jz_number = #{param})
+        </if>
+    </select>
+
+    <!--删除所有预置数据-->
+    <update id="deleteAll">
+        update lm_marker_mobile
+        set del_flag = 0
+        where type = 0
+    </update>
+
+    <!--根据行政区划查询行政区划名称-->
+    <select id="getSysCompany" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            COM_NAME
+        FROM
+            `sys_company`
+        WHERE
+            COM_CODE = #{code}
+    </select>
+
+</mapper>
+

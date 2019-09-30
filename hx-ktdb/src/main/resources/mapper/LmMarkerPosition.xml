@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.LmMarkerPositionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.LmMarkerPosition">
+        <id column="lmp_id" property="lmpId" />
+        <result column="lmp_lb_id" property="lmpLbId" />
+        <result column="lmp_code" property="lmpCode" />
+        <result column="lmp_distance" property="lmpDistance" />
+        <result column="lmp_position" property="lmpPosition" />
+    </resultMap>
+
+	<!-- 批量插入界碑位置信息 -->
+	<insert id="insertLmMarkerPositionInfor" parameterType="hashMap">
+  		INSERT lm_marker_position
+			(lmp_lb_id,lmp_code,lmp_distance,lmp_position) 
+			VALUES 
+			<foreach collection="list" item="item" index="index" separator=",">
+				(#{item.lmpLbId},#{item.lmpCode},#{item.lmpDistance},#{item.lmpPosition})
+			</foreach> 
+  	</insert>
+
+	<!-- 删除 -->
+	<delete id="deleteLmMarkerPositionInfor" parameterType="java.lang.String">
+  		DELETE FROM lm_marker_position WHERE lmp_lb_id = ${lmlpId}
+  	</delete>
+
+</mapper>

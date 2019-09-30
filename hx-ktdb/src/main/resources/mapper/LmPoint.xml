@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.LmPointMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.LmPoint">
+        <id column="lp_id" property="lpId" />
+        <result column="lp_code" property="lpCode" />
+        <result column="lp_srld_id" property="lpSrldId" />
+        <result column="lp_lon" property="lpLon" />
+        <result column="lp_lat" property="lpLat" />
+        <result column="lp_x" property="lpX" />
+        <result column="lp_y" property="lpY" />
+        <result column="lp_getTime" property="lpGettime" />
+        <result column="lp_add_uid" property="lpAddUid" />
+        <result column="lp_add_time" property="lpAddTime" />
+        <result column="lp_upd_uid" property="lpUpdUid" />
+        <result column="lp_upd_time" property="lpUpdTime" />
+        <result column="lp_id_del" property="lpIdDel" />
+    </resultMap>
+
+	<!-- 查询拐点数据列表 -->
+	<select id="selectLmPointList" resultType="hashMap" parameterType="hashMap">
+	 	SELECT IFNULL(t2.srld_name,'') srld_name,
+		 	IFNULL(t2.srld_code,'') srld_code,
+		 	IFNULL(t1.lp_id,'') lp_id,
+		 	IFNULL(t1.lp_code,'') lp_code,
+		 	IFNULL(t1.lp_srld_id,'') lp_srld_id,
+		 	IFNULL(t1.lp_lon,'') lp_lon,
+		 	IFNULL(t1.lp_lat,'') lp_lat,
+		 	IFNULL(t1.lp_x,'') lp_x,
+		 	IFNULL(t1.lp_y,'') lp_y,
+		 	IFNULL(t1.lp_add_time,'') lp_add_time,
+		 	IFNULL(t1.lp_getTime,'') lp_getTime
+			 FROM (SELECT * FROM lm_point )t1
+			INNER JOIN data_redline_register t2
+			ON t1.lp_srld_id = t2.srld_id 
+			WHERE 1=1 AND lp_id_del = 0
+		<if test="map.name !=null">
+			AND srld_name LIKE '%${map.name}%' 
+	   	</if>
+		<if test="map.lpsrldid !=null">
+			AND lp_srld_id in (select srld_id from data_redline_register where srld_code LIKE '%${map.srldcode}%')
+	   	</if>
+	   	order by lp_add_time desc
+	   	<if test="map.limit == 1">
+			limit ${map.number},${map.size}
+	   	</if>
+  	</select>
+  
+  	<!-- 查询拐点数据总数 -->
+  	<select id="selectLmPointListCount" resultType="int" parameterType="hashMap">
+	 	SELECT count(*) COUNT FROM (SELECT * FROM lm_point )t1
+		INNER JOIN data_redline_register t2
+		ON t1.lp_srld_id = t2.srld_id
+		WHERE 1=1 AND lp_id_del = 0 
+		<if test="map.name !=null">
+			AND srld_name LIKE '%${map.name}%' 
+	   	</if>
+	   	<if test="map.lpsrldid !=null">
+			AND lp_srld_id in (select srld_id from data_redline_register where srld_code LIKE '%${map.srldcode}%')
+	   	</if>
+	  </select>
+	  
+	  <!-- 查询红线编码是否重复 -->
+	  <select id="selectLmPointInfor" resultType="hashMap">
+	  	select * from lm_point where lp_code = #{lpCode} AND lp_srld_id = #{lpSrldId}
+	  </select>
+	  
+	  <!-- 新增拐点数据 -->
+	  <insert id="insertLmPointInfor" parameterType="hashMap">
+	  	INSERT lm_point
+			(lp_lon,lp_lat,lp_x,lp_y,lp_add_uid,lp_add_time,lp_getTime,lp_code,lp_srld_id) VALUES 
+			(#{lplon},#{lplat},#{lpx},#{lpy},#{lpadduid},#{lpaddtime},#{lpaddtime},#{lpCode},#{lpSrldId})
+	 </insert>
+	 
+	 <!-- 修改拐点数据 -->
+	 <update id="updateLmPointInfor" parameterType="hashMap">
+		UPDATE lm_point SET 
+			lp_code = #{lpCode},
+			lp_lon = #{lplon},
+			lp_lat = #{lplat},
+			lp_x = #{lpx},
+			lp_y = #{lpy},
+			lp_upd_uid = #{lpUpdUid},
+			lp_upd_time = #{lpUpdTime}
+			WHERE lp_id = #{lpid}
+	 </update>
+	 
+	 <!-- 删除拐点数据 -->
+	 <update id="deleteLmPointInfor" parameterType="hashMap">
+	  	UPDATE lm_point SET lp_id_del = '1' WHERE lp_id in (${lpId})
+	 </update>
+
+	<!-- 根据拐点id获取所有红线id下的拐点信息 -->
+  	<select id="selectAllpointBysrld" resultType="hashMap" parameterType="hashMap">
+ 		SELECT * FROM lm_point WHERE lp_id_del = 0 AND lp_srld_id  = #{lpSrldId};
+ 	</select>
+
+	<!--查询所有拐点-->
+	<select id="getPointList"  resultType="com.gistone.entity.LmPoint">
+		SELECT
+			b.lp_id as lpId,
+			b.lp_code as lpCode,
+			b.lp_srld_id as lpSrldId,
+			b.lp_lon as lpLon,
+			b.lp_lat as lpLat,
+			b.lp_x as lpX,
+			b.lp_y as lpY,
+			b.lp_getTime as lpGettime,
+			c.username as createUser,
+			d.username as updateUser
+
+		FROM
+		    lm_point b
+			left join sys_user c on b.lp_add_uid = c.id
+			left  join sys_user d on b.lp_upd_uid = d.id
+			left  join data_redline_register a on a.srld_id = b.lp_srld_id
+
+		WHERE
+		1=1
+        <if test="code!=null and code !='' ">
+            and a.srld_code like concat( #{code}, '%')
+        </if>
+		<if test="param!=null and param !='' ">
+			and  b.lp_code = #{param}
+		</if>
+
+		<if test="redlineId!=null  ">
+			and b.lp_srld_id =#{redlineId}
+		</if>
+		limit #{startNum},#{pageSize}
+
+	</select>
+	<!--查询拐点列表总条数-->
+	<select id="getTotal" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			count(b.lp_id)
+		FROM
+			data_redline_register a
+			LEFT JOIN lm_point b ON a.srld_id = b.lp_srld_id
+			left join sys_user c on b.lp_add_uid = c.id
+			left  join sys_user d on b.lp_upd_uid = d.id
+		WHERE
+		1=1
+		<if test="code!=null and code !='' ">
+			and a.srld_code like concat( #{code}, '%')
+		</if>
+		<if test="param!=null and param !='' ">
+			and b.lp_code = #{param}
+		</if>
+
+		<if test="redlineId!=null  ">
+			and b.lp_srld_id =#{redlineId}
+		</if>
+	</select>
+
+    <select id="selectLevelByCode" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select
+              COM_LEVEL
+        from
+             sys_company
+        WHERE
+             COM_CODE = #{code}
+    </select>
+
+
+	<select id="selectPointListForAll"  resultType="com.gistone.entity.EXCEL.LmPointVO">
+		SELECT
+		b.lp_id as lpId,
+		b.lp_code as lpCode,
+		b.lp_srld_id as lpSrldId,
+		b.lp_lon as lpLon,
+		b.lp_lat as lpLat,
+		b.lp_x as lpX,
+		b.lp_y as lpY,
+		b.lp_getTime as lpGettime,
+		c.username as createUser,
+		d.username as updateUser
+
+		FROM
+		lm_point b
+		left join sys_user c on b.lp_add_uid = c.id
+		left  join sys_user d on b.lp_upd_uid = d.id
+		left  join data_redline_register a on a.srld_id = b.lp_srld_id
+		WHERE
+		b.lp_id_del = 0
+		<if test="code!=null and code !='' ">
+			and a.srld_code like concat( #{code}, '%')
+		</if>
+		<if test="param!=null and param !='' ">
+			and  b.lp_code = #{param}
+		</if>
+		<if test="redlineId!=null  ">
+			and b.lp_srld_id =#{redlineId}
+		</if>
+	</select>
+</mapper>

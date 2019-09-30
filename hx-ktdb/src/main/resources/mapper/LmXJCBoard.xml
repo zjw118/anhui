@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.LmXJCBoardMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.LmXJCBoard">
+        <id column="lb_id" property="lbId" />
+        <result column="lb_srld_id" property="lbSrldId" />
+        <result column="lb_name" property="lbName" />
+        <result column="lb_code" property="lbCode" />
+        <result column="lb_x" property="lbX" />
+        <result column="lb_y" property="lbY" />
+        <result column="lb_lon" property="lbLon" />
+        <result column="lb_lat" property="lbLat" />
+        <result column="lb_zgbm" property="lbZgbm" />
+        <result column="lb_jdbm" property="lbJdbm" />
+        <result column="lb_phone" property="lbPhone" />
+        <result column="lb_setTime" property="lbSettime" />
+        <result column="lb_add_uid" property="lbAddUid" />
+        <result column="lb_add_time" property="lbAddTime" />
+        <result column="lb_upd_uid" property="lbUpdUid" />
+        <result column="lb_upd_time" property="lbUpdTime" />
+        <result column="lb_id_del" property="lbIdDel" />
+    </resultMap>
+    
+    <!-- 标识标牌列表 -->
+    <select id="seleteLmBoardList" parameterType="hashMap" resultType="hashMap">
+    	SELECT IFNULL(lb_id,'') AS lb_id,IFNULL(lb_srld_id,'') AS lb_srld_id,IFNULL(lb_name,'') AS lb_name,IFNULL(lb_code,'') AS lb_code,
+			IFNULL(lb_lon,'') AS lb_lon,IFNULL(lb_lat,'') AS lb_lat,IFNULL(lb_x,'') AS lb_x,IFNULL(lb_y,'') AS lb_y,
+			IFNULL(lb_zgbm,'') AS lb_zgbm,IFNULL(lb_jdbm,'') AS lb_jdbm,IFNULL(lb_phone,'') AS lb_phone,IFNULL(lb_setTime,'') AS lb_setTime,
+			IFNULL(srld_name,'') AS srld_name,IFNULL(srld_code,'') AS srld_code,IFNULL(lf_path,'') AS lf_path 
+		FROM lm_board LEFT JOIN data_redline_register ON lb_srld_id = srld_id left join 
+		(SELECT lf_board_id,GROUP_CONCAT(lf_path) AS lf_path  FROM lm_files GROUP BY lf_board_id)lp 
+		on lp.lf_board_id = lb_id WHERE 1=1 AND lb_id_del = 0
+	    <if test="map.lbName != null" >
+	       AND lb_name like '%${map.lbName}%'
+	    </if>
+	    <if test="map.srldName != null" >
+	       AND srld_name like '%${map.srldName}%'
+	    </if>
+	    <if test="map.srldCode != null" >
+	       AND srld_code like '${map.srldCode}%'
+	    </if>
+	    order by lb_add_time desc
+		<if test="map.limit == 1">
+			limit ${map.number},${map.size}
+	   	</if>
+    </select>
+    
+    <!-- 总数 -->
+    <select id="selectLmBoardListCount" parameterType="hashMap" resultType="int">
+    	SELECT COUNT(*) 
+		FROM lm_board LEFT JOIN data_redline_register ON lb_srld_id = srld_id left join 
+		(SELECT lf_board_id,GROUP_CONCAT(lf_path) AS lf_path  FROM lm_files GROUP BY lf_board_id)lp 
+		on lp.lf_board_id = lb_id WHERE 1=1 AND lb_id_del = 0
+	    <if test="map.lbName != null" >
+	       AND lb_name like '%${map.lbName}%'
+	    </if>
+	    <if test="map.srldName != null" >
+	       AND srld_name like '%${map.srldName}%'
+	    </if>
+	    <if test="map.srldCode != null" >
+	       AND srld_code like '${map.srldCode}%'
+	    </if>
+    </select>
+    
+    <!-- 保存 -->
+    <insert id="saveLmBoard" parameterType="hashMap">
+    	INSERT INTO lm_board (lb_srld_id, lb_name, lb_code, lb_x, lb_y, lb_lon, lb_lat, lb_zgbm, lb_jdbm, lb_phone, lb_setTime, lb_add_uid, lb_add_time, lb_id_del)
+		VALUES (#{lbSrldId},#{lbName},#{lbCode},#{lbX},#{lbY},#{lbLon},#{lbLat},#{lbZgbm},#{lbJdbm},#{lbPhone},#{lbSettime},#{lbAddUid},#{lbAddTime},0)
+    </insert>
+    
+    <!-- 修改 -->
+	 <update id="updateLmBoard" parameterType="hashMap">
+		UPDATE lm_board SET 
+			lb_name = #{lbName}
+			lb_code = #{lbCode},
+			lb_lon = #{lbLon},
+			lb_lat = #{lbLat},
+			lb_x = #{lbX},
+			lb_y = #{lbY},
+			lb_zgbm = #{lbZgbm},
+			lb_jdbm = #{lbJdbm},
+			lb_phone = #{lbPhone}, 
+			lb_setTime = #{lbSettime},
+			lb_upd_uid = #{lbUpdUid},
+			lb_upd_time = #{lbUpdTime}
+			WHERE lb_id = #{lbId}
+	 </update>
+    
+    <!-- 查询得到最大主键 -->
+    <select id="getPkid" parameterType="java.lang.String" resultType="java.lang.String">
+    	SELECT max(lb_id) PKID from lm_board WHERE lb_id_del = '0'
+    </select>
+
+	<!-- 根据编码和红线id查询是否重复 -->
+	<select id="seleteLmBoardInfo" resultType="hashMap">
+		select * from lm_board where lb_code = #{lbCode} AND lb_srld_id = #{lbSrldId}
+	</select>
+
+	<!-- 删除 -->
+	<update id="deleteLmBoard" parameterType="java.lang.String">
+		UPDATE lm_board SET lb_id_del = 1 WHERE lb_id IN (${lbId})
+	</update>
+
+</mapper>

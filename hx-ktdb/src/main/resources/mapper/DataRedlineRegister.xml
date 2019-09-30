@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.DataRedlineRegisterMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.DataRedlineRegister">
+        <id column="srld_id" property="srldId" />
+        <result column="srld_city" property="srldCity" />
+        <result column="srld_country" property="srldCountry" />
+        <result column="srld_code" property="srldCode" />
+        <result column="srld_name" property="srldName" />
+        <result column="srld_population" property="srldPopulation" />
+        <result column="srld_type" property="srldType" />
+        <result column="srld_target" property="srldTarget" />
+        <result column="srld_position" property="srldPosition" />
+        <result column="srld_area" property="srldArea" />
+        <result column="srld_plant_type" property="srldPlantType" />
+        <result column="srld_active" property="srldActive" />
+        <result column="srld_problem" property="srldProblem" />
+        <result column="srld_control" property="srldControl" />
+        <result column="srld_add_time" property="srldAddTime" />
+        <result column="srld_add_uid" property="srldAddUid" />
+        <result column="srld_is_del" property="srldIsDel" />
+    </resultMap>
+
+	<!-- 得到所有红线块 -->
+	<select id="listAll" resultType="hashMap" parameterType="com.gistone.entity.DataRedlineRegister" >
+    	select srld_name , srld_id , srld_code from data_redline_register
+    		where srld_is_del = 0 
+  	</select>
+	
+	<!-- 根据用户id查询红线块 -->
+	<select id="getRedLindList" resultType="hashMap" parameterType="java.lang.String">
+		SELECT t1.srld_id,t1.srld_name,CONCAT('[',
+              GROUP_CONCAT(
+                   CONCAT('{"lp_id":"',t1.lp_id,'"'),',',
+                   CONCAT('"lm_id":"',lm_id,'"'),',',
+                   CONCAT('"lp_lon":"',t1.lp_lon,'"'),
+                   CONCAT(',"lp_lat":"',t1.lp_lat),'"}')
+				,']') AS coordinate FROM (
+			SELECT t1.srld_id,lm_id,srld_name,lp_id,lp_lon,lp_lat,lp_x,lp_y FROM (
+				SELECT srld_id,lm_id,srld_name,lp_id,lp_lon,lp_lat,lp_x,lp_y FROM data_redline_register INNER JOIN lm_point ON srld_id = lp_srld_id 
+				INNER JOIN lm_marker ON lm_lp_id = lp_id) t1
+				INNER JOIN sys_user_redline glb ON t1.srld_id = glb.srld_id
+				WHERE user_id = #{id} )t1
+		GROUP BY t1.srld_id		
+	</select>
+
+    <select id="selectRedlineNumber" resultType="java.lang.String">
+        SELECT
+            srld_number
+        FROM
+            data_redline_register
+        WHERE
+            srld_id = #{redlineId}
+    </select>
+    <update id="updateTarget" >
+       UPDATE data_redline_register
+       SET srld_target = #{target}
+       WHERE
+            srld_id = #{id}
+    </update>
+    <!--更新红线数据-->
+    <update id="updateBy" parameterType="com.gistone.entity.DataRedlineRegister">
+        update data_redline_register
+        set srld_number = #{srldNumber},srld_code = #{srldCode},srld_type = #{srldType},target= #{target},srld_area = #{srldArea}
+        where
+            srld_id = #{srldId}
+    </update>
+
+</mapper>
