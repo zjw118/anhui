@@ -71,7 +71,7 @@
         <gt-swing>10.0</gt-swing>
         <gt-shapefile>10.0</gt-shapefile>
         <gt-opengis>10.0</gt-opengis>
-        <hutool-all>4.1.19</hutool-all>
+        <hutool-all>3.3.0</hutool-all>
         <thumbnailator>0.4.8</thumbnailator>
         <json-lib>2.4</json-lib>
         <fileupload>1.0.0</fileupload>
