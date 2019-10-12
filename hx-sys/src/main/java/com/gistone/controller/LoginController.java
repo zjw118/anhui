@@ -166,6 +166,7 @@ public class LoginController {
         try {
             String ipAdress = GetIpUtil.getIpAddress(request);
 
+
             /*if (StringUtils.isBlank(login.getAccessToken())) {
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "token不能为空！");
             }

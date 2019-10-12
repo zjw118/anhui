@@ -1,0 +1,2 @@
+1.调用巡护的业务逻辑接口，这里只对APP的接口逻辑做处理
+2.DestinationsManagerController中insertDestinations角色ID暂时未有，等待登录完善角色存入redis后，调取util中IGettingUsersService类中getUsersByTokenRedis方法获取

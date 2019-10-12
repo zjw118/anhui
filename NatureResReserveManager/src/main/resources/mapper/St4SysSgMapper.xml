@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.bjhky.mapper.St4SysSgMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4SysSg">
+        <id column="SG001" property="sg001" jdbcType="INTEGER" />
+        <result column="SG002" property="sg002" jdbcType="INTEGER" />
+        <result column="SG003" property="sg003" jdbcType="TIMESTAMP" />
+        <result column="SG004" property="sg004" jdbcType="INTEGER" />
+        <result column="SG005" property="sg005" jdbcType="TIMESTAMP" />
+        <result column="SG006" property="sg006" jdbcType="VARCHAR" />
+        <result column="SG007" property="sg007" jdbcType="INTEGER" />
+        <result column="SG008" property="sg008" jdbcType="VARCHAR" />
+        <result column="SG009" property="sg009" jdbcType="VARCHAR" />
+        <result column="SD001" property="sd001" jdbcType="INTEGER" />
+        <result column="SG011" property="sg011" jdbcType="VARCHAR" />
+        <result column="CA001" property="ca001" jdbcType="INTEGER" />
+        <result column="CB001" property="cb001" jdbcType="INTEGER" />
+        <result column="SG013" property="sg013" jdbcType="VARCHAR" />
+        <result column="SG014" property="sg014" jdbcType="VARCHAR" />
+        <result column="SG015" property="sg015" jdbcType="VARCHAR" />
+        <result column="SG016" property="sg016" jdbcType="VARCHAR" />
+        <result column="SG017" property="sg017" jdbcType="DATE" />
+        <result column="SG018" property="sg018" jdbcType="VARCHAR" />
+        <result column="SG019" property="sg019" jdbcType="VARCHAR" />
+        <association property="reserveType" javaType="com.gistone.bjhky.entity.St4ScsCa">
+            <id column="CA001" property="ca001" jdbcType="INTEGER" />
+            <result column="CA002" property="ca002" jdbcType="VARCHAR" />
+        </association>
+        <association property="reserveRank" javaType="com.gistone.bjhky.entity.St4ScsCb">
+            <id column="CB001" property="cb001" jdbcType="INTEGER" />
+            <result column="CB002" property="cb002" jdbcType="VARCHAR" />
+        </association>
+        <association property="reserveUrl" javaType="com.gistone.bjhky.entity.St4ScsCs">
+            <id column="CS001" property="cs001" jdbcType="INTEGER" />
+            <result column="SG001" property="sg001" jdbcType="INTEGER" />
+            <result column="CS003" property="cs003" jdbcType="INTEGER" />
+            <result column="CS004" property="cs004" jdbcType="VARCHAR" />
+            <result column="CS005" property="cs005" jdbcType="INTEGER" />
+            <result column="CS006" property="cs006" jdbcType="VARCHAR" />
+            <result column="CS007" property="cs007" jdbcType="INTEGER" />
+            <result column="CS008" property="cs008" jdbcType="TIMESTAMP" />
+            <result column="CS009" property="cs009" jdbcType="INTEGER" />
+            <result column="CS010" property="cs010" jdbcType="VARCHAR" />
+            <result column="CS011" property="cs011" jdbcType="VARCHAR" />
+            <result column="CS012" property="cs012" jdbcType="VARCHAR" />
+        </association>
+        <association property="adminRegion" javaType="com.gistone.bjhky.entity.St4SysSd">
+            <id column="SD001" property="sd001" />
+            <result column="SD002" property="sd002" />
+            <result column="SD003" property="sd003" />
+            <result column="SD004" property="sd004" />
+            <result column="SD005" property="sd005" />
+            <result column="SD006" property="sd006" />
+            <result column="SD007" property="sd007" />
+            <result column="SD008" property="sd008" />
+            <result column="SD009" property="sd009" />
+            <result column="SD010" property="sd010" />
+            <result column="SD011" property="sd011" />
+            <result column="SD012" property="sd012" />
+        </association>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+    SG001, SG002, SG003, SG004, SG005, SG006, SG007, SG008, SG009, SD001, SG011, CA001,
+    CB001, SG013, SG014, SG015, SG016, SG017, SG018, SG019
+  </sql>
+    <select id="getReserveDataBySaid" resultMap="BaseResultMap" >
+      select sg.SG001,sg.SG008 from st4_sys_sg sg left join st4_po_sa_sg sasg on sasg.SG001= sg.SG001 WHERE sg.SG007=1 and sasg.SA001=#{sa001}
+    </select>
+    <select id="getIdAndValue" resultMap="BaseResultMap" >
+        select SG001,SG008 from  st4_sys_sg where SG007=1
+    </select>
+
+    <select id="lists" resultMap="BaseResultMap"  >
+       select distinct sg.*,sd.SD008,ca.CA002,cb.CB002
+       from st4_sys_sg sg
+        LEFT JOIN st4_po_sg_sj sgsj
+        ON sgsj.SG001 = sg.SG001
+        LEFT JOIN st4_sys_sj sj
+        ON sj.SJ001 = sgsj.SJ001
+        LEFT JOIN st4_sys_sd sd
+        ON sd.SD001 = sg.SD001
+        LEFT JOIN st4_scs_ca ca
+        ON ca.CA001 = sg.CA001
+        LEFT JOIN st4_scs_cb cb
+        ON cb.CB001 = sg.CB001
+       WHERE sg.SG007=1
+        <if test="sg.unitId != null" >
+            and sj.SJ001 = #{sg.unitId}
+        </if>
+        <if test="sg.sg002 != null" >
+            and  SG002 = #{sg.sg002}
+        </if>
+        <if test="sg.sg003 != null" >
+            and  SG003 = #{sg.sg003}
+        </if>
+        <if test="sg.sg004 != null" >
+            and  SG004 = #{sg.sg004}
+        </if>
+        <if test="sg.sg005 != null" >
+            and  SG005 = #{sg.sg005}
+        </if>
+        <if test="sg.sg006 != null" >
+            and SG006 = #{sg.sg006}
+        </if>
+        <if test="sg.sg007 != null" >
+            SG007 = #{sg.sg007}
+        </if>
+        <if test="sg.sg008 != null" >
+            and  SG008 like '%${sg.sg008}%'
+        </if>
+        <if test="sg.sg009 != null" >
+            and  SG009 = #{sg.sg009}
+        </if>
+        <if test="sg.sd001 != null" >
+            and sg.SD001 = #{sg.sd001}
+        </if>
+        <if test="sg.sg011 != null" >
+            and  SG011 = #{sg.sg011}
+        </if>
+        <if test="sg.ca001 != null" >
+            and  sg.CA001 = #{sg.ca001}
+        </if>
+        <if test="sg.cb001 != null" >
+            and  sg.CB001 = #{sg.cb001}
+        </if>
+        <if test="sg.sg013 != null" >
+            and  SG013 = #{sg.sg013}
+        </if>
+        <if test="sg.sg014 != null" >
+            and  SG014 = #{sg.sg014}
+        </if>
+        <if test="sg.sg015 != null" >
+            and  SG015 = #{sg.sg015}
+        </if>
+        <if test="sg.sg016 != null" >
+            and  SG016 = #{sg.sg016}
+        </if>
+        <if test="sg.sg017 != null" >
+            and  SG017 = #{sg.sg017}
+        </if>
+        <if test="sg.sg018 != null" >
+            and  SG018 = #{sg.sg018}
+        </if>
+        <if test="sg.sg019 != null" >
+            and  SG019 = #{sg.sg019}
+        </if>
+
+        ORDER BY sg.SG004 desc
+</select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from st4_sys_sg
+        where SG001 = #{sg001,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert2" parameterType="com.gistone.bjhky.entity.St4SysSg" >
+    insert into st4_sys_sg (SG001, SG002, SG003,
+      SG004, SG005, SG006,
+      SG007, SG008, SG009,
+      SD001, SG011, CA001,
+      CB001, SG013, SG014,
+      SG015, SG016, SG017, SG018,
+      SG019)
+    values (#{sg001,jdbcType=INTEGER}, #{sg002,jdbcType=INTEGER}, #{sg003,jdbcType=TIMESTAMP},
+      #{sg004,jdbcType=INTEGER}, #{sg005,jdbcType=TIMESTAMP}, #{sg006,jdbcType=VARCHAR},
+      #{sg007,jdbcType=INTEGER}, #{sg008,jdbcType=VARCHAR}, #{sg009,jdbcType=VARCHAR},
+      #{sd001,jdbcType=INTEGER}, #{sg011,jdbcType=VARCHAR}, #{ca001,jdbcType=INTEGER},
+      #{cb001,jdbcType=INTEGER}, #{sg013,jdbcType=VARCHAR}, #{sg014,jdbcType=VARCHAR},
+      #{sg015,jdbcType=VARCHAR}, #{sg016,jdbcType=VARCHAR}, #{sg017,jdbcType=DATE}, #{sg018,jdbcType=VARCHAR},
+      #{sg019,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insert" parameterType="com.gistone.bjhky.entity.St4SysSg" useGeneratedKeys="true" keyProperty="sg001">
+        insert into st4_sys_sg
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="sg001 != null" >
+                SG001,
+            </if>
+            <if test="sg002 != null" >
+                SG002,
+            </if>
+                SG003,
+            <if test="sg004 != null" >
+                SG004,
+            </if>
+                SG005,
+            <if test="sg006 != null" >
+                SG006,
+            </if>
+            <if test="sg007 != null" >
+                SG007,
+            </if>
+            <if test="sg008 != null" >
+                SG008,
+            </if>
+            <if test="sg009 != null" >
+                SG009,
+            </if>
+            <if test="sd001 != null" >
+                SD001,
+            </if>
+            <if test="sg011 != null" >
+                SG011,
+            </if>
+            <if test="ca001 != null" >
+                CA001,
+            </if>
+            <if test="cb001 != null" >
+                CB001,
+            </if>
+            <if test="sg013 != null" >
+                SG013,
+            </if>
+            <if test="sg014 != null" >
+                SG014,
+            </if>
+            <if test="sg015 != null" >
+                SG015,
+            </if>
+            <if test="sg016 != null" >
+                SG016,
+            </if>
+            <if test="sg017 != null" >
+                SG017,
+            </if>
+            <if test="sg018 != null" >
+                SG018,
+            </if>
+            <if test="sg019 != null" >
+                SG019,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="sg001 != null" >
+                #{sg001,jdbcType=INTEGER},
+            </if>
+            <if test="sg002 != null" >
+                #{sg002,jdbcType=INTEGER},
+            </if>
+                now(),
+            <if test="sg004 != null" >
+                #{sg004,jdbcType=INTEGER},
+            </if>
+                now(),
+            <if test="sg006 != null" >
+                #{sg006,jdbcType=VARCHAR},
+            </if>
+            <if test="sg007 != null" >
+                #{sg007,jdbcType=INTEGER},
+            </if>
+            <if test="sg008 != null" >
+                #{sg008,jdbcType=VARCHAR},
+            </if>
+            <if test="sg009 != null" >
+                #{sg009,jdbcType=VARCHAR},
+            </if>
+            <if test="sd001 != null" >
+                #{sd001,jdbcType=INTEGER},
+            </if>
+            <if test="sg011 != null" >
+                #{sg011,jdbcType=VARCHAR},
+            </if>
+            <if test="ca001 != null" >
+                #{ca001,jdbcType=INTEGER},
+            </if>
+            <if test="cb001 != null" >
+                #{cb001,jdbcType=INTEGER},
+            </if>
+            <if test="sg013 != null" >
+                #{sg013,jdbcType=VARCHAR},
+            </if>
+            <if test="sg014 != null" >
+                #{sg014,jdbcType=VARCHAR},
+            </if>
+            <if test="sg015 != null" >
+                #{sg015,jdbcType=VARCHAR},
+            </if>
+            <if test="sg016 != null" >
+                #{sg016,jdbcType=VARCHAR},
+            </if>
+            <if test="sg017 != null" >
+                #{sg017,jdbcType=DATE},
+            </if>
+            <if test="sg018 != null" >
+                #{sg018,jdbcType=VARCHAR},
+            </if>
+            <if test="sg019 != null" >
+                #{sg019,jdbcType=VARCHAR},
+            </if>
+        </trim>
+
+    </insert>
+    <update id="update" parameterType="com.gistone.bjhky.entity.St4SysSg" >
+        update st4_sys_sg
+        <set >
+            <if test="sg002 != null" >
+                SG002 = #{sg002,jdbcType=INTEGER},
+            </if>
+            <if test="sg003 != null" >
+                SG003 = #{sg003,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sg004 != null" >
+                SG004 = #{sg004,jdbcType=INTEGER},
+            </if>
+                SG005 = now(),
+            <if test="sg006 != null" >
+                SG006 = #{sg006,jdbcType=VARCHAR},
+            </if>
+            <if test="sg007 != null" >
+                SG007 = #{sg007,jdbcType=INTEGER},
+            </if>
+            <if test="sg008 != null" >
+                SG008 = #{sg008,jdbcType=VARCHAR},
+            </if>
+            <if test="sg009 != null" >
+                SG009 = #{sg009,jdbcType=VARCHAR},
+            </if>
+            <if test="sd001 != null" >
+                SD001 = #{sd001,jdbcType=INTEGER},
+            </if>
+            <if test="sg011 != null" >
+                SG011 = #{sg011,jdbcType=VARCHAR},
+            </if>
+            <if test="ca001 != null" >
+                CA001 = #{ca001,jdbcType=INTEGER},
+            </if>
+            <if test="cb001 != null" >
+                CB001 = #{cb001,jdbcType=INTEGER},
+            </if>
+            <if test="sg013 != null" >
+                SG013 = #{sg013,jdbcType=VARCHAR},
+            </if>
+            <if test="sg014 != null" >
+                SG014 = #{sg014,jdbcType=VARCHAR},
+            </if>
+            <if test="sg015 != null" >
+                SG015 = #{sg015,jdbcType=VARCHAR},
+            </if>
+            <if test="sg016 != null" >
+                SG016 = #{sg016,jdbcType=VARCHAR},
+            </if>
+            <if test="sg017 != null" >
+                SG017 = #{sg017,jdbcType=DATE},
+            </if>
+            <if test="sg018 != null" >
+                SG018 = #{sg018,jdbcType=VARCHAR},
+            </if>
+            <if test="sg019 != null" >
+                SG019 = #{sg019,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where SG001 = #{sg001,jdbcType=INTEGER}
+    </update>
+    <update id="delete" parameterType="com.gistone.bjhky.entity.St4SysSg" >
+        update st4_sys_sg
+        set SG007 = 0
+        where SG001 = #{sg001,jdbcType=INTEGER}
+  </update>
+
+    <select id="listByParam" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4SysSg" >
+        select SG001,SG008 from st4_sys_sg where SG007 = 1
+        <if test="sg008 != null" >
+            and SG008 = #{sg008}
+        </if>
+        <if test="sd001 != null" >
+            and SD001 = #{sd001}
+        </if>
+        ORDER BY CONVERT(SG008 USING gbk) COLLATE gbk_chinese_ci ASC
+    </select>
+
+    <select id="getDataById" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4SysSg" >
+        SELECT  a.*,b.CS003 AS CS003,b.CS004,b.CS005,
+            b.CS006,b.CS011
+        FROM st4_sys_sg a
+        LEFT JOIN (
+                SELECT d.*
+                FROM (
+                SELECT MAX(cs.CS001) AS CS001
+                FROM st4_scs_cs cs
+                GROUP BY SG001
+                ) t
+                INNER JOIN st4_scs_cs d ON t.CS001 = d.CS001
+        ) b
+        ON a.SG001 = b.SG001
+            WHERE a.SG007 = 1
+            <if test="sg001!=null">
+                and a.SG001 = #{sg001}
+            </if>
+            <if test="sgList!=null ">
+                and a.SG001 IN
+                <foreach item="item" index="index"  collection="sgList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="strTime!=null and strTime!='' ">
+                and a.SG003 <![CDATA[ >= ]]> #{strTime}
+            </if>
+            <if test="endTime!=null and endTime!='' ">
+                and a.SG003 <![CDATA[ <= ]]> #{endTime}
+            </if>
+            ORDER BY b.CS003 DESC
+
+    </select>
+
+
+    <select id="appList" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4SysSg" >
+        select a.*,Max(b.CS003) as CS003,b.CS004,CS005,
+        b.CS006,c.`SD008`,c.`SD001`,c.`SD012` , d.`CA002`,d.CA001,
+        e.`CB002`, e.`CB001`  from  ( select
+        sg.SG001, SG002, SG003, SG004, SG005, SG006, SG007, SG008, SG009, SD001, SG011, CA001,
+        CB001, SG013, SG014, SG015, SG016, SG017, SG018, SG019
+        from st4_sys_sg sg
+        LEFT JOIN st4_po_sa_sg sasg ON sasg.`SG001` = sg.`SG001`
+        WHERE SG007 = 1
+        <if test="unionId != null" >
+            and  SA001 = #{unionId}
+        </if>
+        <if test="sg002 != null" >
+            and  SG002 = #{sg002}
+        </if>
+        <if test="sg003 != null" >
+            and  SG003 = #{sg003}
+        </if>
+        <if test="sg004 != null" >
+            and  SG004 = #{sg004}
+        </if>
+        <if test="sg005 != null" >
+            and  SG005 = #{sg005}
+        </if>
+        <if test="sg006 != null" >
+            and SG006 = #{sg006}
+        </if>
+        <if test="sg007 != null" >
+            AND SG007 = #{sg007}
+        </if>
+        <if test="sg008 != null" >
+            and  SG008 like '%${sg008}%'
+        </if>
+        <if test="sg009 != null" >
+            and  SG009 = #{sg009}
+        </if>
+        <if test="sd001 != null" >
+            and SD001 = #{sd001}
+        </if>
+        <if test="sg011 != null" >
+            and  SG011 = #{sg011}
+        </if>
+        <if test="ca001 != null" >
+            and  CA001 = #{ca001}
+        </if>
+        <if test="cb001 != null" >
+            and  CB001 = #{cb001}
+        </if>
+        <if test="sg013 != null" >
+            and  SG013 = #{sg013,}
+        </if>
+        <if test="sg014 != null" >
+            and  SG014 = #{sg014}
+        </if>
+        <if test="sg015 != null" >
+            and  SG015 = #{sg015}
+        </if>
+        <if test="sg016 != null" >
+            and  SG016 = #{sg016}
+        </if>
+        <if test="sg017 != null" >
+            and  SG017 = #{sg017}
+        </if>
+        <if test="sg018 != null" >
+            and  SG018 = #{sg018}
+        </if>
+        <if test="sg019 != null" >
+            and  SG019 = #{sg019}
+        </if>
+         ) a
+        left join st4_scs_cs b on a.SG001 = b.SG001
+        LEFT JOIN st4_scs_cb e ON e.`CB001` = a.CB001
+        left join st4_scs_ca d ON a.CA001 = d.`CA001`
+        LEFT JOIN st4_sys_sd c ON a.SD001 = c.SD001
+        where a.SG007 = 1
+        GROUP BY SG001 ORDER BY CONVERT(SG008 USING gbk) COLLATE gbk_chinese_ci ASC
+        <!--GROUP BY rvd_reserve_data_id-->
+    </select>
+    <select id="appListToPoint" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4SysSg" >
+        select SG001, SG008 from st4_sys_sg sg
+        WHERE SG007 = 1
+        <if test="sg008 != null" >
+            and  SG008 like '%${sg008}%'
+        </if>
+        ORDER BY CONVERT(SG008 USING gbk) COLLATE gbk_chinese_ci ASC
+        limit #{pageNumber},#{pageSize}
+    </select>
+
+</mapper>

@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.bjhky.mapper.St4SysSaMapper">
+
+    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4SysSa" >
+        <id column="SA001" property="sa001" jdbcType="INTEGER" />
+        <result column="SA002" property="sa002" jdbcType="INTEGER" />
+        <result column="SA003" property="sa003" jdbcType="TIMESTAMP" />
+        <result column="SA004" property="sa004" jdbcType="INTEGER" />
+        <result column="SA005" property="sa005" jdbcType="TIMESTAMP" />
+        <result column="SA006" property="sa006" jdbcType="VARCHAR" />
+        <result column="SA007" property="sa007" jdbcType="INTEGER" />
+        <result column="SA008" property="sa008" jdbcType="VARCHAR" />
+        <result column="SA009" property="sa009" jdbcType="VARCHAR" />
+        <result column="SA010" property="sa010" jdbcType="VARCHAR" />
+        <result column="SA011" property="sa011" jdbcType="INTEGER" />
+        <result column="SA012" property="sa012" jdbcType="VARCHAR" />
+        <result column="SA013" property="sa013" jdbcType="VARCHAR" />
+        <result column="SA014" property="sa014" jdbcType="INTEGER" />
+        <result column="SA015" property="sa015" jdbcType="INTEGER" />
+        <result column="SA016" property="sa016" jdbcType="INTEGER" />
+        <result column="SA017" property="sa017" jdbcType="TIMESTAMP" />
+        <result column="SA018" property="sa018" jdbcType="VARCHAR" />
+        <result column="SA019" property="sa019" jdbcType="VARCHAR" />
+        <result column="SA020" property="sa020" jdbcType="INTEGER" />
+        <result column="SG001" property="sg001" jdbcType="INTEGER" />
+        <collection property="st4SysSc" ofType="com.gistone.bjhky.entity.St4SysSc">
+            <id column="SC001" jdbcType="INTEGER" property="sc001" />
+            <result column="SC002" jdbcType="VARCHAR" property="sc002" />
+            <result column="SC003" jdbcType="INTEGER" property="sc003" />
+            <result column="SC004" jdbcType="VARCHAR" property="sc004" />
+            <result column="SC005" jdbcType="INTEGER" property="sc005" />
+            <result column="SC006" jdbcType="TIMESTAMP" property="sc006" />
+            <result column="SC007" jdbcType="INTEGER" property="sc007" />
+            <result column="SC008" jdbcType="TIMESTAMP" property="sc008" />
+            <result column="SC009" jdbcType="INTEGER" property="sc009" />
+            <result column="SC010" jdbcType="VARCHAR" property="sc010" />
+            <result column="SC011" jdbcType="VARCHAR" property="sc011" />
+            <result column="SC012" jdbcType="VARCHAR" property="sc012" />
+            <result column="SC013" jdbcType="INTEGER" property="sc013" />
+            <result column="SC014" jdbcType="INTEGER" property="sc014" />
+            <result column="SC015" jdbcType="INTEGER" property="sc015" />
+            <result column="SC016" jdbcType="VARCHAR" property="sc016" />
+        </collection>
+    </resultMap>
+    <sql id="Base_Column_List" >
+    SA001, SA002, SA003, SA004, SA005, SA006, SA007, SA008, SA009, SA010, SA011, SA012,
+    SA013, SA014, SA015, SA016, SA017, SA018, SA019, SA020, SG001
+  </sql>
+    <sql id="Base_Column_List1" >
+    sa.SA001, SA002, SA003, SA004, SA005, SA006, SA007, SA008, SA010, SA011, SA012,
+    SA013, SA014, SA015, SA016, SA017, SA018, SA019, SA020, SG001
+  </sql>
+
+    <select id="listPhoneUserToView" resultType="Map" parameterType="com.gistone.bjhky.entity.St4SysSa" >
+        <!--如果当前坐标时间与当前时间时差不超过一个小时，那么认为该用户在线，否则下线-->
+        select * from (select CH001, CH002, CH003, CH004,CH006, IF(HOUR( TIMEDIFF( NOW(), CH006) ) > 1 , 0 , 1) CH005 ,
+        sa.SA001, sa.SA002, sa.SA003, sa.SA004, sa.SA005, sa.SA006, sa.SA007, sa.SA008, sa.SA010, sa.SA011, sa.SA012,
+        sa.SA013, sa.SA014, sa.SA015, sa.SA016, sa.SA017, sa.SA018, sa.SA019, sa.SA020, sa.SG001
+        from st4_scs_ch ch
+        left join st4_sys_sa sa on sa.SA001 = ch.CH002
+        left join st4_po_sa_sj sasj on sasj.SA001= sa.SA001
+        LEFT JOIN st4_sys_sj sj on sj.SJ001 = sasj.SJ001
+        where SA007 = 1
+        <if test="unitList!=null and unitList.size >0 ">
+            and sj.SJ001 IN
+            <foreach item="item" index="index"  collection="unitList" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="sg001 != null">
+            and SG001 = #{sg001}
+        </if>
+
+        ) a where 1=1
+
+        <if test="ch005 != null">
+            and a.CH005 = #{ch005}
+        </if>
+        ORDER BY a.CH005
+    </select>
+    <select id="login" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4SysSa" >
+        SELECT sa.*,sc.* FROM st4_sys_sa sa LEFT JOIN st4_po_sa_sb sasb ON sa.`SA001` = sasb.`SA001` LEFT JOIN st4_sys_sb sb ON sasb.`SB001` = sb.`SB001`
+        LEFT JOIN st4_po_sb_sc sbsc ON sbsc.SB001 = sb.`SB001`
+        LEFT JOIN st4_sys_sc sc ON sc.`SC001` = sbsc.`SC001`
+        where SA007 = 1 and SA008 = #{sa008} or SA012 = #{sa012}
+        <if test="sg001 != null" >
+          and  SG001 = #{sg001}
+        </if>
+    </select>
+
+    <!--根据人员id与问题点id查询该 点位所在任务的小组的组员-->
+    <select id="getUserByidAndCd001" resultMap="BaseResultMap" parameterType="Map" >
+        SELECT sa.SA001 FROM st4_sys_sa sa
+            LEFT JOIN st4_po_sa_cz sacz ON sa.`SA001` = sacz.SA001
+              LEFT JOIN st4_scs_cz cz ON cz.`CZ001` = sacz.`CZ001`
+              WHERE sacz.CZ001 in
+         (SELECT cz001 FROM st4_po_sa_cz WHERE SA001 = #{sa001})
+
+        AND cz.CL001 = (SELECT CL001 FROM st4_scs_cd cd WHERE CD001= #{cd001})
+
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from st4_sys_sa
+    where SA001 = #{sa001,jdbcType=INTEGER}
+  </delete>
+    <select id="listUser" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List1" />
+        from  st4_sys_sa sa
+        where SA007 = 1
+        <if test="sa.sa012!=null and sa.sa012!='' ">
+            and sa.SA012 like '%${sa.sa012}%'
+        </if>
+        <if test="sa.sa019!=null and sa.sa019!=''">
+            and sa.SA019 like '%${sa.sa019}%'
+        </if>
+        <if test="sa.sa008!=null and sa.sa008!=''">
+            and sa.SA008 like '%${sa.sa008}%'
+        </if>
+        <if test="sa.ptype==0">
+            and (
+            sa.SA001=#{sa.sa001} OR sa.SA002=#{sa.sa001}
+            )
+        </if>
+        <if test="sa.ptype==1">
+            and sa.SA001=#{sa.sa001}
+        </if>
+
+        order by sa.SA005 DESC
+    </select>
+    <select id="listNolimit" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4SysSa"  >
+        select
+        <include refid="Base_Column_List1" />
+        from  st4_sys_sa sa
+        where SA007 = 1
+        <if test="sa012!=null and sa012!='' ">
+            and sa.SA012 like '%${sa012}%'
+        </if>
+        <if test="sa019!=null and sa019!=''">
+            and sa.SA019 like '%${sa019}%'
+        </if>
+        <if test="sa008!=null and sa008!=''">
+            and sa.SA008 like '%${sa008}%'
+        </if>
+        <if test="ptype==0">
+            and (
+            sa.SA001=#{sa001} OR sa.SA002=#{sa001}
+            )
+        </if>
+        <if test="ptype==1">
+            and sa.SA001=#{sa001}
+        </if>
+
+        order by sa.SA005 DESC
+    </select>
+
+    <insert id="insertSelective" parameterType="com.gistone.bjhky.entity.St4SysSa" >
+        insert into st4_sys_sa
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="sa001 != null" >
+                SA001,
+            </if>
+            <if test="sa002 != null" >
+                SA002,
+            </if>
+            <if test="sa003 != null" >
+                SA003,
+            </if>
+            <if test="sa004 != null" >
+                SA004,
+            </if>
+            <if test="sa005 != null" >
+                SA005,
+            </if>
+            <if test="sa006 != null" >
+                SA006,
+            </if>
+            <if test="sa007 != null" >
+                SA007,
+            </if>
+            <if test="sa008 != null" >
+                SA008,
+            </if>
+            <if test="sa009 != null" >
+                SA009,
+            </if>
+            <if test="sa010 != null" >
+                SA010,
+            </if>
+            <if test="sa011 != null" >
+                SA011,
+            </if>
+            <if test="sa012 != null" >
+                SA012,
+            </if>
+            <if test="sa013 != null" >
+                SA013,
+            </if>
+            <if test="sa014 != null" >
+                SA014,
+            </if>
+            <if test="sa015 != null" >
+                SA015,
+            </if>
+            <if test="sa016 != null" >
+                SA016,
+            </if>
+            <if test="sa017 != null" >
+                SA017,
+            </if>
+            <if test="sa018 != null" >
+                SA018,
+            </if>
+            <if test="sa019 != null" >
+                SA019,
+            </if>
+            <if test="sa020 != null" >
+                SA020,
+            </if>
+            <if test="sg001 != null" >
+                SG001,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="sa001 != null" >
+                #{sa001,jdbcType=INTEGER},
+            </if>
+            <if test="sa002 != null" >
+                #{sa002,jdbcType=INTEGER},
+            </if>
+            <if test="sa003 != null" >
+                #{sa003,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sa004 != null" >
+                #{sa004,jdbcType=INTEGER},
+            </if>
+            <if test="sa005 != null" >
+                #{sa005,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sa006 != null" >
+                #{sa006,jdbcType=VARCHAR},
+            </if>
+            <if test="sa007 != null" >
+                #{sa007,jdbcType=INTEGER},
+            </if>
+            <if test="sa008 != null" >
+                #{sa008,jdbcType=VARCHAR},
+            </if>
+            <if test="sa009 != null" >
+                #{sa009,jdbcType=VARCHAR},
+            </if>
+            <if test="sa010 != null" >
+                #{sa010,jdbcType=VARCHAR},
+            </if>
+            <if test="sa011 != null" >
+                #{sa011,jdbcType=INTEGER},
+            </if>
+            <if test="sa012 != null" >
+                #{sa012,jdbcType=VARCHAR},
+            </if>
+            <if test="sa013 != null" >
+                #{sa013,jdbcType=VARCHAR},
+            </if>
+            <if test="sa014 != null" >
+                #{sa014,jdbcType=INTEGER},
+            </if>
+            <if test="sa015 != null" >
+                #{sa015,jdbcType=INTEGER},
+            </if>
+            <if test="sa016 != null" >
+                #{sa016,jdbcType=INTEGER},
+            </if>
+            <if test="sa017 != null" >
+                #{sa017,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sa018 != null" >
+                #{sa018,jdbcType=VARCHAR},
+            </if>
+            <if test="sa019 != null" >
+                #{sa019,jdbcType=VARCHAR},
+            </if>
+            <if test="sa020 != null" >
+                #{sa020,jdbcType=INTEGER},
+            </if>
+            <if test="sg001 != null" >
+                #{sg001,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateAppUser" parameterType="com.gistone.bjhky.entity.St4SysSa" >
+        update st4_sys_sa
+        <set >
+            <if test="sa002 != null" >
+                SA002 = #{sa002,jdbcType=INTEGER},
+            </if>
+            <if test="sa003 != null" >
+                SA003 = #{sa003,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sa004 != null" >
+                SA004 = #{sa004,jdbcType=INTEGER},
+            </if>
+            <if test="sa005 != null" >
+                SA005 = #{sa005,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sa006 != null" >
+                SA006 = #{sa006,jdbcType=VARCHAR},
+            </if>
+            <if test="sa007 != null" >
+                SA007 = #{sa007,jdbcType=INTEGER},
+            </if>
+            <if test="sa008 != null" >
+                SA008 = #{sa008,jdbcType=VARCHAR},
+            </if>
+            <if test="sa009 != null" >
+                SA009 = #{sa009,jdbcType=VARCHAR},
+            </if>
+            <if test="sa010 != null" >
+                SA010 = #{sa010,jdbcType=VARCHAR},
+            </if>
+            <if test="sa011 != null" >
+                SA011 = #{sa011,jdbcType=INTEGER},
+            </if>
+            <!--<if test="sa012 != null" >
+                SA012 = #{sa012,jdbcType=VARCHAR},
+            </if>-->
+            <if test="sa013 != null" >
+                SA013 = #{sa013,jdbcType=VARCHAR},
+            </if>
+            <if test="sa014 != null" >
+                SA014 = #{sa014,jdbcType=INTEGER},
+            </if>
+            <if test="sa015 != null" >
+                SA015 = #{sa015,jdbcType=INTEGER},
+            </if>
+            <if test="sa016 != null" >
+                SA016 = #{sa016,jdbcType=INTEGER},
+            </if>
+            <if test="sa017 != null" >
+                SA017 = #{sa017,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sa018 != null" >
+                SA018 = #{sa018,jdbcType=VARCHAR},
+            </if>
+            <if test="sa019 != null" >
+                SA019 = #{sa019,jdbcType=VARCHAR},
+            </if>
+            <if test="sa020 != null" >
+                SA020 = #{sa020,jdbcType=INTEGER},
+            </if>
+            <if test="sg001 != null" >
+                SG001 = #{sg001,jdbcType=INTEGER},
+            </if>
+        </set>
+        where SA001 = #{sa001,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.gistone.bjhky.entity.St4SysSa" >
+    update st4_sys_sa
+    set SA002 = #{sa002,jdbcType=INTEGER},
+      SA003 = #{sa003,jdbcType=TIMESTAMP},
+      SA004 = #{sa004,jdbcType=INTEGER},
+      SA005 = #{sa005,jdbcType=TIMESTAMP},
+      SA006 = #{sa006,jdbcType=VARCHAR},
+      SA007 = #{sa007,jdbcType=INTEGER},
+      SA008 = #{sa008,jdbcType=VARCHAR},
+      SA009 = #{sa009,jdbcType=VARCHAR},
+      SA010 = #{sa010,jdbcType=VARCHAR},
+      SA011 = #{sa011,jdbcType=INTEGER},
+      SA012 = #{sa012,jdbcType=VARCHAR},
+      SA013 = #{sa013,jdbcType=VARCHAR},
+      SA014 = #{sa014,jdbcType=INTEGER},
+      SA015 = #{sa015,jdbcType=INTEGER},
+      SA016 = #{sa016,jdbcType=INTEGER},
+      SA017 = #{sa017,jdbcType=TIMESTAMP},
+      SA018 = #{sa018,jdbcType=VARCHAR},
+      SA019 = #{sa019,jdbcType=VARCHAR},
+      SA020 = #{sa020,jdbcType=INTEGER},
+      SG001 = #{sg001,jdbcType=INTEGER}
+    where SA001 = #{sa001,jdbcType=INTEGER}
+  </update>
+    <select id="showUserInCheck" resultMap="BaseResultMap">
+      SELECT sa.SA001,sa.SA019 FROM st4_sys_sa sa
+      WHERE (SELECT COUNT(1) FROM st4_po_sa_cz sacz WHERE sa.SA001 = sacz.SA001) = 0
+      AND sa.SA007=1
+    </select>
+</mapper>

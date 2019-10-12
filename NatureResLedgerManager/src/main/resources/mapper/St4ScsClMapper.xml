@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.bjhky.mapper.St4ScsClMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCl">
+        <id column="CL001" property="cl001" />
+        <result column="CL002" property="cl002" />
+        <result column="CL003" property="cl003" />
+        <result column="CL004" property="cl004" />
+        <result column="CL005" property="cl005" />
+        <result column="CL006" property="cl006" />
+        <result column="CL007" property="cl007" />
+        <result column="CL008" property="cl008" />
+        <result column="CL009" property="cl009" />
+        <result column="CL010" property="cl010" />
+        <result column="CL011" property="cl011" />
+        <result column="CL012" property="cl012" />
+        <result column="CL013" property="cl013" />
+        <result column="CL014" property="cl014" />
+        <result column="CL015" property="cl015" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CL001, CL002, CL003, CL004, CL005, CL006, CL007, CL008, CL009, CL010, CL011, CL012, CL013, CL014, CL015
+    </sql>
+<select id="listTask" resultMap="BaseResultMap" >
+    select cl.* from st4_scs_cl cl left join st4_sys_sa sa on cl.CL013 = sa.SA001
+    WHERE cl.CL012=1
+    <if test="cl.type==1">
+      AND   cl.CL013 = #{cl.cl013} OR sa.SA002= #{cl.cl013}
+    </if>
+    <if test="cl.type==0">
+        AND   cl.CL013 = #{cl.cl013}
+    </if>
+    <if test="cl.cl004!=null ">
+        AND   cl.CL004 = #{cl.cl004}
+    </if>
+
+    <if test="cl.cl002!=null and cl.cl002 != '' ">
+        AND   cl.CL002 like '%${cl.cl002}%'
+    </if>
+
+    <if test="cl.cl010!=null and cl.cl010!='' ">
+        AND   cl.CL010 like '%${cl.cl010}%'
+    </if>
+    order by cl.CL014 desc
+
+</select>
+
+
+
+</mapper>

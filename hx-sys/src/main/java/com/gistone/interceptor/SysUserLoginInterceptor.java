@@ -29,7 +29,6 @@ public class SysUserLoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
 
-        System.out.println(request.getRequestURL().toString());
 
 
         Object accessToken = getCookieByName(request, "token") != null ? getCookieByName(request, "token").getValue() : null;

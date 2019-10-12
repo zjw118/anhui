@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.bjhky.mapper.St4SysSbMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4SysSb">
+        <id column="SB001" property="sb001" />
+        <result column="SB002" property="sb002" />
+        <result column="SB003" property="sb003" />
+        <result column="SB004" property="sb004" />
+        <result column="SB005" property="sb005" />
+        <result column="SB006" property="sb006" />
+        <result column="SB007" property="sb007" />
+        <result column="SB008" property="sb008" />
+        <result column="uname" property="uname" />
+        <association property="st4SysSc" javaType="com.gistone.bjhky.entity.St4SysSc">
+            <id column="SC001" jdbcType="INTEGER" property="sc001" />
+            <result column="SC002" jdbcType="VARCHAR" property="sc002" />
+            <result column="SC003" jdbcType="INTEGER" property="sc003" />
+            <result column="SC004" jdbcType="VARCHAR" property="sc004" />
+            <result column="SC005" jdbcType="INTEGER" property="sc005" />
+            <result column="SC006" jdbcType="TIMESTAMP" property="sc006" />
+            <result column="SC007" jdbcType="INTEGER" property="sc007" />
+            <result column="SC008" jdbcType="TIMESTAMP" property="sc008" />
+            <result column="SC009" jdbcType="INTEGER" property="sc009" />
+            <result column="SC010" jdbcType="VARCHAR" property="sc010" />
+            <result column="SC011" jdbcType="VARCHAR" property="sc011" />
+            <result column="SC012" jdbcType="VARCHAR" property="sc012" />
+            <result column="SC013" jdbcType="INTEGER" property="sc013" />
+            <result column="SC014" jdbcType="INTEGER" property="sc014" />
+            <result column="SC015" jdbcType="INTEGER" property="sc015" />
+            <result column="SC016" jdbcType="VARCHAR" property="sc016" />
+        </association>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        SB001, SB002, SB003, SB004, SB005, SB006, SB007, SB008
+    </sql>
+    <select id="getRoleDetail" resultType="com.gistone.bjhky.entity.St4SysSb" parameterType="com.gistone.bjhky.entity.St4SysSb">
+          select sb.*,sa.SA019 AS uname from st4_sys_sb sb
+          left join   st4_sys_sa sa on sb.SB005 = sa.SA001
+          where   sb.SB003 =1 and sb.SB001=#{sb001}
+
+    </select>
+
+</mapper>

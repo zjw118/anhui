@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.bjhky.mapper.St4ScsCyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCy">
+        <id column="CY001" property="cy001" />
+        <result column="CY002" property="cy002" />
+        <result column="CY003" property="cy003" />
+        <result column="CY004" property="cy004" />
+        <result column="CY005" property="cy005" />
+        <result column="CY006" property="cy006" />
+        <result column="CY007" property="cy007" />
+        <result column="SA001" property="sa001" />
+        <result column="CY009" property="cy009" />
+        <result column="CY010" property="cy010" />
+        <result column="CY011" property="cy011" />
+        <result column="CY012" property="cy012" />
+        <result column="CY013" property="cy013" />
+        <result column="CY014" property="cy014" />
+        <result column="CY015" property="cy015" />
+        <result column="CY016" property="cy016" />
+        <result column="CY017" property="cy017" />
+        <result column="CL003" property="cl003" />
+        <association property="st4SysSa" javaType="com.gistone.bjhky.entity.St4SysSa">
+            <id column="SA001" property="sa001" />
+            <result column="SA019" property="sa019" />
+        </association>
+        <association property="st4SysSg" javaType="com.gistone.bjhky.entity.St4SysSg">
+            <id column="SG001" property="sg001" />
+            <result column="SG008" property="sg008" />
+        </association>
+        <association property="st4SysSd" javaType="com.gistone.bjhky.entity.St4SysSd">
+            <id column="SD001" property="sd001" />
+            <result column="SD008" property="sd008" />
+        </association>
+        <collection property="st4ScsCg" ofType="com.gistone.bjhky.entity.St4ScsCg" >
+            <id column="CG001" property="cg001" />
+            <result column="CY017" property="cy017" />
+            <result column="CG003" property="cg003" />
+            <result column="CG004" property="cg004" />
+            <result column="CG005" property="cg005" />
+            <result column="CG006" property="cg006" />
+        </collection>
+
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CY001, CY002, CY003, CY004, CY005, CY006, CY007, SA001, CY009, CY010, CY011, CY012, CY013, CY014, CY015, CY016, CY017
+    </sql>
+    <select id="getSailRecordDetail" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCy" >
+        select cy.*,sa.SA019,sg.SG008,sg.SG001,cg.*
+        from st4_scs_cy cy left join st4_sys_sa sa on cy.CY012 = sa.SA001
+        left join st4_sys_sg sg on sg.SG001 = sa.SG001
+        LEFT JOIN st4_scs_cg cg ON cg.CY017 = CY.CY017
+        where sa.SA007=1 AND cy.CY016=1 and sg.SG007 = 1
+        <if test="cy001!=null ">
+            and cy.CY001 = #{cy001}
+        </if>
+
+
+
+    </select>
+    <select id="listSailRecord" resultMap="BaseResultMap"  >
+      select cy.*,sa.SA019,sg.SG008
+      from st4_scs_cy cy
+      left join st4_sys_sa sa on cy.SA001 = sa.SA001
+      left join st4_sys_sg sg on sg.SG001 = cy.CY010
+      left join st4_scs_cg cg on cy.CY017=cg.CY017
+        left join st4_scs_cl cl on cy.CL003=cl.CL003
+      where cy.CY016=1
+        <if test="cy.type==0 ">
+          and cy.SA001 = #{cy.sa001} OR sa.SA002=#{cy.sa001}
+        </if>
+        <if test="cy.type==1 ">
+            and cy.SA001 = #{cy.sa001}
+        </if>
+        <if test="cy.xcry!=null ">
+            and sa.SA019 like '%${cy.xcry}%'
+        </if>
+        <if test="cy.cy010!=null">
+            and cy.CY010 = #{cy010}
+        </if>
+        <if test="cy.cl001!=null and cy.cl001!='' ">
+            and cl.CL001 = #{cy.cl001}
+        </if>
+        <if test="cy.strTime != null and cy.strTime != '' " >
+            and CY003 <![CDATA[ >= ]]> #{strTime}
+        </if>
+        <if test="cy.endTime != null and cy.endTime != '' " >
+            and CY004 <![CDATA[ <= ]]> #{cy.endTime}
+        </if>
+        order by cy.CY013 desc
+
+    </select>
+
+    <select id="getSailRouteDataByReserveId" resultType="com.gistone.bjhky.entity.St4ScsCy" parameterType="Integer">
+        select
+        cy.*
+        from st4_scs_cy cy
+        left join st4_sys_sa sa on cy.CY012 = sa.SA001
+        left join st4_sys_sg sg on sa.SG001 = sg.SG001
+        where sa.SA007 = 1 and sg.SG007 =1 and cy.CY016=1 and  sg.SG001=#{sg001}
+
+
+    </select>
+
+    <select id="selectPoList" resultType="com.gistone.bjhky.entity.St4ScsCy"  parameterType="com.gistone.bjhky.entity.St4ScsCy">
+        SELECT sa.SA001,sa.SA019 xcry,count(*)rwcs,sum(cy.CY006)gjlc,cy.CY013,
+        sg.SG001,sg.SG008,
+        sD.SD001,sd.SD008,SUM(TIMESTAMPDIFF(HOUR,CY003,CY004)) rwsc
+        from st4_scs_cy cy
+        LEFT JOIN st4_sys_sg sg
+        on cy.CY010=sg.SG001
+        left join st4_sys_sd sd
+        on sg.SD001= sd.SD001
+        LEFT JOIN st4_sys_sa sa
+        on cy.SA001=sa.SA001
+        where cy.CY016 =1
+        and sg.SG007 =1
+        and sa.SA007 =1
+        <if test="bhdmc!=null and bhdmc!=''">
+            and sg.SG008 = #{bhdmc}
+        </if>
+        <if test="xcry!=null and xcry!=''">
+            and sa.SA019 = #{xcry}
+        </if>
+        <if test="sf!=null and sf!=''">
+            and sg.SG019 = #{sf}
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and cy.CY004 &lt;= #{jssj}
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and cy.CY003 >= #{kssj}
+        </if>
+        <if test="groupByName==SG001">
+            GROUP BY  sg.SG001
+        </if>
+        <if test="groupByName==SD001">
+            GROUP BY  sd.SD001
+        </if>
+        <if test="groupByName==SA001">
+            GROUP BY  sa.SA001
+        </if>
+        <if test="sortName==null">
+            ORDER BY cy.CY013 desc
+        </if>
+        <if test="sortName=='xcry'">
+            ORDER BY CONVERT(sa.SA019 USING GBK) ${sortOrder}
+        </if>
+        <if test="sortName=='rwcs'">
+            ORDER BY rwcs ${sortOrder}
+        </if>
+        <if test="sortName=='gjlc'">
+            ORDER BY gjlc ${sortOrder}
+        </if>
+
+    </select>
+
+
+    <select id="getPoSum2" resultType="java.lang.Integer" parameterType="com.gistone.bjhky.entity.St4ScsCy">
+        SELECT count(*)
+        from st4_scs_cy cy
+        LEFT JOIN st4_sys_sg sg
+        on cy.CY010=sg.SG001
+        LEFT JOIN st4_sys_sa sa
+        on cy.SA001=sa.SA001
+        where cy.CY016 =1
+        and sg.SG007 =1
+        and sa.SA007 =1
+        and cy.SA001 = #{sa001}
+    </select>
+
+
+    <select id="selectPoList2" resultType="com.gistone.bjhky.entity.St4ScsCy"
+            parameterType="com.gistone.bjhky.entity.St4ScsCy">
+        SELECT cy.*,sg.SG008 bhdmc,sa.SA019 xcry
+        from st4_scs_cy cy
+        LEFT JOIN st4_sys_sg sg
+        on cy.CY010=sg.SG001
+        LEFT JOIN st4_sys_sa sa
+        on cy.SA001=sa.SA001
+        where cy.CY016 =1
+        and sg.SG007 =1
+        and sa.SA007 =1
+        and cy.SA001 = #{sa001}
+        ORDER BY CY013
+        limit #{pageNumber},#{pageSize}
+    </select>
+</mapper>

@@ -1,0 +1,7 @@
+1.IGettingUsersService方法可以获取得到用户的redis信息
+2.MD5Util此类为密码MD5加密方法
+3.ResultMsg封装返回结果常量值
+4.IGettingUsersService类中getUsersByTokenRedis获取用户存在redis中信息
+5.annotion包-MyLog类为不需要日志记录标签类（使用在controller中加@MyLog）
+6.annotion包-PassToken类为不需要权限认证标签类（使用在controller中加@PassToken）
+7.annotion包-UserLoginToken类为用户认证标签类（使用在controller中加@UserLoginToken）

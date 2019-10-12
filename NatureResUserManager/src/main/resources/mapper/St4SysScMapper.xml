@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.bjhky.mapper.St4SysScMapper">
+    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4SysSc">
+        <id column="SC001" jdbcType="INTEGER" property="sc001" />
+        <result column="SC002" jdbcType="VARCHAR" property="sc002" />
+        <result column="SC003" jdbcType="INTEGER" property="sc003" />
+        <result column="SC004" jdbcType="VARCHAR" property="sc004" />
+        <result column="SC005" jdbcType="INTEGER" property="sc005" />
+        <result column="SC006" jdbcType="TIMESTAMP" property="sc006" />
+        <result column="SC007" jdbcType="INTEGER" property="sc007" />
+        <result column="SC008" jdbcType="TIMESTAMP" property="sc008" />
+        <result column="SC009" jdbcType="INTEGER" property="sc009" />
+        <result column="SC010" jdbcType="VARCHAR" property="sc010" />
+        <result column="SC011" jdbcType="VARCHAR" property="sc011" />
+        <result column="SC012" jdbcType="VARCHAR" property="sc012" />
+        <result column="SC013" jdbcType="INTEGER" property="sc013" />
+        <result column="SC014" jdbcType="INTEGER" property="sc014" />
+        <result column="SC015" jdbcType="INTEGER" property="sc015" />
+        <result column="SC016" jdbcType="VARCHAR" property="sc016" />
+       <!--<collection property="children" ofType="com.gistone.bjhky.entity.St4SysSc" column="SC001" select="findMenuByParentId"/>-->
+    </resultMap>
+    <select id="findAllRecursion" resultMap="BaseResultMap">
+        SELECT SC001,SC002,SC003 FROM st4_sys_sc where SC009=1 order by SC001 DESC
+    </select>
+
+    <select id="findTypeInfoByParentIdAndSortNum" resultType="com.gistone.bjhky.entity.St4SysSc" parameterType="Integer">
+        SELECT SC001,SC002,SC003 FROM st4_sys_sc WHERE SC003 = #{pid}
+    </select>
+
+    <select id="listModuleBySa001" resultMap="BaseResultMap" parameterType="Integer">
+        SELECT sc.* FROM st4_sys_sc sc LEFT JOIN st4_po_sb_sc sbsc ON sc.`SC001` = sbsc.`SC001`
+            LEFT JOIN st4_sys_sb sb ON sb.`SB001` = sbsc.`SB001`
+            LEFT JOIN st4_po_sa_sb sasb ON sb.`SB001` = sasb.`SB001` WHERE sasb.`SA001` = #{sa001} and sc.SC009 = 1
+            GROUP BY sc.SC001 order by sc.SC015
+
+    </select>
+
+    <select id="findMenuByParentId" resultType="com.gistone.bjhky.entity.St4SysSc">
+        SELECT SC001,SC002,SC003 FROM st4_sys_sc WHERE SC003 = #{sc001}
+    </select>
+    <sql id="Base_Column_List">
+        SC001, SC002, SC003, SC004, SC005, SC006, SC007, SC008, SC009, SC010, SC011, SC012,
+        SC013, SC014, SC015, SC016
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from st4_sys_sc
+        where SC001 = #{sc001,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from st4_sys_sc
+        where SC001 = #{sc001,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.gistone.bjhky.entity.St4SysSc">
+        insert into st4_sys_sc (SC001, SC002, SC003,
+        SC004, SC005, SC006,
+        SC007, SC008, SC009,
+        SC010, SC011, SC012,
+        SC013, SC014, SC015,
+        SC016)
+        values (#{sc001,jdbcType=INTEGER}, #{sc002,jdbcType=VARCHAR}, #{sc003,jdbcType=INTEGER},
+        #{sc004,jdbcType=VARCHAR}, #{sc005,jdbcType=INTEGER}, #{sc006,jdbcType=TIMESTAMP},
+        #{sc007,jdbcType=INTEGER}, #{sc008,jdbcType=TIMESTAMP}, #{sc009,jdbcType=INTEGER},
+        #{sc010,jdbcType=VARCHAR}, #{sc011,jdbcType=VARCHAR}, #{sc012,jdbcType=VARCHAR},
+        #{sc013,jdbcType=INTEGER}, #{sc014,jdbcType=INTEGER}, #{sc015,jdbcType=INTEGER},
+        #{sc016,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.gistone.bjhky.entity.St4SysSc">
+        insert into st4_sys_sc
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sc001 != null">
+                SC001,
+            </if>
+            <if test="sc002 != null">
+                SC002,
+            </if>
+            <if test="sc003 != null">
+                SC003,
+            </if>
+            <if test="sc004 != null">
+                SC004,
+            </if>
+            <if test="sc005 != null">
+                SC005,
+            </if>
+            <if test="sc006 != null">
+                SC006,
+            </if>
+            <if test="sc007 != null">
+                SC007,
+            </if>
+            <if test="sc008 != null">
+                SC008,
+            </if>
+            <if test="sc009 != null">
+                SC009,
+            </if>
+            <if test="sc010 != null">
+                SC010,
+            </if>
+            <if test="sc011 != null">
+                SC011,
+            </if>
+            <if test="sc012 != null">
+                SC012,
+            </if>
+            <if test="sc013 != null">
+                SC013,
+            </if>
+            <if test="sc014 != null">
+                SC014,
+            </if>
+            <if test="sc015 != null">
+                SC015,
+            </if>
+            <if test="sc016 != null">
+                SC016,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sc001 != null">
+                #{sc001,jdbcType=INTEGER},
+            </if>
+            <if test="sc002 != null">
+                #{sc002,jdbcType=VARCHAR},
+            </if>
+            <if test="sc003 != null">
+                #{sc003,jdbcType=INTEGER},
+            </if>
+            <if test="sc004 != null">
+                #{sc004,jdbcType=VARCHAR},
+            </if>
+            <if test="sc005 != null">
+                #{sc005,jdbcType=INTEGER},
+            </if>
+            <if test="sc006 != null">
+                #{sc006,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sc007 != null">
+                #{sc007,jdbcType=INTEGER},
+            </if>
+            <if test="sc008 != null">
+                #{sc008,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sc009 != null">
+                #{sc009,jdbcType=INTEGER},
+            </if>
+            <if test="sc010 != null">
+                #{sc010,jdbcType=VARCHAR},
+            </if>
+            <if test="sc011 != null">
+                #{sc011,jdbcType=VARCHAR},
+            </if>
+            <if test="sc012 != null">
+                #{sc012,jdbcType=VARCHAR},
+            </if>
+            <if test="sc013 != null">
+                #{sc013,jdbcType=INTEGER},
+            </if>
+            <if test="sc014 != null">
+                #{sc014,jdbcType=INTEGER},
+            </if>
+            <if test="sc015 != null">
+                #{sc015,jdbcType=INTEGER},
+            </if>
+            <if test="sc016 != null">
+                #{sc016,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.gistone.bjhky.entity.St4SysSc">
+        update st4_sys_sc
+        <set>
+            <if test="sc002 != null">
+                SC002 = #{sc002,jdbcType=VARCHAR},
+            </if>
+            <if test="sc003 != null">
+                SC003 = #{sc003,jdbcType=INTEGER},
+            </if>
+            <if test="sc004 != null">
+                SC004 = #{sc004,jdbcType=VARCHAR},
+            </if>
+            <if test="sc005 != null">
+                SC005 = #{sc005,jdbcType=INTEGER},
+            </if>
+            <if test="sc006 != null">
+                SC006 = #{sc006,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sc007 != null">
+                SC007 = #{sc007,jdbcType=INTEGER},
+            </if>
+            <if test="sc008 != null">
+                SC008 = #{sc008,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sc009 != null">
+                SC009 = #{sc009,jdbcType=INTEGER},
+            </if>
+            <if test="sc010 != null">
+                SC010 = #{sc010,jdbcType=VARCHAR},
+            </if>
+            <if test="sc011 != null">
+                SC011 = #{sc011,jdbcType=VARCHAR},
+            </if>
+            <if test="sc012 != null">
+                SC012 = #{sc012,jdbcType=VARCHAR},
+            </if>
+            <if test="sc013 != null">
+                SC013 = #{sc013,jdbcType=INTEGER},
+            </if>
+            <if test="sc014 != null">
+                SC014 = #{sc014,jdbcType=INTEGER},
+            </if>
+            <if test="sc015 != null">
+                SC015 = #{sc015,jdbcType=INTEGER},
+            </if>
+            <if test="sc016 != null">
+                SC016 = #{sc016,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where SC001 = #{sc001,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.gistone.bjhky.entity.St4SysSc">
+        update st4_sys_sc
+        set SC002 = #{sc002,jdbcType=VARCHAR},
+        SC003 = #{sc003,jdbcType=INTEGER},
+        SC004 = #{sc004,jdbcType=VARCHAR},
+        SC005 = #{sc005,jdbcType=INTEGER},
+        SC006 = #{sc006,jdbcType=TIMESTAMP},
+        SC007 = #{sc007,jdbcType=INTEGER},
+        SC008 = #{sc008,jdbcType=TIMESTAMP},
+        SC009 = #{sc009,jdbcType=INTEGER},
+        SC010 = #{sc010,jdbcType=VARCHAR},
+        SC011 = #{sc011,jdbcType=VARCHAR},
+        SC012 = #{sc012,jdbcType=VARCHAR},
+        SC013 = #{sc013,jdbcType=INTEGER},
+        SC014 = #{sc014,jdbcType=INTEGER},
+        SC015 = #{sc015,jdbcType=INTEGER},
+        SC016 = #{sc016,jdbcType=VARCHAR}
+        where SC001 = #{sc001,jdbcType=INTEGER}
+    </update>
+
+
+</mapper>

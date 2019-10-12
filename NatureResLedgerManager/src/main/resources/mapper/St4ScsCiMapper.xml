@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.bjhky.mapper.St4ScsCiMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCi">
+        <id column="CI001" property="ci001" />
+        <result column="CI002" property="ci002" />
+        <result column="CI003" property="ci003" />
+        <result column="CI004" property="ci004" />
+        <result column="CI005" property="ci005" />
+        <result column="CI006" property="ci006" />
+        <result column="CI007" property="ci007" />
+        <result column="CI008" property="ci008" />
+        <association property="st4SysSa" javaType="com.gistone.bjhky.entity.St4SysSa">
+            <id column="SA001" property="sa001" jdbcType="INTEGER" />
+            <result column="SA002" property="sa002" jdbcType="VARCHAR" />
+            <result column="SA003" property="sa003" jdbcType="TIMESTAMP" />
+            <result column="SA004" property="sa004" jdbcType="INTEGER" />
+            <result column="SA005" property="sa005" jdbcType="TIMESTAMP" />
+            <result column="SA006" property="sa006" jdbcType="VARCHAR" />
+            <result column="SA007" property="sa007" jdbcType="INTEGER" />
+            <result column="SA008" property="sa008" jdbcType="VARCHAR" />
+            <result column="SA009" property="sa009" jdbcType="VARCHAR" />
+            <result column="SA010" property="sa010" jdbcType="VARCHAR" />
+            <result column="SA011" property="sa011" jdbcType="INTEGER" />
+            <result column="SA012" property="sa012" jdbcType="VARCHAR" />
+            <result column="SA013" property="sa013" jdbcType="VARCHAR" />
+            <result column="SA014" property="sa014" jdbcType="INTEGER" />
+            <result column="SA015" property="sa015" jdbcType="INTEGER" />
+            <result column="SA016" property="sa016" jdbcType="INTEGER" />
+            <result column="SA017" property="sa017" jdbcType="TIMESTAMP" />
+            <result column="SA018" property="sa018" jdbcType="VARCHAR" />
+            <result column="SA019" property="sa019" jdbcType="VARCHAR" />
+            <result column="SA020" property="sa020" jdbcType="INTEGER" />
+            <result column="SG001" property="sg001" jdbcType="INTEGER" />
+        </association>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CI001, CI002, CI003, CI004, CI005, CI006, CI007, CI008
+    </sql>
+    <select id="getWarnDetail" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCi">
+        SELECT ci.*,sa.* from
+        st4_scs_ci ci LEFT join st4_sys_sa sa on sa.SA001 = ci.CI005 where ci.CI006=1 AND sa.SA007=1
+        AND ci.CI001 = #{ci001}
+    </select>
+
+    <select id="listAppWarn" resultType="com.gistone.bjhky.entity.St4ScsCi">
+        select ci.*,sa.SA019 as uname from
+        st4_scs_ci ci
+        LEFT join st4_sys_sa sa on sa.SA001 = ci.CI005
+        left join st4_po_sa_sj sasj on sasj.SA001 = sa.SA001
+        where ci.CI006=1 AND sasj.SJ001=#{ci.unitId}
+        <if test="ci.ci002!=null">
+        ci.CI002=#{ci.CI002}
+        </if>
+        order by ci.CI004 desc
+    </select>
+
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.bjhky.mapper.St4ScsCfMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCf">
+        <id column="CF001" property="cf001" />
+        <result column="CC002" property="cc002" />
+        <result column="CF003" property="cf003" />
+        <result column="CF004" property="cf004" />
+        <result column="CF005" property="cf005" />
+        <result column="CF006" property="cf006" />
+        <result column="CF007" property="cf007" />
+        <result column="CF008" property="cf008" />
+        <result column="CF009" property="cf009" />
+        <result column="CF010" property="cf010" />
+        <result column="CF011" property="cf011" />
+        <result column="CF012" property="cf012" />
+        <result column="CF013" property="cf013" />
+        <result column="CF014" property="cf014" />
+        <result column="CF015" property="cf015" />
+        <result column="CF016" property="cf016" />
+        <result column="CF017" property="cf017" />
+        <result column="CF018" property="cf018" />
+        <result column="CF019" property="cf019" />
+        <result column="CF020" property="cf020" />
+        <result column="CF021" property="cf021" />
+        <result column="CF022" property="cf022" />
+        <result column="CF023" property="cf023" />
+        <result column="CF024" property="cf024" />
+        <result column="CF025" property="cf025" />
+        <result column="CF026" property="cf026" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CF001, CC002, CF003, CF004, CF005, CF006, CF007, CF008, CF009, CF010, CF011, CF012, CF013, CF014, CF015, CF016, CF017, CF018, CF019, CF020, CF021, CF022, CF023, CF024, CF025, CF026
+    </sql>
+</mapper>

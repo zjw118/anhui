@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.bjhky.mapper.St4ScsChMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCh">
+        <id column="CH001" property="ch001" />
+        <result column="CH002" property="ch002" />
+        <result column="CH003" property="ch003" />
+        <result column="CH004" property="ch004" />
+        <result column="CH005" property="ch005" />
+        <result column="CH006" property="ch006" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CH001, CH002, CH003, CH004, CH005, CH006
+    </sql>
+    <select id="getPersonNumber" resultType="HashMap">
+        SELECT COUNT(ch001)  VALUE  ,'离线' NAME
+         FROM st4_scs_ch ch WHERE CH005 = 0
+
+         UNION
+
+         SELECT COUNT(ch001)  VALUE  ,'在线' NAME
+
+         FROM st4_scs_ch ch WHERE CH005 = 1
+         UNION
+         SELECT COUNT(ch001)  VALUE ,'正在巡护中' NAME
+
+         FROM st4_scs_ch ch WHERE CH005 = 2
+
+    </select>
+
+</mapper>

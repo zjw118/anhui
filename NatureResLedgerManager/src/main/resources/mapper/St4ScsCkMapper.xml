@@ -1,0 +1,2288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.bjhky.mapper.St4ScsCkMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCk">
+        <id column="CK001" property="ck001" />
+        <result column="CK002" property="ck002" />
+        <result column="CD004" property="cd004" />
+        <result column="SG001" property="sg001" />
+        <result column="CK005" property="ck005" />
+        <result column="CK006" property="ck006" />
+        <result column="CK007" property="ck007" />
+        <result column="CK008" property="ck008" />
+        <result column="CK009" property="ck009" />
+        <result column="CK010" property="ck010" />
+        <result column="CK011" property="ck011" />
+        <result column="CK012" property="ck012" />
+        <result column="CK013" property="ck013" />
+        <result column="CK014" property="ck014" />
+        <result column="CK015" property="ck015" />
+        <result column="CK016" property="ck016" />
+        <result column="CK017" property="ck017" />
+        <result column="CK018" property="ck018" />
+        <result column="CK019" property="ck019" />
+        <result column="CK020" property="ck020" />
+        <result column="CK021" property="ck021" />
+        <result column="CK022" property="ck022" />
+        <result column="CK023" property="ck023" />
+        <result column="CK024" property="ck024" />
+        <result column="CK025" property="ck025" />
+        <result column="CK026" property="ck026" />
+        <result column="CK027" property="ck027" />
+        <result column="CK028" property="ck028" />
+        <result column="CK029" property="ck029" />
+        <result column="CK030" property="ck030" />
+        <result column="CK031" property="ck031" />
+        <result column="CK032" property="ck032" />
+        <result column="CK033" property="ck033" />
+        <result column="CK034" property="ck034" />
+        <result column="CK035" property="ck035" />
+        <result column="CK036" property="ck036" />
+        <result column="CK037" property="ck037" />
+        <result column="CK038" property="ck038" />
+        <result column="CK039" property="ck039" />
+        <result column="CK040" property="ck040" />
+        <result column="CK041" property="ck041" />
+        <result column="CK042" property="ck042" />
+        <result column="CK043" property="ck043" />
+        <result column="CK044" property="ck044" />
+        <result column="CK045" property="ck045" />
+        <result column="CK046" property="ck046" />
+        <result column="CK047" property="ck047" />
+        <result column="CK048" property="ck048" />
+        <result column="CK049" property="ck049" />
+        <result column="CK050" property="ck050" />
+        <result column="CK051" property="ck051" />
+        <result column="CK052" property="ck052" />
+        <result column="CK053" property="ck053" />
+        <result column="CK054" property="ck054" />
+        <result column="CK055" property="ck055" />
+        <result column="CK056" property="ck056" />
+        <result column="CK057" property="ck057" />
+        <result column="CK058" property="ck058" />
+        <result column="CK059" property="ck059" />
+        <result column="CK060" property="ck060" />
+        <result column="CK061" property="ck061" />
+        <result column="CK062" property="ck062" />
+        <result column="CK063" property="ck063" />
+        <result column="CK064" property="ck064" />
+        <result column="CK065" property="ck065" />
+        <result column="CK066" property="ck066" />
+        <result column="CK067" property="ck067" />
+        <result column="CK068" property="ck068" />
+        <result column="CK069" property="ck069" />
+        <result column="CK070" property="ck070" />
+        <result column="CK071" property="ck071" />
+        <result column="CK072" property="ck072" />
+        <result column="CC002" property="cc002" />
+        <result column="CK074" property="ck074" />
+        <result column="CK075" property="ck075" />
+        <result column="CK076" property="ck076" />
+        <result column="CK077" property="ck077" />
+        <result column="CK078" property="ck078" />
+        <result column="CK079" property="ck079" />
+        <result column="CK080" property="ck080" />
+        <result column="CK081" property="ck081" />
+        <result column="CK082" property="ck082" />
+        <result column="CK083" property="ck083" />
+        <result column="CK084" property="ck084" />
+        <result column="CK085" property="ck085" />
+        <result column="CK086" property="ck086" />
+        <result column="CK087" property="ck087" />
+        <result column="CK088" property="ck088" />
+        <result column="CK089" property="ck089" />
+        <result column="CK090" property="ck090" />
+        <result column="CK091" property="ck091" />
+        <result column="uname" property="uname" />
+        <association property="st4ScsCac" javaType="com.gistone.bjhky.entity.St4ScsCac">
+            <result column="CK001" property="ck001" />
+            <result column="CAC002" property="cac002" />
+            <result column="CD004" property="cd004" />
+            <result column="SG001" property="sg001" />
+            <result column="CAC003" property="cac003" />
+            <result column="CAC004" property="cac004" />
+            <result column="CAC005" property="cac005" />
+            <result column="CAC006" property="cac006" />
+            <result column="CAC007" property="cac007" />
+            <result column="CAC008" property="cac008" />
+            <result column="CAC009" property="cac009" />
+            <result column="CAC010" property="cac010" />
+            <result column="CAC011" property="cac011" />
+            <result column="CAC012" property="cac012" />
+            <result column="CAC013" property="cac013" />
+            <result column="CAC014" property="cac014" />
+            <result column="CAC015" property="cac015" />
+            <result column="CAC016" property="cac016" />
+            <result column="CAC017" property="cac017" />
+            <result column="CAC018" property="cac018" />
+            <result column="CAC019" property="cac019" />
+            <result column="CAC020" property="cac020" />
+            <result column="CAC021" property="cac021" />
+            <result column="CAC022" property="cac022" />
+            <result column="CAC023" property="cac023" />
+            <result column="CAC024" property="cac024" />
+            <result column="CAC025" property="cac025" />
+            <result column="CAC026" property="cac026" />
+            <result column="CAC027" property="cac027" />
+            <result column="CAC028" property="cac028" />
+            <result column="CAC029" property="cac029" />
+            <result column="CAC030" property="cac030" />
+            <result column="CAC031" property="cac031" />
+            <result column="CAC032" property="cac032" />
+            <result column="CAC033" property="cac033" />
+            <result column="CAC034" property="cac034" />
+            <result column="CAC035" property="cac035" />
+            <result column="CAC036" property="cac036" />
+        </association>
+        <association property="st4ScsCd" javaType="com.gistone.bjhky.entity.St4ScsCd">
+            <id column="CD001" property="cd001" />
+            <result column="CD002" property="cd002" />
+            <result column="CD003" property="cd003" />
+            <result column="CD004" property="cd004" />
+            <result column="SG001" property="sg001" />
+            <result column="CL001" property="cl001" />
+            <result column="CD007" property="cd007" />
+            <result column="SD001" property="sd001" />
+            <result column="CD009" property="cd009" />
+            <result column="CD010" property="cd010" />
+            <result column="CD011" property="cd011" />
+            <result column="CD012" property="cd012" />
+            <result column="CD013" property="cd013" />
+            <result column="CD014" property="cd014" />
+        </association>
+        <association property="st4ScsCl" javaType="com.gistone.bjhky.entity.St4ScsCl">
+            <id column="CL001" property="cl001" />
+            <result column="CL002" property="cl002" />
+        </association>
+        <association property="st4ScsCb" javaType="com.gistone.bjhky.entity.St4ScsCb">
+            <id column="CB001" property="cb001" />
+            <result column="CB002" property="cb002" />
+        </association>
+        <association property="st4SysSg" javaType="com.gistone.bjhky.entity.St4SysSg">
+            <id column="SG001" property="sg001" />
+            <result column="SG008" property="sg008" />
+        </association>
+        <association property="st4SysSd" javaType="com.gistone.bjhky.entity.St4SysSd">
+            <id column="SD001" property="sd001" />
+            <result column="SD008" property="sd008" />
+        </association>
+        <association property="st4ScsCn" javaType="com.gistone.bjhky.entity.St4ScsCn">
+            <id column="CN001" property="cn001" />
+            <result column="CN010" property="cn010" />
+        </association>
+        <association property="st4ScsCz" javaType="com.gistone.bjhky.entity.St4ScsCz">
+            <id column="CZ001" property="cz001" />
+            <result column="CZ002" property="cz002" />
+
+        </association>
+        <collection property="st4ScsCnList" ofType="com.gistone.bjhky.entity.St4ScsCn">
+            <result column="CN001" property="cn001" />
+            <result column="CN004" property="cn004" />
+            <result column="CN010" property="cn010" />
+        </collection>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CK001, CK002, CD004, SG001, CK005, CK006, CK007, CK008, CK009, CK010, CK011, CK012, CK013, CK014, CK015, CK016, CK017, CK018, CK019, CK020, CK021, CK022, CK023, CK024, CK025, CK026, CK027, CK028, CK029, CK030, CK031, CK032, CK033, CK034, CK035, CK036, CK037, CK038, CK039, CK040, CK041, CK042, CK043, CK044, CK045, CK046, CK047, CK048, CK049, CK050, CK051, CK052, CK053, CK054, CK055, CK056, CK057, CK058, CK059, CK060, CK061, CK062, CK063, CK064, CK065, CK066, CK067, CK068, CK069, CK070, CK071, CK072, CC002, CK074, CK075, CK076, CK077, CK078, CK079, CK080, CK081, CK082, CK083, CK084, CK085, CK086, CK087, CK088, CK089, CK090, CK091
+    </sql>
+
+    <sql id="Base_Column_List1">
+        CK002, CD004, SG001, CK005, CK006, CK007, CK008, CK009, CK010, CK011, CK012, CK013, CK014, CK015, CK016, CK017, CK018, CK019, CK020, CK021, CK022, CK023, CK024, CK025, CK026, CK027, CK028, CK029, CK030, CK031, CK032, CK033, CK034, CK035, CK036, CK037, CK038, CK039, CK040, CK041, CK042, CK043, CK044, CK045, CK046, CK047, CK048, CK049, CK050, CK051, CK052, CK053, CK054, CK055, CK056, CK057, CK058, CK059, CK060, CK061, CK062, CK063, CK064, CK065, CK066, CK067, CK068, CK069, CK070, CK071, CK072, CC002, CK074, CK075, CK076, CK077, CK078, CK079, CK080, CK081, CK082, CK083, CK084, CK085, CK086, CK087, CK088, CK089, CK090, CK091
+    </sql>
+
+    <sql id="Base_Column_List2">
+        CK001,CK002, cd.CD004, sg.SG001, CK005,cd.CD002 as ck007,cd.CD003 as ck008, CK006, CK009, CK010, CK011, CK012, CK013, CK014, CK015, CK016, CK017, CK018, CK019, CK020, CK021, CK022, CK023, CK024, CK025, CK026, CK027, CK028, CK029, CK030, CK031, CK032, CK033, CK034, CK035, CK036, CK037, CK038, CK039, CK040, CK041, CK042, CK043, CK044, CK045, CK046, CK047, CK048, CK049, CK050, CK051, CK052, CK053, CK054, CK055, CK056, CK057, CK058, CK059, CK060, CK061, CK062, CK063, CK064, CK065, CK066, CK067, CK068, CK069, CK070, CK071, CK072, CC002, CK074, CK075, CK076, CK077, CK078, CK079, CK080, CK081, CK082, CK083, CK084, CK085, CK086, CK087, CK088, CK089, CK090, CK091
+    </sql>
+    <sql id="Base_Column_List4">
+        ck.CK001,CK002, cd.CD004, sg.SG001, sg.SG008, CK005,cd.CD002 as ck007,cd.CD003 as ck008, CK006, CK009, CK010, CK011, CK012, CK013,
+         CK014, CK015, CK016, CK017, CK018, CK019, CK020, CK021, CK022, CK023, CK024, CK025, CK026, CK027, CK028, CK029, CK030, CK031, CK032, CK033, CK034, CK035, CK036, CK037, CK038, CK039, CK040, CK041, CK042, CK043, CK044, CK045, CK046, CK047, CK048, CK049, CK050, CK051, CK052, CK053, CK054, CK055, CK056, CK057, CK058, CK059, CK060, CK061, CK062, CK063, CK064, CK065, CK066, CK067, CK068, CK069, CK070, CK071, CK072, CC002, CK074, CK075, CK076, CK077, CK078, CK079, CK080, CK081, CK082, CK083, CK084, CK085, CK086, CK087, CK088, CK089, CK090, CK091
+    </sql>
+    <sql id="Base_Column_List3">
+        CAC002, CAC003, CAC004, CAC005, CAC006, CAC007, CAC008, CAC009, CAC010, CAC011, CAC012, CAC013, CAC014, CAC015, CAC016, CAC017, CAC018, CAC019, CAC020, CAC021, CAC022, CAC023, CAC024, CAC025, CAC026, CAC027, CAC028, CAC029, CAC030, CAC031, CAC032, CAC033, CAC034, CAC035, CAC036
+    </sql>
+    <!---->
+
+
+    <insert id="insertAsHashMap" parameterType="HashMap" useGeneratedKeys="true" keyProperty="ck001" >
+        insert into st4_scs_ck
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="ck001 != null" >
+                CK001,
+            </if>
+            <if test="ck002 != null" >
+                CK002,
+            </if>
+            <if test="cd004 != null" >
+                CD004,
+            </if>
+            <if test="sg001 != null" >
+                SG001,
+            </if>
+            <if test="ck005 != null" >
+                CK005,
+            </if>
+            <if test="ck006 != null" >
+                CK006,
+            </if>
+            <if test="ck007 != null" >
+                CK007,
+            </if>
+            <if test="ck008 != null" >
+                CK008,
+            </if>
+            <if test="ck009 != null" >
+                CK009,
+            </if>
+            <if test="ck010 != null" >
+                CK010,
+            </if>
+            <if test="ck011 != null" >
+                CK011,
+            </if>
+            <if test="ck012 != null" >
+                CK012,
+            </if>
+            <if test="ck013 != null" >
+                CK013,
+            </if>
+            <if test="ck014 != null" >
+                CK014,
+            </if>
+            <if test="ck015 != null" >
+                CK015,
+            </if>
+            <if test="ck016 != null" >
+                CK016,
+            </if>
+            <if test="ck017 != null" >
+                CK017,
+            </if>
+            <if test="ck018 != null" >
+                CK018,
+            </if>
+            <if test="ck019 != null" >
+                CK019,
+            </if>
+            <if test="ck020 != null" >
+                CK020,
+            </if>
+            <if test="ck021 != null" >
+                CK021,
+            </if>
+            <if test="ck022 != null" >
+                CK022,
+            </if>
+            <if test="ck023 != null" >
+                CK023,
+            </if>
+            <if test="ck024 != null" >
+                CK024,
+            </if>
+            <if test="ck025 != null" >
+                CK025,
+            </if>
+            <if test="ck026 != null" >
+                CK026,
+            </if>
+            <if test="ck027 != null" >
+                CK027,
+            </if>
+            <if test="ck028 != null" >
+                CK028,
+            </if>
+            <if test="ck029 != null" >
+                CK029,
+            </if>
+            <if test="ck030 != null" >
+                CK030,
+            </if>
+            <if test="ck031 != null" >
+                CK031,
+            </if>
+            <if test="ck032 != null" >
+                CK032,
+            </if>
+            <if test="ck033 != null" >
+                CK033,
+            </if>
+            <if test="ck034 != null" >
+                CK034,
+            </if>
+            <if test="ck035 != null" >
+                CK035,
+            </if>
+            <if test="ck036 != null" >
+                CK036,
+            </if>
+            <if test="ck037 != null" >
+                CK037,
+            </if>
+            <if test="ck038 != null" >
+                CK038,
+            </if>
+            <if test="ck039 != null" >
+                CK039,
+            </if>
+            <if test="ck040 != null" >
+                CK040,
+            </if>
+            <if test="ck041 != null" >
+                CK041,
+            </if>
+            <if test="ck042 != null" >
+                CK042,
+            </if>
+            <if test="ck043 != null" >
+                CK043,
+            </if>
+            <if test="ck044 != null" >
+                CK044,
+            </if>
+            <if test="ck045 != null" >
+                CK045,
+            </if>
+            <if test="ck046 != null" >
+                CK046,
+            </if>
+            <if test="ck047 != null" >
+                CK047,
+            </if>
+            <if test="ck048 != null" >
+                CK048,
+            </if>
+            <if test="ck049 != null" >
+                CK049,
+            </if>
+            <if test="ck050 != null" >
+                CK050,
+            </if>
+            <if test="ck051 != null" >
+                CK051,
+            </if>
+            <if test="ck052 != null" >
+                CK052,
+            </if>
+            <if test="ck053 != null" >
+                CK053,
+            </if>
+            <if test="ck054 != null" >
+                CK054,
+            </if>
+            <if test="ck055 != null" >
+                CK055,
+            </if>
+            <if test="ck056 != null" >
+                CK056,
+            </if>
+            <if test="ck057 != null" >
+                CK057,
+            </if>
+            <if test="ck058 != null" >
+                CK058,
+            </if>
+            <if test="ck059 != null" >
+                CK059,
+            </if>
+            <if test="ck060 != null" >
+                CK060,
+            </if>
+            <if test="ck061 != null" >
+                CK061,
+            </if>
+            <if test="ck062 != null" >
+                CK062,
+            </if>
+            <if test="ck063 != null" >
+                CK063,
+            </if>
+            <if test="ck064 != null" >
+                CK064,
+            </if>
+            <if test="ck065 != null" >
+                CK065,
+            </if>
+            <if test="ck066 != null" >
+                CK066,
+            </if>
+            <if test="ck067 != null" >
+                CK067,
+            </if>
+            <if test="ck068 != null" >
+                CK068,
+            </if>
+            <if test="ck069 != null" >
+                CK069,
+            </if>
+            <if test="ck070 != null" >
+                CK070,
+            </if>
+            <if test="ck071 != null" >
+                CK071,
+            </if>
+            <if test="ck072 != null" >
+                CK072,
+            </if>
+            <if test="cc002 != null" >
+                CC002,
+            </if>
+            <if test="ck074 != null" >
+                CK074,
+            </if>
+            <if test="ck075 != null" >
+                CK075,
+            </if>
+            <if test="ck076 != null" >
+                CK076,
+            </if>
+            <if test="ck077 != null" >
+                CK077,
+            </if>
+            <if test="ck078 != null" >
+                CK078,
+            </if>
+            <if test="ck079 != null" >
+                CK079,
+            </if>
+            <if test="ck080 != null" >
+                CK080,
+            </if>
+            <if test="ck081 != null" >
+                CK081,
+            </if>
+            <if test="ck082 != null" >
+                CK082,
+            </if>
+            <if test="ck083 != null" >
+                CK083,
+            </if>
+            <if test="ck084 != null" >
+                CK084,
+            </if>
+            <if test="ck085 != null" >
+                CK085,
+            </if>
+            <if test="ck086 != null" >
+                CK086,
+            </if>
+            <if test="ck087 != null" >
+                CK087,
+            </if>
+            <if test="ck088 != null" >
+                CK088,
+            </if>
+            <if test="ck089 != null" >
+                CK089,
+            </if>
+            <if test="ck090 != null" >
+                CK090,
+            </if>
+            <if test="ck091 != null" >
+                CK091,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="ck001 != null" >
+                #{ck001},
+            </if>
+            <if test="ck002 != null" >
+                #{ck002},
+            </if>
+            <if test="cd004 != null" >
+                #{cd004},
+            </if>
+            <if test="sg001 != null" >
+                #{sg001},
+            </if>
+            <if test="ck005 != null" >
+                #{ck005},
+            </if>
+            <if test="ck006 != null" >
+                #{ck006},
+            </if>
+            <if test="ck007 != null" >
+                #{ck007},
+            </if>
+            <if test="ck008 != null" >
+                #{ck008},
+            </if>
+            <if test="ck009 != null" >
+                #{ck009},
+            </if>
+            <if test="ck010 != null" >
+                #{ck010},
+            </if>
+            <if test="ck011 != null" >
+                #{ck011},
+            </if>
+            <if test="ck012 != null" >
+                #{ck012},
+            </if>
+            <if test="ck013 != null" >
+                #{ck013},
+            </if>
+            <if test="ck014 != null" >
+                #{ck014},
+            </if>
+            <if test="ck015 != null" >
+                #{ck015},
+            </if>
+            <if test="ck016 != null" >
+                #{ck016},
+            </if>
+            <if test="ck017 != null" >
+                #{ck017},
+            </if>
+            <if test="ck018 != null" >
+                #{ck018},
+            </if>
+            <if test="ck019 != null" >
+                #{ck019},
+            </if>
+            <if test="ck020 != null" >
+                #{ck020},
+            </if>
+            <if test="ck021 != null" >
+                #{ck021},
+            </if>
+            <if test="ck022 != null" >
+                #{ck022},
+            </if>
+            <if test="ck023 != null" >
+                #{ck023},
+            </if>
+            <if test="ck024 != null" >
+                #{ck024},
+            </if>
+            <if test="ck025 != null" >
+                #{ck025},
+            </if>
+            <if test="ck026 != null" >
+                #{ck026},
+            </if>
+            <if test="ck027 != null" >
+                #{ck027},
+            </if>
+            <if test="ck028 != null" >
+                #{ck028},
+            </if>
+            <if test="ck029 != null" >
+                #{ck029},
+            </if>
+            <if test="ck030 != null" >
+                #{ck030},
+            </if>
+            <if test="ck031 != null" >
+                #{ck031},
+            </if>
+            <if test="ck032 != null" >
+                #{ck032},
+            </if>
+            <if test="ck033 != null" >
+                #{ck033},
+            </if>
+            <if test="ck034 != null" >
+                #{ck034},
+            </if>
+            <if test="ck035 != null" >
+                #{ck035},
+            </if>
+            <if test="ck036 != null" >
+                #{ck036},
+            </if>
+            <if test="ck037 != null" >
+                #{ck037},
+            </if>
+            <if test="ck038 != null" >
+                #{ck038},
+            </if>
+            <if test="ck039 != null" >
+                #{ck039},
+            </if>
+            <if test="ck040 != null" >
+                #{ck040},
+            </if>
+            <if test="ck041 != null" >
+                #{ck041},
+            </if>
+            <if test="ck042 != null" >
+                #{ck042},
+            </if>
+            <if test="ck043 != null" >
+                #{ck043},
+            </if>
+            <if test="ck044 != null" >
+                #{ck044},
+            </if>
+            <if test="ck045 != null" >
+                #{ck045},
+            </if>
+            <if test="ck046 != null" >
+                #{ck046},
+            </if>
+            <if test="ck047 != null" >
+                #{ck047},
+            </if>
+            <if test="ck048 != null" >
+                #{ck048},
+            </if>
+            <if test="ck049 != null" >
+                #{ck049},
+            </if>
+            <if test="ck050 != null" >
+                #{ck050},
+            </if>
+            <if test="ck051 != null" >
+                #{ck051},
+            </if>
+            <if test="ck052 != null" >
+                #{ck052},
+            </if>
+            <if test="ck053 != null" >
+                #{ck053},
+            </if>
+            <if test="ck054 != null" >
+                #{ck054},
+            </if>
+            <if test="ck055 != null" >
+                #{ck055},
+            </if>
+            <if test="ck056 != null" >
+                #{ck056},
+            </if>
+            <if test="ck057 != null" >
+                #{ck057},
+            </if>
+            <if test="ck058 != null" >
+                #{ck058},
+            </if>
+            <if test="ck059 != null" >
+                #{ck059},
+            </if>
+            <if test="ck060 != null" >
+                #{ck060},
+            </if>
+            <if test="ck061 != null" >
+                #{ck061},
+            </if>
+            <if test="ck062 != null" >
+                #{ck062},
+            </if>
+            <if test="ck063 != null" >
+                #{ck063},
+            </if>
+            <if test="ck064 != null" >
+                #{ck064},
+            </if>
+            <if test="ck065 != null" >
+                #{ck065},
+            </if>
+            <if test="ck066 != null" >
+                #{ck066},
+            </if>
+            <if test="ck067 != null" >
+                #{ck067},
+            </if>
+            <if test="ck068 != null" >
+                #{ck068},
+            </if>
+            <if test="ck069 != null" >
+                #{ck069},
+            </if>
+            <if test="ck070 != null" >
+                #{ck070},
+            </if>
+            <if test="ck071 != null" >
+                #{ck071},
+            </if>
+            <if test="ck072 != null" >
+                #{ck072},
+            </if>
+            <if test="cc002 != null" >
+                #{cc002},
+            </if>
+            <if test="ck074 != null" >
+                #{ck074},
+            </if>
+            <if test="ck075 != null" >
+                #{ck075},
+            </if>
+            <if test="ck076 != null" >
+                #{ck076},
+            </if>
+            <if test="ck077 != null" >
+                #{ck077},
+            </if>
+            <if test="ck078 != null" >
+                #{ck078},
+            </if>
+            <if test="ck079 != null" >
+                #{ck079},
+            </if>
+            <if test="ck080 != null" >
+                #{ck080},
+            </if>
+            <if test="ck081 != null" >
+                #{ck081},
+            </if>
+            <if test="ck082 != null" >
+                #{ck082},
+            </if>
+            <if test="ck083 != null" >
+                #{ck083},
+            </if>
+            <if test="ck084 != null" >
+                #{ck084},
+            </if>
+            <if test="ck085 != null" >
+                #{ck085},
+            </if>
+            <if test="ck086 != null" >
+                #{ck086},
+            </if>
+            <if test="ck087 != null" >
+                #{ck087},
+            </if>
+            <if test="ck088 != null" >
+                #{ck088},
+            </if>
+            <if test="ck089 != null" >
+                #{ck089},
+            </if>
+            <if test="ck090 != null" >
+                #{ck090},
+            </if>
+            <if test="ck091 != null" >
+                #{ck091},
+            </if>
+        </trim>
+    </insert>
+    <select id="getStageDetail" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCk" >
+               ( SELECT
+        <include refid="Base_Column_List2"/>
+               ,sa.SA019 as uname
+        FROM st4_scs_ck ck
+        left join st4_scs_cd cd on cd.CD004=ck.CD004
+        LEFT JOIN st4_sys_sg sg on sg.SG001=ck.SG001
+            LEFT JOIN st4_sys_sa sa
+            ON ck.CK049 = sa.SA001
+        WHERE CK085 = 1
+            AND CK088 = 0
+            AND ck.CD004 = #{cd004} order by CK001 DESC limit 1)
+        UNION
+        (SELECT
+        <include refid="Base_Column_List2"/>
+        ,sa.SA019 as uname
+        FROM st4_scs_ck ck
+        left join st4_scs_cd cd on cd.CD004=ck.CD004
+        LEFT JOIN st4_sys_sg sg on sg.SG001=ck.SG001
+        LEFT JOIN st4_sys_sa sa
+          ON ck.CK049 = sa.SA001
+        WHERE CK085 = 1
+            AND CK088 = 1
+            AND ck.CD004 =#{cd004} order by CK001 DESC limit 1)
+    </select>
+    <select id="listLedger" resultMap="BaseResultMap"  >
+        SELECT
+        <include refid="Base_Column_List2"/>,sa.SA019 as uname
+        FROM
+
+        (
+        SELECT *  FROM (
+        SELECT MAX(CK001) AS ID FROM st4_scs_ck  GROUP BY CD004 )t
+        INNER JOIN st4_scs_ck d ON t.ID= d.CK001
+
+        )
+
+        ck left join st4_scs_cd cd on cd.CD004 = ck.CD004
+        left join  st4_sys_sg sg on cd.SG001 = SG.sg001
+        left join  st4_sys_sa sa on sa.SA001= ck.CK049
+        left join st4_scs_cl cl on cl.CL001=ck.CK091
+        where CK085 = 1
+
+
+        <if test="ck.uname != null">
+            and sa.SA019 like '%${ck.uname}%'
+        </if>
+        <if test="ck.ptype==0">
+            and ck.CK049=#{ck.ck049} or sa.SA002=#{ck.ck049}
+        </if>
+        <if test="ck.ptype==1">
+            and ck.CK049=#{ck.ck049}
+        </if>
+        <if test="ck.sg001 != null" > and
+            cd.SG001 = #{ck.sg001}
+        </if>
+        <if test="ck.ck002 != null" > and
+            CK002 = #{ck.ck002}
+        </if>
+        <if test="ck.cd004 != null" > and
+            ck.CD004 like '%${ck.cd004}%'
+        </if>
+
+        <if test="ck.ck005 != null" > and
+            CK005 = #{ck.ck005}
+        </if>
+        <if test="ck.ck006 != null" > and
+            CK006 = #{ck.ck006}
+        </if>
+        <if test="ck.ck007 != null" > and
+            CK007 = #{ck.ck007}
+        </if>
+        <if test="ck.ck008 != null" > and
+            CK008 = #{ck.ck008}
+        </if>
+        <if test="ck.ck009 != null" > and
+            CK009 = #{ck.ck009}
+        </if>
+        <if test="ck.ck010 != null" > and
+            CK010 = #{ck.ck010}
+        </if>
+        <if test="ck.ck011 != null" > and
+            CK011 = #{ck.ck011}
+        </if>
+        <if test="ck.ck012 != null" > and
+            CK012 = #{ck.ck012}
+        </if>
+        <if test="ck.ck013 != null" > and
+            CK013 = #{ck.ck013}
+        </if>
+        <if test="ck.ck014 != null" > and
+            CK014 = #{ck.ck014}
+        </if>
+        <if test="ck.ck015 != null" > and
+            CK015 = #{ck.ck015}
+        </if>
+        <if test="ck.ck016 != null" > and
+            CK016 = #{ck.ck016}
+        </if>
+        <if test="ck.ck017 != null" > and
+            CK017 = #{ck.ck017}
+        </if>
+        <if test="ck.ck018 != null" > and
+            CK018 = #{ck.ck018}
+        </if>
+        <if test="ck.ck019 != null" > and
+            CK019 = #{ck.ck019}
+        </if>
+        <if test="ck.ck020 != null" > and
+            CK020 = #{ck.ck020}
+        </if>
+        <if test="ck.ck021 != null" > and
+            CK021 = #{ck.ck021}
+        </if>
+        <if test="ck.ck022 != null" > and
+            CK022 = #{ck.ck022}
+        </if>
+        <if test="ck.ck023 != null" > and
+            CK023 = #{ck.ck023}
+        </if>
+        <if test="ck.ck024 != null" > and
+            CK024 = #{ck.ck024}
+        </if>
+        <if test="ck.ck025 != null" > and
+            CK025 = #{ck.ck025}
+        </if>
+        <if test="ck.ck026 != null" > and
+            CK026 = #{ck.ck026}
+        </if>
+        <if test="ck.ck027 != null" > and
+            CK027 = #{ck.ck027}
+        </if>
+        <if test="ck.ck028 != null" > and
+            CK028 = #{ck.ck028}
+        </if>
+        <if test="ck.ck029 != null" > and
+            CK029 = #{ck.ck029}
+        </if>
+        <if test="ck.ck030 != null" > and
+            CK030 = #{ck.ck030}
+        </if>
+        <if test="ck.ck031 != null" > and
+            CK031 = #{ck.ck031}
+        </if>
+        <if test="ck.ck032 != null" > and
+            CK032 = #{ck.ck032}
+        </if>
+        <if test="ck.ck033 != null" > and
+            CK033 = #{ck.ck033}
+        </if>
+        <if test="ck.ck034 != null" > and
+            CK034 = #{ck.ck034}
+        </if>
+        <if test="ck.ck035 != null" > and
+            CK035 = #{ck.ck035}
+        </if>
+        <if test="ck.ck036 != null" > and
+            CK036 = #{ck.ck036}
+        </if>
+        <if test="ck.ck037 != null" > and
+            CK037 = #{ck.ck037}
+        </if>
+        <if test="ck.ck038 != null" > and
+            CK038 = #{ck.ck038}
+        </if>
+        <if test="ck.ck039 != null" > and
+            CK039 = #{ck.ck039}
+        </if>
+        <if test="ck.ck040 != null" > and
+            CK040 = #{ck.ck040}
+        </if>
+        <if test="ck.ck041 != null" > and
+            CK041 = #{ck.ck041}
+        </if>
+        <if test="ck.ck042 != null" > and
+            CK042 = #{ck.ck042}
+        </if>
+        <if test="ck.ck043 != null" > and
+            CK043 = #{ck.ck043}
+        </if>
+        <if test="ck.ck044 != null" > and
+            CK044 = #{ck.ck044}
+        </if>
+        <if test="ck.ck045 != null" > and
+            CK045 = #{ck.ck045}
+        </if>
+        <if test="ck.ck046 != null" > and
+            CK046 = #{ck.ck046}
+        </if>
+        <if test="ck.ck047 != null" > and
+            CK047 = #{ck.ck047}
+        </if>
+        <if test="ck.ck048 != null" > and
+            CK048 = #{ck.ck048}
+        </if>
+
+        <if test="ck.ck050 != null" > and
+            CK050 = #{ck.ck050}
+        </if>
+        <if test="ck.ck051 != null" > and
+            CK051 = #{ck.ck051}
+        </if>
+        <if test="ck.ck052 != null" > and
+            CK052 = #{ck.ck052}
+        </if>
+        <if test="ck.ck053 != null" > and
+            CK053 = #{ck.ck053}
+        </if>
+        <if test="ck.ck054 != null" > and
+            CK054 = #{ck.ck054}
+        </if>
+        <if test="ck.ck055 != null" > and
+            CK055 = #{ck.ck055}
+        </if>
+        <if test="ck.ck056 != null" > and
+            CK056 = #{ck.ck056}
+        </if>
+        <if test="ck.ck057 != null" > and
+            CK057 = #{ck.ck057}
+        </if>
+        <if test="ck.ck058 != null" > and
+            CK058 = #{ck.ck058}
+        </if>
+        <if test="ck.ck059 != null" > and
+            CK059 = #{ck.ck059}
+        </if>
+        <if test="ck.ck060 != null" > and
+            CK060 = #{ck.ck060}
+        </if>
+        <if test="ck.ck061 != null" > and
+            CK061 = #{ck.ck061}
+        </if>
+        <if test="ck.ck062 != null" > and
+            CK062 = #{ck.ck062}
+        </if>
+        <if test="ck.ck063 != null" > and
+            CK063 = #{ck.ck063}
+        </if>
+        <if test="ck.ck064 != null" > and
+            CK064 = #{ck.ck064}
+        </if>
+        <if test="ck.ck065 != null" > and
+            CK065 = #{ck.ck065}
+        </if>
+        <if test="ck.ck066 != null" > and
+            CK066 = #{ck.ck066}
+        </if>
+        <if test="ck.ck067 != null" > and
+            CK067 = #{ck.ck067}
+        </if>
+        <if test="ck.ck068 != null" > and
+            CK068 = #{ck.ck068}
+        </if>
+        <if test="ck.ck069 != null" > and
+            CK069 = #{ck.ck069}
+        </if>
+        <if test="ck.ck070 != null" > and
+            CK070 = #{ck.ck070}
+        </if>
+        <if test="ck.ck071 != null" > and
+            CK071 = #{ck.ck071}
+        </if>
+        <if test="ck.ck072 != null" > and
+            CK072 = #{ck.ck072}
+        </if>
+        <if test="ck.cc002 != null" > and
+            CC002 = #{ck.cc002}
+        </if>
+        <if test="ck.ck074 != null" > and
+            CK074 = #{ck.ck074}
+        </if>
+        <if test="ck.ck075 != null" > and
+            CK075 = #{ck.ck075}
+        </if>
+        <if test="ck.ck076 != null" > and
+            CK076 = #{ck.ck076}
+        </if>
+        <if test="ck.ck077 != null" > and
+            CK077 = #{ck.ck077}
+        </if>
+        <if test="ck.ck078 != null" > and
+            CK078 = #{ck.ck078}
+        </if>
+        <if test="ck.ck079 != null" > and
+            CK079 = #{ck.ck079}
+        </if>
+        <if test="ck.ck080 != null" > and
+            CK080 = #{ck.ck080}
+        </if>
+        <if test="ck.ck081 != null" > and
+            CK081 = #{ck.ck081}
+        </if>
+        <if test="ck.ck082 != null" > and
+            CK082 = #{ck.ck082}
+        </if>
+        <if test="ck.ck083 != null" > and
+            CK083 = #{ck.ck083}
+        </if>
+        <if test="ck.ck084 != null" > and
+            CK084 = #{ck.ck084}
+        </if>
+        <if test="ck.ck085 != null" > and
+            CK085 = #{ck.ck085}
+        </if>
+        <if test="ck.ck086 != null" > and
+            CK086 = #{ck.ck086}
+        </if>
+        <if test="ck.ck087 != null" > and
+            CK087 = #{ck.ck087}
+        </if>
+        <if test="ck.ck088 != null" > and
+            CK088 = #{ck.ck088}
+        </if>
+        <if test="ck.ck089 != null" > and
+            CK089 = #{ck.ck089}
+        </if>
+        <if test="ck.ck090 != null" > and
+            CK090 = #{ck.ck090}
+        </if>
+        <if test="ck.ck091 != null" > and
+            CK091 = #{ck.ck091}
+        </if>
+
+        order by ck.CK086 desc
+
+
+    </select>
+    <select id="listHkyLedger" resultMap="BaseResultMap"  >
+        SELECT
+        <include refid="Base_Column_List4"/>,
+        <include refid="Base_Column_List3"/>,sa.SA019 as uname
+        FROM
+
+        (
+        SELECT *  FROM (
+        SELECT MAX(CK001) AS ID FROM st4_scs_ck  GROUP BY CD004 )t
+        INNER JOIN st4_scs_ck d ON t.ID= d.CK001
+
+        )
+
+        ck left join st4_scs_cd cd on cd.CD004 = ck.CD004
+        left join st4_scs_cac cac on cac.CK001= ck.CK001
+        left join  st4_sys_sg sg on cd.SG001 = SG.sg001
+        left join  st4_sys_sa sa on sa.SA001= ck.CK049
+        left join st4_scs_cl cl on cl.CL001=ck.CK091
+        where CK085 = 1 and ck046 !="是"
+        <if test="ck.bhqmc != null">
+            and sg.SG008 like '%${ck.bhqmc}%'
+        </if>
+
+        <if test="ck.uname != null">
+            and sa.SA019 like '%${ck.uname}%'
+        </if>
+        <if test="ck.ptype==0">
+            and ck.CK049=#{ck.ck049} or sa.SA002=#{ck.ck049}
+        </if>
+        <if test="ck.ptype==1">
+            and ck.CK049=#{ck.ck049}
+        </if>
+        <if test="ck.sg001 != null" > and
+            cd.SG001 = #{ck.sg001}
+        </if>
+        <if test="ck.ck002 != null" > and
+            CK002 = #{ck.ck002}
+        </if>
+        <if test="ck.cd004 != null" > and
+            ck.CD004 like '%${ck.cd004}%'
+        </if>
+
+        <if test="ck.ck005 != null" > and
+            CK005 = #{ck.ck005}
+        </if>
+        <if test="ck.ck006 != null" > and
+            CK006 = #{ck.ck006}
+        </if>
+        <if test="ck.ck007 != null" > and
+            CK007 = #{ck.ck007}
+        </if>
+        <if test="ck.ck008 != null" > and
+            CK008 = #{ck.ck008}
+        </if>
+        <if test="ck.ck009 != null" > and
+            CK009 = #{ck.ck009}
+        </if>
+        <if test="ck.ck010 != null" > and
+            CK010 = #{ck.ck010}
+        </if>
+        <if test="ck.ck011 != null" > and
+            CK011 = #{ck.ck011}
+        </if>
+        <if test="ck.ck012 != null" > and
+            CK012 = #{ck.ck012}
+        </if>
+        <if test="ck.ck013 != null" > and
+            CK013 = #{ck.ck013}
+        </if>
+        <if test="ck.ck014 != null" > and
+            CK014 = #{ck.ck014}
+        </if>
+        <if test="ck.ck015 != null" > and
+            CK015 = #{ck.ck015}
+        </if>
+        <if test="ck.ck016 != null" > and
+            CK016 = #{ck.ck016}
+        </if>
+        <if test="ck.ck017 != null" > and
+            CK017 = #{ck.ck017}
+        </if>
+        <if test="ck.ck018 != null" > and
+            CK018 = #{ck.ck018}
+        </if>
+        <if test="ck.ck019 != null" > and
+            CK019 = #{ck.ck019}
+        </if>
+        <if test="ck.ck020 != null" > and
+            CK020 = #{ck.ck020}
+        </if>
+        <if test="ck.ck021 != null" > and
+            CK021 = #{ck.ck021}
+        </if>
+        <if test="ck.ck022 != null" > and
+            CK022 = #{ck.ck022}
+        </if>
+        <if test="ck.ck023 != null" > and
+            CK023 = #{ck.ck023}
+        </if>
+        <if test="ck.ck024 != null" > and
+            CK024 = #{ck.ck024}
+        </if>
+        <if test="ck.ck025 != null" > and
+            CK025 = #{ck.ck025}
+        </if>
+        <if test="ck.ck026 != null" > and
+            CK026 = #{ck.ck026}
+        </if>
+        <if test="ck.ck027 != null" > and
+            CK027 = #{ck.ck027}
+        </if>
+        <if test="ck.ck028 != null" > and
+            CK028 = #{ck.ck028}
+        </if>
+        <if test="ck.ck029 != null" > and
+            CK029 = #{ck.ck029}
+        </if>
+        <if test="ck.ck030 != null" > and
+            CK030 = #{ck.ck030}
+        </if>
+        <if test="ck.ck031 != null" > and
+            CK031 = #{ck.ck031}
+        </if>
+        <if test="ck.ck032 != null" > and
+            CK032 = #{ck.ck032}
+        </if>
+        <if test="ck.ck033 != null" > and
+            CK033 = #{ck.ck033}
+        </if>
+        <if test="ck.ck034 != null" > and
+            CK034 = #{ck.ck034}
+        </if>
+        <if test="ck.ck035 != null" > and
+            CK035 = #{ck.ck035}
+        </if>
+        <if test="ck.ck036 != null" > and
+            CK036 = #{ck.ck036}
+        </if>
+        <if test="ck.ck037 != null" > and
+            CK037 = #{ck.ck037}
+        </if>
+        <if test="ck.ck038 != null" > and
+            CK038 = #{ck.ck038}
+        </if>
+        <if test="ck.ck039 != null" > and
+            CK039 = #{ck.ck039}
+        </if>
+        <if test="ck.ck040 != null" > and
+            CK040 = #{ck.ck040}
+        </if>
+        <if test="ck.ck041 != null" > and
+            CK041 = #{ck.ck041}
+        </if>
+        <if test="ck.ck042 != null" > and
+            CK042 = #{ck.ck042}
+        </if>
+        <if test="ck.ck043 != null" > and
+            CK043 = #{ck.ck043}
+        </if>
+        <if test="ck.ck044 != null" > and
+            CK044 = #{ck.ck044}
+        </if>
+        <if test="ck.ck045 != null" > and
+            CK045 = #{ck.ck045}
+        </if>
+        <if test="ck.ck046 != null" > and
+            CK046 = #{ck.ck046}
+        </if>
+        <if test="ck.ck047 != null" > and
+            CK047 = #{ck.ck047}
+        </if>
+        <if test="ck.ck048 != null" > and
+            CK048 = #{ck.ck048}
+        </if>
+
+        <if test="ck.ck050 != null" > and
+            CK050 = #{ck.ck050}
+        </if>
+        <if test="ck.ck051 != null" > and
+            CK051 = #{ck.ck051}
+        </if>
+        <if test="ck.ck052 != null" > and
+            CK052 = #{ck.ck052}
+        </if>
+        <if test="ck.ck053 != null" > and
+            CK053 = #{ck.ck053}
+        </if>
+        <if test="ck.ck054 != null" > and
+            CK054 = #{ck.ck054}
+        </if>
+        <if test="ck.ck055 != null" > and
+            CK055 = #{ck.ck055}
+        </if>
+        <if test="ck.ck056 != null" > and
+            CK056 = #{ck.ck056}
+        </if>
+        <if test="ck.ck057 != null" > and
+            CK057 = #{ck.ck057}
+        </if>
+        <if test="ck.ck058 != null" > and
+            CK058 = #{ck.ck058}
+        </if>
+        <if test="ck.ck059 != null" > and
+            CK059 = #{ck.ck059}
+        </if>
+        <if test="ck.ck060 != null" > and
+            CK060 = #{ck.ck060}
+        </if>
+        <if test="ck.ck061 != null" > and
+            CK061 = #{ck.ck061}
+        </if>
+        <if test="ck.ck062 != null" > and
+            CK062 = #{ck.ck062}
+        </if>
+        <if test="ck.ck063 != null" > and
+            CK063 = #{ck.ck063}
+        </if>
+        <if test="ck.ck064 != null" > and
+            CK064 = #{ck.ck064}
+        </if>
+        <if test="ck.ck065 != null" > and
+            CK065 = #{ck.ck065}
+        </if>
+        <if test="ck.ck066 != null" > and
+            CK066 = #{ck.ck066}
+        </if>
+        <if test="ck.ck067 != null" > and
+            CK067 = #{ck.ck067}
+        </if>
+        <if test="ck.ck068 != null" > and
+            CK068 = #{ck.ck068}
+        </if>
+        <if test="ck.ck069 != null" > and
+            CK069 = #{ck.ck069}
+        </if>
+        <if test="ck.ck070 != null" > and
+            CK070 = #{ck.ck070}
+        </if>
+        <if test="ck.ck071 != null" > and
+            CK071 = #{ck.ck071}
+        </if>
+        <if test="ck.ck072 != null" > and
+            CK072 = #{ck.ck072}
+        </if>
+        <if test="ck.cc002 != null" > and
+            CC002 = #{ck.cc002}
+        </if>
+        <if test="ck.ck074 != null" > and
+            CK074 = #{ck.ck074}
+        </if>
+        <if test="ck.ck075 != null" > and
+            CK075 = #{ck.ck075}
+        </if>
+        <if test="ck.ck076 != null" > and
+            CK076 = #{ck.ck076}
+        </if>
+        <if test="ck.ck077 != null" > and
+            CK077 = #{ck.ck077}
+        </if>
+        <if test="ck.ck078 != null" > and
+            CK078 = #{ck.ck078}
+        </if>
+        <if test="ck.ck079 != null" > and
+            CK079 = #{ck.ck079}
+        </if>
+        <if test="ck.ck080 != null" > and
+            CK080 = #{ck.ck080}
+        </if>
+        <if test="ck.ck081 != null" > and
+            CK081 = #{ck.ck081}
+        </if>
+        <if test="ck.ck082 != null" > and
+            CK082 = #{ck.ck082}
+        </if>
+        <if test="ck.ck083 != null" > and
+            CK083 = #{ck.ck083}
+        </if>
+        <if test="ck.ck084 != null" > and
+            CK084 = #{ck.ck084}
+        </if>
+        <if test="ck.ck085 != null" > and
+            CK085 = #{ck.ck085}
+        </if>
+        <if test="ck.strTime != null and ck.strTime != ''" >
+            and CK086 <![CDATA[ >= ]]>#{ck.strTime}
+        </if>
+        <if test="ck.endTime != null and ck.endTime != '' " >
+            and CK086 <![CDATA[ <= ]]> #{ck.endTime}
+        </if>
+
+        <if test="ck.ck087 != null" > and
+            CK087 = #{ck.ck087}
+        </if>
+        <if test="ck.ck088 != null" > and
+            CK088 = #{ck.ck088}
+        </if>
+        <if test="ck.ck089 != null" > and
+            CK089 = #{ck.ck089}
+        </if>
+        <if test="ck.ck090 != null" > and
+            CK090 = #{ck.ck090}
+        </if>
+        <if test="ck.ck091 != null" > and
+            CK091 = #{ck.ck091}
+        </if>
+
+        order by ck.CK086 desc
+
+    </select>
+
+    <insert id="insertList" parameterType="com.gistone.bjhky.entity.St4ScsCk"  useGeneratedKeys="true" keyProperty="ck001" >
+
+        insert into st4_scs_ck (
+
+        <include refid="Base_Column_List1" />
+
+        )
+        values
+        <foreach collection="list" item="item" index="index"  separator=",">
+            ( #{item.ck002}, #{item.cd004},
+            #{item.sg001}, #{item.ck005}, #{item.ck006},
+            #{item.ck007}, #{item.ck008}, #{item.ck009},
+            #{item.ck010}, #{item.ck011}, #{item.ck012},
+            #{item.ck013}, #{item.ck014}, #{item.ck015},
+            #{item.ck016}, #{item.ck017}, #{item.ck018},
+            #{item.ck019}, #{item.ck020}, #{item.ck021},
+            #{item.ck022}, #{item.ck023}, #{item.ck024},
+            #{item.ck025}, #{item.ck026}, #{item.ck027},
+            #{item.ck028}, #{item.ck029}, #{item.ck030},
+            #{item.ck031}, #{item.ck032}, #{item.ck033},
+            #{item.ck034}, #{item.ck035}, #{item.ck036},
+            #{item.ck037}, #{item.ck038}, #{item.ck039},
+            #{item.ck040}, #{item.ck041}, #{item.ck042},
+            #{item.ck043}, #{item.ck044}, #{item.ck045},
+            #{item.ck046}, #{item.ck047}, #{item.ck048},
+            #{item.ck049}, #{item.ck050}, #{item.ck051},
+            #{item.ck052}, #{item.ck053}, #{item.ck054},
+            #{item.ck055}, #{item.ck056}, #{item.ck057},
+            #{item.ck058}, #{item.ck059}, #{item.ck060},
+            #{item.ck061}, #{item.ck062}, #{item.ck063},
+            #{item.ck064}, #{item.ck065}, #{item.ck066},
+            #{item.ck067}, #{item.ck068}, #{item.ck069},
+            #{item.ck070}, #{item.ck071}, #{item.ck072},
+            #{item.cc002}, #{item.ck074}, #{item.ck075},
+            #{item.ck076}, #{item.ck077}, #{item.ck078},
+            #{item.ck079}, #{item.ck080}, #{item.ck081},
+            #{item.ck082}, #{item.ck083}, #{item.ck084},
+            #{item.ck085}, #{item.ck086}, #{item.ck087},
+            #{item.ck088}, #{item.ck089}, #{item.ck090},
+            #{item.ck091})
+        </foreach>
+    </insert>
+    <update id="batchUpdateByPrimaryKey"  parameterType="com.gistone.bjhky.entity.St4ScsCk">
+        update st4_scs_ck
+        <set >
+            <if test="ck002 != null" >
+                CK002 = #{ck002},
+            </if>
+            <if test="cd004 != null" >
+                CD004 = #{cd004},
+            </if>
+            <if test="sg001 != null" >
+                SG001 = #{sg001},
+            </if>
+            <if test="ck005 != null" >
+                CK005 = #{ck005},
+            </if>
+            <if test="ck006 != null" >
+                CK006 = #{ck006},
+            </if>
+            <if test="ck007 != null" >
+                CK007 = #{ck007},
+            </if>
+            <if test="ck008 != null" >
+                CK008 = #{ck008},
+            </if>
+            <if test="ck009 != null" >
+                CK009 = #{ck009},
+            </if>
+            <if test="ck010 != null" >
+                CK010 = #{ck010},
+            </if>
+            <if test="ck011 != null" >
+                CK011 = #{ck011},
+            </if>
+            <if test="ck012 != null" >
+                CK012 = #{ck012},
+            </if>
+            <if test="ck013 != null" >
+                CK013 = #{ck013},
+            </if>
+            <if test="ck014 != null" >
+                CK014 = #{ck014},
+            </if>
+            <if test="ck015 != null" >
+                CK015 = #{ck015},
+            </if>
+            <if test="ck016 != null" >
+                CK016 = #{ck016},
+            </if>
+            <if test="ck017 != null" >
+                CK017 = #{ck017},
+            </if>
+            <if test="ck018 != null" >
+                CK018 = #{ck018},
+            </if>
+            <if test="ck019 != null" >
+                CK019 = #{ck019},
+            </if>
+            <if test="ck020 != null" >
+                CK020 = #{ck020},
+            </if>
+            <if test="ck021 != null" >
+                CK021 = #{ck021},
+            </if>
+            <if test="ck022 != null" >
+                CK022 = #{ck022},
+            </if>
+            <if test="ck023 != null" >
+                CK023 = #{ck023},
+            </if>
+            <if test="ck024 != null" >
+                CK024 = #{ck024},
+            </if>
+            <if test="ck025 != null" >
+                CK025 = #{ck025},
+            </if>
+            <if test="ck026 != null" >
+                CK026 = #{ck026},
+            </if>
+            <if test="ck027 != null" >
+                CK027 = #{ck027},
+            </if>
+            <if test="ck028 != null" >
+                CK028 = #{ck028},
+            </if>
+            <if test="ck029 != null" >
+                CK029 = #{ck029},
+            </if>
+            <if test="ck030 != null" >
+                CK030 = #{ck030},
+            </if>
+            <if test="ck031 != null" >
+                CK031 = #{ck031},
+            </if>
+            <if test="ck032 != null" >
+                CK032 = #{ck032},
+            </if>
+            <if test="ck033 != null" >
+                CK033 = #{ck033},
+            </if>
+            <if test="ck034 != null" >
+                CK034 = #{ck034},
+            </if>
+            <if test="ck035 != null" >
+                CK035 = #{ck035},
+            </if>
+            <if test="ck036 != null" >
+                CK036 = #{ck036},
+            </if>
+            <if test="ck037 != null" >
+                CK037 = #{ck037},
+            </if>
+            <if test="ck038 != null" >
+                CK038 = #{ck038},
+            </if>
+            <if test="ck039 != null" >
+                CK039 = #{ck039},
+            </if>
+            <if test="ck040 != null" >
+                CK040 = #{ck040},
+            </if>
+            <if test="ck041 != null" >
+                CK041 = #{ck041},
+            </if>
+            <if test="ck042 != null" >
+                CK042 = #{ck042},
+            </if>
+            <if test="ck043 != null" >
+                CK043 = #{ck043},
+            </if>
+            <if test="ck044 != null" >
+                CK044 = #{ck044},
+            </if>
+            <if test="ck045 != null" >
+                CK045 = #{ck045},
+            </if>
+            <if test="ck046 != null" >
+                CK046 = #{ck046},
+            </if>
+            <if test="ck047 != null" >
+                CK047 = #{ck047},
+            </if>
+            <if test="ck048 != null" >
+                CK048 = #{ck048},
+            </if>
+            <if test="ck049 != null" >
+                CK049 = #{ck049},
+            </if>
+            <if test="ck050 != null" >
+                CK050 = #{ck050},
+            </if>
+            <if test="ck051 != null" >
+                CK051 = #{ck051},
+            </if>
+            <if test="ck052 != null" >
+                CK052 = #{ck052},
+            </if>
+            <if test="ck053 != null" >
+                CK053 = #{ck053},
+            </if>
+            <if test="ck054 != null" >
+                CK054 = #{ck054},
+            </if>
+            <if test="ck055 != null" >
+                CK055 = #{ck055},
+            </if>
+            <if test="ck056 != null" >
+                CK056 = #{ck056},
+            </if>
+            <if test="ck057 != null" >
+                CK057 = #{ck057},
+            </if>
+            <if test="ck058 != null" >
+                CK058 = #{ck058},
+            </if>
+            <if test="ck059 != null" >
+                CK059 = #{ck059},
+            </if>
+            <if test="ck060 != null" >
+                CK060 = #{ck060},
+            </if>
+            <if test="ck061 != null" >
+                CK061 = #{ck061},
+            </if>
+            <if test="ck062 != null" >
+                CK062 = #{ck062},
+            </if>
+            <if test="ck063 != null" >
+                CK063 = #{ck063},
+            </if>
+            <if test="ck064 != null" >
+                CK064 = #{ck064},
+            </if>
+            <if test="ck065 != null" >
+                CK065 = #{ck065},
+            </if>
+            <if test="ck066 != null" >
+                CK066 = #{ck066},
+            </if>
+            <if test="ck067 != null" >
+                CK067 = #{ck067},
+            </if>
+            <if test="ck068 != null" >
+                CK068 = #{ck068},
+            </if>
+            <if test="ck069 != null" >
+                CK069 = #{ck069},
+            </if>
+            <if test="ck070 != null" >
+                CK070 = #{ck070},
+            </if>
+            <if test="ck071 != null" >
+                CK071 = #{ck071},
+            </if>
+            <if test="ck072 != null" >
+                CK072 = #{ck072},
+            </if>
+            <if test="cc002 != null" >
+                CC002 = #{cc002},
+            </if>
+            <if test="ck074 != null" >
+                CK074 = #{ck074},
+            </if>
+            <if test="ck075 != null" >
+                CK075 = #{ck075},
+            </if>
+            <if test="ck076 != null" >
+                CK076 = #{ck076},
+            </if>
+            <if test="ck077 != null" >
+                CK077 = #{ck077},
+            </if>
+            <if test="ck078 != null" >
+                CK078 = #{ck078},
+            </if>
+            <if test="ck079 != null" >
+                CK079 = #{ck079},
+            </if>
+            <if test="ck080 != null" >
+                CK080 = #{ck080},
+            </if>
+            <if test="ck081 != null" >
+                CK081 = #{ck081},
+            </if>
+            <if test="ck082 != null" >
+                CK082 = #{ck082},
+            </if>
+            <if test="ck083 != null" >
+                CK083 = #{ck083},
+            </if>
+            <if test="ck084 != null" >
+                CK084 = #{ck084},
+            </if>
+            <if test="ck085 != null" >
+                CK085 = #{ck085},
+            </if>
+            <if test="ck086 != null" >
+                CK086 = #{ck086},
+            </if>
+            <if test="ck087 != null" >
+                CK087 = #{ck087},
+            </if>
+            <if test="ck088 != null" >
+                CK088 = #{ck088},
+            </if>
+            <if test="ck089 != null" >
+                CK089 = #{ck089},
+            </if>
+            <if test="ck090 != null" >
+                CK090 = #{ck090},
+            </if>
+            <if test="ck091 != null" >
+                CK091 = #{ck091},
+            </if>
+        </set>
+
+        where CK001 = #{ck001}
+
+    </update>
+
+
+
+
+
+    <select id="selectSt4ScsCk"  parameterType="com.gistone.bjhky.entity.St4ScsCk" resultType="com.gistone.bjhky.entity.St4ScsCk">
+        <if test="type==1">
+            SELECT sg.SG001, sg.SG008
+            , IF(COUNT(*) IS NULL, 0, COUNT(*)) AS num
+            FROM st4_scs_ck ck inner JOIN st4_scs_cd cd ON cd.CD004 = ck.`CD004`
+            LEFT JOIN st4_sys_sg sg ON sg.SG001 = cd.SG001
+            LEFT JOIN st4_scs_cl cl ON ck.CK091 = cl.CL001
+            WHERE ck.CK085 = 1
+            AND sg.SG007 = 1
+            AND cl.CL012 = 1
+            <if test="sg001!=null and sg001 !=''">
+                and ck.SG001 =#{sg001}
+            </if>
+            <if test="ck002!=null and ck002 !=''">
+                and ck.CK002 =#{ck002}
+            </if>
+            <if test="yyyy!=null and yyyy!=''">
+                and cl.CL010 =#{yyyy}
+            </if>
+            <if test="cl001!=null and cl001 !=''">
+                and cl.CL001 =#{cl001}
+            </if>
+            <if test="ck005!=null  and ck005 !=''">
+                and ck.CK005 =#{ck005}
+            </if>
+            <if test="ck016!=null  and ck016 !=''">
+                and ck.CK016 =#{ck016}
+            </if>
+            <if test="ck013!=null and ck013 !='' ">
+                and ck.CK013 =#{ck013}
+            </if>
+            <if test="ck006!=null  and ck006 !=''">
+                and ck.CK006 =#{ck006}
+            </if>
+            <if test="ck014!=null  and ck014 !=''">
+                and ck.CK014=#{ck014}
+            </if>
+            <if test="ck046!=null  and ck046 !=''">
+                and ck.CK046=#{ck046}
+            </if>
+            <if test="ck080!=null  and ck080 !=''">
+                and ck.CK080=#{ck080}
+            </if>
+            <if test="ck081!=null  and ck081 !=''">
+                and ck.CK081=#{ck081}
+            </if>
+            <if test="ck082!=null  and ck082 !=''">
+                and ck.CK082=#{ck082}
+            </if>
+            <if test="ck083!=null  and ck083 !=''">
+                and ck.CK083=#{ck083}
+            </if>
+            <if test="bhqmc!=null  and bhqmc !=''">
+                and sg.SG008 like '%${bhqmc}%'
+            </if>
+            <if test="ck078!=null  and ck078 !=''">
+                and ck.CK078 like '%${ck078}%'
+            </if>
+            <if test="ck043!=null  and ck043 !=''">
+                and ck.CK043 like '%${ck043}%'
+            </if>
+            <if test="xfjb==1">
+                and ck.CK082 = 1
+            </if>
+            <if test="xfjb==2">
+                and ck.CK083 = 1
+            </if>
+            GROUP BY sg.SG001
+        </if>
+        <if test="type==2">
+            SELECT ck.CK002,sd.SD008,if(count(*) is null,0,count(*))num
+            from st4_scs_ck ck
+            LEFT JOIN st4_sys_sd sd
+            ON sd.SD001 = ck.CK002
+            LEFT JOIN st4_scs_cl cl
+            ON ck.CK091=cl.CL001
+            where ck.CK085 = 1
+            and sd.SD007 = 1
+            and cl.CL012 = 1
+            <if test="sg001!=null and sg001 !=''">
+                and ck.SG001 =#{sg001}
+            </if>
+            <if test="ck002!=null and ck002 !=''">
+                and ck.CK002 =#{ck002}
+            </if>
+            <if test="yyyy!=null and yyyy!=''">
+                and cl.CL010 =#{yyyy}
+            </if>
+            <if test="cl001!=null">
+                and cl.CL001 =#{cl001}
+            </if>
+            <if test="ck005!=null  and ck005 !=''">
+                and ck.CK005 =#{ck005}
+            </if>
+            <if test="ck016!=null">
+                and ck.CK016 =#{ck016}
+            </if>
+            <if test="ck013!=null">
+                and ck.CK013 =#{ck013}
+            </if>
+            <if test="ck006!=null">
+                and ck.CK006 =#{ck006}
+            </if>
+            <if test="ck014!=null">
+                and ck.CK014=#{ck014}
+            </if>
+            <if test="ck046!=null">
+                and ck.CK046=#{ck046}
+            </if>
+            <if test="ck080!=null">
+                and ck.CK080=#{ck080}
+            </if>
+            <if test="ck081!=null">
+                and ck.CK081=#{ck081}
+            </if>
+            <if test="ck082!=null">
+                and ck.CK082=#{ck082}
+            </if>
+            <if test="ck083!=null">
+                and ck.CK083=#{ck083}
+            </if>
+            <if test="bhqmc!=null">
+                and sg.SG008 like '%${bhqmc}%'
+            </if>
+            <if test="ck078!=null">
+                and ck.CK078 like '%${ck078}%'
+            </if>
+            <if test="ck043!=null">
+                and ck.CK043 like '%${ck043}%'
+            </if>
+            <if test="xfjb==1">
+                and ck.CK082 = 1
+            </if>
+            <if test="xfjb==2">
+                and ck.CK083 = 1
+            </if>
+            GROUP BY ck.CK002
+        </if>
+    </select>
+
+
+    <select id="selectSt4ScsCkzg"  parameterType="com.gistone.bjhky.entity.St4ScsCk" resultType="Map">
+        SELECT *FROM (SELECT COUNT(*) AS value , CN010 AS name
+
+        FROM st4_scs_ck k LEFT JOIN st4_scs_cn n ON k.CK001 = n.CK001
+        LEFT JOIN st4_scs_cd d ON d.CD004 = K.CD004
+        WHERE k.CK085 = 1 AND n.CN009 = 1
+        <if test="sg001!=null">
+            and d.SG001 =#{sg001}
+        </if>
+        <if test="sd001!=null">
+            and d.SD001 =#{sd001}
+        </if>
+        GROUP BY n.CN010) a WHERE name !=''
+      <!--  SELECT COUNT(*) AS value ,
+        (CASE
+        WHEN CN010=0 THEN 'wzg'
+        WHEN CN010=1 THEN 'zgz'
+        WHEN CN010=2 THEN 'zgwc'
+        ELSE 'wxzg'
+        END) 'name'
+
+        FROM st4_scs_ck k LEFT JOIN st4_scs_cn n ON k.CK001 = n.CK001
+        LEFT JOIN st4_scs_cd d ON d.CD004 = K.CD004
+        WHERE k.CK085 = 1 AND n.CN009 = 1
+        <if test="sg001!=null">
+            and d.SG001 =#{sg001}
+        </if>
+        <if test="sd001!=null">
+            and d.SD001 =#{sd001}
+        </if>
+
+        GROUP BY n.CN010-->
+     <!--   <if test="sg001!=null">
+            SELECT
+            y.SG001,-->
+    --             sg.SG008,
+        <!--    if(y.wzg is null,0,y.wzg)wzg,
+            if(y.zgz is null,0,y.zgz)zgz,
+            if(y.zgwc is null,0,y.zgwc)zgwc,
+            if(y.wxzg is null,0,y.wxzg)wxzg
+            from
+            (
+            SELECT x.SG001,a.wzg,b.zgz,c.zgwc,d.wxzg from
+            (SELECT SG001 from st4_scs_ck
+            where CK085 = 1
+            and SG001 = #{sg001}
+            and SG001 is not null
+            GROUP BY SG001)x
+            LEFT JOIN
+            (
+            SELECT ck.SG001 bhq,count(*) wzg
+            from st4_scs_cn cn
+            LEFT JOIN st4_scs_ck ck
+            on cn.CK001=ck.CK001
+            where cn.CN009=1
+            and ck.CK085=1
+            and cn.CN010=0
+            GROUP BY ck.SG001
+            )a
+            on x.SG001=a.bhq
+            LEFT JOIN
+            (
+            SELECT ck.SG001 bhq,count(*) zgz
+            from st4_scs_cn cn
+            LEFT JOIN st4_scs_ck ck
+            on cn.CK001=ck.CK001
+            where cn.CN009=1
+            and ck.CK085=1
+            and cn.CN010=1
+            GROUP BY ck.SG001
+            )b
+            on x.SG001=b.bhq
+            LEFT JOIN
+            (
+            SELECT ck.SG001 bhq,count(*) zgwc
+            from st4_scs_cn cn
+            LEFT JOIN st4_scs_ck ck
+            on cn.CK001=ck.CK001
+            where cn.CN009=1
+            and ck.CK085=1
+            and cn.CN010=2
+            GROUP BY ck.SG001
+            )c
+            on x.SG001=c.bhq
+            LEFT JOIN
+            (
+            SELECT ck.SG001 bhq,count(*) wxzg
+            from st4_scs_cn cn
+            LEFT JOIN st4_scs_ck ck
+            on cn.CK001=ck.CK001
+            where cn.CN009=1
+            and ck.CK085=1
+            and cn.CN010=3
+            GROUP BY ck.SG001
+            )d
+            on x.SG001=d.bhq
+            )y
+            LEFT JOIN st4_sys_sg sg
+            ON y.SG001=sg.SG001
+        </if>
+        <if test="ck002!=null">
+            SELECT
+            y.CK002,-->
+--             sd.SD008,
+    <!--        if(y.wzg is null,0,y.wzg)wzg,
+            if(y.zgz is null,0,y.zgz)zgz,
+            if(y.zgwc is null,0,y.zgwc)zgwc,
+            if(y.wxzg is null,0,y.wxzg)wxzg
+            from
+            (
+            SELECT x.CK002,a.wzg,b.zgz,c.zgwc,d.wxzg from
+            (SELECT CK002 from st4_scs_ck
+            where CK085 = 1
+            and CK002 = #{ck002}
+            and CK002 is not null
+            GROUP BY CK002)x
+            LEFT JOIN
+            (
+            SELECT ck.CK002 xzq,count(*) wzg
+            from st4_scs_cn cn
+            LEFT JOIN st4_scs_ck ck
+            on cn.CK001=ck.CK001
+            where cn.CN009=1
+            and ck.CK085=1
+            and cn.CN010=0
+            GROUP BY ck.CK002
+            )a
+            on x.CK002=a.xzq
+            LEFT JOIN
+            (
+            SELECT ck.CK002 xzq,count(*) zgz
+            from st4_scs_cn cn
+            LEFT JOIN st4_scs_ck ck
+            on cn.CK001=ck.CK001
+            where cn.CN009=1
+            and ck.CK085=1
+            and cn.CN010=1
+            GROUP BY ck.CK002
+            )b
+            on x.CK002=b.xzq
+            LEFT JOIN
+            (
+            SELECT ck.CK002 xzq,count(*) zgwc
+            from st4_scs_cn cn
+            LEFT JOIN st4_scs_ck ck
+            on cn.CK001=ck.CK001
+            where cn.CN009=1
+            and ck.CK085=1
+            and cn.CN010=2
+            GROUP BY ck.CK002
+            )c
+            on x.CK002=c.xzq
+            LEFT JOIN
+            (
+            SELECT ck.CK002 xzq,count(*) wxzg
+            from st4_scs_cn cn
+            LEFT JOIN st4_scs_ck ck
+            on cn.CK001=ck.CK001
+            where cn.CN009=1
+            and ck.CK085=1
+            and cn.CN010=3
+            GROUP BY ck.CK002
+            )d
+            on x.CK002=d.xzq
+            )y
+            LEFT JOIN st4_sys_sd sd
+            ON y.CK002=sd.SD001
+        </if>-->
+	</select>
+
+
+
+    <select id="getPoSum" resultType="java.lang.Integer" parameterType="com.gistone.bjhky.entity.St4ScsCk">
+        SELECT count(*)
+        from st4_scs_ck ck left join st4_scs_cn cn on ck.CK001 = cn.CK001
+        where ck.CK085 = 1 and cn.CN009 = 1
+        <if test="ck002!=null">
+            and ck.CK002 = #{ck002}
+        </if>
+        <if test="sg001!=null">
+            and ck.SG001 = #{sg001}
+        </if>
+        <if test="st4ScsCn.cn010!=null">
+            and cn.CN010 = #{st4ScsCn.cn010}
+        </if>
+    </select>
+
+    <select id="selectPoList" resultType="com.gistone.bjhky.entity.St4ScsCk" parameterType="com.gistone.bjhky.entity.St4ScsCk">
+        SELECT * from st4_scs_ck ck left join st4_scs_cn cn on ck.CK001 = cn.CK001
+        where ck.CK085 = 1 and cn.CN009 = 1
+        <if test="ck002!=null">
+            and ck.CK002 = #{ck002}
+        </if>
+        <if test="sg001!=null">
+            and ck.SG001 = #{sg001}
+        </if>
+        <if test="st4ScsCn.cn010!=null">
+            and cn.CN010 = #{st4ScsCn.cn010}
+        </if>
+        ORDER BY CK086 desc
+        limit #{firstLimit},#{pageSize}
+    </select>
+
+    <select id="selectReserveNumTiew" resultType="Map" parameterType="com.gistone.bjhky.entity.St4SysSd">
+        (SELECT COUNT(1) AS value,'保护地个数' AS NAME  FROM st4_sys_sg g WHERE g.`SG007` = 1
+        <if test="sd001!=null">
+            and g.SD001 = #{sd001}
+        </if>)
+        UNION
+        (SELECT COUNT(1) AS value,'问题点数量' AS NAME  FROM st4_scs_cd WHERE CD009 = 1
+        <if test="sd001!=null">
+            and SD001 = #{sd001}
+        </if>)
+        UNION
+        (SELECT COUNT(1) AS value,'巡护次数' AS NAME  FROM st4_scs_cy Y
+        LEFT JOIN st4_sys_sg g ON y.CY010 = g.SG001 WHERE CY016 = 1
+        <if test="sd001!=null">
+            and g.SD001 = #{sd001}
+        </if>)
+        UNION
+        (SELECT SUM(CY006) AS value,'巡护里程数' AS NAME  FROM st4_scs_cy Y
+        LEFT JOIN st4_sys_sg g ON y.CY010 = g.SG001 WHERE CY016 = 1
+        <if test="sd001!=null">
+            and g.SD001 = #{sd001}
+        </if>)
+    </select>
+    <!--查询出已核查和未核查的点位数目-->
+    <select id="pointStatistics" resultType="Map">
+               SELECT COUNT(cd.CD001) AS VALUE, '未核查' AS NAME
+        FROM st4_scs_cd cd
+            INNER JOIN (
+                SELECT *
+                FROM (
+                    SELECT MAX(CK001) AS id
+                    FROM st4_scs_ck
+                    GROUP BY CD004
+                ) t
+                    INNER JOIN st4_scs_ck k ON t.id = k.CK001
+            ) ck
+            ON cd.CD004 = ck.CD004
+        WHERE (cd.CD009 = 1
+            AND ck.CK085 = 1
+            AND ck.CK088 = 0)
+        UNION
+            SELECT COUNT(cd.CD001) AS VALUE, '已核查' AS NAME
+        FROM st4_scs_cd cd
+            INNER JOIN (
+                SELECT *
+                FROM (
+                    SELECT MAX(CK001) AS id
+                    FROM st4_scs_ck
+                    GROUP BY CD004
+                ) t
+                    INNER JOIN st4_scs_ck k ON t.id = k.CK001
+            ) ck
+            ON cd.CD004 = ck.CD004
+        WHERE (cd.CD009 = 1
+            AND ck.CK085 = 1
+            AND ck.CK088 = 1)
+             UNION
+            SELECT COUNT(cd.CD001) AS VALUE, '全部' AS NAME
+        FROM st4_scs_cd cd
+            INNER JOIN (
+                SELECT *
+                FROM (
+                    SELECT MAX(CK001) AS id
+                    FROM st4_scs_ck
+                    GROUP BY CD004
+                ) t
+                    INNER JOIN st4_scs_ck k ON t.id = k.CK001
+            ) ck
+            ON cd.CD004 = ck.CD004
+        WHERE cd.CD009 = 1
+    </select>
+
+
+    <!--统计已整改、未整改、整改中、无需整改的问题点数量。-->
+    <select id="pointStatisticsRepairCon" resultType="Map">
+               SELECT COUNT(cd.CD001) VALUE ,   '未整改'  NAME
+        FROM st4_scs_cd cd
+            INNER JOIN (
+                SELECT *
+                FROM (
+                    SELECT MAX(CK001) AS id
+                    FROM st4_scs_ck
+                    GROUP BY CD004
+                ) t
+                    INNER JOIN st4_scs_ck ck ON t.id = ck.CK001
+            ) ckk
+            ON cd.CD004 = ckk.CD004
+            INNER JOIN st4_scs_cn cn ON ckk.CK001 = cn.CK001
+        WHERE (cd.CD009 = 1
+            AND ckk.CK085 = 1
+            AND cn.CN009 = 1
+            AND cn.CN010 = 0)
+        UNION
+              SELECT COUNT(cd.CD001) VALUE ,  '整改中' NAME
+        FROM st4_scs_cd cd
+            INNER JOIN (
+                SELECT *
+                FROM (
+                    SELECT MAX(CK001) AS id
+                    FROM st4_scs_ck
+                    GROUP BY CD004
+                ) t
+                    INNER JOIN st4_scs_ck ck ON t.id = ck.CK001
+            ) ckk
+            ON cd.CD004 = ckk.CD004
+            INNER JOIN st4_scs_cn cn ON ckk.CK001 = cn.CK001
+        WHERE (cd.CD009 = 1
+            AND ckk.CK085 = 1
+            AND cn.CN009 = 1
+            AND cn.CN010 = 1)
+        UNION
+              SELECT COUNT(cd.CD001)  VALUE ,  '已整改' NAME
+        FROM st4_scs_cd cd
+            INNER JOIN (
+                SELECT *
+                FROM (
+                    SELECT MAX(CK001) AS id
+                    FROM st4_scs_ck
+                    GROUP BY CD004
+                ) t
+                    INNER JOIN st4_scs_ck ck ON t.id = ck.CK001
+            ) ckk
+            ON cd.CD004 = ckk.CD004
+            INNER JOIN st4_scs_cn cn ON ckk.CK001 = cn.CK001
+        WHERE (cd.CD009 = 1
+            AND ckk.CK085 = 1
+            AND cn.CN009 = 1
+            AND cn.CN010 = 2)
+
+    </select>
+    <select id="getTaskMemberUnpass" resultType="Map" parameterType="com.gistone.bjhky.entity.St4ScsCk">
+        select distinct sa.sa012 AS NAME , cl.cl002 AS VALUE  from st4_scs_ck ck
+        inner join st4_scs_cd cd
+        on ck.cd004 = cd.cd004
+        inner  join st4_po_sa_cl sacl
+        on cd.cl001 = sacl.cl001
+        inner join st4_scs_cl cl on
+        cl.cl001 = sacl.cl001
+        inner  join st4_sys_sa sa
+         on sacl.sa001 =sa.sa001
+        where
+         ck.ck085=1 and cd.cd009=1
+         and sa.sa007=1 and ck.ck001 = #{ck001}
+    </select>
+    <select id="getTaskByGroupId" resultMap="BaseResultMap" parameterType="Map">
+       SELECT * FROM st4_scs_ck ck
+        ON ck.CK049 = sacz.SA001
+        inner join st4_scs_cd cd on cd.CD004 = ck.CD004 where CK085 = 1 and CK088 = 1 and cd.CD001 = #{cd001}
+        group by SA001
+    </select>
+
+    <!--app同步问题点用-->
+    <select id="sysPointAndLedgerData" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+
+   <!--select
+        *
+        FROM
+        (SELECT cd.*,cl.CL002,sg.SG008,SD.SD008 FROM st4_scs_cd cd LEFT JOIN st4_po_cd_sa cdsa ON cd.CD001=cdsa.CD001
+        LEFT JOIN st4_sys_sg sg ON cd.SG001=sg.SG001
+        LEFT JOIN st4_scs_cl cl ON cd.CL001=cl.CL001
+         LEFT JOIN st4_sys_sd sd ON cd.SD001 = SD.SD001
+         WHERE cdsa.SA001=#{sa001} and cd.CD009 = 1) cda
+
+				left join st4_scs_ck ck on ck.CD004= cda.CD004
+        where 1=1 order by CK086 desc-->
+         SELECT cd.*,cdsa.*,sg.*,cl.*,sd.*,cn.*,ck3.CK002, ck3.CD004, ck3.SG001, ck3.CK005, ck3.CK006, ck3.CK007, ck3.CK008,
+        ck3.CK009, ck3.CK010, ck3.CK011, ck3.CK012, ck3.CK013, ck3.CK014, ck3.CK015, ck3.CK016, ck3.CK017, ck3.CK018, ck3.CK019,
+        ck3.CK020, ck3.CK021, ck3.CK022, ck3.CK023, ck3.CK024, ck3.CK025, ck3.CK026, ck3.CK027, ck3.CK028, ck3.CK029, ck3.CK030,
+        ck3.CK031, ck3.CK032, ck3.CK033, ck3.CK034, ck3.CK035, ck3.CK036, ck3.CK037, ck3.CK038, ck3.CK039, ck3.CK040, ck3.CK041,
+        ck3.CK042, ck3.CK043, ck3.CK044, ck3.CK045, ck3.CK046, ck3.CK047, ck3.CK048, ck3.CK049, ck3.CK050, ck3.CK051, ck3.CK052,
+        ck3.CK053, ck3.CK054, ck3.CK055, ck3.CK056, ck3.CK057, ck3.CK058, ck3.CK059, ck3.CK060, ck3.CK061, ck3.CK062, ck3.CK063,
+        ck3.CK064, ck3.CK065, ck3.CK066, ck3.CK067, ck3.CK068, ck3.CK069, ck3.CK070, ck3.CK071, ck3.CK072, ck3.CC002, ck3.CK074,
+        ck3.CK075, ck3.CK076, ck3.CK077, ck3.CK078, ck3.CK079, ck3.CK080, ck3.CK081, ck3.CK082, ck3.CK083, ck3.CK084, ck3.CK085,
+        ck3.CK086, ck3.CK087, ck3.CK088, ck3.CK089, ck3.CK090, ck3.CK091
+         FROM st4_scs_cd cd
+        LEFT JOIN st4_po_cd_sa cdsa ON cd.CD001=cdsa.CD001
+        LEFT JOIN (
+                SELECT ck2.* FROM st4_scs_ck ck2 INNER JOIN
+                (SELECT MAX(CK001) AS CK001 FROM st4_scs_ck c
+                WHERE CK085 = 1  GROUP BY CD004) cks ON cks.CK001 = ck2.CK001
+                ) ck3 ON cd.CD004 = ck3.CD004
+        LEFT JOIN st4_sys_sg sg ON cd.SG001=sg.SG001
+        LEFT JOIN st4_scs_cl cl ON cd.CL001=cl.CL001
+        LEFT JOIN st4_sys_sd sd ON cd.SD001 = SD.SD001
+
+        LEFT JOIN st4_scs_cn cn ON ck3.CK001 = cn.CK001
+        WHERE cd.CD009 = 1 AND cdsa.SA001=#{sa001}
+        and cn.CN001 IS NOT null
+
+    </select>
+
+    <select id="getExportData"  resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCk">
+                 SELECT *
+        FROM st4_scs_ck ck
+            LEFT JOIN (
+                SELECT *
+                FROM (
+                    SELECT MAX(cn.CN001) AS id
+                    FROM st4_scs_cn cn
+                    GROUP BY cn.CK001
+                ) t
+                    INNER JOIN st4_scs_cn cnnn ON t.id = cnnn.CN001
+            ) cm
+            ON ck.CK001 = cm.CK001
+            left  join st4_scs_cd cd on cd.CD004 = ck.CD004
+            left join st4_sys_sg sg on cd.SG001 = sg.SG001
+            LEFT JOIN st4_sys_sd sd on sd.SD001 = cd.SD001
+            left join  st4_scs_cl cl on cd.CL001 = cl.CL001
+            left join st4_scs_cb cb on sg.CB001 = cb.CB001
+            WHERE ck.CK085=1 AND cd.CD009=1 and ck.CK001=#{ck001}
+            order by ck.CK086 desc
+
+    </select>
+    <select id="getLastLedgerHky" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCk">
+        select ck.* from st4_scs_ck ck
+        where ck.ck085=1 and ck.CD004=#{cd004}
+        order by ck.CK001 DESC LIMIT 1
+    </select>
+
+
+</mapper>

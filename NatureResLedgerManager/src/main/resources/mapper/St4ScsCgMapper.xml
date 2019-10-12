@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.bjhky.mapper.St4ScsCgMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCg">
+        <id column="CG001" property="cg001" />
+        <result column="CY017" property="cy017" />
+        <result column="CG003" property="cg003" />
+        <result column="CG004" property="cg004" />
+        <result column="CG005" property="cg005" />
+        <result column="CG006" property="cg006" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CG001, CY017, CG003, CG004, CG005, CG006
+    </sql>
+
+</mapper>

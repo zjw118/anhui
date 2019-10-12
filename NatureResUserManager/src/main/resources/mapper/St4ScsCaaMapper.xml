@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.bjhky.mapper.St4ScsCaaMapper">
+    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCaa" >
+        <id column="CAA001" property="caa001" jdbcType="INTEGER" />
+        <result column="CAA002" property="caa002" jdbcType="VARCHAR" />
+        <result column="CAA003" property="caa003" jdbcType="INTEGER" />
+        <result column="CAA004" property="caa004" jdbcType="VARCHAR" />
+        <result column="CAA005" property="caa005" jdbcType="VARCHAR" />
+        <result column="CAA006" property="caa006" jdbcType="INTEGER" />
+        <result column="CAA007" property="caa007" jdbcType="TIMESTAMP" />
+        <result column="CAA008" property="caa008" jdbcType="VARCHAR" />
+        <result column="CAA009" property="caa009" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    CAA001, CAA002, CAA003, CAA004, CAA005, CAA006, CAA007, CAA008, CAA009
+  </sql>
+    <select id="getNewVersion" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCaa" >
+       SELECT CAA003,CAA001, CAA002,  CAA004, CAA005, CAA006, CAA007, CAA008, CAA009
+        FROM st4_scs_caa
+        WHERE CAA009 = 1 ORDER BY CAA003 DESC LIMIT 1
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from st4_scs_caa
+    where CAA001 = #{caa001,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.gistone.bjhky.entity.St4ScsCaa" >
+    insert into st4_scs_caa (CAA001, CAA002, CAA003,
+      CAA004, CAA005, CAA006,
+      CAA007, CAA008, CAA009
+      )
+    values (#{caa001,jdbcType=INTEGER}, #{caa002,jdbcType=VARCHAR}, #{caa003,jdbcType=INTEGER},
+      #{caa004,jdbcType=VARCHAR}, #{caa005,jdbcType=VARCHAR}, #{caa006,jdbcType=INTEGER},
+      #{caa007,jdbcType=TIMESTAMP}, #{caa008,jdbcType=VARCHAR}, #{caa009,jdbcType=INTEGER}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.gistone.bjhky.entity.St4ScsCaa" >
+        insert into st4_scs_caa
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="caa001 != null" >
+                CAA001,
+            </if>
+            <if test="caa002 != null" >
+                CAA002,
+            </if>
+            <if test="caa003 != null" >
+                CAA003,
+            </if>
+            <if test="caa004 != null" >
+                CAA004,
+            </if>
+            <if test="caa005 != null" >
+                CAA005,
+            </if>
+            <if test="caa006 != null" >
+                CAA006,
+            </if>
+            <if test="caa007 != null" >
+                CAA007,
+            </if>
+            <if test="caa008 != null" >
+                CAA008,
+            </if>
+            <if test="caa009 != null" >
+                CAA009,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="caa001 != null" >
+                #{caa001,jdbcType=INTEGER},
+            </if>
+            <if test="caa002 != null" >
+                #{caa002,jdbcType=VARCHAR},
+            </if>
+            <if test="caa003 != null" >
+                #{caa003,jdbcType=INTEGER},
+            </if>
+            <if test="caa004 != null" >
+                #{caa004,jdbcType=VARCHAR},
+            </if>
+            <if test="caa005 != null" >
+                #{caa005,jdbcType=VARCHAR},
+            </if>
+            <if test="caa006 != null" >
+                #{caa006,jdbcType=INTEGER},
+            </if>
+            <if test="caa007 != null" >
+                #{caa007,jdbcType=TIMESTAMP},
+            </if>
+            <if test="caa008 != null" >
+                #{caa008,jdbcType=VARCHAR},
+            </if>
+            <if test="caa009 != null" >
+                #{caa009,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.gistone.bjhky.entity.St4ScsCaa" >
+        update st4_scs_caa
+        <set >
+            <if test="caa002 != null" >
+                CAA002 = #{caa002,jdbcType=VARCHAR},
+            </if>
+            <if test="caa003 != null" >
+                CAA003 = #{caa003,jdbcType=INTEGER},
+            </if>
+            <if test="caa004 != null" >
+                CAA004 = #{caa004,jdbcType=VARCHAR},
+            </if>
+            <if test="caa005 != null" >
+                CAA005 = #{caa005,jdbcType=VARCHAR},
+            </if>
+            <if test="caa006 != null" >
+                CAA006 = #{caa006,jdbcType=INTEGER},
+            </if>
+            <if test="caa007 != null" >
+                CAA007 = #{caa007,jdbcType=TIMESTAMP},
+            </if>
+            <if test="caa008 != null" >
+                CAA008 = #{caa008,jdbcType=VARCHAR},
+            </if>
+            <if test="caa009 != null" >
+                CAA009 = #{caa009,jdbcType=INTEGER},
+            </if>
+        </set>
+        where CAA001 = #{caa001,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.gistone.bjhky.entity.St4ScsCaa" >
+    update st4_scs_caa
+    set CAA002 = #{caa002,jdbcType=VARCHAR},
+      CAA003 = #{caa003,jdbcType=INTEGER},
+      CAA004 = #{caa004,jdbcType=VARCHAR},
+      CAA005 = #{caa005,jdbcType=VARCHAR},
+      CAA006 = #{caa006,jdbcType=INTEGER},
+      CAA007 = #{caa007,jdbcType=TIMESTAMP},
+      CAA008 = #{caa008,jdbcType=VARCHAR},
+      CAA009 = #{caa009,jdbcType=INTEGER}
+    where CAA001 = #{caa001,jdbcType=INTEGER}
+  </update>
+</mapper>

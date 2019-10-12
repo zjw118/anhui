@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.bjhky.mapper.St4SysSeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4SysSe">
+        <id column="SE001" property="se001" />
+        <result column="SE002" property="se002" />
+        <result column="SE003" property="se003" />
+        <result column="SE004" property="se004" />
+        <result column="SE005" property="se005" />
+        <result column="SE006" property="se006" />
+        <result column="SE007" property="se007" />
+        <result column="SE008" property="se008" />
+        <result column="SE009" property="se009" />
+        <result column="uname" property="uname" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        SE001, SE002, SE003, SE004, SE005, SE006, SE007, SE008, SE009
+    </sql>
+    <select id="listDataBackUp" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4SysSe">
+        select SE001, SE002, SE003, SE004, SE005, SE006, SE007, SE008, SE009,sa.SA019 as uname
+        from st4_sys_se se left join st4_sys_sa sa on sa.SA001=se.SE003 WHERE  SE007=1
+        <if test=" se.se002!=null ">
+          and se.se002 like '%${se.se002}%'
+        </if>
+        order by  se.SE004 desc
+
+    </select>
+
+</mapper>

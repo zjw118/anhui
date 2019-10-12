@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.bjhky.mapper.St4ScsCnMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCn">
+        <id column="CN001" property="cn001" />
+        <result column="CN002" property="cn002" />
+        <result column="CN003" property="cn003" />
+        <result column="CN004" property="cn004" />
+        <result column="CK001" property="ck001" />
+        <result column="CN005" property="cn005" />
+        <result column="CN006" property="cn006" />
+        <result column="CN007" property="cn007" />
+        <result column="CN008" property="cn008" />
+        <result column="CN009" property="cn009" />
+        <result column="CN010" property="cn010" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CN001, CN002, CN003, CN004, CK001, CN005, CN006, CN007, CN008, CN009, CN010
+    </sql>
+    <insert id="insertList" parameterType="com.gistone.bjhky.entity.St4ScsCn"  >
+
+        insert into st4_scs_cn (
+        CN002, CN003, CN004, CK001, CN005, CN006, CN007, CN008, CN009, CN010
+        )
+        values
+        <foreach collection="list" item="item" index="index"  separator=",">
+            ( #{item.cn002,jdbcType=INTEGER}, #{item.cn003,jdbcType=TIMESTAMP},
+            #{item.cn004,jdbcType=VARCHAR}, #{item.ck001,jdbcType=INTEGER} ,#{item.cn005,jdbcType=INTEGER},
+            #{item.cn006,jdbcType=VARCHAR},#{item.cn007,jdbcType=INTEGER}, #{item.cn008,jdbcType=VARCHAR},
+            #{item.cn009,jdbcType=TIMESTAMP},#{item.cn010,jdbcType=INTEGER})
+
+        </foreach>
+    </insert>
+    <update id="batchUpdateByCid"   parameterType="java.util.List">
+        update st4_scs_cn t
+        set
+        t.CN009 = 0
+        where t.CN004 in
+        <foreach item="item" index="index"  collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="selectCn010ByCk001" resultMap="BaseResultMap"  parameterType="Integer">
+        select CN010
+       FROM st4_scs_cn
+        where CN009=1 AND
+        CK001 = #{ck001} order by CN001 DESC LIMIT 1
+    </select>
+
+</mapper>

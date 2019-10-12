@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.bjhky.mapper.St4ScsCzMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCz">
+        <id column="CZ001" property="cz001" />
+        <result column="CZ002" property="cz002" />
+        <result column="CZ003" property="cz003" />
+        <result column="CZ004" property="cz004" />
+        <result column="CZ005" property="cz005" />
+        <result column="CZ006" property="cz006" />
+        <result column="CL001" property="cl001" />
+        <association property="st4SysSa" javaType="com.gistone.bjhky.entity.St4SysSa">
+            <id column="SA001" property="sa001" />
+            <result column="SA019" property="sa019" />
+        </association>
+    </resultMap>
+    <resultMap id="BaseResultMap1" type="com.gistone.bjhky.entity.St4SysSa">
+        <id column="SA001" property="sa001" />
+        <result column="SA002" property="sa002" />
+        <result column="SA003" property="sa003" />
+        <result column="SA004" property="sa004" />
+        <result column="SA005" property="sa005" />
+        <result column="SA006" property="sa006" />
+        <result column="SA007" property="sa007" />
+        <result column="SA008" property="sa008" />
+        <result column="SA009" property="sa009" />
+        <result column="SA010" property="sa010" />
+        <result column="SA011" property="sa011" />
+        <result column="SA012" property="sa012" />
+        <result column="SA013" property="sa013" />
+        <result column="SA014" property="sa014" />
+        <result column="SA015" property="sa015" />
+        <result column="SA016" property="sa016" />
+        <result column="SA017" property="sa017" />
+        <result column="SA018" property="sa018" />
+        <result column="SA019" property="sa019" />
+        <result column="SA020" property="sa020" />
+        <result column="SG001" property="sg001" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CZ001, CZ002, CZ003, CZ004, CZ005,CZ006,CZ007
+    </sql>
+    <select id="getUserShare" resultMap="BaseResultMap">
+               SELECT CZ.*
+        FROM st4_sys_sa sa
+          INNER JOIN st4_po_sa_cz sacz
+            ON sacz.SA001 = sa.SA001
+          INNER JOIN st4_scs_cz cz
+            ON cz.CZ001 = sacz.CZ001
+
+        WHERE sa.SA007 = 1
+            AND cz.CL001 = #{cl001} AND sa.SA001=#{sa001}
+    </select>
+    <select id="getRecentTask" resultMap="BaseResultMap" parameterType="Integer" >
+        select cz.* from st4_scs_cz cz
+        left join st4_po_sa_cz sacz on cz.CZ001=sacz.CZ001
+        LEFT JOIN   st4_sys_sa sa on sa.SA001= sacz.SA001
+         where cz.CZ003 = 1
+         and sa.SA001=#{sa001}
+         order  by cz.cz005 desc limit 1
+    </select>
+    <select id="listGroup" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCz" >
+        select cz.*,sa.SA001,sa.SA019
+        from st4_scs_cz cz
+        LEFT JOIN st4_po_sa_cz sacz ON cz.CZ001=sacz.CZ001
+        LEFT join st4_sys_sa sa ON sacz.SA001 = sa.SA001
+
+        where cz.CZ003=1 AND sa.SA007=1
+        <if test="type==0">
+          and cz.CZ004 = #{cz004} or sa.SA001=#{cz004}
+        </if>
+        <if test="type==1">
+            and cz.CZ004 = #{cz004}
+        </if>
+
+        <if test="cz002!=null">
+            and cz.CZ002 like '%${cz002}%'
+        </if>
+        <if test="memberName!=null">
+            and sa.SA019 like '%${memberName}%'
+        </if>
+        GROUP BY cz001 order by cz.CZ005 desc
+        <if test="pageNumber!=null and pageSize!=null ">
+            limit #{pageNumber},#{pageSize}
+        </if>
+    </select>
+
+    <select id="getGroupUserDetail" resultMap="BaseResultMap1" parameterType="com.gistone.bjhky.entity.St4ScsCz" >
+        select sa.*
+        from
+        st4_sys_sa sa
+        left join st4_po_sa_cz sacz
+        on sacz.SA001=sa.SA001
+          left join
+        st4_scs_cz cz on cz.CZ001= sacz.CZ001
+
+        where cz.CZ003=1 AND sa.SA007=1
+        <if test="cz001!=null">
+            and cz.CZ001 = #{cz001}
+        </if>
+
+    </select>
+
+
+
+
+</mapper>

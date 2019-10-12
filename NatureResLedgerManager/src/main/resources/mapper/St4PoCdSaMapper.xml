@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.bjhky.mapper.St4PoCdSaMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4PoCdSa">
+        <result column="CD001" property="cd001" />
+        <result column="SA001" property="sa001" />
+        <result column="CDSA001" property="cdsa001" />
+        <association property="checkLedger" javaType="com.gistone.bjhky.entity.St4ScsCk">
+            <id column="CK001" property="ck001" />
+            <result column="CK002" property="ck002" />
+            <result column="CD004" property="cd004" />
+            <result column="SG004" property="sg004" />
+            <result column="CK005" property="ck005" />
+            <result column="CK006" property="ck006" />
+            <result column="CK007" property="ck007" />
+            <result column="CK008" property="ck008" />
+            <result column="CK009" property="ck009" />
+            <result column="CK010" property="ck010" />
+            <result column="CK011" property="ck011" />
+            <result column="CK012" property="ck012" />
+            <result column="CK013" property="ck013" />
+            <result column="CK014" property="ck014" />
+            <result column="CK015" property="ck015" />
+            <result column="CK016" property="ck016" />
+            <result column="CK017" property="ck017" />
+            <result column="CK018" property="ck018" />
+            <result column="CK019" property="ck019" />
+            <result column="CK020" property="ck020" />
+            <result column="CK021" property="ck021" />
+            <result column="CK022" property="ck022" />
+            <result column="CK023" property="ck023" />
+            <result column="CK024" property="ck024" />
+            <result column="CK025" property="ck025" />
+            <result column="CK026" property="ck026" />
+            <result column="CK027" property="ck027" />
+            <result column="CK028" property="ck028" />
+            <result column="CK029" property="ck029" />
+            <result column="CK030" property="ck030" />
+            <result column="CK031" property="ck031" />
+            <result column="CK032" property="ck032" />
+            <result column="CK033" property="ck033" />
+            <result column="CK034" property="ck034" />
+            <result column="CK035" property="ck035" />
+            <result column="CK036" property="ck036" />
+            <result column="CK037" property="ck037" />
+            <result column="CK038" property="ck038" />
+            <result column="CK039" property="ck039" />
+            <result column="CK040" property="ck040" />
+            <result column="CK041" property="ck041" />
+            <result column="CK042" property="ck042" />
+            <result column="CK043" property="ck043" />
+            <result column="CK044" property="ck044" />
+            <result column="CK045" property="ck045" />
+            <result column="CK046" property="ck046" />
+            <result column="CK047" property="ck047" />
+            <result column="CK048" property="ck048" />
+            <result column="CK049" property="ck049" />
+            <result column="CK050" property="ck050" />
+            <result column="CK051" property="ck051" />
+            <result column="CK052" property="ck052" />
+            <result column="CK053" property="ck053" />
+            <result column="CK054" property="ck054" />
+            <result column="CK055" property="ck055" />
+            <result column="CK056" property="ck056" />
+            <result column="CK057" property="ck057" />
+            <result column="CK058" property="ck058" />
+            <result column="CK059" property="ck059" />
+            <result column="CK060" property="ck060" />
+            <result column="CK061" property="ck061" />
+            <result column="CK062" property="ck062" />
+            <result column="CK063" property="ck063" />
+            <result column="CK064" property="ck064" />
+            <result column="CK065" property="ck065" />
+            <result column="CK066" property="ck066" />
+            <result column="CK067" property="ck067" />
+            <result column="CK068" property="ck068" />
+            <result column="CK069" property="ck069" />
+            <result column="CK070" property="ck070" />
+            <result column="CK071" property="ck071" />
+            <result column="CK072" property="ck072" />
+            <result column="CC002" property="cc002" />
+            <result column="CK074" property="ck074" />
+            <result column="CK075" property="ck075" />
+            <result column="CK076" property="ck076" />
+            <result column="CK077" property="ck077" />
+            <result column="CK078" property="ck078" />
+            <result column="CK079" property="ck079" />
+            <result column="CK080" property="ck080" />
+            <result column="CK081" property="ck081" />
+            <result column="CK082" property="ck082" />
+            <result column="CK083" property="ck083" />
+            <result column="CK084" property="ck084" />
+            <result column="CK085" property="ck085" />
+            <result column="CK086" property="ck086" />
+            <result column="CK087" property="ck087" />
+            <result column="CK088" property="ck088" />
+            <result column="CK089" property="ck089" />
+            <result column="CK090" property="ck090" />
+            <result column="CK091" property="ck091" />
+
+        </association>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CD001, SA001
+    </sql>
+    <sql id="Base_Column_List2">
+       CK001, CK002, l.CD004, SG004, CK005, CK006, CK007, CK008, CK009, CK010, CK011, CK012, CK013, CK014, CK015, CK016, CK017, CK018, CK019, CK020, CK021, CK022, CK023, CK024, CK025, CK026, CK027, CK028, CK029, CK030, CK031, CK032, CK033, CK034, CK035, CK036, CK037, CK038, CK039, CK040, CK041, CK042, CK043, CK044, CK045, CK046, CK047, CK048, CK049, CK050, CK051, CK052, CK053, CK054, CK055, CK056, CK057, CK058, CK059, CK060, CK061, CK062, CK063, CK064, CK065, CK066, CK067, CK068, CK069, CK070, CK071, CK072, CC002, CK074, CK075, CK076, CK077, CK078, CK079, CK080, CK081, CK082, CK083, CK084, CK085, CK086, CK087, CK088, CK089, CK090, CK091
+    </sql>
+
+    <!--批量插入操作-->
+
+    <insert id="insertList" parameterType="com.gistone.bjhky.entity.St4PoCdSa"  >
+
+        insert into st4_po_cd_sa (
+        CD001, SA001
+        )
+        values
+        <foreach collection="list" item="item" index="index"  separator=",">
+            ( #{item.cd001,jdbcType=INTEGER},  #{item.SA001,jdbcType=INTEGER})
+
+        </foreach>
+    </insert>
+    <update id="submitPoint" parameterType="com.gistone.bjhky.entity.St4PoCdSa">
+        update st4_po_cd_sa set CDSA001=1 WHERE CD001=#{cd001} and SA001=#{sa001}
+    </update>
+
+
+</mapper>

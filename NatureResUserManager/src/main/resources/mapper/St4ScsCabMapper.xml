@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.bjhky.mapper.St4ScsCabMapper">
+    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCab" >
+        <id column="CAB001" property="cab001" jdbcType="INTEGER" />
+        <result column="CAB002" property="cab002" jdbcType="VARCHAR" />
+        <result column="CAB003" property="cab003" jdbcType="TIMESTAMP" />
+        <result column="CAB004" property="cab004" jdbcType="VARCHAR" />
+        <result column="CAB005" property="cab005" jdbcType="VARCHAR" />
+        <result column="CAB006" property="cab006" jdbcType="VARCHAR" />
+        <result column="CAB007" property="cab007" jdbcType="INTEGER" />
+        <result column="CAB009" property="cab009" jdbcType="INTEGER" />
+        <result column="CAB010" property="cab010" jdbcType="INTEGER" />
+        <result column="CAB011" property="cab011" jdbcType="INTEGER" />
+        <result column="CAB012" property="cab012" jdbcType="INTEGER" />
+        <result column="CAB013" property="cab013" jdbcType="TIMESTAMP" />
+        <result column="CAB014" property="cab014" jdbcType="INTEGER" />
+        <result column="CAB015" property="cab015" jdbcType="INTEGER" />
+        <result column="CAB008" property="cab008" jdbcType="LONGVARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    CAB001, CAB002, CAB003, CAB004, CAB005, CAB006, CAB007, CAB008,CAB009, CAB010, CAB011, CAB012,
+    CAB013, CAB014,CAB015
+  </sql>
+    <sql id="Blob_Column_List" >
+    CAB008
+  </sql>
+    <select id="listForApp" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCab" >
+        select  CAB001, CAB002, CAB003
+        from st4_scs_cab
+        where 1 = 1
+        <if test="cab002 != null and cab002 != ''" >
+          and  CAB002 like '%${cab002}%'
+        <!--  or CAB004 like '%${cab002}%'
+          or CAB008 like '%${cab002}%'-->
+        </if>
+        and CAB014 = 1
+        and CAB015 = #{cab015}
+        order by CAB007 desc limit #{pageNumber},#{pageSize}
+    </select>
+    <select id="getByIdForApp" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCab" >
+        select
+        <include refid="Base_Column_List" />
+        from st4_scs_cab
+        where CAB014 = 1 and CAB001 = #{cab001}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from st4_scs_cab
+    where CAB001 = #{cab001,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert22" parameterType="com.gistone.bjhky.entity.St4ScsCab" >
+    insert into st4_scs_cab (CAB001, CAB002, CAB003,
+      CAB004, CAB005, CAB006,
+      CAB007, CAB009, CAB010,
+      CAB011, CAB012, CAB013,
+      CAB014, CAB008)
+    values (#{cab001,jdbcType=INTEGER}, #{cab002,jdbcType=VARCHAR}, #{cab003,jdbcType=TIMESTAMP},
+      #{cab004,jdbcType=VARCHAR}, #{cab005,jdbcType=VARCHAR}, #{cab006,jdbcType=VARCHAR},
+      #{cab007,jdbcType=INTEGER}, #{cab009,jdbcType=INTEGER}, #{cab010,jdbcType=INTEGER},
+      #{cab011,jdbcType=INTEGER}, #{cab012,jdbcType=INTEGER}, #{cab013,jdbcType=TIMESTAMP},
+      #{cab014,jdbcType=INTEGER}, #{cab008,jdbcType=LONGVARCHAR})
+  </insert>
+    <insert id="insert" parameterType="com.gistone.bjhky.entity.St4ScsCab" >
+        insert into st4_scs_cab
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="cab001 != null" >
+                CAB001,
+            </if>
+            <if test="cab002 != null" >
+                CAB002,
+            </if>
+            <if test="cab003 != null" >
+                CAB003,
+            </if>
+            <if test="cab004 != null" >
+                CAB004,
+            </if>
+            <if test="cab005 != null" >
+                CAB005,
+            </if>
+            <if test="cab006 != null" >
+                CAB006,
+            </if>
+            <if test="cab007 != null" >
+                CAB007,
+            </if>
+            <if test="cab009 != null" >
+                CAB009,
+            </if>
+            <if test="cab010 != null" >
+                CAB010,
+            </if>
+            <if test="cab011 != null" >
+                CAB011,
+            </if>
+            <if test="cab012 != null" >
+                CAB012,
+            </if>
+            <if test="cab013 != null" >
+                CAB013,
+            </if>
+            <if test="cab014 != null" >
+                CAB014,
+            </if>
+            <if test="cab015 != null" >
+                CAB015,
+            </if>
+            <if test="cab008 != null" >
+                CAB008,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="cab001 != null" >
+                #{cab001,jdbcType=INTEGER},
+            </if>
+            <if test="cab002 != null" >
+                #{cab002,jdbcType=VARCHAR},
+            </if>
+            <if test="cab003 != null" >
+                #{cab003,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cab004 != null" >
+                #{cab004,jdbcType=VARCHAR},
+            </if>
+            <if test="cab005 != null" >
+                #{cab005,jdbcType=VARCHAR},
+            </if>
+            <if test="cab006 != null" >
+                #{cab006,jdbcType=VARCHAR},
+            </if>
+            <if test="cab007 != null" >
+                #{cab007,jdbcType=INTEGER},
+            </if>
+            <if test="cab009 != null" >
+                #{cab009,jdbcType=INTEGER},
+            </if>
+            <if test="cab010 != null" >
+                #{cab010,jdbcType=INTEGER},
+            </if>
+            <if test="cab011 != null" >
+                #{cab011,jdbcType=INTEGER},
+            </if>
+            <if test="cab012 != null" >
+                #{cab012,jdbcType=INTEGER},
+            </if>
+            <if test="cab013 != null" >
+                #{cab013,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cab014 != null" >
+                #{cab014,jdbcType=INTEGER},
+            </if>
+            <if test="cab015 != null" >
+                #{cab015,jdbcType=INTEGER},
+            </if>
+            <if test="cab008 != null" >
+                #{cab008,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="com.gistone.bjhky.entity.St4ScsCab" >
+        update st4_scs_cab
+        <set >
+            <if test="cab002 != null" >
+                CAB002 = #{cab002,jdbcType=VARCHAR},
+            </if>
+            <if test="cab003 != null" >
+                CAB003 = #{cab003,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cab004 != null" >
+                CAB004 = #{cab004,jdbcType=VARCHAR},
+            </if>
+            <if test="cab005 != null" >
+                CAB005 = #{cab005,jdbcType=VARCHAR},
+            </if>
+            <if test="cab006 != null" >
+                CAB006 = #{cab006,jdbcType=VARCHAR},
+            </if>
+            <if test="cab007 != null" >
+                CAB007 = #{cab007,jdbcType=INTEGER},
+            </if>
+            <if test="cab009 != null" >
+                CAB009 = #{cab009,jdbcType=INTEGER},
+            </if>
+            <if test="cab010 != null" >
+                CAB010 = #{cab010,jdbcType=INTEGER},
+            </if>
+            <if test="cab011 != null" >
+                CAB011 = #{cab011,jdbcType=INTEGER},
+            </if>
+            <if test="cab012 != null" >
+                CAB012 = #{cab012,jdbcType=INTEGER},
+            </if>
+            <if test="cab013 != null" >
+                CAB013 = #{cab013,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cab014 != null" >
+                CAB014 = #{cab014,jdbcType=INTEGER},
+            </if>
+            <if test="cab015 != null" >
+                CAB015 = #{cab015,jdbcType=INTEGER},
+            </if>
+            <if test="cab008 != null" >
+                CAB008 = #{cab008,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where CAB001 = #{cab001,jdbcType=INTEGER}
+    </update>
+    <update id="delete" parameterType="com.gistone.bjhky.entity.St4ScsCab" >
+    update st4_scs_cab
+    set CAB014 = 0
+    where CAB001 = #{cab001,jdbcType=INTEGER}
+  </update>
+</mapper>

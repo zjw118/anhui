@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.bjhky.mapper.St4ScsCacMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCac">
+        <result column="CK001" property="ck001" />
+        <result column="CAC002" property="cac002" />
+        <result column="CD004" property="cd004" />
+        <result column="SG001" property="sg001" />
+        <result column="CAC003" property="cac003" />
+        <result column="CAC004" property="cac004" />
+        <result column="CAC005" property="cac005" />
+        <result column="CAC006" property="cac006" />
+        <result column="CAC007" property="cac007" />
+        <result column="CAC008" property="cac008" />
+        <result column="CAC009" property="cac009" />
+        <result column="CAC010" property="cac010" />
+        <result column="CAC011" property="cac011" />
+        <result column="CAC012" property="cac012" />
+        <result column="CAC013" property="cac013" />
+        <result column="CAC014" property="cac014" />
+        <result column="CAC015" property="cac015" />
+        <result column="CAC016" property="cac016" />
+        <result column="CAC017" property="cac017" />
+        <result column="CAC018" property="cac018" />
+        <result column="CAC019" property="cac019" />
+        <result column="CAC020" property="cac020" />
+        <result column="CAC021" property="cac021" />
+        <result column="CAC022" property="cac022" />
+        <result column="CAC023" property="cac023" />
+        <result column="CAC024" property="cac024" />
+        <result column="CAC025" property="cac025" />
+        <result column="CAC026" property="cac026" />
+        <result column="CAC027" property="cac027" />
+        <result column="CAC028" property="cac028" />
+        <result column="CAC029" property="cac029" />
+        <result column="CAC030" property="cac030" />
+        <result column="CAC031" property="cac031" />
+        <result column="CAC032" property="cac032" />
+        <result column="CAC033" property="cac033" />
+        <result column="CAC034" property="cac034" />
+        <result column="CAC035" property="cac035" />
+        <result column="CAC036" property="cac036" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CK001, CAC002, CD004, SG001, CAC003, CAC004, CAC005, CAC006, CAC007, CAC008, CAC009, CAC010, CAC011, CAC012, CAC013, CAC014, CAC015, CAC016, CAC017, CAC018, CAC019, CAC020, CAC021, CAC022, CAC023, CAC024, CAC025, CAC026, CAC027, CAC028, CAC029, CAC030, CAC031, CAC032, CAC033, CAC034, CAC035, CAC036
+    </sql>
+    <update id="updateByCk001" parameterType="com.gistone.bjhky.entity.St4ScsCac">
+        update st4_scs_cac
+        <set >
+            <if test="cac002 != null" >
+                CAC002=  #{cac002},
+            </if>
+            <if test="cd004 != null" >
+                cd004= #{cd004},
+            </if>
+            <if test="sg001 != null" >
+                sg001= #{sg001},
+            </if>
+            <if test="cac003 != null" >
+                CAC003= #{cac003},
+            </if>
+            <if test="cac004 != null" >
+                CAC004= #{cac004},
+            </if>
+            <if test="cac005 != null" >
+                CAC005=  #{cac005},
+            </if>
+            <if test="cac006 != null" >
+                CAC006= #{cac006},
+            </if>
+            <if test="cac007 != null" >
+                CAC007=  #{cac007},
+            </if>
+            <if test="cac008 != null" >
+                CAC008= #{cac008},
+            </if>
+            <if test="cac009 != null" >
+                CAC009=#{cac009},
+            </if>
+            <if test="cac010 != null" >
+                CAC010= #{cac010},
+            </if>
+            <if test="cac011 != null" >
+                CAC011=#{cac011},
+            </if>
+            <if test="cac012 != null" >
+                CAC012=#{cac012},
+            </if>
+            <if test="cac013 != null" >
+                CAC013=#{cac013},
+            </if>
+            <if test="cac014 != null" >
+                CAC014= #{cac014},
+            </if>
+            <if test="cac015 != null" >
+                CAC015=#{cac015},
+            </if>
+            <if test="cac016 != null" >
+                CAC016=#{cac016},
+            </if>
+            <if test="cac017 != null" >
+                CAC017=#{cac017},
+            </if>
+            <if test="cac018 != null" >
+                CAC018=#{cac018},
+            </if>
+            <if test="cac019 != null" >
+                CAC019=#{cac019},
+            </if>
+            <if test="cac020 != null" >
+                CAC020=#{cac020},
+            </if>
+            <if test="cac021 != null" >
+                CAC021=#{cac021},
+            </if>
+            <if test="cac022 != null" >
+                CAC022=#{cac022},
+            </if>
+            <if test="cac023 != null" >
+                CAC023=#{cac023},
+            </if>
+            <if test="cac024 != null" >
+                CAC024=#{cac024},
+            </if>
+            <if test="cac025 != null" >
+                CAC025=#{cac025},
+            </if>
+            <if test="cac026 != null" >
+                CAC026=#{cac026},
+            </if>
+            <if test="cac027 != null" >
+                CAC027=#{cac027},
+            </if>
+            <if test="cac028 != null" >
+                CAC028=#{cac028},
+            </if>
+            <if test="cac029 != null" >
+                CAC029= #{cac029},
+            </if>
+            <if test="cac030 != null" >
+                CAC030= #{cac030},
+            </if>
+            <if test="cac031 != null" >
+                CAC031= #{cac031},
+            </if>
+            <if test="cac032 != null" >
+                CAC032= #{cac032},
+            </if>
+            <if test="cac033 != null" >
+                CAC033= #{cac033},
+            </if>
+            <if test="cac034 != null" >
+                CAC034= #{cac034},
+            </if>
+            <if test="cac035 != null" >
+                CAC035=#{cac035},
+            </if>
+            <if test="cac036 != null" >
+                CAC036=#{cac036 }
+            </if>
+        </set>
+        where CK001 = #{ck001}
+    </update>
+
+</mapper>

@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.bjhky.mapper.St4ScsCcMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCc">
+        <id column="CC001" property="cc001" />
+        <result column="CC002" property="cc002" />
+        <result column="CC003" property="cc003" />
+        <result column="CC004" property="cc004" />
+        <result column="CC005" property="cc005" />
+        <result column="CY017" property="cy017" />
+        <result column="CC007" property="cc007" />
+        <result column="CC008" property="cc008" />
+        <result column="CC009" property="cc009" />
+        <result column="CC010" property="cc010" />
+        <result column="CC011" property="cc011" />
+        <result column="CC012" property="cc012" />
+        <result column="CD004" property="cd004" />
+        <association property="st4SysSa" javaType="com.gistone.bjhky.entity.St4SysSa">
+            <id column="SA001" property="sa001" />
+            <result column="SA019" property="sa019" />
+        </association>
+        <association property="st4Scscf" javaType="com.gistone.bjhky.entity.St4ScsCf">
+            <id column="CF001" property="cf001" />
+            <result column="CC002" property="cc002" />
+            <result column="CF003" property="cf003" />
+            <result column="CF004" property="cf004" />
+            <result column="CF005" property="cf005" />
+            <result column="CF006" property="cf006" />
+            <result column="CF007" property="cf007" />
+            <result column="CF008" property="cf008" />
+            <result column="CF009" property="cf009" />
+            <result column="CF010" property="cf010" />
+            <result column="CF011" property="cf011" />
+            <result column="CF012" property="cf012" />
+            <result column="CF013" property="cf013" />
+            <result column="CF014" property="cf014" />
+            <result column="CF015" property="cf015" />
+            <result column="CF016" property="cf016" />
+            <result column="CF017" property="cf017" />
+            <result column="CF018" property="cf018" />
+            <result column="CF019" property="cf019" />
+            <result column="CF020" property="cf020" />
+            <result column="CF021" property="cf021" />
+            <result column="CF022" property="cf022" />
+            <result column="CF023" property="cf023" />
+            <result column="CF024" property="cf024" />
+            <result column="CF025" property="cf025" />
+            <result column="CF026" property="cf026" />
+        </association>
+        <association property="st4ScsCk" javaType="com.gistone.bjhky.entity.St4ScsCk">
+            <id column="CK001" property="ck001" />
+            <result column="CK002" property="ck002" />
+            <result column="CD004" property="cd004" />
+            <result column="SG001" property="sg001" />
+            <result column="CK005" property="ck005" />
+            <result column="CK006" property="ck006" />
+            <result column="CK007" property="ck007" />
+            <result column="CK008" property="ck008" />
+            <result column="CK009" property="ck009" />
+            <result column="CK010" property="ck010" />
+            <result column="CK011" property="ck011" />
+            <result column="CK012" property="ck012" />
+            <result column="CK013" property="ck013" />
+            <result column="CK014" property="ck014" />
+            <result column="CK015" property="ck015" />
+            <result column="CK016" property="ck016" />
+            <result column="CK017" property="ck017" />
+            <result column="CK018" property="ck018" />
+            <result column="CK019" property="ck019" />
+            <result column="CK020" property="ck020" />
+            <result column="CK021" property="ck021" />
+            <result column="CK022" property="ck022" />
+            <result column="CK023" property="ck023" />
+            <result column="CK024" property="ck024" />
+            <result column="CK025" property="ck025" />
+            <result column="CK026" property="ck026" />
+            <result column="CK027" property="ck027" />
+            <result column="CK028" property="ck028" />
+            <result column="CK029" property="ck029" />
+            <result column="CK030" property="ck030" />
+            <result column="CK031" property="ck031" />
+            <result column="CK032" property="ck032" />
+            <result column="CK033" property="ck033" />
+            <result column="CK034" property="ck034" />
+            <result column="CK035" property="ck035" />
+            <result column="CK036" property="ck036" />
+            <result column="CK037" property="ck037" />
+            <result column="CK038" property="ck038" />
+            <result column="CK039" property="ck039" />
+            <result column="CK040" property="ck040" />
+            <result column="CK041" property="ck041" />
+            <result column="CK042" property="ck042" />
+            <result column="CK043" property="ck043" />
+            <result column="CK044" property="ck044" />
+            <result column="CK045" property="ck045" />
+            <result column="CK046" property="ck046" />
+            <result column="CK047" property="ck047" />
+            <result column="CK048" property="ck048" />
+            <result column="CK049" property="ck049" />
+            <result column="CK050" property="ck050" />
+            <result column="CK051" property="ck051" />
+            <result column="CK052" property="ck052" />
+            <result column="CK053" property="ck053" />
+            <result column="CK054" property="ck054" />
+            <result column="CK055" property="ck055" />
+            <result column="CK056" property="ck056" />
+            <result column="CK057" property="ck057" />
+            <result column="CK058" property="ck058" />
+            <result column="CK059" property="ck059" />
+            <result column="CK060" property="ck060" />
+            <result column="CK061" property="ck061" />
+            <result column="CK062" property="ck062" />
+            <result column="CK063" property="ck063" />
+            <result column="CK064" property="ck064" />
+            <result column="CK065" property="ck065" />
+            <result column="CK066" property="ck066" />
+            <result column="CK067" property="ck067" />
+            <result column="CK068" property="ck068" />
+            <result column="CK069" property="ck069" />
+            <result column="CK070" property="ck070" />
+            <result column="CK071" property="ck071" />
+            <result column="CK072" property="ck072" />
+            <result column="CC002" property="cc002" />
+            <result column="CK074" property="ck074" />
+            <result column="CK075" property="ck075" />
+            <result column="CK076" property="ck076" />
+            <result column="CK077" property="ck077" />
+            <result column="CK078" property="ck078" />
+            <result column="CK079" property="ck079" />
+            <result column="CK080" property="ck080" />
+            <result column="CK081" property="ck081" />
+            <result column="CK082" property="ck082" />
+            <result column="CK083" property="ck083" />
+            <result column="CK084" property="ck084" />
+            <result column="CK085" property="ck085" />
+            <result column="CK086" property="ck086" />
+            <result column="CK087" property="ck087" />
+            <result column="CK088" property="ck088" />
+            <result column="CK089" property="ck089" />
+            <result column="CK090" property="ck090" />
+            <result column="CK091" property="ck091" />
+        </association>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CC001, CC002, CC003, CC004, CC005, CY017, CC007, CC008, CC009, CC010, CC011, CC012,CD004
+    </sql>
+    <sql id="Base_Column_List1">
+       CC001, CC002, CC003, CC004, CC005, CY017, CC007, CC008, CC009, CC010, CC011, CC012,SA001,SA019
+    </sql>
+    <select id="getSailPointData" resultMap="BaseResultMap">
+        select cc.* from  st4_scs_cc cc left join  st4_sys_sa sa on sa.SA001 = cc.CC008
+        WHERE cc.CC011=1
+        <if test="cc.ptype==0">
+          and  cc.CC008=#{cc.cc008} or sa.SA002 =#{cc.cc008}
+        </if>
+        <if test="cc.ptype==1">
+            and cc.CC008=#{cc.cc008}
+        </if>
+        <if test="cc.cc003!=null">
+            and  cc.CC003=#{cc.cc003}
+        </if>
+        <if test="cc.cc012!=null and cc.cc012!='' ">
+            and cc.CC012 like '%${cc.cc012}%'
+        </if>
+        <if test="cc.strTime!=null and cc.strTime!='' ">
+            <![CDATA[
+            and cc.CC007 >= #{cc.strTime}
+            ]]>
+        </if>
+        <if test="cc.endTime!=null and cc.endTime!='' ">
+               <![CDATA[
+              and cc.CC007 <= #{cc.endTime}
+            ]]>
+        </if>
+
+
+    </select>
+    <select id="getSailPointRecordDetail" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCc">
+    select cc.*,cf.*
+    from st4_scs_cc cc
+     left join st4_scs_cf cf
+     on cc.CC002=cf.CC002
+     where cc.CC011=1 and cf.CF026=1
+      and cc.CC001=#{cc001}
+
+    </select>
+    <select id="getSailPointLedgerDetail" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCc">
+    select cc.*,ck.*
+    from st4_scs_cc cc
+    left join st4_scs_cd cd
+    on cc.CD004 = cd.CD004
+     left join st4_scs_ck ck
+     on cd.CD004 = ck.CD004
+     where cc.CC011=1 and cd.CD009=1 AND ck.CK085=1
+      and cc.CC001=#{cc001}
+      order by ck.CK001 desc limit 1
+
+    </select>
+    <select id="getSailList" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCc">
+        select
+        <include refid="Base_Column_List1" />
+        from st4_scs_cc cc
+        left join st4_sys_sa sa on cc.CC008 = sa.SA001
+        where sa.SA007 = 1  and cc.CC011=1
+        <if test="cc003!=null">
+            and cc.CC003 = #{cc003}
+        </if>
+        <if test="cc008!=null">
+            and cc.CC008 = #{cc008}
+        </if>
+        <if test="cc007!=null">
+            and cc.CC007 = #{cc007}
+        </if>
+        <if test="cc012!=null">
+            and cc.CC012 like '%${cc012}%'
+        </if>
+        order by CC007 desc
+        <if test="pageNumber!=null and pageSize!=null">
+            limit #{pageNumber},#{pageSize}
+        </if>
+    </select>
+
+    <select id="getSailPointDataByReserveId" resultType="com.gistone.bjhky.entity.St4ScsCc" parameterType="Integer">
+        select
+        cc.*
+        FROM st4_scs_cc cc
+        LEFT JOIN st4_scs_cd cd
+        ON cc.CD004 = cd.CD004
+        LEFT JOIN st4_sys_sg sg
+        ON cd.SG001 = sg.SG001
+        where  sg.SG007 = 1
+        AND cc.CC011 = 1 and  sg.SG001=#{sg001}
+    </select>
+    <select id="selectSt4ScsCc"  parameterType="com.gistone.bjhky.entity.St4ScsCc" resultType="com.gistone.bjhky.entity.St4ScsCc">
+        <if test="type==1">
+            SELECT cc.CC008,sa.SA019 name,count(*)num
+            FROM st4_scs_cc cc
+            LEFT JOIN st4_sys_sa sa
+            ON cc.CC008=sa.SA001
+            WHERE cc.CC011 = 1
+            and sa.SA007 = 1
+            <if test="cc003!=null">
+                and cc.CC003 = #{cc003}
+            </if>
+            <if test="strTime!=null and strTime!='' ">
+                and cc.CC007 <![CDATA[ >= ]]> #{strTime}
+            </if>
+            <if test="endTime!=null and endTime!='' ">
+                and cc.CC007 <![CDATA[ <= ]]> #{endTime}
+            </if>
+            GROUP BY cc.CC008
+        </if>
+        <if test="type==2">
+            SELECT count(sa.SA001)num,sg.SG008,sg.SG001
+            FROM st4_scs_cc cc
+            LEFT JOIN st4_sys_sa sa
+            ON cc.CC008=sa.SA001
+            LEFT JOIN st4_sys_sg sg
+            ON sa.SA001=sg.SG001
+            WHERE cc.CC011 = 1
+            and sa.SA007 = 1
+            and sg.SG007 = 1
+            <if test="cc003!=null">
+                and cc.CC003 = #{cc003}
+            </if>
+            <if test="strTime!=null and strTime!='' ">
+                and cc.CC007 <![CDATA[ >= ]]> #{strTime}
+            </if>
+            <if test="endTime!=null and endTime!='' ">
+                and cc.CC007 <![CDATA[ <= ]]> #{endTime}
+            </if>
+            <if test="name!=null">
+                and sa.SA019 like '%${name}%'
+            </if>
+            GROUP BY sa.SA001
+        </if>
+        <if test="type==3">
+            SELECT count(sg.SD001)num,sd.SD001,sd.SD008
+            FROM st4_scs_cc cc
+            LEFT JOIN st4_sys_sa sa
+            ON cc.CC008=sa.SA001
+            LEFT JOIN st4_sys_sg sg
+            ON sa.SA001=sg.SG001
+            LEFT JOIN st4_sys_sd sd
+            on sg.SD001=sd.SD001
+            WHERE cc.CC011 = 1
+            and sa.SA007 = 1
+            and sg.SG007 = 1
+            and sd.SD007 = 1
+            <if test="cc003!=null">
+                and cc.CC003 = #{cc003}
+            </if>
+            <if test="strTime!=null and strTime!='' ">
+                and cc.CC007 <![CDATA[ >= ]]> #{strTime}
+            </if>
+            <if test="endTime!=null and endTime!='' ">
+                and cc.CC007 <![CDATA[ <= ]]> #{endTime}
+            </if>
+            <if test="name!=null">
+                and sa.SA019 like '%${name}%'
+            </if>
+            <if test="st4SysSa != null and st4SysSa.sa001 != null">
+                and sa.SA001 = #{st4SysSa.sa001}
+            </if>
+            GROUP BY sg.SD001
+        </if>
+    </select>
+
+
+    <select id="getPoSum" resultType="java.lang.Integer" parameterType="com.gistone.bjhky.entity.St4ScsCc">
+        SELECT count(*)
+        FROM st4_scs_cc cc
+        LEFT JOIN st4_sys_sa sa
+        ON cc.CC008=sa.SA001
+        LEFT JOIN st4_sys_sg sg
+        ON sa.SA001=sg.SG001
+        LEFT JOIN st4_sys_sd sd
+        on sg.SD001=sd.SD001
+        WHERE cc.CC011 = 1
+        and sa.SA007 = 1
+        and sg.SG007 = 1
+        and sd.SD007 = 1
+        <if test="cc008!=null">
+            and cc.CC008=#{cc008}
+        </if>
+        <if test="sg001!=null">
+            and sg.SG001=#{sg001}
+        </if>
+        <if test="sd001!=null">
+            and sd.SD001=#{sd001}
+        </if>
+    </select>
+
+    <select id="selectPoList" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCc">
+        SELECT *
+        FROM st4_scs_cc cc
+        LEFT JOIN st4_sys_sa sa
+        ON cc.CC008=sa.SA001
+        LEFT JOIN st4_sys_sg sg
+        ON sa.SA001=sg.SG001
+        LEFT JOIN st4_sys_sd sd
+        on sg.SD001=sd.SD001
+        WHERE cc.CC011 = 1
+        and sa.SA007 = 1
+        and sg.SG007 = 1
+        and sd.SD007 = 1
+        <if test="cc008!=null">
+            and cc.CC008=#{cc008}
+        </if>
+        <if test="cc003!=null">
+            and cc.CC003=#{cc003}
+        </if>
+        <if test="sg001!=null">
+            and sg.SG001=#{sg001}
+        </if>
+        <if test="sd001!=null">
+            and sd.SD001=#{sg001}
+        </if>
+        <if test="cc012!=null">
+            and cc.CC012 like '%${cc012}%'
+        </if>
+        limit #{firstLimit},#{pageSize}
+    </select>
+    <!--物种空间分布-->
+    <select id="listSpeciesToMap" resultType="Map" parameterType="com.gistone.bjhky.entity.St4ScsCc">
+        ( SELECT * FROM st4_scs_cc cc
+        LEFT JOIN st4_scs_cf cf ON cc.CC002 = cf.CC002
+        left join st4_sys_sa sa on sa.SA001 = cc.CC008
+        left join st4_sys_sg sg on sg.SG001 = sa.SG001
+        WHERE cc.CC011 = 1
+        and cf.CF016 is not null
+        <if test="sd001!=null">
+            and sg.SD001=#{sd001}
+        </if>
+        <if test="sg001!=null">
+            and sg.SG001=#{sg001}
+        </if>)
+        union
+        ( SELECT * FROM st4_scs_cc cc
+        LEFT JOIN st4_scs_cf cf ON cc.CC002 = cf.CC002
+        left join st4_sys_sa sa on sa.SA001 = cc.CC008
+        left join st4_sys_sg sg on sg.SG001 = sa.SG001
+        WHERE cc.CC011 = 1
+        and cf.CF003 is not null
+        <if test="sd001!=null">
+            and sg.SD001=#{sd001}
+        </if>
+        <if test="sg001!=null">
+            and sg.SG001=#{sg001}
+        </if>)
+    </select>
+    <!--物种动物统计饼状图-->
+    <select id="statisDw" resultType="Map" parameterType="com.gistone.bjhky.entity.St4ScsCc">
+        SELECT CF.CF016 AS NAME ,COUNT(1) AS VALUE  FROM st4_scs_cc cc
+        LEFT JOIN st4_scs_cf cf ON cc.CC002=cf.CC002
+        left join st4_sys_sa sa on sa.SA001 = cc.CC008
+        left join st4_sys_sg sg on sg.SG001 = sa.SG001
+        WHERE cc.CC011 = 1
+        and cf.CF016 is not null
+        GROUP BY CF.CF016
+        <if test="sd001!=null">
+            and sg.SD001=#{sd001}
+        </if>
+        <if test="sg001!=null">
+            and sg.SG001=#{sg001}
+        </if>
+    </select>
+    <!--物种植物统计饼状图-->
+    <select id="statisZw" resultType="Map" parameterType="com.gistone.bjhky.entity.St4ScsCc">
+        SELECT CF.CF003 AS NAME ,COUNT(1) AS VALUE  FROM st4_scs_cc cc
+        LEFT JOIN st4_scs_cf cf ON cc.CC002=cf.CC002
+        left join st4_sys_sa sa on sa.SA001 = cc.CC008
+        left join st4_sys_sg sg on sg.SG001 = sa.SG001
+        WHERE cc.CC011 = 1
+        and cf.CF003 is not null
+        GROUP BY CF.CF003
+        <if test="sd001!=null">
+            and sg.SD001=#{sd001}
+        </if>
+        <if test="sg001!=null">
+            and sg.SG001=#{sg001}
+        </if>
+    </select>
+
+
+
+
+</mapper>

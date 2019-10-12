@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.bjhky.mapper.St4SysShMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4SysSh">
+        <id column="SH001" property="sh001" />
+        <result column="SH002" property="sh002" />
+        <result column="SH003" property="sh003" />
+        <result column="SH004" property="sh004" />
+        <result column="SH005" property="sh005" />
+        <result column="SH006" property="sh006" />
+        <result column="SH007" property="sh007" />
+        <result column="SH008" property="sh008" />
+        <result column="SH009" property="sh009" />
+        <result column="SH010" property="sh010" />
+        <result column="SH011" property="sh011" />
+        <result column="SH012" property="sh012" />
+        <result column="SH013" property="sh013" />
+        <result column="SH014" property="sh014" />
+        <result column="uname" property="uname" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        SH001, SH002, SH003, SH004, SH005, SH006, SH007, SH008, SH009, SH010, SH011, SH012, SH013, SH014
+    </sql>
+    <select id="listLog" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4SysSh" >
+          select
+        <include refid="Base_Column_List"/>,sa.SA019  as uname
+        from st4_sys_sh sh left  join st4_sys_sa sa on sa.SA001 = sh.SH002
+        WHERE sh.SH007=1
+        <if test="sh.sh014!=null">
+            and sh.SH014 LIKE '%${sh.sh014}%'
+        </if>
+        <if test="sh.uname!=null">
+          and  sa.SA019 LIKE '%${sh.uname}%'
+        </if>
+        <if test="sh.strTime!=null and sh.strTime!='' ">
+            and sh003 <![CDATA[ >= ]]> #{sh.strTime}
+        </if>
+        <if test="sh.endTime!=null and sh.endTime!='' ">
+            and sh003 <![CDATA[ <= ]]> #{sh.endTime}
+        </if>
+
+    </select>
+
+</mapper>
