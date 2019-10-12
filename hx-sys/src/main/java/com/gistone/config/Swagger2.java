@@ -53,6 +53,8 @@ public class Swagger2 {
                 .globalResponseMessage(RequestMethod.GET, responseMessageList())
                 .globalResponseMessage(RequestMethod.POST, responseMessageList());
     }
+
+
 //    @Bean
 //    public Docket webUserApi() {
 //        return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any())

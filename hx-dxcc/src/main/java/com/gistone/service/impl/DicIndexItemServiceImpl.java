@@ -696,7 +696,6 @@ public class DicIndexItemServiceImpl extends ServiceImpl<DicIndexItemMapper, Dic
 
             //构造数据，没有的字段设置为空
             /*if (filedMapList != null && filedMapList.size() > 0) {
-
                 for (Map<String, Object> map : filedMapList) {
                     Map<String, Object> filedMap2 = new HashMap<>();
                     Integer filedId = (Integer) map.get("pk_id");
@@ -709,13 +708,11 @@ public class DicIndexItemServiceImpl extends ServiceImpl<DicIndexItemMapper, Dic
             mapInfo.put("filed_name", list);
             mapInfo.remove("survey_jsonData");
         }
-
         return mapInfo;
     }
 
     @Override
     public List<SurveyTableInfoVO> getFileds(Integer id) {
-
         List<SurveyTableInfoVO> newList = null;
         try {
             List<SurveyTableInfoVO> list = dicIndexItemMapper.selectFileds(id);

@@ -30,7 +30,7 @@ public class WebConfigurer implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(sysUserLoginInterceptor()).addPathPatterns("/**").
-//                excludePathPatterns("/**").
+                excludePathPatterns("**/swagger-ui.html").
 //                excludePathPatterns("/epr/api/sys/login/check").
                 excludePathPatterns("/api/sys/login/check").
                 excludePathPatterns("/api/sys/login/check").
