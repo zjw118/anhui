@@ -30,21 +30,28 @@ public class WebConfigurer implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(sysUserLoginInterceptor()).addPathPatterns("/**").
-                excludePathPatterns("/epr/api/sys/login/check").
+//                excludePathPatterns("/**").
+//                excludePathPatterns("/epr/api/sys/login/check").
                 excludePathPatterns("/api/sys/login/check").
-                excludePathPatterns("/epr/index.html").
+                excludePathPatterns("/api/sys/login/check").
+                excludePathPatterns("/index.html").
+//                excludePathPatterns("/epr/index.html").
                 excludePathPatterns("/img/**").
                 excludePathPatterns("/css/**").
                 excludePathPatterns("/js/**").
                 excludePathPatterns("/fonts/**").
                 excludePathPatterns("/index.html").
-                excludePathPatterns("/epr/api/sys/login/getToken").
-                excludePathPatterns("/epr/api/dcxx/dataRenew/getRenewVer").
-                excludePathPatterns("/epr/api/dcxx/dicIndexItem/getAllList").
+                excludePathPatterns("/api/sys/login/getToken").
+//                excludePathPatterns("/epr/api/sys/login/getToken").
+                excludePathPatterns("/api/dcxx/dataRenew/getRenewVer").
+//                excludePathPatterns("/epr/api/dcxx/dataRenew/getRenewVer").
+                excludePathPatterns("/api/dcxx/dicIndexItem/getAllList").
+//                excludePathPatterns("/epr/api/dcxx/dicIndexItem/getAllList").
                 excludePathPatterns("/api/sys/login/getToken").
                 excludePathPatterns("/api/dcxx/dataRenew/getRenewVer").
                 excludePathPatterns("/api/dcxx/dicIndexItem/getAllList").
-                excludePathPatterns("/epr/api/sys/sysAppVersion/getNewEdition").
+                excludePathPatterns("/api/sys/sysAppVersion/getNewEdition").
+//                excludePathPatterns("/epr/api/sys/sysAppVersion/getNewEdition").
                 excludePathPatterns("/api/sys/sysAppVersion/getNewEdition").
                 excludePathPatterns("/api/ktdb/lmMarkerMobile/import").
                 excludePathPatterns("/api/ktdb/dataRedlineRegister/import").
