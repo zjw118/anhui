@@ -79,7 +79,7 @@ public class ImageUtil{
 
     public static void main(String[] args) {
 
-        
+
         File srcfile = new File("D:/epr/132.png");
         File distfile = new File("D:/epr/attached/123min.png");
 
