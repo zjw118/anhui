@@ -8,12 +8,10 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.micrometer.core.lang.NonNull;
 import lombok.Data;
 
-
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
-
-import javax.validation.constraints.NotBlank;
 
 /**
  * <p>
@@ -78,6 +76,12 @@ public class SysUser implements Serializable {
     @TableField(exist = false)
     private Set<SysRole> roles;
 
+    /**
+     * 属于本次登陆用户的token
+     */
+    @TableField(exist = false)
+    private String token;
+
     public SysUser(Integer id, @NonNull @NotBlank(message = "用户名不能为空") String username, @NonNull @NotBlank(message = "密码不能为空") String password, Integer enable, Integer type) {
         this.id = id;
         this.username = username;
@@ -85,6 +89,7 @@ public class SysUser implements Serializable {
         this.enable = enable;
         this.type = type;
     }
+
 
 
     public String toMap() {

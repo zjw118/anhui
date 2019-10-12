@@ -1,0 +1,5 @@
+<root>
+    <item name='org.springframework.util.unit.DataSize'>
+        <com.gistone.annotation name='java.lang.Deprecated'/>
+    </item>
+</root>

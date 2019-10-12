@@ -1,5 +1,7 @@
 package com.gistone.controller;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.*;
@@ -198,7 +200,7 @@ public class LoginController {
 
                     if (user.getType() == 0) {//pc端一小时过期 ，查询该级以下行政区划，查询该级行政区划名称级别
 
-                        String token = UUID.randomUUID().toString().replaceAll("-", "");
+                        String token = getToken(listParam.get(0));
                         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
                         redisTemplate.opsForValue().set(uuid, token, 1, TimeUnit.DAYS);
                         Integer userId = listParam.get(0).getId();
@@ -303,6 +305,19 @@ public class LoginController {
             log.error("登录异常：信息为：" + e.getMessage());
             return ResultVOUtil.error(ResultEnum.INTERFACEERROR.getCode(), "登陆异常，请联系管理员");
         }
+    }
+
+    /**
+     * @param sysUser
+     * @return java.lang.String
+     * @explain : 根据用户信息生成token
+     * @author xxh
+     * @date 2019/7/22
+     */
+    public static String getToken(SysUser sysUser) {
+        StringBuffer token = new StringBuffer();
+        token.append(JWT.create().withAudience(sysUser.getId().toString()).sign(Algorithm.HMAC256(sysUser.getPassword())));
+        return token.toString();
     }
 }
 
