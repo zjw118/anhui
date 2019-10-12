@@ -35,7 +35,7 @@
         <mybatis_plus_version>3.1.0</mybatis_plus_version>
         <velocity_version>2.0</velocity_version>
         <thumbnailator_veriosn>0.4.8</thumbnailator_veriosn>
-        <poi_version>3.7</poi_version>
+        <poi_version>3.8</poi_version>
         <jwt_version>3.8.0</jwt_version>
         <commons_fileupload_veriosn>1.3.1</commons_fileupload_veriosn>
         <jxl_version>2.6.12</jxl_version>
@@ -58,7 +58,7 @@
         <freemarker_version>2.3.28</freemarker_version>
         <jackson_vsrsion>2.9.7</jackson_vsrsion>
         <joda-time_version>2.10.1</joda-time_version>
-        <mybatis-plus-boot-starter>3.0.1</mybatis-plus-boot-starter>
+        <mybatis-plus-boot-starter>3.1.0</mybatis-plus-boot-starter>
         <commons-lang3>3.3.2</commons-lang3>
         <commons-codec>1.11</commons-codec>
         <javaee-api>8.0</javaee-api>
@@ -167,7 +167,7 @@
             <version>${gt-opengis}</version>
         </dependency>
         <dependency>
-            <groupId>cn.hutool</groupId>
+            <groupId>com.xiaoleilu</groupId>
             <artifactId>hutool-all</artifactId>
             <version>${hutool-all}</version>
         </dependency>
@@ -196,6 +196,13 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatis-plus-boot-starter}</version>
         </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>${mybatis_plus_version}</version>
+        </dependency>
+
+
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
@@ -261,16 +268,12 @@
             <artifactId>poi-ooxml-schemas</artifactId>
             <version>${poi_version}</version>
         </dependency>
-      <!--  <dependency>
+        <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-excelant</artifactId>
             <version>${poi_version}</version>
-        </dependency>-->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-generator</artifactId>
-            <version>${mybatis_plus_version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity-engine-core</artifactId>
