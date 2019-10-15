@@ -1,15 +1,17 @@
 package com.gistone.controller;
 
 
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.DataRedlineRegister;
 import com.gistone.service.IDataRedlineRegisterService;
+import com.gistone.service.ILmPointService;
 import com.gistone.util.ImportRedlineData;
 import com.gistone.util.Result;
+import com.gistone.util.ResultEnum;
+import com.gistone.util.ResultVOUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,6 +33,10 @@ public class DataRedlineRegisterController {
     @Autowired
     private IDataRedlineRegisterService dataRedlineRegisterService;
 
+    @Autowired
+    private ILmPointService iLmPointService;
+
+
 
     /**
      * 查询红线块
@@ -46,6 +52,60 @@ public class DataRedlineRegisterController {
         List<Map<String, Object>> list = dataRedlineRegisterService.listAll(date);
 
         return Result.success(list);
+    }
+
+    /**
+     * @param paramsMap
+     * @return ResultVO
+     * @description:红线列表
+     * @author zf1017@foxmail.com
+     * @motto: Talk is cheap,show me the code
+     * @date 2019/10/12 0012 13:46
+     */
+    @PostMapping("/list")
+    public ResultVO getRedLineList(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
+        if (dataParam == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        String boardNum = (String) dataParam.get("redLineNum");
+
+        String code = (String) dataParam.get("code");
+
+        //截取code做模糊查询
+        String codes = null;
+        if (StringUtils.isNotBlank(code)) {
+            Integer level = iLmPointService.getLevelByCode(code);
+            if (level != null && level > 0) {
+                if (level == 1) {
+                    codes = code.substring(0, 2);
+                } else if (level == 2) {
+                    codes = code.substring(0, 4);
+                } else {
+                    codes = code;
+                }
+            } else {
+                codes = code;
+            }
+        }
+
+        Integer pageNum = (Integer) dataParam.get("pageNum");
+        Integer pageSize = (Integer) dataParam.get("pageSize");
+
+
+        if (pageNum == null) {
+            pageNum = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = 10;
+        }
+
+        Map<String, Object> result = dataRedlineRegisterService.getRedLineList(boardNum, codes, pageNum, pageSize);
+
+
+        return ResultVOUtil.success(result);
     }
 
     /**

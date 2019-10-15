@@ -2,14 +2,12 @@ package com.gistone.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gistone.entity.EXCEL.LmPointVO;
-import com.gistone.entity.LmBoard;
 import com.gistone.entity.LmPoint;
-
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -41,6 +39,7 @@ public interface ILmPointService extends IService<LmPoint> {
 
 	Integer getLevelByCode(String code);
 
-
 	List<LmPointVO> selectPointListForAll(String codes, String param, Integer redlineId);
+
+	Map<String,Object> getPointList(String pointNum,Integer pageNum,Integer pageSize);
 }

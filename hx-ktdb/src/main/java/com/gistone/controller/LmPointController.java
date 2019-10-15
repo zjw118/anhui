@@ -10,10 +10,7 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -84,6 +81,31 @@ public class LmPointController {
         Map<String, Object> map = iLmPointService.selectLmPointList(resultMap);
 
         return Result.success(map);
+    }
+
+    @PostMapping("/list")
+    public ResultVO getPointList(@RequestBody Map<String, Object> paramsMap){
+        //请求参数格式校验
+        Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
+        if (dataParam == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        String boardNum = (String) dataParam.get("pointNum");
+        Integer pageNum = (Integer) dataParam.get("pageNum");
+        Integer pageSize = (Integer) dataParam.get("pageSize");
+
+
+        if (pageNum == null) {
+            pageNum = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = 10;
+        }
+
+        Map<String,Object> result = iLmPointService.getPointList(boardNum,pageNum,pageSize);
+        return ResultVOUtil.success(result);
+
     }
 
     /**

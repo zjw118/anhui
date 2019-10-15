@@ -1,24 +1,23 @@
 package com.gistone.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.entity.EXCEL.LmPointVO;
-import com.gistone.entity.LmBoard;
 import com.gistone.entity.LmPoint;
 import com.gistone.mapper.LmPointMapper;
 import com.gistone.service.ILmPointService;
 import com.gistone.util.ConfigUtils;
-import com.gistone.util.ExcelUtils;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -235,6 +234,20 @@ public class LmPointServiceImpl extends ServiceImpl<LmPointMapper, LmPoint> impl
 	@Override
 	public List<LmPointVO> selectPointListForAll(String codes, String param, Integer redlineId) {
 		return lmPointMapper.selectPointListForAll(codes,param,redlineId);
+	}
+
+	@Override
+	public Map<String, Object> getPointList(String pointNum, Integer pageNum, Integer pageSize) {
+		Map<String,Object> result = new HashMap<>();
+		QueryWrapper<LmPoint> wrapper = new QueryWrapper<>();
+		if(StringUtils.isNotBlank(pointNum)){
+			wrapper.likeRight("lp_code",pointNum);
+		}
+
+		IPage<LmPoint> IPage = lmPointMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+		result.put("rows", IPage.getRecords());
+		result.put("total", IPage.getTotal());
+		return result;
 	}
 
 

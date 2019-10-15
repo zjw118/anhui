@@ -23,4 +23,6 @@ public interface IDataRedlineRegisterService extends IService<DataRedlineRegiste
 
 	void updateBy(DataRedlineRegister data);
 
+	Map<String, Object> getRedLineList(String redLineName,String code,Integer pageNum,Integer pageSize);
+
 }
