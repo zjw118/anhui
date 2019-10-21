@@ -76,7 +76,7 @@ public class BottomChartController {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
         }
 
-        List<Integer> id = (List<Integer>) params.get("ids");
+        List<Integer> id = (List<Integer>) params.get("id");
         if (id == null || id.size() <= 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
