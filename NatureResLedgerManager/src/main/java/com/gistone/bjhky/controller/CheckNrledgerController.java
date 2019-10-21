@@ -47,7 +47,6 @@ public class CheckNrledgerController {
 
     @Autowired
     private ISt4ScsCkService icheckLedgerService;
-
     @Autowired
     private ISt4ScsCiService st4ScsCiService;
     @Autowired

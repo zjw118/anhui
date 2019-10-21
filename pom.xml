@@ -30,7 +30,6 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <lombok_verion>1.18.6</lombok_verion>
         <swagger_version>2.7.0</swagger_version>
         <mybatis_plus_version>3.1.0</mybatis_plus_version>
         <velocity_version>2.0</velocity_version>
@@ -65,7 +64,7 @@
         <commons-httpclient>3.1</commons-httpclient>
         <opencsv>4.2</opencsv>
         <easypoi>4.1.0</easypoi>
-        <poi_version>4.1.0</poi_version>
+        <poi_version>3.7</poi_version>
         <gt-swing>10.0</gt-swing>
         <gt-shapefile>10.0</gt-shapefile>
         <gt-opengis>10.0</gt-opengis>
@@ -78,8 +77,37 @@
 
 
 
-
     <dependencies>
+       <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.1</version>
+        </dependency>
+
+
+
+
+<!--    <dependency>
+            <groupId>com.szboanda.platform</groupId>
+            <artifactId>powerdata-platform-module-cas-client</artifactId>
+            <version>4.1.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/powerdata-platform-module-cas-client-4.1.1-SNAPSHOT.jar</systemPath>
+        </dependency>
+-->
+
+
+
+
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -139,11 +167,6 @@
             <artifactId>easypoi-base</artifactId>
             <version>${easypoi}</version>
         </dependency>
-  <!--      <dependency>
-            <groupId>cn.afterturn</groupId>
-            <artifactId>easypoi-web</artifactId>
-            <version>${easypoi}</version>
-        </dependency>-->
         <dependency>
             <groupId>cn.afterturn</groupId>
             <artifactId>easypoi-annotation</artifactId>
@@ -258,8 +281,6 @@
             </exclusions>
             <version>${poi_version}</version>
         </dependency>
-
-
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>

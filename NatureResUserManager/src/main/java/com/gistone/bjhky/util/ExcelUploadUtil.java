@@ -22,7 +22,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
  */
 public class ExcelUploadUtil {
 	/**
-	 * 
+	 *
 	 *@description TODO 校验字符串不能为空
 	 *@method  isNotNull
 	 *@return  boolean
@@ -37,7 +37,7 @@ public class ExcelUploadUtil {
 		}
 	}
 	/**
-	 * 
+	 *
 	 *@description TODO 校验是否享受字段格式
 	 *@method  isNotNull
 	 *@return  boolean
@@ -52,7 +52,7 @@ public class ExcelUploadUtil {
 		}
 	}
 	/**
-	 * 
+	 *
 	 *@description TODO 校验身份证号码
 	 *@method  isCard
 	 *@return  boolean
@@ -65,16 +65,16 @@ public class ExcelUploadUtil {
 		Matcher matcher = pattern.matcher(card);
 		return matcher.matches();
 	}
-	
+
 	/**
 	 * 获取单元格数据内容为字符串类型的数据
-	 * 
+	 *
 	 * @param cell
 	 *            Excel单元格
 	 * @return String 单元格数据内容，若为字符串的要加单引号
 	 */
 	private static String getCellValue(HSSFCell cell) {
-        DecimalFormat df = new DecimalFormat("0"); //防止excel数字 科学计数法显示   
+        DecimalFormat df = new DecimalFormat("0"); //防止excel数字 科学计数法显示
 		String strCell = "";
 		switch (cell.getCellType()) {
 		case HSSFCell.CELL_TYPE_STRING:
@@ -102,7 +102,7 @@ public class ExcelUploadUtil {
 		return strCell;
 	}
 	/**
-	 * 
+	 *
 	 *@description TODO EXCEL列校验
 	 *@method  excelColumnsValid
 	 *@return  void
@@ -115,13 +115,13 @@ public class ExcelUploadUtil {
 		if(row.getCell(colth)!=null){
 			columnValue = getCellValue(row.getCell(colth)).trim();
 		}
-		
+
 		if(column.equals("县")){
-			
+
 		}else if(column.equals("乡")){
-			
+
 		}else if(column.equals("村")){
-			
+
 		}else if(column.equals("家庭成员姓名")){
 			if(!ExcelUploadUtil.isNotNull(columnValue)){//如果姓名为空 记录某行某列
 				cell = row.createCell(colth);
@@ -145,9 +145,9 @@ public class ExcelUploadUtil {
 				delRows.add(rowth);
 			}
 		}else if(column.equals("与户主关系")){
-			
+
 		}else if(column.equals("年度")){
-			
+
 		}else if(column.equals("是否享受")){
 			if(!ExcelUploadUtil.isNotNull(columnValue)){//如果身份证为空 记录某行某列
 				cell = row.createCell(colth);
@@ -167,7 +167,7 @@ public class ExcelUploadUtil {
 		return delRows;
 	}
 	/**
-	 * 
+	 *
 	 *@description TODO EXCEL列校验
 	 *@method  excelColumnsValid
 	 *@return  void
@@ -211,7 +211,7 @@ public class ExcelUploadUtil {
 					delRows.add(rowth);
 				}
 			}else if(column.equals("享受人员姓名")){
-				
+
 			}else if(column.equals("享受人员身份证")){
 
 				if(columnValue.length()==20){
@@ -285,23 +285,23 @@ public class ExcelUploadUtil {
 					delRows.add(rowth);
 				}
 			}else if(column.equals("出险日期")){
-				
+
 			}else if(column.equals("结案日期")){
-				
+
 			}else if(column.equals("赔付金额")){
-				
+
 			}else if(column.equals("住院补贴金额")){
-				
+
 			}else{
 				delRows.add(1);
 				return delRows;
 			}
 		}
-		
+
 		return delRows;
 	}
 	/**
-	 * 
+	 *
 	 *@description TODO 获取json文件中的表头
 	 *@method  getModelTitle
 	 *@return  String
@@ -331,5 +331,5 @@ public class ExcelUploadUtil {
 		// TODO Auto-generated method stub
 		System.out.println(ExcelValidUtil.validInterest("10000.01"));
 	}*/
-	
+
 }

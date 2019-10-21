@@ -8,11 +8,10 @@ import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
 
 import cn.afterturn.easypoi.word.WordExportUtil;
 
-import com.gistone.entity.EXCEL.LmMarkerMobileVO;
 import org.apache.commons.io.FileUtils;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
+//import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.util.Assert;
@@ -61,7 +60,7 @@ public class FileUtil {
 
     private static void downLoadExcel(String fileName, HttpServletResponse response, Workbook workbook) {
         try {
-            response.setCharacterEncoding("UTF-8");
+//            response.setCharacterEncoding("UTF-8");
             response.setHeader("content-Type", "application/vnd.ms-excel");
             response.setHeader("Content-Disposition",
                     "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));

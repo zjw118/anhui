@@ -10,6 +10,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 @MapperScan("com.gistone.mapper") // 配置dao层路径
 @SpringBootApplication
+@ServletComponentScan
 public class GistoneApplication  extends SpringBootServletInitializer {
 
     public static void main(String[] args) {

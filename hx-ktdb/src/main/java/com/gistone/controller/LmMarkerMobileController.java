@@ -713,12 +713,17 @@ public class LmMarkerMobileController {
         }
         //1.通过id查询界桩信息
         LmMarkerMobile lmMarkerMobile = lmMarkerMobileService.findMarkerById(id);
-        //如果之前导出过word则不再导出
-        if (lmMarkerMobile != null && StringUtils.isBlank(lmMarkerMobile.getFileUrl())) {
+
+
+        System.out.println(lmMarkerMobile.toString());
+        //如果之前导出过word则不再导出 && StringUtils.isBlank(lmMarkerMobile.getFileUrl())
+        if (lmMarkerMobile != null) {
             //2.通过id查询界桩图片
 
             List<LmMarkerPhoto> lmMarkerPhotos = lmMarkerPhotoService.list(new QueryWrapper<LmMarkerPhoto>().eq("jz_id", id));
             lmMarkerMobile.setLmMarkerPhotos(lmMarkerPhotos);
+
+
 
             //3.通过id查询界桩方位物
             List<LmMarkerRelationPosition> positions = iLmMarkerRelationPositionService.list(new QueryWrapper<LmMarkerRelationPosition>().eq("jz_id", id));
@@ -806,6 +811,7 @@ public class LmMarkerMobileController {
             log.info("获取图片信息", photoes);
 
             ImageEntity image1 = getImageEntity("type1", photoes);
+
             if (image1.getUrl() == null) {
                 params.put("image1", "-");
                 params.put("imagew1", " ");
@@ -864,6 +870,7 @@ public class LmMarkerMobileController {
 
             }
 
+
             System.out.println("构造图片耗时：" + (l2 - System.currentTimeMillis()));
 
             lmMarkerMobile.setStrLat(LongitudeUtil.dblToLocation(lmMarkerMobile.getProofLat()));
@@ -906,8 +913,9 @@ public class LmMarkerMobileController {
             System.out.println("准备参数总耗时：" + (l - System.currentTimeMillis()));
             try {
                 long l4 = System.currentTimeMillis();
-                XWPFDocument doc = WordExportUtil.exportWord07(
-                        "word/marker.docx", params);
+                XWPFDocument doc = WordExportUtil.exportWord07("word/markerword.docx", params);
+
+
                 String fileName = "界桩" + lmMarkerMobile.getJzNumber() + "登记表";
                 String lastName = WORD_PATH + fileName + ".docx";
                 lmMarkerMobile.setFileUrl(lastName.substring(2));
@@ -939,6 +947,7 @@ public class LmMarkerMobileController {
      */
     @PostMapping("/exportStandardWord")
     public ResultVO exportStandardWord(@RequestBody Map<String, Object> paramsMap) {
+
         //请求参数格式校验
         Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
         if (dataParam == null) {
@@ -951,6 +960,9 @@ public class LmMarkerMobileController {
         }
         //1.通过id查询界桩信息
         LmMarkerMobile lmMarkerMobile = lmMarkerMobileService.findMarkerById(id);
+
+
+        System.out.println(lmMarkerMobile.toString());
         //如果之前导出过word则不再导出
         if (lmMarkerMobile != null && StringUtils.isNotBlank(lmMarkerMobile.getWordUrl())) {
             //2.通过id查询界桩图片
@@ -1169,9 +1181,12 @@ public class LmMarkerMobileController {
 
             try {
                 BufferedImage sourceImg = ImageIO.read(new FileInputStream(picture));
-                float proportion = (float) sourceImg.getHeight() / sourceImg.getWidth();
 
+                System.out.println(sourceImg.getHeight());
+                System.out.println(sourceImg.getWidth());
+                float proportion = (float) sourceImg.getHeight() / sourceImg.getWidth();
                 height = proportion * 85;
+                System.out.println("height===="+height);
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -21,7 +21,6 @@ public enum ResultEnum {
     INTERSECTAREA_EMPTY("8","相交面积不能为空");
 
 
-
     private String code;
 
     private String msg;

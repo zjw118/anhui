@@ -14,10 +14,10 @@ import com.gistone.service.ILmMarkerPhotoService;
 import com.gistone.service.ILmMarkerRelationPositionService;
 import com.gistone.service.LmMarkerMobilerDeviceIDService;
 import com.gistone.util.*;
-import io.micrometer.core.instrument.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
