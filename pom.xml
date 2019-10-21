@@ -35,7 +35,6 @@
         <mybatis_plus_version>3.1.0</mybatis_plus_version>
         <velocity_version>2.0</velocity_version>
         <thumbnailator_veriosn>0.4.8</thumbnailator_veriosn>
-        <poi_version>3.8</poi_version>
         <jwt_version>3.8.0</jwt_version>
         <commons_fileupload_veriosn>1.3.1</commons_fileupload_veriosn>
         <jxl_version>2.6.12</jxl_version>
@@ -65,9 +64,8 @@
         <druid>1.1.11</druid>
         <commons-httpclient>3.1</commons-httpclient>
         <opencsv>4.2</opencsv>
-        <easypoi-base>4.0.0</easypoi-base>
-        <easypoi-web>4.0.0</easypoi-web>
-        <easypoi-annotation>4.0.0</easypoi-annotation>
+        <easypoi>4.1.0</easypoi>
+        <poi_version>4.1.0</poi_version>
         <gt-swing>10.0</gt-swing>
         <gt-shapefile>10.0</gt-shapefile>
         <gt-opengis>10.0</gt-opengis>
@@ -139,17 +137,17 @@
         <dependency>
             <groupId>cn.afterturn</groupId>
             <artifactId>easypoi-base</artifactId>
-            <version>${easypoi-base}</version>
+            <version>${easypoi}</version>
         </dependency>
-        <dependency>
+  <!--      <dependency>
             <groupId>cn.afterturn</groupId>
             <artifactId>easypoi-web</artifactId>
-            <version>${easypoi-web}</version>
-        </dependency>
+            <version>${easypoi}</version>
+        </dependency>-->
         <dependency>
             <groupId>cn.afterturn</groupId>
             <artifactId>easypoi-annotation</artifactId>
-            <version>${easypoi-annotation}</version>
+            <version>${easypoi}</version>
         </dependency>
         <dependency>
             <groupId>org.geotools</groupId>
@@ -248,11 +246,20 @@
             <artifactId>freemarker</artifactId>
             <version>${freemarker_version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.poi</groupId>
-            <artifactId>poi-examples</artifactId>
+            <artifactId>poi-ooxml-schemas</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>xerces</groupId>
+                    <artifactId>xercesImpl</artifactId>
+                </exclusion>
+            </exclusions>
             <version>${poi_version}</version>
         </dependency>
+
+
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
@@ -262,17 +269,14 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-scratchpad</artifactId>
             <version>${poi_version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml-schemas</artifactId>
             <version>${poi_version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-excelant</artifactId>
-            <version>${poi_version}</version>
-        </dependency>
+
 
         <dependency>
             <groupId>org.apache.velocity</groupId>
