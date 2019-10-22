@@ -2,7 +2,6 @@ package com.gistone.util;
 
 import com.gistone.entity.CodeMenu;
 import com.gistone.entity.Menu;
-import com.gistone.exception.StopMsgException;
 
 import java.util.ArrayList;
 import java.util.List;

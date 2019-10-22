@@ -39,6 +39,23 @@
         </dependency>
 
         <dependency>
+            <groupId>com</groupId>
+            <artifactId>test</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com</groupId>
+            <artifactId>hx-ygjc</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+       <!-- <dependency>
+            <groupId>com</groupId>
+            <artifactId>NatureResAppManager</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>-->
+
+        <dependency>
             <groupId>com.szboanda.platform</groupId>
             <artifactId>powerdata-platform-module-cas-client</artifactId>
             <version>4.1.1-RELEASE</version>

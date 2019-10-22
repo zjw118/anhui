@@ -8,7 +8,6 @@ import com.gistone.entity.Image;
 import com.gistone.mapper.ImageMapper;
 import com.gistone.service.ImageService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,19 +33,13 @@ import java.util.Map;
     private ImageMapper mapper;
     @Override
     public Map<String, Object> list(Integer pageNum, Integer pageSize,String userName) {
-
-    QueryWrapper<Image> wrapper = new QueryWrapper<>();
-    if(StringUtils.isNotBlank(userName)){
-    wrapper.likeRight("name",userName);
-    }
-    wrapper.eq("del_flag",1);
-    wrapper.orderByDesc("create_date");
-    IPage<Image> iPage = mapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+        QueryWrapper<Image> wrapper = new QueryWrapper<>();
+        IPage<Image> imageIPage = mapper.selectPage(new Page<>(pageNum, pageSize),wrapper);
 
 
-    Map<String, Object> result = new HashMap<>();
-    result.put("rows", iPage.getRecords());
-    result.put("total", iPage.getTotal());
+        Map<String, Object> result = new HashMap<>();
+    result.put("rows", imageIPage.getRecords());
+    result.put("total", imageIPage.getTotal());
 
     return result;
 }

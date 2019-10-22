@@ -59,7 +59,7 @@ import java.util.Map;
 
     @Override
     public void insert(List<Map<String, Object>> data) {
-    //通过影像id先删除记录然后再插入
+    //通过影像id先删除记录然后再插入,然后再写入shp文件，将地址更新到影像表中！
         mapper.delete(new QueryWrapper<Iterpretation>().eq("image_id",""));
         //从data中构造属性
         for (Map<String, Object> datum : data) {
