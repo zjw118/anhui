@@ -1,6 +1,6 @@
 package com.gistone.bjhky.util;
 
-import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
@@ -10,10 +10,9 @@ import org.springframework.stereotype.Component;
 @PropertySource(value = "classpath:/config.properties")
 /**
  * 路径帮助类
- *
  * @author WangShanxi
  */
-public class ConfigUtil {
+public class ConfigUtil{
 
 
 	@Value("${RunningStatus}")
