@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gistone.bjhky.mapper.St4ScsCzMapper">
+<mapper namespace="com.gistone.mapper.St4ScsCzMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCz">
+    <resultMap id="BaseResultMap" type="com.gistone.entity.St4ScsCz">
         <id column="CZ001" property="cz001" />
         <result column="CZ002" property="cz002" />
         <result column="CZ003" property="cz003" />
@@ -11,12 +11,12 @@
         <result column="CZ005" property="cz005" />
         <result column="CZ006" property="cz006" />
         <result column="CL001" property="cl001" />
-        <association property="st4SysSa" javaType="com.gistone.bjhky.entity.St4SysSa">
+        <association property="st4SysSa" javaType="com.gistone.entity.St4SysSa">
             <id column="SA001" property="sa001" />
             <result column="SA019" property="sa019" />
         </association>
     </resultMap>
-    <resultMap id="BaseResultMap1" type="com.gistone.bjhky.entity.St4SysSa">
+    <resultMap id="BaseResultMap1" type="com.gistone.entity.St4SysSa">
         <id column="SA001" property="sa001" />
         <result column="SA002" property="sa002" />
         <result column="SA003" property="sa003" />
@@ -63,7 +63,7 @@
          and sa.SA001=#{sa001}
          order  by cz.cz005 desc limit 1
     </select>
-    <select id="listGroup" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCz" >
+    <select id="listGroup" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCz" >
         select cz.*,sa.SA001,sa.SA019
         from st4_scs_cz cz
         LEFT JOIN st4_po_sa_cz sacz ON cz.CZ001=sacz.CZ001
@@ -89,7 +89,7 @@
         </if>
     </select>
 
-    <select id="getGroupUserDetail" resultMap="BaseResultMap1" parameterType="com.gistone.bjhky.entity.St4ScsCz" >
+    <select id="getGroupUserDetail" resultMap="BaseResultMap1" parameterType="com.gistone.entity.St4ScsCz" >
         select sa.*
         from
         st4_sys_sa sa

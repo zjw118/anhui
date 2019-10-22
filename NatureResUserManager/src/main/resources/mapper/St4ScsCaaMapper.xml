@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gistone.bjhky.mapper.St4ScsCaaMapper">
-    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCaa" >
+<mapper namespace="com.gistone.mapper.St4ScsCaaMapper">
+    <resultMap id="BaseResultMap" type="com.gistone.entity.St4ScsCaa" >
         <id column="CAA001" property="caa001" jdbcType="INTEGER" />
         <result column="CAA002" property="caa002" jdbcType="VARCHAR" />
         <result column="CAA003" property="caa003" jdbcType="INTEGER" />
@@ -15,7 +15,7 @@
     <sql id="Base_Column_List" >
     CAA001, CAA002, CAA003, CAA004, CAA005, CAA006, CAA007, CAA008, CAA009
   </sql>
-    <select id="getNewVersion" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCaa" >
+    <select id="getNewVersion" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCaa" >
        SELECT CAA003,CAA001, CAA002,  CAA004, CAA005, CAA006, CAA007, CAA008, CAA009
         FROM st4_scs_caa
         WHERE CAA009 = 1 ORDER BY CAA003 DESC LIMIT 1
@@ -24,7 +24,7 @@
     delete from st4_scs_caa
     where CAA001 = #{caa001,jdbcType=INTEGER}
   </delete>
-    <insert id="insert" parameterType="com.gistone.bjhky.entity.St4ScsCaa" >
+    <insert id="insert" parameterType="com.gistone.entity.St4ScsCaa" >
     insert into st4_scs_caa (CAA001, CAA002, CAA003,
       CAA004, CAA005, CAA006,
       CAA007, CAA008, CAA009
@@ -34,7 +34,7 @@
       #{caa007,jdbcType=TIMESTAMP}, #{caa008,jdbcType=VARCHAR}, #{caa009,jdbcType=INTEGER}
       )
   </insert>
-    <insert id="insertSelective" parameterType="com.gistone.bjhky.entity.St4ScsCaa" >
+    <insert id="insertSelective" parameterType="com.gistone.entity.St4ScsCaa" >
         insert into st4_scs_caa
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="caa001 != null" >
@@ -95,7 +95,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.gistone.bjhky.entity.St4ScsCaa" >
+    <update id="updateByPrimaryKeySelective" parameterType="com.gistone.entity.St4ScsCaa" >
         update st4_scs_caa
         <set >
             <if test="caa002 != null" >
@@ -125,7 +125,7 @@
         </set>
         where CAA001 = #{caa001,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.gistone.bjhky.entity.St4ScsCaa" >
+    <update id="updateByPrimaryKey" parameterType="com.gistone.entity.St4ScsCaa" >
     update st4_scs_caa
     set CAA002 = #{caa002,jdbcType=VARCHAR},
       CAA003 = #{caa003,jdbcType=INTEGER},

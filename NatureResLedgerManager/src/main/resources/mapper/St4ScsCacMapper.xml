@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gistone.bjhky.mapper.St4ScsCacMapper">
+<mapper namespace="com.gistone.mapper.St4ScsCacMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCac">
+    <resultMap id="BaseResultMap" type="com.gistone.entity.St4ScsCac">
         <result column="CK001" property="ck001" />
         <result column="CAC002" property="cac002" />
         <result column="CD004" property="cd004" />
@@ -48,7 +48,7 @@
     <sql id="Base_Column_List">
         CK001, CAC002, CD004, SG001, CAC003, CAC004, CAC005, CAC006, CAC007, CAC008, CAC009, CAC010, CAC011, CAC012, CAC013, CAC014, CAC015, CAC016, CAC017, CAC018, CAC019, CAC020, CAC021, CAC022, CAC023, CAC024, CAC025, CAC026, CAC027, CAC028, CAC029, CAC030, CAC031, CAC032, CAC033, CAC034, CAC035, CAC036
     </sql>
-    <update id="updateByCk001" parameterType="com.gistone.bjhky.entity.St4ScsCac">
+    <update id="updateByCk001" parameterType="com.gistone.entity.St4ScsCac">
         update st4_scs_cac
         <set >
             <if test="cac002 != null" >

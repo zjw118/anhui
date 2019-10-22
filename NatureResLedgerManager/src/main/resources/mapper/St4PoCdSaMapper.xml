@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gistone.bjhky.mapper.St4PoCdSaMapper">
+<mapper namespace="com.gistone.mapper.St4PoCdSaMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4PoCdSa">
+    <resultMap id="BaseResultMap" type="com.gistone.entity.St4PoCdSa">
         <result column="CD001" property="cd001" />
         <result column="SA001" property="sa001" />
         <result column="CDSA001" property="cdsa001" />
-        <association property="checkLedger" javaType="com.gistone.bjhky.entity.St4ScsCk">
+        <association property="checkLedger" javaType="com.gistone.entity.St4ScsCk">
             <id column="CK001" property="ck001" />
             <result column="CK002" property="ck002" />
             <result column="CD004" property="cd004" />
@@ -113,7 +113,7 @@
 
     <!--批量插入操作-->
 
-    <insert id="insertList" parameterType="com.gistone.bjhky.entity.St4PoCdSa"  >
+    <insert id="insertList" parameterType="com.gistone.entity.St4PoCdSa"  >
 
         insert into st4_po_cd_sa (
         CD001, SA001
@@ -124,7 +124,7 @@
 
         </foreach>
     </insert>
-    <update id="submitPoint" parameterType="com.gistone.bjhky.entity.St4PoCdSa">
+    <update id="submitPoint" parameterType="com.gistone.entity.St4PoCdSa">
         update st4_po_cd_sa set CDSA001=1 WHERE CD001=#{cd001} and SA001=#{sa001}
     </update>
 

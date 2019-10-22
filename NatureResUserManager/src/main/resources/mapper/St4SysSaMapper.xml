@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gistone.bjhky.mapper.St4SysSaMapper">
+<mapper namespace="com.gistone.mapper.St4SysSaMapper">
 
-    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4SysSa" >
+    <resultMap id="BaseResultMap" type="com.gistone.entity.St4SysSa" >
         <id column="SA001" property="sa001" jdbcType="INTEGER" />
         <result column="SA002" property="sa002" jdbcType="INTEGER" />
         <result column="SA003" property="sa003" jdbcType="TIMESTAMP" />
@@ -24,7 +24,7 @@
         <result column="SA019" property="sa019" jdbcType="VARCHAR" />
         <result column="SA020" property="sa020" jdbcType="INTEGER" />
         <result column="SG001" property="sg001" jdbcType="INTEGER" />
-        <collection property="st4SysSc" ofType="com.gistone.bjhky.entity.St4SysSc">
+        <collection property="st4SysSc" ofType="com.gistone.entity.St4SysSc">
             <id column="SC001" jdbcType="INTEGER" property="sc001" />
             <result column="SC002" jdbcType="VARCHAR" property="sc002" />
             <result column="SC003" jdbcType="INTEGER" property="sc003" />
@@ -52,7 +52,7 @@
     SA013, SA014, SA015, SA016, SA017, SA018, SA019, SA020, SG001
   </sql>
 
-    <select id="listPhoneUserToView" resultType="Map" parameterType="com.gistone.bjhky.entity.St4SysSa" >
+    <select id="listPhoneUserToView" resultType="Map" parameterType="com.gistone.entity.St4SysSa" >
         <!--如果当前坐标时间与当前时间时差不超过一个小时，那么认为该用户在线，否则下线-->
         select * from (select CH001, CH002, CH003, CH004,CH006, IF(HOUR( TIMEDIFF( NOW(), CH006) ) > 1 , 0 , 1) CH005 ,
         sa.SA001, sa.SA002, sa.SA003, sa.SA004, sa.SA005, sa.SA006, sa.SA007, sa.SA008, sa.SA010, sa.SA011, sa.SA012,
@@ -79,7 +79,7 @@
         </if>
         ORDER BY a.CH005
     </select>
-    <select id="login" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4SysSa" >
+    <select id="login" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4SysSa" >
         SELECT sa.*,sc.* FROM st4_sys_sa sa LEFT JOIN st4_po_sa_sb sasb ON sa.`SA001` = sasb.`SA001` LEFT JOIN st4_sys_sb sb ON sasb.`SB001` = sb.`SB001`
         LEFT JOIN st4_po_sb_sc sbsc ON sbsc.SB001 = sb.`SB001`
         LEFT JOIN st4_sys_sc sc ON sc.`SC001` = sbsc.`SC001`
@@ -129,7 +129,7 @@
 
         order by sa.SA005 DESC
     </select>
-    <select id="listNolimit" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4SysSa"  >
+    <select id="listNolimit" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4SysSa"  >
         select
         <include refid="Base_Column_List1" />
         from  st4_sys_sa sa
@@ -155,7 +155,7 @@
         order by sa.SA005 DESC
     </select>
 
-    <insert id="insertSelective" parameterType="com.gistone.bjhky.entity.St4SysSa" >
+    <insert id="insertSelective" parameterType="com.gistone.entity.St4SysSa" >
         insert into st4_sys_sa
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="sa001 != null" >
@@ -288,7 +288,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateAppUser" parameterType="com.gistone.bjhky.entity.St4SysSa" >
+    <update id="updateAppUser" parameterType="com.gistone.entity.St4SysSa" >
         update st4_sys_sa
         <set >
             <if test="sa002 != null" >
@@ -354,7 +354,7 @@
         </set>
         where SA001 = #{sa001,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.gistone.bjhky.entity.St4SysSa" >
+    <update id="updateByPrimaryKey" parameterType="com.gistone.entity.St4SysSa" >
     update st4_sys_sa
     set SA002 = #{sa002,jdbcType=INTEGER},
       SA003 = #{sa003,jdbcType=TIMESTAMP},
