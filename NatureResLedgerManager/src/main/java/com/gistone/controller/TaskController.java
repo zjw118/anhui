@@ -4,10 +4,7 @@ package com.gistone.controller;
 import com.auth0.jwt.JWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.annotation.PassToken;
-import com.gistone.entity.St4PoSaCz;
-import com.gistone.entity.St4ScsCl;
-import com.gistone.entity.St4ScsCz;
-import com.gistone.entity.St4SysSa;
+import com.gistone.entity.*;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.ISt4PoSaCzService;
 import com.gistone.service.ISt4ScsClService;
@@ -142,8 +139,8 @@ public class TaskController {
         }
         String token = request.getHeader("token");// 从 http 请求头中取出 token
         String userId ="1" ;//JWT.decode(token).getAudience().get(0);
-        St4SysSa serUser = new St4SysSa();
-        serUser.setSa001(Integer.valueOf(userId));
+        SysUser serUser = new SysUser();
+        serUser.setId(Integer.valueOf(userId));
         return  iSt4ScsClService.listTask(param,serUser);
     }
     /**

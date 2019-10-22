@@ -3,12 +3,15 @@ package com.gistone.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.entity.St4PoCdSa;
 import com.gistone.entity.St4SysSa;
+import com.gistone.entity.SysUser;
 import com.gistone.mapper.St4PoCdSaMapper;
 import com.gistone.mapper.St4SysSaMapper;
+import com.gistone.mapper.SysUserMapper;
 import com.gistone.service.ISt4PoCdSaService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.util.JPushUtil;
 import com.gistone.util.Result;
+import com.gistone.util.ResultCp;
 import com.gistone.util.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,11 +36,11 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
     private ISt4PoCdSaService st4PoCdSaService;
 
     @Autowired
-    private St4SysSaMapper st4SysSaMapper;
+    private SysUserMapper st4SysSaMapper;
 
 
     @Override
-    public Result givePoint(List<Integer> uids, List<Integer> pointList) {
+    public ResultCp givePoint(List<Integer> uids, List<Integer> pointList) {
 //        St4SysSa sa = new St4SysSa();
 
         List<St4PoCdSa> existsaList = null;
@@ -100,15 +103,15 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
 
 
         if(flag){
-                QueryWrapper<St4SysSa> wrapper = new QueryWrapper<>();
-                wrapper.in("SA001",uids);
-                List<St4SysSa> saList = st4SysSaMapper.selectList(wrapper);
-                for (St4SysSa saa:saList) {
+                QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
+                wrapper.in("id",uids);
+                List<SysUser> saList = st4SysSaMapper.selectList(wrapper);
+                /*for (SysUser saa:saList) {
                     JPushUtil.jiGuangPush(saa.getSa012(), "您有新的问题点需要接收！","1");
-                }
+                }*/
 
-            return Result.build(1000,"问题点分配"+ResultMsg.MSG_1000);
+            return ResultCp.build(1000,"问题点分配"+ResultMsg.MSG_1000);
         }
-        return Result.build(1005,ResultMsg.MSG_1005);
+        return ResultCp.build(1005,ResultMsg.MSG_1005);
     }
 }

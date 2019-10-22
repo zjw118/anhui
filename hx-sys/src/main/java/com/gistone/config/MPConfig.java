@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  * @date 2019/4/26 0026 20:06
  * @description
  */
-@Configuration
+//@Configuration
 public class MPConfig {
     /***
      * plus 的性能优化

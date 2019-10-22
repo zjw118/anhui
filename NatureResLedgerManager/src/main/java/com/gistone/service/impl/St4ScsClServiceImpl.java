@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.entity.St4ScsCl;
 import com.gistone.entity.St4SysSa;
+import com.gistone.entity.SysUser;
 import com.gistone.mapper.St4ScsClMapper;
 import com.gistone.mapper.St4SysSaMapper;
+import com.gistone.mapper.SysUserMapper;
 import com.gistone.service.ISt4ScsClService;
 import com.gistone.util.Result;
 import com.gistone.util.ResultCp;
@@ -32,7 +34,7 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
     private St4ScsClMapper st4ScsClMapper;
 
     @Autowired
-    private St4SysSaMapper st4SysSaMapper;
+    private SysUserMapper st4SysSaMapper;
 
     @Override
     public Result listForView(St4ScsCl data) {
@@ -46,7 +48,7 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
     }
 
     @Override
-    public ResultCp listTask(St4ScsCl data, St4SysSa seUser) {
+    public ResultCp listTask(St4ScsCl data, SysUser seUser) {
 
       /*  QueryWrapper<St4ScsCl> wrapper = new QueryWrapper<>();
         Page<St4ScsCl>  page = new Page<>(data.getPageNumber(),data.getPageSize());
@@ -54,7 +56,7 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
         wrapper.like("CL002",data.getCl002()==null?"":data.getCl002());
         wrapper.like("CL010",data.getCl010()==null?"":data.getCl010());
         wrapper.eq("CL013",seUser.getSa001());*/
-        seUser = st4SysSaMapper.selectById(seUser);
+       /* seUser = st4SysSaMapper.selectById(seUser);
         data.setCl013(seUser.getSa001());
         if(seUser.getSa001()==1){
             data.setType(2);
@@ -66,7 +68,7 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
             }else {
                 data.setType(0);
             }
-        }
+        }*/
 
        /*try{
            wrapper.allEq(BeanUtils.describe(data));

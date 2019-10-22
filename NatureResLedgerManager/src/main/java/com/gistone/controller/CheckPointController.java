@@ -12,6 +12,7 @@ import com.gistone.service.*;
 import com.gistone.swagger.SharePoint;
 import com.gistone.util.ObjectUtils;
 import com.gistone.util.Result;
+import com.gistone.util.ResultCp;
 import com.gistone.util.ResultMsg;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,7 +34,6 @@ import java.util.List;
  * @author LiuXiong
  * @since 2019-08-13
  */
-@Valid
 @RestController
 @RequestMapping("/api/checkPoint")
 @Api(value = "API-UserManage", tags = "问题点位管理接口", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -185,18 +185,17 @@ public class CheckPointController {
      * @param spSwagger
      * @return
      */
-    @PassToken
     @ApiOperation(value="下发问题点",notes = "下发问题点",response = St4PoCdSa.class)
     @RequestMapping(value="/sharePoint",method = RequestMethod.POST)
-    public Result sharePoint(@ApiParam(name="下发问题点", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
+    public ResultCp sharePoint(@ApiParam(name="下发问题点", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
         SharePoint sp = spSwagger.getData();
         List<Integer> pointList = sp.getPointIdList();
         List<Integer> uids = sp.getUidList();
         if(pointList==null||pointList.size()<1){
-            return Result.build(1001,"核查任务不能为空");
+            return ResultCp.build(1001,"核查任务不能为空");
         }
         if(uids==null||uids.size()<1){
-            return Result.build(1001,"下发人员不能为空");
+            return ResultCp.build(1001,"下发人员不能为空");
         }
 
         return checkUserRelavantService.givePoint(uids,pointList);
