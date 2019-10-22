@@ -193,7 +193,7 @@ public class CheckPointController {
         List<Integer> pointList = sp.getPointIdList();
         List<Integer> uids = sp.getUidList();
         if(pointList==null||pointList.size()<1){
-            return Result.build(1001,"问题点不能为空");
+            return Result.build(1001,"核查任务不能为空");
         }
         if(uids==null||uids.size()<1){
             return Result.build(1001,"下发人员不能为空");

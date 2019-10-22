@@ -40,7 +40,7 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
 
     @Override
     public Result givePoint(List<Integer> uids, List<Integer> pointList) {
-        St4SysSa sa = new St4SysSa();
+//        St4SysSa sa = new St4SysSa();
 
         List<St4PoCdSa> existsaList = null;
         St4PoCdSa saSg=null;
@@ -49,7 +49,7 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
         for (Integer rid:pointList) {
             List<St4PoCdSa> list = new ArrayList<>();
             existsaList = new ArrayList<>();
-            QueryWrapper<St4PoCdSa> sasgWrapper = new QueryWrapper<>();
+            QueryWrapper<St4PoCdSa> sasgWrapper = new QueryWrapper<>();  //关联表
             sasgWrapper.eq("CD001",rid);
             existsaList = st4PoCdSaMapper.selectList(sasgWrapper);
             List<Integer> ridExist=null;
@@ -98,6 +98,9 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
             }
 
         }
+
+
+
         if(flag){
                 QueryWrapper<St4SysSa> wrapper = new QueryWrapper<>();
                 wrapper.in("SA001",uids);

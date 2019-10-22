@@ -1,6 +1,9 @@
 package com.gistone.interceptor;
 
 import cn.hutool.json.JSONObject;
+import com.gistone.entity.SysRole;
+import com.gistone.mapper.SysUserMapper;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -11,42 +14,38 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-/**
- * @author zf1017@foxmail.com
- * @date 2019/7/25 0025 10:39
- * @description
- */
 
 public class SysUserLoginInterceptor implements HandlerInterceptor {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
 
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
 
+        String uri = request.getRequestURI();
+        System.out.println("=>"+uri);
 
 
-        Object accessToken = getCookieByName(request, "token") != null ? getCookieByName(request, "token").getValue() : null;
-        Object idKey = getCookieByName(request, "uuid") != null ? getCookieByName(request, "uuid").getValue() : null;
-        if(accessToken==null){
-            returnJson(response, "token为空");
-            return false;
-        }
-        if(idKey==null){
-            returnJson(response, "id为空");
-            return false;
-        }
-        String values =redisTemplate.opsForValue().get(idKey);
-        if(!accessToken.equals(values)){
-            returnJson(response, "无效token");
-            return  false;
-        }
-
-
+//        Object accessToken = getCookieByName(request, "token") != null ? getCookieByName(request, "token").getValue() : null;
+//        Object idKey = getCookieByName(request, "uuid") != null ? getCookieByName(request, "uuid").getValue() : null;
+//        if(accessToken==null){
+//            returnJson(response, "token为空");
+//            return false;
+//        }
+//        if(idKey==null){
+//            returnJson(response, "id为空");
+//            return false;
+//        }
+//        String values =redisTemplate.opsForValue().get(idKey);
+//        if(!accessToken.equals(values)){
+//            returnJson(response, "无效token");
+//            return  false;
+//        }
         return true;
     }
 
@@ -105,7 +104,7 @@ public class SysUserLoginInterceptor implements HandlerInterceptor {
      */
     private void returnJson(HttpServletResponse response, String json) throws Exception{
         PrintWriter writer = null;
-//        response.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=utf-8");
         try {
             writer = response.getWriter();

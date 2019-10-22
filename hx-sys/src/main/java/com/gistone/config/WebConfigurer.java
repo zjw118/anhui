@@ -1,65 +1,94 @@
-//package com.gistone.config;
-//
-//import com.gistone.interceptor.SysUserLoginInterceptor;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-//
-///**
-// * @author zf1017@foxmail.com
-// * @date 2019/7/25 0025 10:27
-// * @description
-// */
-//
-//@Configuration
-//public class WebConfigurer implements WebMvcConfigurer {
-//
+package com.gistone.config;
+
+import com.gistone.interceptor.SysUserLoginInterceptor;
+import org.jasig.cas.client.authentication.AuthenticationFilter;
+import org.jasig.cas.client.session.SingleSignOutFilter;
+import org.jasig.cas.client.util.HttpServletRequestWrapperFilter;
+import org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class WebConfigurer implements WebMvcConfigurer {
+
 //    /**
-//     * 自己定义的拦截器类
+//     * 该过滤器用于实现单点登出功能，可选配置
 //     * @return
 //     */
 //    @Bean
-//    SysUserLoginInterceptor sysUserLoginInterceptor() {
-//        return new SysUserLoginInterceptor();
+//    public FilterRegistrationBean sessionExpireFilter(){
+//        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+////        registrationBean.setFilter((Filter) this.SessionExpireFilter());
+//        registrationBean.setFilter(new SingleSignOutFilter());
+//        registrationBean.addUrlPatterns("/*");
+//        registrationBean.setOrder(1);//启动时候的优先级
+//        return registrationBean;
 //    }
-//    /**
-//     * 添加拦截器
-//     * @param registry
-//     */
-////    @Override
-////    public void addInterceptors(InterceptorRegistry registry) {
-////        registry.addInterceptor(sysUserLoginInterceptor()).addPathPatterns("/**").
-////                excludePathPatterns("**/swagger-ui.html").
-//////                excludePathPatterns("/epr/api/sys/login/check").
-////                excludePathPatterns("/api/sys/login/check").
-////                excludePathPatterns("/api/sys/login/check").
-////                excludePathPatterns("/index.html").
-//////                excludePathPatterns("/epr/index.html").
-////                excludePathPatterns("/img/**").
-////                excludePathPatterns("/css/**").
-////                excludePathPatterns("/js/**").
-////                excludePathPatterns("/fonts/**").
-////                excludePathPatterns("/index.html").
-////                excludePathPatterns("/api/sys/login/getToken").
-//////                excludePathPatterns("/epr/api/sys/login/getToken").
-////                excludePathPatterns("/api/dcxx/dataRenew/getRenewVer").
-//////                excludePathPatterns("/epr/api/dcxx/dataRenew/getRenewVer").
-////                excludePathPatterns("/api/dcxx/dicIndexItem/getAllList").
-//////                excludePathPatterns("/epr/api/dcxx/dicIndexItem/getAllList").
-////                excludePathPatterns("/api/sys/login/getToken").
-////                excludePathPatterns("/api/dcxx/dataRenew/getRenewVer").
-////                excludePathPatterns("/api/dcxx/dicIndexItem/getAllList").
-////                excludePathPatterns("/api/sys/sysAppVersion/getNewEdition").
-//////                excludePathPatterns("/epr/api/sys/sysAppVersion/getNewEdition").
-////                excludePathPatterns("/api/sys/sysAppVersion/getNewEdition").
-////                excludePathPatterns("/api/ktdb/lmMarkerMobile/import").
-////                excludePathPatterns("/api/ktdb/dataRedlineRegister/import").
-////                excludePathPatterns("/api/ktdb/dataRedlineRegister/exchange").
-////                excludePathPatterns("/api/ktdb/lmMarkerMobile/getMarkerByCoordinate").
-////                excludePathPatterns("/api/ktdb/lmMarkerMobile/exportWord").
-////                excludePathPatterns("/api/ktdb/lmBoard/import").
-////                excludePathPatterns("/api/ktdb/lmBoardDiagram/importBoardDiagram");
-////
-////    }
 //
-//}
+//    /**
+//     * 该过滤器负责对Ticket的校验工作，必须启用它
+//     * @return
+//     */
+//    @Bean
+//    public FilterRegistrationBean cas20ProxyReceivingTicketValidationFilter(){
+//        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+//        registrationBean.setFilter(new Cas20ProxyReceivingTicketValidationFilter());
+//        registrationBean.addUrlPatterns("/*");
+//        registrationBean.setOrder(2);//启动时候的优先级
+//        return registrationBean;
+//    }
+//
+//    /**
+//     * 该过滤器负责用户的认证工作，必须启用它
+//     * @return
+//     */
+//    @Bean
+//    public FilterRegistrationBean authenticationFilter(){
+//        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+//        registrationBean.setFilter(new AuthenticationFilter());
+//        registrationBean.addUrlPatterns("/*");
+//        registrationBean.setOrder(3);//启动时候的优先级
+//        return registrationBean;
+//    }
+//
+//
+//    /**
+//     * 该过滤器负责实现HttpServletRequest请求的包裹，
+//     * 比如允许开发者通过HttpServletRequest的getRemoteUser()方法获得SSO登录用户的登录名，
+//     * 可选配置。
+//     * @return
+//     */
+//    @Bean
+//    public FilterRegistrationBean httpServletRequestWrapperFilter(){
+//        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+//        registrationBean.setFilter(new HttpServletRequestWrapperFilter());
+//        registrationBean.addUrlPatterns("/*");
+//        registrationBean.setOrder(4);//启动时候的优先级
+//        return registrationBean;
+//    }
+
+
+
+    /**
+     * 自己定义的拦截器类
+     * @return
+     */
+    @Bean
+    SysUserLoginInterceptor sysUserLoginInterceptor() {
+        return new SysUserLoginInterceptor();
+    }
+    /**
+     * 添加拦截器
+     * @param registry
+     */
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(sysUserLoginInterceptor()).addPathPatterns("/**")
+                .excludePathPatterns("/cassso/getuseraccount")
+
+                ;
+    }
+
+}

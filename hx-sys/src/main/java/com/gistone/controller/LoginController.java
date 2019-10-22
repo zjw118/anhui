@@ -162,6 +162,11 @@ public class LoginController {
 
     }
 
+
+    public static void main(String[] args) {
+        System.out.println(Md5Util.md5("PW123456"));
+    }
+
     @RequestMapping(value = "/check", method = RequestMethod.POST)
     public ResultVO getLoginInfo(@RequestBody LoginParameter login, HttpServletRequest request) {
         //先从redis中取出此token的code验证码，然后和登陆参数中做比较，一致后不能更新用户信息及其他需要session的信息到redis中。
