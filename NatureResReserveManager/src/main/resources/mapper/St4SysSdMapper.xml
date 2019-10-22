@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gistone.bjhky.mapper.St4SysSdMapper">
+<mapper namespace="com.gistone.mapper.St4SysSdMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4SysSd">
+    <resultMap id="BaseResultMap" type="com.gistone.entity.St4SysSd">
         <id column="SD001" property="sd001" />
         <result column="SD002" property="sd002" />
         <result column="SD003" property="sd003" />
@@ -17,7 +17,7 @@
         <result column="SD011" property="sd011" />
         <result column="SD012" property="sd012" />
     </resultMap>
-    <resultMap id="BaseResultMap2" type="com.gistone.bjhky.entity.St4SysSd">
+    <resultMap id="BaseResultMap2" type="com.gistone.entity.St4SysSd">
         <id column="SD001" property="sd001" />
         <result column="SD002" property="sd002" />
         <result column="SD003" property="sd003" />
@@ -30,7 +30,7 @@
         <result column="SD010" property="sd010" />
         <result column="SD011" property="sd011" />
         <result column="SD012" property="sd012" />
-        <association property="children" javaType="com.gistone.bjhky.entity.St4ScsCa">
+        <association property="children" javaType="com.gistone.entity.St4ScsCa">
             <id column="SG001" property="sg001" jdbcType="INTEGER" />
             <result column="SG002" property="sg002" jdbcType="INTEGER" />
             <result column="SG003" property="sg003" jdbcType="TIMESTAMP" />
@@ -51,7 +51,7 @@
             <result column="SG017" property="sg017" jdbcType="DATE" />
             <result column="SG018" property="sg018" jdbcType="VARCHAR" />
             <result column="SG019" property="sg019" jdbcType="VARCHAR" />
-            <association property="children" javaType="com.gistone.bjhky.entity.St4ScsCd">
+            <association property="children" javaType="com.gistone.entity.St4ScsCd">
                 <id column="CD001" property="cd001" />
                 <result column="CD002" property="cd002" />
                 <result column="CD003" property="cd003" />
@@ -72,7 +72,7 @@
         SD001, SD002, SD003, SD004, SD005, SD006, SD007, SD008, SD009, SD010, SD011, SD012
     </sql>
 
-    <select id="listTreeToView" resultMap="BaseResultMap2" parameterType="com.gistone.bjhky.entity.St4ScsCd" >
+    <select id="listTreeToView" resultMap="BaseResultMap2" parameterType="com.gistone.entity.St4ScsCd" >
 
         SELECT *  FROM st4_sys_sd d
             LEFT JOIN st4_sys_sg g ON d.SD001 = g.SD001

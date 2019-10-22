@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gistone.bjhky.mapper.St4SysScMapper">
-    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4SysSc">
+<mapper namespace="com.gistone.mapper.St4SysScMapper">
+    <resultMap id="BaseResultMap" type="com.gistone.entity.St4SysSc">
         <id column="SC001" jdbcType="INTEGER" property="sc001" />
         <result column="SC002" jdbcType="VARCHAR" property="sc002" />
         <result column="SC003" jdbcType="INTEGER" property="sc003" />
@@ -18,13 +18,13 @@
         <result column="SC014" jdbcType="INTEGER" property="sc014" />
         <result column="SC015" jdbcType="INTEGER" property="sc015" />
         <result column="SC016" jdbcType="VARCHAR" property="sc016" />
-       <!--<collection property="children" ofType="com.gistone.bjhky.entity.St4SysSc" column="SC001" select="findMenuByParentId"/>-->
+       <!--<collection property="children" ofType="St4SysSc" column="SC001" select="findMenuByParentId"/>-->
     </resultMap>
     <select id="findAllRecursion" resultMap="BaseResultMap">
         SELECT SC001,SC002,SC003 FROM st4_sys_sc where SC009=1 order by SC001 DESC
     </select>
 
-    <select id="findTypeInfoByParentIdAndSortNum" resultType="com.gistone.bjhky.entity.St4SysSc" parameterType="Integer">
+    <select id="findTypeInfoByParentIdAndSortNum" resultType="com.gistone.entity.St4SysSc" parameterType="Integer">
         SELECT SC001,SC002,SC003 FROM st4_sys_sc WHERE SC003 = #{pid}
     </select>
 
@@ -36,7 +36,7 @@
 
     </select>
 
-    <select id="findMenuByParentId" resultType="com.gistone.bjhky.entity.St4SysSc">
+    <select id="findMenuByParentId" resultType="com.gistone.entity.St4SysSc">
         SELECT SC001,SC002,SC003 FROM st4_sys_sc WHERE SC003 = #{sc001}
     </select>
     <sql id="Base_Column_List">
@@ -53,7 +53,7 @@
         delete from st4_sys_sc
         where SC001 = #{sc001,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.gistone.bjhky.entity.St4SysSc">
+    <insert id="insert" parameterType="com.gistone.entity.St4SysSc">
         insert into st4_sys_sc (SC001, SC002, SC003,
         SC004, SC005, SC006,
         SC007, SC008, SC009,
@@ -67,7 +67,7 @@
         #{sc013,jdbcType=INTEGER}, #{sc014,jdbcType=INTEGER}, #{sc015,jdbcType=INTEGER},
         #{sc016,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="com.gistone.bjhky.entity.St4SysSc">
+    <insert id="insertSelective" parameterType="com.gistone.entity.St4SysSc">
         insert into st4_sys_sc
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="sc001 != null">
@@ -170,7 +170,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.gistone.bjhky.entity.St4SysSc">
+    <update id="updateByPrimaryKeySelective" parameterType="com.gistone.entity.St4SysSc">
         update st4_sys_sc
         <set>
             <if test="sc002 != null">
@@ -221,7 +221,7 @@
         </set>
         where SC001 = #{sc001,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.gistone.bjhky.entity.St4SysSc">
+    <update id="updateByPrimaryKey" parameterType="com.gistone.entity.St4SysSc">
         update st4_sys_sc
         set SC002 = #{sc002,jdbcType=VARCHAR},
         SC003 = #{sc003,jdbcType=INTEGER},

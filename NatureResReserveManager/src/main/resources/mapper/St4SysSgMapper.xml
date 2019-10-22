@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gistone.bjhky.mapper.St4SysSgMapper">
+<mapper namespace="com.gistone.mapper.St4SysSgMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4SysSg">
+    <resultMap id="BaseResultMap" type="com.gistone.entity.St4SysSg">
         <id column="SG001" property="sg001" jdbcType="INTEGER" />
         <result column="SG002" property="sg002" jdbcType="INTEGER" />
         <result column="SG003" property="sg003" jdbcType="TIMESTAMP" />
@@ -24,15 +24,15 @@
         <result column="SG017" property="sg017" jdbcType="DATE" />
         <result column="SG018" property="sg018" jdbcType="VARCHAR" />
         <result column="SG019" property="sg019" jdbcType="VARCHAR" />
-        <association property="reserveType" javaType="com.gistone.bjhky.entity.St4ScsCa">
+        <association property="reserveType" javaType="com.gistone.entity.St4ScsCa">
             <id column="CA001" property="ca001" jdbcType="INTEGER" />
             <result column="CA002" property="ca002" jdbcType="VARCHAR" />
         </association>
-        <association property="reserveRank" javaType="com.gistone.bjhky.entity.St4ScsCb">
+        <association property="reserveRank" javaType="com.gistone.entity.St4ScsCb">
             <id column="CB001" property="cb001" jdbcType="INTEGER" />
             <result column="CB002" property="cb002" jdbcType="VARCHAR" />
         </association>
-        <association property="reserveUrl" javaType="com.gistone.bjhky.entity.St4ScsCs">
+        <association property="reserveUrl" javaType="com.gistone.entity.St4ScsCs">
             <id column="CS001" property="cs001" jdbcType="INTEGER" />
             <result column="SG001" property="sg001" jdbcType="INTEGER" />
             <result column="CS003" property="cs003" jdbcType="INTEGER" />
@@ -46,7 +46,7 @@
             <result column="CS011" property="cs011" jdbcType="VARCHAR" />
             <result column="CS012" property="cs012" jdbcType="VARCHAR" />
         </association>
-        <association property="adminRegion" javaType="com.gistone.bjhky.entity.St4SysSd">
+        <association property="adminRegion" javaType="com.gistone.entity.St4SysSd">
             <id column="SD001" property="sd001" />
             <result column="SD002" property="sd002" />
             <result column="SD003" property="sd003" />
@@ -155,7 +155,7 @@
         delete from st4_sys_sg
         where SG001 = #{sg001,jdbcType=INTEGER}
   </delete>
-    <insert id="insert2" parameterType="com.gistone.bjhky.entity.St4SysSg" >
+    <insert id="insert2" parameterType="com.gistone.entity.St4SysSg" >
     insert into st4_sys_sg (SG001, SG002, SG003,
       SG004, SG005, SG006,
       SG007, SG008, SG009,
@@ -171,7 +171,7 @@
       #{sg015,jdbcType=VARCHAR}, #{sg016,jdbcType=VARCHAR}, #{sg017,jdbcType=DATE}, #{sg018,jdbcType=VARCHAR},
       #{sg019,jdbcType=VARCHAR})
   </insert>
-    <insert id="insert" parameterType="com.gistone.bjhky.entity.St4SysSg" useGeneratedKeys="true" keyProperty="sg001">
+    <insert id="insert" parameterType="com.gistone.entity.St4SysSg" useGeneratedKeys="true" keyProperty="sg001">
         insert into st4_sys_sg
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="sg001 != null" >
@@ -291,7 +291,7 @@
         </trim>
 
     </insert>
-    <update id="update" parameterType="com.gistone.bjhky.entity.St4SysSg" >
+    <update id="update" parameterType="com.gistone.entity.St4SysSg" >
         update st4_sys_sg
         <set >
             <if test="sg002 != null" >
@@ -352,13 +352,13 @@
         </set>
         where SG001 = #{sg001,jdbcType=INTEGER}
     </update>
-    <update id="delete" parameterType="com.gistone.bjhky.entity.St4SysSg" >
+    <update id="delete" parameterType="com.gistone.entity.St4SysSg" >
         update st4_sys_sg
         set SG007 = 0
         where SG001 = #{sg001,jdbcType=INTEGER}
   </update>
 
-    <select id="listByParam" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4SysSg" >
+    <select id="listByParam" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4SysSg" >
         select SG001,SG008 from st4_sys_sg where SG007 = 1
         <if test="sg008 != null" >
             and SG008 = #{sg008}
@@ -369,7 +369,7 @@
         ORDER BY CONVERT(SG008 USING gbk) COLLATE gbk_chinese_ci ASC
     </select>
 
-    <select id="getDataById" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4SysSg" >
+    <select id="getDataById" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4SysSg" >
         SELECT  a.*,b.CS003 AS CS003,b.CS004,b.CS005,
             b.CS006,b.CS011
         FROM st4_sys_sg a
@@ -404,7 +404,7 @@
     </select>
 
 
-    <select id="appList" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4SysSg" >
+    <select id="appList" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4SysSg" >
         select a.*,Max(b.CS003) as CS003,b.CS004,CS005,
         b.CS006,c.`SD008`,c.`SD001`,c.`SD012` , d.`CA002`,d.CA001,
         e.`CB002`, e.`CB001`  from  ( select
@@ -482,7 +482,7 @@
         GROUP BY SG001 ORDER BY CONVERT(SG008 USING gbk) COLLATE gbk_chinese_ci ASC
         <!--GROUP BY rvd_reserve_data_id-->
     </select>
-    <select id="appListToPoint" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4SysSg" >
+    <select id="appListToPoint" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4SysSg" >
         select SG001, SG008 from st4_sys_sg sg
         WHERE SG007 = 1
         <if test="sg008 != null" >

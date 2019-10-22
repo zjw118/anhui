@@ -49,6 +49,7 @@
             <artifactId>hx-ygjc</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+<<<<<<< HEAD
        <!-- <dependency>
             <groupId>com</groupId>
             <artifactId>NatureResAppManager</artifactId>
@@ -59,14 +60,9 @@
             <artifactId>NatureResLedgerManager</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>-->
+=======
+>>>>>>> b161482d788911a9be0e8d54bd369dbb8d403f88
 
-        <dependency>
-            <groupId>com.szboanda.platform</groupId>
-            <artifactId>powerdata-platform-module-cas-client</artifactId>
-            <version>4.1.1-RELEASE</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/powerdata-platform-module-cas-client-4.1.1-RELEASE.jar</systemPath>
-        </dependency>
     </dependencies>
 
     <build>

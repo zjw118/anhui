@@ -11,7 +11,10 @@
     </resultMap>
 
     <select id="getRoleOfUser" resultType="com.gistone.entity.SysRole" parameterType="java.lang.Integer">
-
+        SELECT * from sys_user
+        WHERE del_flag = 1
+        and id = #{id}
+        limit 1
     </select>
 
 </mapper>

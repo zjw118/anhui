@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gistone.bjhky.mapper.St4ScsCabMapper">
-    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCab" >
+<mapper namespace="com.gistone.mapper.St4ScsCabMapper">
+    <resultMap id="BaseResultMap" type="com.gistone.entity.St4ScsCab" >
         <id column="CAB001" property="cab001" jdbcType="INTEGER" />
         <result column="CAB002" property="cab002" jdbcType="VARCHAR" />
         <result column="CAB003" property="cab003" jdbcType="TIMESTAMP" />
@@ -25,7 +25,7 @@
     <sql id="Blob_Column_List" >
     CAB008
   </sql>
-    <select id="listForApp" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCab" >
+    <select id="listForApp" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCab" >
         select  CAB001, CAB002, CAB003
         from st4_scs_cab
         where 1 = 1
@@ -38,7 +38,7 @@
         and CAB015 = #{cab015}
         order by CAB007 desc limit #{pageNumber},#{pageSize}
     </select>
-    <select id="getByIdForApp" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCab" >
+    <select id="getByIdForApp" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCab" >
         select
         <include refid="Base_Column_List" />
         from st4_scs_cab
@@ -49,7 +49,7 @@
     delete from st4_scs_cab
     where CAB001 = #{cab001,jdbcType=INTEGER}
   </delete>
-    <insert id="insert22" parameterType="com.gistone.bjhky.entity.St4ScsCab" >
+    <insert id="insert22" parameterType="com.gistone.entity.St4ScsCab" >
     insert into st4_scs_cab (CAB001, CAB002, CAB003,
       CAB004, CAB005, CAB006,
       CAB007, CAB009, CAB010,
@@ -61,7 +61,7 @@
       #{cab011,jdbcType=INTEGER}, #{cab012,jdbcType=INTEGER}, #{cab013,jdbcType=TIMESTAMP},
       #{cab014,jdbcType=INTEGER}, #{cab008,jdbcType=LONGVARCHAR})
   </insert>
-    <insert id="insert" parameterType="com.gistone.bjhky.entity.St4ScsCab" >
+    <insert id="insert" parameterType="com.gistone.entity.St4ScsCab" >
         insert into st4_scs_cab
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="cab001 != null" >
@@ -158,7 +158,7 @@
             </if>
         </trim>
     </insert>
-    <update id="update" parameterType="com.gistone.bjhky.entity.St4ScsCab" >
+    <update id="update" parameterType="com.gistone.entity.St4ScsCab" >
         update st4_scs_cab
         <set >
             <if test="cab002 != null" >
@@ -206,7 +206,7 @@
         </set>
         where CAB001 = #{cab001,jdbcType=INTEGER}
     </update>
-    <update id="delete" parameterType="com.gistone.bjhky.entity.St4ScsCab" >
+    <update id="delete" parameterType="com.gistone.entity.St4ScsCab" >
     update st4_scs_cab
     set CAB014 = 0
     where CAB001 = #{cab001,jdbcType=INTEGER}

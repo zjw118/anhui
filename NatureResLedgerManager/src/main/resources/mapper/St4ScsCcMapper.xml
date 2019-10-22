@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gistone.bjhky.mapper.St4ScsCcMapper">
+<mapper namespace="com.gistone.mapper.St4ScsCcMapper">
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCc">
+    <resultMap id="BaseResultMap" type="com.gistone.entity.St4ScsCc">
         <id column="CC001" property="cc001" />
         <result column="CC002" property="cc002" />
         <result column="CC003" property="cc003" />
@@ -16,11 +16,11 @@
         <result column="CC011" property="cc011" />
         <result column="CC012" property="cc012" />
         <result column="CD004" property="cd004" />
-        <association property="st4SysSa" javaType="com.gistone.bjhky.entity.St4SysSa">
+        <association property="st4SysSa" javaType="com.gistone.entity.St4SysSa">
             <id column="SA001" property="sa001" />
             <result column="SA019" property="sa019" />
         </association>
-        <association property="st4Scscf" javaType="com.gistone.bjhky.entity.St4ScsCf">
+        <association property="st4Scscf" javaType="com.gistone.entity.St4ScsCf">
             <id column="CF001" property="cf001" />
             <result column="CC002" property="cc002" />
             <result column="CF003" property="cf003" />
@@ -48,7 +48,7 @@
             <result column="CF025" property="cf025" />
             <result column="CF026" property="cf026" />
         </association>
-        <association property="st4ScsCk" javaType="com.gistone.bjhky.entity.St4ScsCk">
+        <association property="st4ScsCk" javaType="com.gistone.entity.St4ScsCk">
             <id column="CK001" property="ck001" />
             <result column="CK002" property="ck002" />
             <result column="CD004" property="cd004" />
@@ -178,7 +178,7 @@
 
 
     </select>
-    <select id="getSailPointRecordDetail" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCc">
+    <select id="getSailPointRecordDetail" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCc">
     select cc.*,cf.*
     from st4_scs_cc cc
      left join st4_scs_cf cf
@@ -187,7 +187,7 @@
       and cc.CC001=#{cc001}
 
     </select>
-    <select id="getSailPointLedgerDetail" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCc">
+    <select id="getSailPointLedgerDetail" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCc">
     select cc.*,ck.*
     from st4_scs_cc cc
     left join st4_scs_cd cd
@@ -199,7 +199,7 @@
       order by ck.CK001 desc limit 1
 
     </select>
-    <select id="getSailList" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCc">
+    <select id="getSailList" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCc">
         select
         <include refid="Base_Column_List1" />
         from st4_scs_cc cc
@@ -223,7 +223,7 @@
         </if>
     </select>
 
-    <select id="getSailPointDataByReserveId" resultType="com.gistone.bjhky.entity.St4ScsCc" parameterType="Integer">
+    <select id="getSailPointDataByReserveId" resultType="com.gistone.entity.St4ScsCc" parameterType="Integer">
         select
         cc.*
         FROM st4_scs_cc cc
@@ -234,7 +234,7 @@
         where  sg.SG007 = 1
         AND cc.CC011 = 1 and  sg.SG001=#{sg001}
     </select>
-    <select id="selectSt4ScsCc"  parameterType="com.gistone.bjhky.entity.St4ScsCc" resultType="com.gistone.bjhky.entity.St4ScsCc">
+    <select id="selectSt4ScsCc" parameterType="com.gistone.entity.St4ScsCc" resultType="com.gistone.entity.St4ScsCc">
         <if test="type==1">
             SELECT cc.CC008,sa.SA019 name,count(*)num
             FROM st4_scs_cc cc
@@ -310,7 +310,7 @@
     </select>
 
 
-    <select id="getPoSum" resultType="java.lang.Integer" parameterType="com.gistone.bjhky.entity.St4ScsCc">
+    <select id="getPoSum" resultType="java.lang.Integer" parameterType="com.gistone.entity.St4ScsCc">
         SELECT count(*)
         FROM st4_scs_cc cc
         LEFT JOIN st4_sys_sa sa
@@ -334,7 +334,7 @@
         </if>
     </select>
 
-    <select id="selectPoList" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCc">
+    <select id="selectPoList" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCc">
         SELECT *
         FROM st4_scs_cc cc
         LEFT JOIN st4_sys_sa sa
@@ -365,7 +365,7 @@
         limit #{firstLimit},#{pageSize}
     </select>
     <!--物种空间分布-->
-    <select id="listSpeciesToMap" resultType="Map" parameterType="com.gistone.bjhky.entity.St4ScsCc">
+    <select id="listSpeciesToMap" resultType="Map" parameterType="com.gistone.entity.St4ScsCc">
         ( SELECT * FROM st4_scs_cc cc
         LEFT JOIN st4_scs_cf cf ON cc.CC002 = cf.CC002
         left join st4_sys_sa sa on sa.SA001 = cc.CC008
@@ -393,7 +393,7 @@
         </if>)
     </select>
     <!--物种动物统计饼状图-->
-    <select id="statisDw" resultType="Map" parameterType="com.gistone.bjhky.entity.St4ScsCc">
+    <select id="statisDw" resultType="Map" parameterType="com.gistone.entity.St4ScsCc">
         SELECT CF.CF016 AS NAME ,COUNT(1) AS VALUE  FROM st4_scs_cc cc
         LEFT JOIN st4_scs_cf cf ON cc.CC002=cf.CC002
         left join st4_sys_sa sa on sa.SA001 = cc.CC008
@@ -409,7 +409,7 @@
         </if>
     </select>
     <!--物种植物统计饼状图-->
-    <select id="statisZw" resultType="Map" parameterType="com.gistone.bjhky.entity.St4ScsCc">
+    <select id="statisZw" resultType="Map" parameterType="com.gistone.entity.St4ScsCc">
         SELECT CF.CF003 AS NAME ,COUNT(1) AS VALUE  FROM st4_scs_cc cc
         LEFT JOIN st4_scs_cf cf ON cc.CC002=cf.CC002
         left join st4_sys_sa sa on sa.SA001 = cc.CC008

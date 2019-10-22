@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gistone.bjhky.mapper.St4ScsChMapper">
+<mapper namespace="com.gistone.mapper.St4ScsChMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCh">
+    <resultMap id="BaseResultMap" type="com.gistone.entity.St4ScsCh">
         <id column="CH001" property="ch001" />
         <result column="CH002" property="ch002" />
         <result column="CH003" property="ch003" />

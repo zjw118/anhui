@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gistone.bjhky.mapper.St4PoSaClMapper">
+<mapper namespace="com.gistone.mapper.St4PoSaClMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4PoSaCl">
+    <resultMap id="BaseResultMap" type="com.gistone.entity.St4PoSaCl">
         <id column="CL001" property="cl001" />
         <result column="SA001" property="sa001" />
     </resultMap>
@@ -12,7 +12,7 @@
     <sql id="Base_Column_List">
         CL001, SA001
     </sql>
-    <insert id="insertList" parameterType="com.gistone.bjhky.entity.St4PoSaCl"  >
+    <insert id="insertList" parameterType="com.gistone.entity.St4PoSaCl"  >
 
         insert into st4_po_sa_cl (
         CL001, SA001

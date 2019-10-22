@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gistone.bjhky.mapper.St4ScsCkMapper">
+<mapper namespace="com.gistone.mapper.St4ScsCkMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCk">
+    <resultMap id="BaseResultMap" type="com.gistone.entity.St4ScsCk">
         <id column="CK001" property="ck001" />
         <result column="CK002" property="ck002" />
         <result column="CD004" property="cd004" />
@@ -96,7 +96,7 @@
         <result column="CK090" property="ck090" />
         <result column="CK091" property="ck091" />
         <result column="uname" property="uname" />
-        <association property="st4ScsCac" javaType="com.gistone.bjhky.entity.St4ScsCac">
+        <association property="st4ScsCac" javaType="com.gistone.entity.St4ScsCac">
             <result column="CK001" property="ck001" />
             <result column="CAC002" property="cac002" />
             <result column="CD004" property="cd004" />
@@ -136,7 +136,7 @@
             <result column="CAC035" property="cac035" />
             <result column="CAC036" property="cac036" />
         </association>
-        <association property="st4ScsCd" javaType="com.gistone.bjhky.entity.St4ScsCd">
+        <association property="st4ScsCd" javaType="com.gistone.entity.St4ScsCd">
             <id column="CD001" property="cd001" />
             <result column="CD002" property="cd002" />
             <result column="CD003" property="cd003" />
@@ -152,32 +152,32 @@
             <result column="CD013" property="cd013" />
             <result column="CD014" property="cd014" />
         </association>
-        <association property="st4ScsCl" javaType="com.gistone.bjhky.entity.St4ScsCl">
+        <association property="st4ScsCl" javaType="com.gistone.entity.St4ScsCl">
             <id column="CL001" property="cl001" />
             <result column="CL002" property="cl002" />
         </association>
-        <association property="st4ScsCb" javaType="com.gistone.bjhky.entity.St4ScsCb">
+        <association property="st4ScsCb" javaType="com.gistone.entity.St4ScsCb">
             <id column="CB001" property="cb001" />
             <result column="CB002" property="cb002" />
         </association>
-        <association property="st4SysSg" javaType="com.gistone.bjhky.entity.St4SysSg">
+        <association property="st4SysSg" javaType="com.gistone.entity.St4SysSg">
             <id column="SG001" property="sg001" />
             <result column="SG008" property="sg008" />
         </association>
-        <association property="st4SysSd" javaType="com.gistone.bjhky.entity.St4SysSd">
+        <association property="st4SysSd" javaType="com.gistone.entity.St4SysSd">
             <id column="SD001" property="sd001" />
             <result column="SD008" property="sd008" />
         </association>
-        <association property="st4ScsCn" javaType="com.gistone.bjhky.entity.St4ScsCn">
+        <association property="st4ScsCn" javaType="com.gistone.entity.St4ScsCn">
             <id column="CN001" property="cn001" />
             <result column="CN010" property="cn010" />
         </association>
-        <association property="st4ScsCz" javaType="com.gistone.bjhky.entity.St4ScsCz">
+        <association property="st4ScsCz" javaType="com.gistone.entity.St4ScsCz">
             <id column="CZ001" property="cz001" />
             <result column="CZ002" property="cz002" />
 
         </association>
-        <collection property="st4ScsCnList" ofType="com.gistone.bjhky.entity.St4ScsCn">
+        <collection property="st4ScsCnList" ofType="com.gistone.entity.St4ScsCn">
             <result column="CN001" property="cn001" />
             <result column="CN004" property="cn004" />
             <result column="CN010" property="cn010" />
@@ -759,7 +759,7 @@
             </if>
         </trim>
     </insert>
-    <select id="getStageDetail" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCk" >
+    <select id="getStageDetail" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCk" >
                ( SELECT
         <include refid="Base_Column_List2"/>
                ,sa.SA019 as uname
@@ -1396,7 +1396,7 @@
 
     </select>
 
-    <insert id="insertList" parameterType="com.gistone.bjhky.entity.St4ScsCk"  useGeneratedKeys="true" keyProperty="ck001" >
+    <insert id="insertList" parameterType="com.gistone.entity.St4ScsCk" useGeneratedKeys="true" keyProperty="ck001" >
 
         insert into st4_scs_ck (
 
@@ -1438,7 +1438,7 @@
             #{item.ck091})
         </foreach>
     </insert>
-    <update id="batchUpdateByPrimaryKey"  parameterType="com.gistone.bjhky.entity.St4ScsCk">
+    <update id="batchUpdateByPrimaryKey"  parameterType="com.gistone.entity.St4ScsCk">
         update st4_scs_ck
         <set >
             <if test="ck002 != null" >
@@ -1721,7 +1721,7 @@
 
 
 
-    <select id="selectSt4ScsCk"  parameterType="com.gistone.bjhky.entity.St4ScsCk" resultType="com.gistone.bjhky.entity.St4ScsCk">
+    <select id="selectSt4ScsCk" parameterType="com.gistone.entity.St4ScsCk" resultType="com.gistone.entity.St4ScsCk">
         <if test="type==1">
             SELECT sg.SG001, sg.SG008
             , IF(COUNT(*) IS NULL, 0, COUNT(*)) AS num
@@ -1862,7 +1862,7 @@
     </select>
 
 
-    <select id="selectSt4ScsCkzg"  parameterType="com.gistone.bjhky.entity.St4ScsCk" resultType="Map">
+    <select id="selectSt4ScsCkzg" parameterType="com.gistone.entity.St4ScsCk" resultType="Map">
         SELECT *FROM (SELECT COUNT(*) AS value , CN010 AS name
 
         FROM st4_scs_ck k LEFT JOIN st4_scs_cn n ON k.CK001 = n.CK001
@@ -2034,7 +2034,7 @@
 
 
 
-    <select id="getPoSum" resultType="java.lang.Integer" parameterType="com.gistone.bjhky.entity.St4ScsCk">
+    <select id="getPoSum" resultType="java.lang.Integer" parameterType="com.gistone.entity.St4ScsCk">
         SELECT count(*)
         from st4_scs_ck ck left join st4_scs_cn cn on ck.CK001 = cn.CK001
         where ck.CK085 = 1 and cn.CN009 = 1
@@ -2049,7 +2049,7 @@
         </if>
     </select>
 
-    <select id="selectPoList" resultType="com.gistone.bjhky.entity.St4ScsCk" parameterType="com.gistone.bjhky.entity.St4ScsCk">
+    <select id="selectPoList" resultType="com.gistone.entity.St4ScsCk" parameterType="com.gistone.entity.St4ScsCk">
         SELECT * from st4_scs_ck ck left join st4_scs_cn cn on ck.CK001 = cn.CK001
         where ck.CK085 = 1 and cn.CN009 = 1
         <if test="ck002!=null">
@@ -2065,7 +2065,7 @@
         limit #{firstLimit},#{pageSize}
     </select>
 
-    <select id="selectReserveNumTiew" resultType="Map" parameterType="com.gistone.bjhky.entity.St4SysSd">
+    <select id="selectReserveNumTiew" resultType="Map" parameterType="com.gistone.entity.St4SysSd">
         (SELECT COUNT(1) AS value,'保护地个数' AS NAME  FROM st4_sys_sg g WHERE g.`SG007` = 1
         <if test="sd001!=null">
             and g.SD001 = #{sd001}
@@ -2195,7 +2195,7 @@
             AND cn.CN010 = 2)
 
     </select>
-    <select id="getTaskMemberUnpass" resultType="Map" parameterType="com.gistone.bjhky.entity.St4ScsCk">
+    <select id="getTaskMemberUnpass" resultType="Map" parameterType="com.gistone.entity.St4ScsCk">
         select distinct sa.sa012 AS NAME , cl.cl002 AS VALUE  from st4_scs_ck ck
         inner join st4_scs_cd cd
         on ck.cd004 = cd.cd004
@@ -2256,7 +2256,7 @@
 
     </select>
 
-    <select id="getExportData"  resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCk">
+    <select id="getExportData"  resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCk">
                  SELECT *
         FROM st4_scs_ck ck
             LEFT JOIN (
@@ -2278,7 +2278,7 @@
             order by ck.CK086 desc
 
     </select>
-    <select id="getLastLedgerHky" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCk">
+    <select id="getLastLedgerHky" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCk">
         select ck.* from st4_scs_ck ck
         where ck.ck085=1 and ck.CD004=#{cd004}
         order by ck.CK001 DESC LIMIT 1

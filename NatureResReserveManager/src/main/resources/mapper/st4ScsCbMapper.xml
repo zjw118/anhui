@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.gistone.bjhky.entity.st4ScsCbMapper" >
-  <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCb" >
+<mapper namespace="com.gistone.entity.st4ScsCbMapper" >
+  <resultMap id="BaseResultMap" type="com.gistone.entity.St4ScsCb" >
     <id column="CB001" property="cb001" jdbcType="INTEGER" />
     <result column="CB002" property="cb002" jdbcType="VARCHAR" />
   </resultMap>
@@ -18,11 +18,11 @@
     delete from st4_scs_cb
     where CB001 = #{cb001,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.gistone.bjhky.entity.St4ScsCb" >
+  <insert id="insert" parameterType="com.gistone.entity.St4ScsCb" >
     insert into st4_scs_cb (CB001, CB002)
     values (#{cb001,jdbcType=INTEGER}, #{cb002,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.gistone.bjhky.entity.St4ScsCb" >
+  <insert id="insertSelective" parameterType="com.gistone.entity.St4ScsCb" >
     insert into st4_scs_cb
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="cb001 != null" >
@@ -41,7 +41,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.gistone.bjhky.entity.St4ScsCb" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.gistone.entity.St4ScsCb" >
     update st4_scs_cb
     <set >
       <if test="cb002 != null" >
@@ -50,7 +50,7 @@
     </set>
     where CB001 = #{cb001,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.gistone.bjhky.entity.St4ScsCb" >
+  <update id="updateByPrimaryKey" parameterType="com.gistone.entity.St4ScsCb" >
     update st4_scs_cb
     set CB002 = #{cb002,jdbcType=VARCHAR}
     where CB001 = #{cb001,jdbcType=INTEGER}

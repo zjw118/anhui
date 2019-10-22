@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -21,7 +22,7 @@ import java.util.Set;
  */
 @TableName("sys_role")
 @Data
-public class SysRole extends BaseEntity implements Serializable  {
+public class SysRole  implements Serializable  {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,6 +41,46 @@ public class SysRole extends BaseEntity implements Serializable  {
     private List<Integer> resourceIds;
 
 
+    /**
+     * 创建人id
+     */
+    private Integer createBy;
 
+    /**
+     * 创建人
+     */
+    @TableField(exist = false)
+    private String createUser;
+
+    /**
+     * 更新时间
+     */
+    private Date updateDate;
+
+    /**
+     * 创建时间
+     */
+    private Date createDate;
+
+    /**
+     * 更新人id
+     */
+    private Integer updateBy;
+
+    /**
+     * 更新人
+     */
+    @TableField(exist = false)
+    private String updateUser;
+
+    /**
+     * 备注
+     */
+    private String remarks;
+
+    /**
+     * 是否删除 0删除，1正常
+     */
+    private Integer delFlag;
 
 }

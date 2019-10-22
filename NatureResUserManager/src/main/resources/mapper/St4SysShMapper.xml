@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gistone.bjhky.mapper.St4SysShMapper">
+<mapper namespace="com.gistone.mapper.St4SysShMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4SysSh">
+    <resultMap id="BaseResultMap" type="com.gistone.entity.St4SysSh">
         <id column="SH001" property="sh001" />
         <result column="SH002" property="sh002" />
         <result column="SH003" property="sh003" />
@@ -25,7 +25,7 @@
     <sql id="Base_Column_List">
         SH001, SH002, SH003, SH004, SH005, SH006, SH007, SH008, SH009, SH010, SH011, SH012, SH013, SH014
     </sql>
-    <select id="listLog" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4SysSh" >
+    <select id="listLog" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4SysSh" >
           select
         <include refid="Base_Column_List"/>,sa.SA019  as uname
         from st4_sys_sh sh left  join st4_sys_sa sa on sa.SA001 = sh.SH002

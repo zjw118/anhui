@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gistone.bjhky.mapper.St4ScsCyMapper">
+<mapper namespace="com.gistone.mapper.St4ScsCyMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.gistone.bjhky.entity.St4ScsCy">
+    <resultMap id="BaseResultMap" type="com.gistone.entity.St4ScsCy">
         <id column="CY001" property="cy001" />
         <result column="CY002" property="cy002" />
         <result column="CY003" property="cy003" />
@@ -22,19 +22,19 @@
         <result column="CY016" property="cy016" />
         <result column="CY017" property="cy017" />
         <result column="CL003" property="cl003" />
-        <association property="st4SysSa" javaType="com.gistone.bjhky.entity.St4SysSa">
+        <association property="st4SysSa" javaType="com.gistone.entity.St4SysSa">
             <id column="SA001" property="sa001" />
             <result column="SA019" property="sa019" />
         </association>
-        <association property="st4SysSg" javaType="com.gistone.bjhky.entity.St4SysSg">
+        <association property="st4SysSg" javaType="com.gistone.entity.St4SysSg">
             <id column="SG001" property="sg001" />
             <result column="SG008" property="sg008" />
         </association>
-        <association property="st4SysSd" javaType="com.gistone.bjhky.entity.St4SysSd">
+        <association property="st4SysSd" javaType="com.gistone.entity.St4SysSd">
             <id column="SD001" property="sd001" />
             <result column="SD008" property="sd008" />
         </association>
-        <collection property="st4ScsCg" ofType="com.gistone.bjhky.entity.St4ScsCg" >
+        <collection property="st4ScsCg" ofType="com.gistone.entity.St4ScsCg" >
             <id column="CG001" property="cg001" />
             <result column="CY017" property="cy017" />
             <result column="CG003" property="cg003" />
@@ -49,7 +49,7 @@
     <sql id="Base_Column_List">
         CY001, CY002, CY003, CY004, CY005, CY006, CY007, SA001, CY009, CY010, CY011, CY012, CY013, CY014, CY015, CY016, CY017
     </sql>
-    <select id="getSailRecordDetail" resultMap="BaseResultMap" parameterType="com.gistone.bjhky.entity.St4ScsCy" >
+    <select id="getSailRecordDetail" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCy" >
         select cy.*,sa.SA019,sg.SG008,sg.SG001,cg.*
         from st4_scs_cy cy left join st4_sys_sa sa on cy.CY012 = sa.SA001
         left join st4_sys_sg sg on sg.SG001 = sa.SG001
@@ -95,7 +95,7 @@
 
     </select>
 
-    <select id="getSailRouteDataByReserveId" resultType="com.gistone.bjhky.entity.St4ScsCy" parameterType="Integer">
+    <select id="getSailRouteDataByReserveId" resultType="com.gistone.entity.St4ScsCy" parameterType="Integer">
         select
         cy.*
         from st4_scs_cy cy
@@ -106,7 +106,7 @@
 
     </select>
 
-    <select id="selectPoList" resultType="com.gistone.bjhky.entity.St4ScsCy"  parameterType="com.gistone.bjhky.entity.St4ScsCy">
+    <select id="selectPoList" resultType="com.gistone.entity.St4ScsCy" parameterType="com.gistone.entity.St4ScsCy">
         SELECT sa.SA001,sa.SA019 xcry,count(*)rwcs,sum(cy.CY006)gjlc,cy.CY013,
         sg.SG001,sg.SG008,
         sD.SD001,sd.SD008,SUM(TIMESTAMPDIFF(HOUR,CY003,CY004)) rwsc
@@ -160,7 +160,7 @@
     </select>
 
 
-    <select id="getPoSum2" resultType="java.lang.Integer" parameterType="com.gistone.bjhky.entity.St4ScsCy">
+    <select id="getPoSum2" resultType="java.lang.Integer" parameterType="com.gistone.entity.St4ScsCy">
         SELECT count(*)
         from st4_scs_cy cy
         LEFT JOIN st4_sys_sg sg
@@ -174,8 +174,8 @@
     </select>
 
 
-    <select id="selectPoList2" resultType="com.gistone.bjhky.entity.St4ScsCy"
-            parameterType="com.gistone.bjhky.entity.St4ScsCy">
+    <select id="selectPoList2" resultType="com.gistone.entity.St4ScsCy"
+            parameterType="com.gistone.entity.St4ScsCy">
         SELECT cy.*,sg.SG008 bhdmc,sa.SA019 xcry
         from st4_scs_cy cy
         LEFT JOIN st4_sys_sg sg
