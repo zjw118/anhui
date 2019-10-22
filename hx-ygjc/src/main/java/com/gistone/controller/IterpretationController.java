@@ -2,8 +2,8 @@ package com.gistone.controller;
 
 
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.Image;
-import com.gistone.service.ImageService;
+import com.gistone.entity.Iterpretation;
+import com.gistone.service.IterpretationService;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultVOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import java.util.Map;
 
 /**
  * <p>
- * 影像数据表 前端控制器
+ * 人类活动解译信息表 前端控制器
  * </p>
  *
  * @author zf1017@foxmail.com
@@ -24,13 +24,18 @@ import java.util.Map;
  */
 
 @RestController
-@RequestMapping("/image")
-public class ImageController {
+@RequestMapping("/api/ygjc/iterpretation")
+public class IterpretationController {
     @Autowired
-    private ImageService service;
+    private IterpretationService service;
 
     @PostMapping("/list")
-    public ResultVO getList(@RequestBody Map<String, Object> params) {
+    public ResultVO getList(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
 
         Integer pageNum = (Integer) params.get("pageNum");
         Integer pageSize = (Integer) params.get("pageSize");
@@ -54,25 +59,32 @@ public class ImageController {
         if (id == null || id < 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
-        Image entity = service.getById(id);
+        Iterpretation entity = service.getById(id);
         return ResultVOUtil.success(entity);
     }
 
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResultVO add(@RequestBody Image entity, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
+    public ResultVO add(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+
+        List<Map<String, Object>> data = (List<Map<String, Object>>) params.get("");
+        if(data==null||data.size()<=0){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"解译数据不能为空");
         }
         //判断添加人是否为空
-        service.insert(entity);
+        service.insert(data);
         return ResultVOUtil.success();
     }
 
 
     @RequestMapping(value = "/delete")
     public ResultVO delete(@RequestBody Map<String, Object> params) {
-        List<Integer> id = (List<Integer>) params.get("ids");
+        List<Integer> id = (List<Integer>) params.get("id");
         if (id != null && id.size() > 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
@@ -82,7 +94,7 @@ public class ImageController {
 
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResultVO update(@RequestBody Image entity, BindingResult bindingResult) {
+    public ResultVO update(@RequestBody Iterpretation entity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
         }

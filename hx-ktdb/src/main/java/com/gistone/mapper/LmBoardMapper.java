@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.gistone.entity.EXCEL.LmBoardVO;
 import com.gistone.entity.LmBoard;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 

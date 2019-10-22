@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.LmMarkerMobile;
 import com.gistone.entity.LmMarkerMobileDeviceID;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

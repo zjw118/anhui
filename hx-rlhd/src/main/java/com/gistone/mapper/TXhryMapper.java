@@ -3,7 +3,6 @@ package com.gistone.mapper;
 import com.gistone.entity.TXhry;
 
 import java.util.List;
-import java.util.Map;
 
 
 public interface TXhryMapper {

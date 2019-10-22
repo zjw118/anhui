@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 影像数据表
+ * 人类活动解译信息表
  * </p>
  *
  * @author zf1017@foxmail.com
@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Image extends Model<Image> {
+public class Iterpretation extends Model<Iterpretation> {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,17 +30,27 @@ public class Image extends Model<Image> {
     private Integer id;
 
     /**
-     * 影像名称
+     * 影像关联id
      */
-    private String name;
+    private Integer imageId;
 
     /**
-     * 服务地址
+     * 活动名称
      */
-    private String url;
+    private String activeName;
 
     /**
-     * 描述
+     * 活动类型
+     */
+    private Integer activeType;
+
+    /**
+     * 活动面积
+     */
+    private Double area;
+
+    /**
+     * 说明
      */
     private String desc;
 
@@ -51,20 +61,17 @@ public class Image extends Model<Image> {
     private Integer createBy;
 
     /**
-     * 创建日期
+     * 创建时间
      */
     @TableField("createDate")
     private LocalDateTime createDate;
 
     /**
-     * 修改人id
+     * 修改人
      */
     @TableField("updateBy")
     private Integer updateBy;
 
-    /**
-     * 修改日期
-     */
     @TableField("updateDate")
     private LocalDateTime updateDate;
 
@@ -73,6 +80,9 @@ public class Image extends Model<Image> {
      */
     private String remark;
 
+    /**
+     * 逻辑删除 0删除，1未删除
+     */
     private Integer delFlag;
 
 

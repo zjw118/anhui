@@ -24,7 +24,7 @@ import java.util.Map;
  * @description
  */
 public class ImportRedlineData {
-    
+
 
     public ArrayList<DataRedlineRegister> readShapeFile(String filePath) {
         ArrayList<DataRedlineRegister> modelList = new ArrayList<>();

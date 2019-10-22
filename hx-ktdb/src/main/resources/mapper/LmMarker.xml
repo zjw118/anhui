@@ -102,8 +102,8 @@
   	</select>
 
 	<!-- 新增 -->
-	<insert id="insertLmMarkerInfor" parameterType="com.gistone.entity.LmMarker"  useGeneratedKeys="true"
-		keyProperty="lmId">
+	<insert id="insertLmMarkerInfor" parameterType="com.gistone.entity.LmMarker" useGeneratedKeys="true"
+            keyProperty="lmId">
 	  	INSERT lm_marker
 			(lm_srld_id,lm_lp_id,lm_jzkh,lm_szd,lm_sffbsp,lm_jzwzlt,lm_jzxczp,lm_beizhu,lm_jsfzr,lm_setTime,
 			lm_add_uid,lm_add_time,lm_id_del)

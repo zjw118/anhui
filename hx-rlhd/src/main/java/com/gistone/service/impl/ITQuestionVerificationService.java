@@ -2,7 +2,6 @@ package com.gistone.service.impl;
 
 import com.gistone.entity.TQuestionVerification;
 
-import java.util.List;
 import java.util.Map;
 
 public interface ITQuestionVerificationService {

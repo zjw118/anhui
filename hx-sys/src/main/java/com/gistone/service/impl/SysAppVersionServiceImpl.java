@@ -7,7 +7,6 @@ import com.gistone.entity.SysAppVersion;
 import com.gistone.entity.SysMobileUser;
 import com.gistone.entity.SysUser;
 import com.gistone.mapper.SysAppVersionMapper;
-import com.gistone.mapper.SysMobileUserMapper;
 import com.gistone.mapper.SysUserMapper;
 import com.gistone.service.ISysAppVersionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
