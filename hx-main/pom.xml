@@ -49,11 +49,11 @@
             <artifactId>hx-ygjc</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-       <!-- <dependency>
+        <dependency>
             <groupId>com</groupId>
             <artifactId>NatureResAppManager</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>com</groupId>
             <artifactId>NatureResLedgerManager</artifactId>
