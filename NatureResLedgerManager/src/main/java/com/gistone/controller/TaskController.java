@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 
 /**
@@ -130,10 +131,8 @@ public class TaskController {
      */
     @ApiOperation(value = "任务批次列表接口", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/listTask")
-    public ResultCp listTask(@RequestBody @ApiParam(name = "任务批次列表接口", value = "json格式", required = true)
-                                         Swagger<St4ScsCl> data,HttpServletRequest request) {
+    public ResultCp listTask(@RequestBody @ApiParam(name = "任务批次列表接口", value = "json格式", required = true)Swagger<St4ScsCl> data,HttpServletRequest request) {
         St4ScsCl param = data.getData();
-
         if(!ObjectUtils.isNotNullAndEmpty(param.getPageNumber())&&!ObjectUtils.isNotNullAndEmpty(param.getPageSize())){
             return  ResultCp.build(1001,"pageSize和pageNumber"+ResultMsg.MSG_1001);
         }
@@ -142,6 +141,7 @@ public class TaskController {
         SysUser serUser = new SysUser();
         serUser.setId(Integer.valueOf(userId));
         return  iSt4ScsClService.listTask(param,serUser);
+
     }
     /**
      * 任务批次下拉框列表接口

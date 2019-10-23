@@ -9,9 +9,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.entity.*;
 import com.gistone.mapper.*;
-import com.gistone.util.*;
-import com.gistone.entity.*;
-import com.gistone.mapper.*;
 import com.gistone.service.*;
 import com.gistone.util.*;
 import org.apache.commons.beanutils.BeanUtils;
@@ -339,12 +336,12 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
     @Override
     public Result listHkyLedger(St4ScsCk checkLedger, St4SysSa seUser) {
 
-        if(checkLedger.getStrTime()!=null && checkLedger.getStrTime() != ""){
+       /* if(checkLedger.getStrTime()!=null && checkLedger.getStrTime() != ""){
             checkLedger.setStrTime(checkLedger.getStrTime()+" 00:00:00");
         }
         if(checkLedger.getEndTime()!=null && checkLedger.getEndTime() != ""){
             checkLedger.setEndTime(checkLedger.getEndTime()+" 23:59:59");
-        }
+        }*/
 
         seUser = st4SysSaMapper.selectById(seUser);
         checkLedger.setCk049(String.valueOf(seUser.getSa001()));

@@ -66,32 +66,32 @@ public class St4ScsCcServiceImpl extends ServiceImpl<St4ScsCcMapper, St4ScsCc> i
 
     @Override
     public Result listSt4ScsCcByPage(St4ScsCc cc, St4SysSa seUser) {
-       // QueryWrapper<St4ScsCc> queryWrapper = queryWrapper(st4ScsCc);
-        //Integer count = st4ScsCcMapper.selectCount(queryWrapper);
-        //queryWrapper.last("limit " + st4ScsCc.getPageSize() * st4ScsCc.getPageNumber() + "," + st4ScsCc.getPageSize());
-        /*int size = st4ScsCc.getPageSize();//每页条数
-        int number = st4ScsCc.getPageNumber();//开始索引
-        int numberReal =0;
-        if(0==number){
-            numberReal = number;
-        }else{
-            numberReal= (number-1)*size;
-        }
-        st4ScsCc.setPageNumber(numberReal);
-        st4ScsCc.setPageSize(size);
-
+//        QueryWrapper<St4ScsCc> queryWrapper = queryWrapper(st4ScsCc);
+//        Integer count = st4ScsCcMapper.selectCount(queryWrapper);
+//        queryWrapper.last("limit " + st4ScsCc.getPageSize() * st4ScsCc.getPageNumber() + "," + st4ScsCc.getPageSize());
+//        int size = st4ScsCc.getPageSize();//每页条数
+//        int number = st4ScsCc.getPageNumber();//开始索引
+//        int numberReal =0;
+//        if(0==number){
+//            numberReal = number;
+//        }else{
+//            numberReal= (number-1)*size;
+//        }
+//        st4ScsCc.setPageNumber(numberReal);
+//        st4ScsCc.setPageSize(size);
+//
         Result result = new Result();
-        List<St4ScsCc> list = st4ScsCcMapper.getSailList(st4ScsCc);
-        st4ScsCc.setPageNumber(null);
-        st4ScsCc.setPageSize(null);
-        Integer tsize = st4ScsCcMapper.getSailList(st4ScsCc).size();
-        result.setPage((int)Math.ceil((double)tsize/size));//共多少页
-        result.setRows(list);
-        result.setTotal(tsize);
-        result.setStatus(1000);*/
-        Result result = new Result();
-        seUser=st4SysSaMapper.selectById(seUser);
-        cc.setCc008(seUser.getSa001());
+//        List<St4ScsCc> list = st4ScsCcMapper.getSailList(st4ScsCc);
+//        st4ScsCc.setPageNumber(null);
+//        st4ScsCc.setPageSize(null);
+//        Integer tsize = st4ScsCcMapper.getSailList(st4ScsCc).size();
+//        result.setPage((int)Math.ceil((double)tsize/size));//共多少页
+//        result.setRows(list);
+//        result.setTotal(tsize);
+//        result.setStatus(1000);
+//        Result result = new Result();
+//        seUser=st4SysSaMapper.selectById(seUser);
+//        cc.setCc008(seUser.getSa001());
         if(seUser.getSa001()==1){
             cc.setPtype(2);
         }else {
@@ -101,12 +101,12 @@ public class St4ScsCcServiceImpl extends ServiceImpl<St4ScsCcMapper, St4ScsCc> i
                 cc.setPtype(1);
             }
         }
-        /*if(cc.getCc003()!=null){
-            wrapper.eq("CC003",cc.getCc003());
-        }
-        if(cc.getCc012()!=null){
-            wrapper.like("CC012",cc.getCc012());
-        }*/
+//        if(cc.getCc003()!=null){
+//            wrapper.eq("CC003",cc.getCc003());
+//        }
+//        if(cc.getCc012()!=null){
+//            wrapper.like("CC012",cc.getCc012());
+//        }
         if(ObjectUtils.isNotNullAndEmpty(cc.getEndTime())){
             cc.setEndTime(cc.getEndTime()+" 23:59:59");
 

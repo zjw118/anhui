@@ -9,7 +9,11 @@ import com.gistone.service.ISt4ScsCaaService;
 import com.gistone.service.ISt4ScsCbService;
 import com.gistone.service.ISt4SysSaService;
 import com.gistone.service.ISt4SysSgService;
+<<<<<<< HEAD
 import com.gistone.util.ResultCp;
+=======
+import com.gistone.util.Result;
+>>>>>>> 9fa8b2c89aba5ada1c610716367e0a5c6ec9be2f
 import com.gistone.util.ResultMsg;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -64,7 +68,7 @@ public class AppReserveController {
             St4SysSg param = data.getData();
             ResultCp list = iSt4SysSgService.appList(param);
             return list;
-        } catch (Exception e) {
+        } catch (Exception e){
             e.printStackTrace();
         }
         return ResultCp.build(1005, ResultMsg.MSG_1005);

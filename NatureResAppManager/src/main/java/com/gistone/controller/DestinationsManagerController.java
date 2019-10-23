@@ -11,7 +11,6 @@ import com.gistone.service.IDestinationsManagerService;
 import com.gistone.service.ISt4ScsChService;
 import com.gistone.service.ISt4ScsCpService;
 import com.gistone.util.ObjectUtils;
-import com.gistone.util.Result;
 import com.gistone.util.ResultCp;
 import com.gistone.util.ResultMsg;
 import io.swagger.annotations.*;

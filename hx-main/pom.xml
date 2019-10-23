@@ -49,16 +49,29 @@
             <artifactId>hx-ygjc</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+<<<<<<< HEAD
         <dependency>
             <groupId>com</groupId>
             <artifactId>NatureResAppManager</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+=======
+
+       <!-- <dependency>
+            <groupId>com</groupId>
+            <artifactId>NatureResAppManager</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>-->
+>>>>>>> 9fa8b2c89aba5ada1c610716367e0a5c6ec9be2f
         <dependency>
             <groupId>com</groupId>
             <artifactId>NatureResLedgerManager</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9fa8b2c89aba5ada1c610716367e0a5c6ec9be2f
 
     </dependencies>
 

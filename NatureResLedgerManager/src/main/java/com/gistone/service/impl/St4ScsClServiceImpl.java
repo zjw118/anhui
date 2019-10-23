@@ -35,6 +35,8 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
 
     @Autowired
     private SysUserMapper st4SysSaMapper;
+    @Autowired
+    private SysUserMapper sysUserMapper;
 
     @Override
     public Result listForView(St4ScsCl data) {
@@ -59,10 +61,13 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
        /* seUser = st4SysSaMapper.selectById(seUser);
         data.setCl013(seUser.getSa001());
         if(seUser.getSa001()==1){
+=======
+        data.setCl013(seUser.getId());
+        if(seUser.getId()==1){
+>>>>>>> 9fa8b2c89aba5ada1c610716367e0a5c6ec9be2f
             data.setType(2);
         }else{
-
-            if(seUser.getSa020()==0){
+            if(seUser.getSA020()==0){
                 //代表是管理员权限
                 data.setType(1);
             }else {
@@ -70,11 +75,6 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
             }
         }*/
 
-       /*try{
-           wrapper.allEq(BeanUtils.describe(data));
-       }catch (Exception e){
-           return Result.build(1003,ResultMsg.MSG_1003);
-       }*/
 
         Page<St4ScsCl>  page = new Page<>(data.getPageNumber(),data.getPageSize());
         IPage<St4ScsCl> ipage = st4ScsClMapper.listTask(page,data);

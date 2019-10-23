@@ -41,8 +41,6 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
 
     @Override
     public ResultCp givePoint(List<Integer> uids, List<Integer> pointList) {
-//        St4SysSa sa = new St4SysSa();
-
         List<St4PoCdSa> existsaList = null;
         St4PoCdSa saSg=null;
         boolean flag=true;

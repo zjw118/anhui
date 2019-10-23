@@ -1,9 +1,7 @@
 package com.gistone.controller;
 
 
-import com.gistone.annotation.PassToken;
 import com.gistone.entity.St4ScsCaa;
-import com.gistone.entity.St4ScsCab;
 import com.gistone.entity.St4SysSa;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.ISt4ScsCaaService;
@@ -53,7 +51,6 @@ public class AppManagerController {
      * @param response
      * @return
      */
-    @PassToken
     @ApiOperation(value="app版本更新",notes = "app版本更新",response = St4ScsCaa.class)
     @RequestMapping(value = "/getNewVersion",method = RequestMethod.POST)
     public ResultCp getNewVersion(@RequestBody @ApiParam(name="当前APP版本号", value="json格式", required=true) Swagger<St4ScsCaa> data, HttpServletRequest request, HttpServletResponse response) {

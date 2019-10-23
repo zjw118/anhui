@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.entity.*;
 
 import com.gistone.service.*;
-import com.gistone.util.Result;
 import com.gistone.util.ResultCp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -50,6 +50,11 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
     private ISt4PoSaSjService st4PoSaSjService;
     @Autowired
     private St4SysShMapper st4SysShMapper;
+    @Autowired
+    private SysUserMapper sysUserMapper;
+
+
+
     @Override
     public Result searchSysUserByLogin(String username, String password){
        /* QueryWrapper<St4SysSa> queryWrapper = new QueryWrapper<>();
@@ -101,28 +106,20 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
     }
 
     @Override
-    public Result listUser(St4SysSa sa,St4SysSa seUser) {
-
+    public Result listUser(St4SysSa sa) {
         Result result = new Result();
-        QueryWrapper<St4SysSa> wrapper = new QueryWrapper<St4SysSa>();
-        seUser = st4SysSaMapper.selectById(seUser);
-        sa.setSa001(seUser.getSa001());
-        sa.setSa002(seUser.getSa002());
-        if(seUser.getSa001()==1){
-            sa.setPtype(2);
-        }else if(seUser.getSa020()==0){
-           sa.setPtype(0);
-        }else if(seUser.getSa020()==1){
-            sa.setPtype(1);
-        }
-        IPage<St4SysSa> iPage = st4SysSaMapper.listUser(new Page<>(sa.getPageNumber(),sa.getPageSize()),sa);
+        PageBean pageBean = new PageBean();
+        pageBean.setStr1(sa.getSa008()); //条件
 
-
+        pageBean.setPageIndex(Integer.valueOf(sa.getPageNumber()+""));
+        pageBean.setPageSize(Integer.valueOf(sa.getPageSize()+""));
+        pageBean.setPoSum(sysUserMapper.getPoSum(pageBean));
+        pageBean.setPoList(sysUserMapper.selectPoList(pageBean));
         result.setStatus(1000);
         result.setMsg("加载成功");
-        result.setRows(iPage.getRecords());
-        result.setPage((int)iPage.getPages());
-        result.setTotal((int)iPage.getTotal());
+        result.setRows(sysUserMapper.selectPoList(pageBean));
+        result.setPage(pageBean.getPageSum());
+        result.setTotal(pageBean.getPoSum());
         return result;
     }
 

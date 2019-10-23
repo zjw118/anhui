@@ -13,14 +13,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-/**
- * <p>
- *
- * </p>
- *
- * @author xxh
- * @since 2019-01-22
- */
 @TableName("sys_user")
 @Data
 public class SysUser implements Serializable {
@@ -40,6 +32,7 @@ public class SysUser implements Serializable {
      * 是否启用（默认1启用）
      */
     private Integer enable;
+    private Integer SA020;
 
     /**
      * 用户类型（0pc端用户，1手机端用户）
