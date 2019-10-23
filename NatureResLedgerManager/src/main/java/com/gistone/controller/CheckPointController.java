@@ -188,17 +188,24 @@ public class CheckPointController {
     @ApiOperation(value="下发问题点",notes = "下发问题点",response = St4PoCdSa.class)
     @RequestMapping(value="/sharePoint",method = RequestMethod.POST)
     public ResultCp sharePoint(@ApiParam(name="下发问题点", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
+        /**
+         * 这里的业务逻辑是这样的:
+         * 1.拿到传递过来的任务id去找到对应的台账(可能是多个)
+         * 2.在拿每一个台账的id去拿斑点的的id
+         * 3.最终是把斑点下发到人员
+         */
         SharePoint sp = spSwagger.getData();
-        List<Integer> pointList = sp.getPointIdList();
+
+        Integer taskID = sp.getTaskId();
         List<Integer> uids = sp.getUidList();
-        if(pointList==null||pointList.size()<1){
-            return ResultCp.build(1001,"核查任务不能为空");
+        if(!ObjectUtils.isNotNullAndEmpty(taskID)){
+            return ResultCp.build(1001,"任务不能为空");
         }
         if(uids==null||uids.size()<1){
             return ResultCp.build(1001,"下发人员不能为空");
         }
 
-        return checkUserRelavantService.givePoint(uids,pointList);
+        return checkUserRelavantService.givePoint(uids,taskID);
 
     }
   /*  *//**

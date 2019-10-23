@@ -1,12 +1,8 @@
 package com.gistone.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.gistone.entity.St4PoCdSa;
-import com.gistone.entity.St4SysSa;
-import com.gistone.entity.SysUser;
-import com.gistone.mapper.St4PoCdSaMapper;
-import com.gistone.mapper.St4SysSaMapper;
-import com.gistone.mapper.SysUserMapper;
+import com.gistone.entity.*;
+import com.gistone.mapper.*;
 import com.gistone.service.ISt4PoCdSaService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.util.JPushUtil;
@@ -18,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -31,6 +28,14 @@ import java.util.List;
 public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa> implements ISt4PoCdSaService {
     @Autowired
     private St4PoCdSaMapper st4PoCdSaMapper;
+    @Autowired
+    private St4ScsCdMapper st4ScsCdMapper;
+    @Autowired
+    private St4ScsClMapper st4ScsClMapper;
+    @Autowired
+    private St4PoClCoMapper st4PoClCoMapper;
+    @Autowired
+    private St4PoCdCoMapper st4PoCdCoMapper;
 
     @Autowired
     private ISt4PoCdSaService st4PoCdSaService;
@@ -40,7 +45,19 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
 
 
     @Override
-    public ResultCp givePoint(List<Integer> uids, List<Integer> pointList) {
+    public ResultCp givePoint(List<Integer> uids, Integer taskId) {
+        /**
+         * 这里的业务逻辑是这样的:
+         * 1.拿到传递过来的任务id去找到对应的台账(可能是多个)
+         * 2.在拿每一个台账的id去拿斑点的的id
+         * 3.最终是把斑点下发到人员
+         */
+        List<St4ScsCd> cds= st4ScsCdMapper.getSpotByTaskId(taskId);
+        if(cds==null||cds.size()<1){
+            return ResultCp.build(1001,"由于此任务下的台账无绑定的斑点信息,下发失败");
+        }
+
+        List<Integer> pointList = cds.stream().map(St4ScsCd::getCd001).collect(Collectors.toList());
         List<St4PoCdSa> existsaList = null;
         St4PoCdSa saSg=null;
         boolean flag=true;

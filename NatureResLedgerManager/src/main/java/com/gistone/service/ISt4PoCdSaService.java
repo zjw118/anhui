@@ -16,5 +16,5 @@ import java.util.List;
  * @since 2019-08-15
  */
 public interface ISt4PoCdSaService extends IService<St4PoCdSa> {
-    ResultCp givePoint(List<Integer> uids, List<Integer> pointList);
+    ResultCp givePoint(List<Integer> uids,Integer taskId);
 }
