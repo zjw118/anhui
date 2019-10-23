@@ -14,7 +14,6 @@
         <module>NatureResUtilManager</module>
         <module>NatureResUserManager</module>
         <module>hx-ygjc</module>
-        <module>test</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

@@ -22,7 +22,7 @@ import java.util.Map;
 
     void delete(List<Integer> id);
 
-    void insert(Image entity);
+    void insert(String name, String url, Integer createBy,String remark);
 
-    void edit(Image entity);
+    void edit(Integer id,String name,String url,Integer updateBy,String remark);
     }
