@@ -113,7 +113,7 @@ public class UpLoadImgAttach {
 				maplist.add(map);
 			}
 			
-			return Result.build(maplist, null, null);
+			return Result.build(null, null,maplist);
 		} catch (Exception e1) {
 			LogUtil.getLogger().error("上传文件异常。", e1);
 			return Result.build(1001, "上传文件异常。");

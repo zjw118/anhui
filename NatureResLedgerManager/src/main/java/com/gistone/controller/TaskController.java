@@ -4,10 +4,7 @@ package com.gistone.controller;
 import com.auth0.jwt.JWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.annotation.PassToken;
-import com.gistone.entity.St4PoSaCz;
-import com.gistone.entity.St4ScsCl;
-import com.gistone.entity.St4ScsCz;
-import com.gistone.entity.St4SysSa;
+import com.gistone.entity.*;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.ISt4PoSaCzService;
 import com.gistone.service.ISt4ScsClService;
@@ -29,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 
 /**
@@ -133,18 +131,16 @@ public class TaskController {
      */
     @ApiOperation(value = "任务批次列表接口", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/listTask")
-    public ResultCp listTask(@RequestBody @ApiParam(name = "任务批次列表接口", value = "json格式", required = true)
-                                         Swagger<St4ScsCl> data,HttpServletRequest request) {
+    public ResultCp listTask(@RequestBody @ApiParam(name = "任务批次列表接口", value = "json格式", required = true)Swagger<St4ScsCl> data,HttpServletRequest request) {
         St4ScsCl param = data.getData();
-
         if(!ObjectUtils.isNotNullAndEmpty(param.getPageNumber())&&!ObjectUtils.isNotNullAndEmpty(param.getPageSize())){
             return  ResultCp.build(1001,"pageSize和pageNumber"+ResultMsg.MSG_1001);
         }
-        String token = request.getHeader("token");// 从 http 请求头中取出 token
-        String userId ="1" ;//JWT.decode(token).getAudience().get(0);
-        St4SysSa serUser = new St4SysSa();
-        serUser.setSa001(Integer.valueOf(userId));
-        return  iSt4ScsClService.listTask(param,serUser);
+        //String token = request.getHeader("token");// 从 http 请求头中取出 token
+        //JWT.decode(token).getAudience().get(0);
+        HttpSession session = request.getSession();
+        SysUser user = (SysUser) session.getAttribute("user");
+        return  iSt4ScsClService.listTask(param,user);
     }
     /**
      * 任务批次下拉框列表接口

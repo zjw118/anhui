@@ -66,9 +66,9 @@ public class DataSurveyController {
         jsonobj.put("rows", jarr);
 
         if (resultMap != null && resultMap.size() > 0) {
-            return Result.build(ResultEnum.SUCCESS, jsonobj);
+            return Result.build(0000, jsonobj+"");
         } else {
-            return Result.build(ResultEnum.SUCCESS, "该用户没有红线斑块！！");
+            return Result.build(9999, "该用户没有红线斑块！！");
         }
 
     }
@@ -88,7 +88,7 @@ public class DataSurveyController {
         //请求参数格式校验
         Object dataParam = requestData.get("data");
         if (dataParam == null) {
-            return Result.build(ResultEnum.PARAMETEREMPTY, "请求数据data不能为空！");
+            return Result.build(1333, "请求数据data不能为空！");
         }
 
         Map<String, Object> data = (Map<String, Object>) requestData.get("data");
@@ -136,9 +136,9 @@ public class DataSurveyController {
 
         boolean b = iDataSurveyService.save(dataSurvey, detailsArr);
         if (b) {
-            return Result.success("保存成功！！");
+            return Result.ok();
         } else {
-            return Result.error("保存失败！！");
+            return Result.build(9999, "保存失败！！");
         }
 
     }
@@ -153,10 +153,8 @@ public class DataSurveyController {
      */
     @RequestMapping(value = "upload", method = RequestMethod.POST)
     public Object upload(@RequestParam(value = "files") MultipartFile[] files, HttpServletRequest request, HttpServletResponse response) {
-
         Map<String, Object> resultMap = iDataSurveyService.upload(files);
-
-        return Result.build(resultMap.get("code").toString(), resultMap.get("msg").toString(), resultMap.get("data").toString());
+        return Result.build(0000, resultMap.get("msg")+"", resultMap.get("data"));
     }
 
 }

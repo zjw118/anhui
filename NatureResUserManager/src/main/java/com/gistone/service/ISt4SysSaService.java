@@ -2,6 +2,7 @@ package com.gistone.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gistone.entity.St4SysSa;
+import com.gistone.entity.SysUser;
 import com.gistone.util.Result;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public interface ISt4SysSaService extends IService<St4SysSa> {
      * @param sa
      * @return
      */
-    Result listUser(St4SysSa sa,St4SysSa seUser);
+    Result listUser(St4SysSa sa);
 
     /**
      * 用户详情接口

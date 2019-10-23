@@ -79,57 +79,57 @@ public class ClientUtil {
 		return resultString;
 	}
 
-	/**
-	 * 执行Post请求 不带参数
-	 * @param url
-	 * @return
-	 */
-	public static String doPost(String url) {
-		return doPost(url, null);
-	}
-	
-	public Result doGet(String params, String url, int timeout) {
-		this.timeout = timeout;
-		url = params == null ? url : (url + "?" + params);
-	    return doRequestData(null, Request.Get(url));
-	  }
-	
-	public Result doRequestData(String params, Request request) {
-		long start = System.currentTimeMillis();
-		Content content = null;
-	    Exception exception = null;
-	    try {
-	      if (params != null) {
-	        request = request.bodyString(params, contentType);
-	      }
-	      content = request
-	          .socketTimeout(timeout)
-	          .connectTimeout(timeout)
-	          .execute()
-	          .returnContent();
-	    } catch (Exception e) {
-	      exception = e;
-	    }
-	    long cost = System.currentTimeMillis() - start;
-	    if (exception == null) {
-            logger.info(formatLog("request info", cost, timeout, params, request));
-        } else {
-            logger.error(formatLog("request failed", cost, timeout, request), exception);
-        }
-	    Result EdatResult = new Result();
-		try {
-			Map map = JsonUtil.jsonToObj(content.asString(), Map.class);
-			EdatResult.setData(map.get("data"));
-			EdatResult.setMsg((String) map.get("result"));
-			String code = (String) map.get("code");
-			int c = StringUtils.isEmpty(code.trim()) ? 0 : Integer.valueOf(code);
-			EdatResult.setStatus(c);
-			return EdatResult;
-		} catch (IOException e) {
-			logger.error("request response convert EdatResult error", e);
-			return null;
-		}
-	}
+//	/**
+//	 * 执行Post请求 不带参数
+//	 * @param url
+//	 * @return
+//	 */
+//	public static String doPost(String url) {
+//		return doPost(url, null);
+//	}
+//
+//	public Result doGet(String params, String url, int timeout) {
+//		this.timeout = timeout;
+//		url = params == null ? url : (url + "?" + params);
+//	    return doRequestData(null, Request.Get(url));
+//	  }
+//
+//	public Result doRequestData(String params, Request request) {
+//		long start = System.currentTimeMillis();
+//		Content content = null;
+//	    Exception exception = null;
+//	    try {
+//	      if (params != null) {
+//	        request = request.bodyString(params, contentType);
+//	      }
+//	      content = request
+//	          .socketTimeout(timeout)
+//	          .connectTimeout(timeout)
+//	          .execute()
+//	          .returnContent();
+//	    } catch (Exception e) {
+//	      exception = e;
+//	    }
+//	    long cost = System.currentTimeMillis() - start;
+//	    if (exception == null) {
+//            logger.info(formatLog("request info", cost, timeout, params, request));
+//        } else {
+//            logger.error(formatLog("request failed", cost, timeout, request), exception);
+//        }
+//	    Result EdatResult = new Result();
+//		try {
+//			Map map = JsonUtil.jsonToObj(content.asString(), Map.class);
+//			EdatResult.setData(map.get("data"));
+//			EdatResult.setMsg((String) map.get("result"));
+//			String code = (String) map.get("code");
+//			int c = StringUtils.isEmpty(code.trim()) ? 0 : Integer.valueOf(code);
+//			EdatResult.setStatus(c);
+//			return EdatResult;
+//		} catch (IOException e) {
+//			logger.error("request response convert EdatResult error", e);
+//			return null;
+//		}
+//	}
 	
 	public static String formatLog(String desc, Object... params) {
 	    StringBuilder sb = new StringBuilder();

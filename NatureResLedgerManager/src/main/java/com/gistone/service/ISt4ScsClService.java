@@ -3,6 +3,7 @@ package com.gistone.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gistone.entity.St4ScsCl;
 import com.gistone.entity.St4SysSa;
+import com.gistone.entity.SysUser;
 import com.gistone.util.Result;
 import com.gistone.util.ResultCp;
 
@@ -17,5 +18,5 @@ import com.gistone.util.ResultCp;
 public interface ISt4ScsClService extends IService<St4ScsCl> {
 
     Result listForView(St4ScsCl data);
-    ResultCp listTask(St4ScsCl data, St4SysSa seUser);
+    ResultCp listTask(St4ScsCl data, SysUser seUser);
 }

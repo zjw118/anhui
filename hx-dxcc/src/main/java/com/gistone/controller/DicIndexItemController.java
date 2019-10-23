@@ -71,7 +71,7 @@ public class DicIndexItemController {
 
         jsonobj.put("rows", jarr);
 
-        return Result.success(jsonobj);
+        return Result.ok(jsonobj);
     }
 
     /**
@@ -89,7 +89,7 @@ public class DicIndexItemController {
         //请求参数格式校验
         Object dataParam = requestData.get("data");
         if (dataParam == null) {
-            return Result.build(ResultEnum.PARAMETEREMPTY, "请求数据data不能为空！");
+            return Result.build(1333, "请求数据data不能为空！");
         }
 
         Map<String, Object> data = (Map<String, Object>) requestData.get("data");
@@ -109,7 +109,7 @@ public class DicIndexItemController {
 
         Map<String, Object> list = iDicIndexItemService.getSonTableList(resultMap);
 
-        return Result.success(list);
+        return Result.ok(list);
     }
 
     /**
@@ -127,7 +127,7 @@ public class DicIndexItemController {
         //请求参数格式校验
         Object dataParam = requestData.get("data");
         if (dataParam == null) {
-            return Result.build(ResultEnum.PARAMETEREMPTY, "请求数据data不能为空！");
+            return Result.build(1333, "请求数据data不能为空！");
         }
 
         Map<String, Object> data = (Map<String, Object>) requestData.get("data");
@@ -143,9 +143,9 @@ public class DicIndexItemController {
 
         boolean flag = iDicIndexItemService.saveSonTable(resultMap);
         if (flag) {
-            return Result.build(ResultEnum.SUCCESS, "保存成功！！");
+            return Result.build(0000, "保存成功！！");
         } else {
-            return Result.build(ResultEnum.ERROR, "保存失败！！");
+            return Result.build(9999, "保存失败！！");
         }
     }
 
@@ -164,7 +164,7 @@ public class DicIndexItemController {
         //请求参数格式校验
         Object dataParam = requestData.get("data");
         if (dataParam == null) {
-            return Result.build(ResultEnum.PARAMETEREMPTY, "请求数据data不能为空！");
+            return Result.build(1333, "请求数据data不能为空！");
         }
 
         Map<String, Object> data = (Map<String, Object>) requestData.get("data");
@@ -184,9 +184,9 @@ public class DicIndexItemController {
 
         boolean flag = iDicIndexItemService.updateSonTable(resultMap);
         if (flag) {
-            return Result.build(ResultEnum.SUCCESS, "修改成功！！");
+            return Result.build(0000, "修改成功！！");
         } else {
-            return Result.build(ResultEnum.ERROR, "修改失败！！");
+            return Result.build(9999, "修改失败！！");
         }
     }
 
@@ -205,7 +205,7 @@ public class DicIndexItemController {
         //请求参数格式校验
         Object dataParam = requestData.get("data");
         if (dataParam == null) {
-            return Result.build(ResultEnum.PARAMETEREMPTY, "请求数据data不能为空！");
+            return Result.build(1333, "请求数据data不能为空！");
         }
 
         Map<String, Object> data = (Map<String, Object>) requestData.get("data");
@@ -217,7 +217,7 @@ public class DicIndexItemController {
 
         Map<String, Object> flag = iDicIndexItemService.deleteSonTable(pkId);
 
-        return Result.build(flag.get("code").toString(), flag.get("msg").toString());
+        return Result.build(0000, flag.get("msg").toString());
     }
 
 
@@ -236,7 +236,7 @@ public class DicIndexItemController {
         //请求参数格式校验
         Object dataParam = requestData.get("data");
         if (dataParam == null) {
-            return Result.build(ResultEnum.PARAMETEREMPTY, "请求数据data不能为空！");
+            return Result.build(1333, "请求数据data不能为空！");
         }
 
         Map<String, Object> data = (Map<String, Object>) requestData.get("data");
@@ -256,7 +256,7 @@ public class DicIndexItemController {
 
         Map<String, Object> map = iDicIndexItemService.getFiledList(resultMap);
 
-        return Result.success(map);
+        return Result.ok(map);
     }
 
     /**
@@ -274,7 +274,7 @@ public class DicIndexItemController {
         //请求参数格式校验
         Object dataParam = requestData.get("data");
         if (dataParam == null) {
-            return Result.build(ResultEnum.PARAMETEREMPTY, "请求数据data不能为空！");
+            return Result.build(1333, "请求数据data不能为空！");
         }
         Map<String, Object> data = (Map<String, Object>) requestData.get("data");
         Map<String, Object> resultMap = new HashMap<>();
@@ -350,7 +350,7 @@ public class DicIndexItemController {
         Map<String, Object> map = iDicIndexItemService.saveFiled(resultMap);
 
 
-        return Result.build(map.get("state").toString(), map.get("msg").toString());
+        return Result.build(0000, map.get("msg").toString());
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -509,7 +509,7 @@ public class DicIndexItemController {
         //请求参数格式校验
         Object dataParam = requestData.get("data");
         if (dataParam == null) {
-            return Result.build(ResultEnum.PARAMETEREMPTY, "请求数据data不能为空！");
+            return Result.build(1333, "请求数据data不能为空！");
         }
 
         Map<String, Object> data = (Map<String, Object>) requestData.get("data");
@@ -585,9 +585,9 @@ public class DicIndexItemController {
 
         boolean flag = iDicIndexItemService.updateFiled(resultMap);
         if (flag) {
-            return Result.build(ResultEnum.SUCCESS, "保存成功！！");
+            return Result.build(0000, "保存成功！！");
         } else {
-            return Result.build(ResultEnum.ERROR, "保存失败！！");
+            return Result.build(9999, "保存失败！！");
         }
 
     }
@@ -607,7 +607,7 @@ public class DicIndexItemController {
         //请求参数格式校验
         Object dataParam = requestData.get("data");
         if (dataParam == null) {
-            return Result.build(ResultEnum.PARAMETEREMPTY, "请求数据data不能为空！");
+            return Result.build(1333, "请求数据data不能为空！");
         }
 
         Map<String, Object> data = (Map<String, Object>) requestData.get("data");
@@ -619,9 +619,9 @@ public class DicIndexItemController {
 
         boolean b = iDicIndexItemService.deleteFiled(pkId);
         if (b) {
-            return Result.build(ResultEnum.SUCCESS, "删除成功！！");
+            return Result.build(0000, "删除成功！！");
         } else {
-            return Result.build(ResultEnum.ERROR, "删除失败！！");
+            return Result.build(9999, "删除失败！！");
         }
     }
 

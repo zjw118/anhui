@@ -1,6 +1,7 @@
 package com.gistone.service;
 
 import com.gistone.entity.*;
+import com.gistone.util.Result;
 
 import java.util.List;
 

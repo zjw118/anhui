@@ -17,6 +17,11 @@
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com</groupId>
+            <artifactId>hx-sys</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <!--spring切面aop依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

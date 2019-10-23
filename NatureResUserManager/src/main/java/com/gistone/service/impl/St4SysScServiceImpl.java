@@ -50,7 +50,7 @@ public class St4SysScServiceImpl extends ServiceImpl<St4SysScMapper, St4SysSc> i
 
         Result result = new Result();
         result.setData( buildTree(list,0));
-        result.setStatus(1000);
+//        result.setStatus(1000);
         result.setMsg("加载成功");
 
         return result;
