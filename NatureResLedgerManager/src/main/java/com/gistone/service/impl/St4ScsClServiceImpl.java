@@ -51,14 +51,6 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
 
     @Override
     public ResultCp listTask(St4ScsCl data, SysUser seUser) {
-
-      /*  QueryWrapper<St4ScsCl> wrapper = new QueryWrapper<>();
-        Page<St4ScsCl>  page = new Page<>(data.getPageNumber(),data.getPageSize());
-        wrapper.eq("CL012",1);
-        wrapper.like("CL002",data.getCl002()==null?"":data.getCl002());
-        wrapper.like("CL010",data.getCl010()==null?"":data.getCl010());
-        wrapper.eq("CL013",seUser.getSa001());*/
-        seUser = sysUserMapper.selectById(seUser);
         data.setCl013(seUser.getId());
         if(seUser.getId()==1){
             data.setType(2);
@@ -71,11 +63,6 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
             }
         }
 
-       /*try{
-           wrapper.allEq(BeanUtils.describe(data));
-       }catch (Exception e){
-           return Result.build(1003,ResultMsg.MSG_1003);
-       }*/
 
         Page<St4ScsCl>  page = new Page<>(data.getPageNumber(),data.getPageSize());
         IPage<St4ScsCl> ipage = st4ScsClMapper.listTask(page,data);

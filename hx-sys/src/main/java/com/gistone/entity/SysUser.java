@@ -13,14 +13,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-/**
- * <p>
- *
- * </p>
- *
- * @author xxh
- * @since 2019-01-22
- */
 @TableName("sys_user")
 @Data
 public class SysUser implements Serializable {
