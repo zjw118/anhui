@@ -40,6 +40,7 @@ public class SysUser implements Serializable {
      * 是否启用（默认1启用）
      */
     private Integer enable;
+    private Integer SA020;
 
     /**
      * 用户类型（0pc端用户，1手机端用户）
