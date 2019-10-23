@@ -20,14 +20,14 @@
         SELECT count(*) from sys_user
         WHERE del_flag = 1
         <if test="str1 != null and str1 != ''">
-            and username like '${str1}'
+            and username like '%${str1}%'
         </if>
     </select>
     <select id="selectPoList" resultType="com.gistone.entity.SysUser" parameterType="com.gistone.util.PageBean">
         SELECT * from sys_user
         WHERE del_flag = 1
         <if test="str1 != null and str1 != ''">
-            and username like '${str1}'
+            and username like '%${str1}%'
         </if>
         LIMIT #{firstLimit},#{pageSize}
     </select>
