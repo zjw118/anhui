@@ -51,7 +51,7 @@ public class DataRedlineRegisterController {
 
         List<Map<String, Object>> list = dataRedlineRegisterService.listAll(date);
 
-        return Result.success(list);
+        return Result.ok(list);
     }
 
     /**

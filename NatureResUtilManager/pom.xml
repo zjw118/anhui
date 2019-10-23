@@ -11,6 +11,15 @@
     <packaging>jar</packaging>
     <artifactId>NatureResUtilManager</artifactId>
     <dependencies>
+
+        <dependency>
+            <groupId>com</groupId>
+            <artifactId>hx-sys</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+
+
         <!-- 文件上传组件 -->
         <dependency>
             <groupId>commons-fileupload</groupId>

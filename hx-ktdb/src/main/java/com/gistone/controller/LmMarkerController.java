@@ -52,7 +52,7 @@ public class LmMarkerController {
 		//请求参数格式校验
 		Object dataParam = requestData.get("data");
 		if (dataParam == null) {
-			return Result.build(ResultEnum.PARAMETEREMPTY, "请求数据data不能为空！");
+			return Result.build(1333, "请求数据data不能为空！");
 		}
 		
 		Map<String, Object> data = (Map<String, Object>) requestData.get("data");
@@ -85,7 +85,7 @@ public class LmMarkerController {
 		
 		Map<String,Object> map = iLmMarkerService.getLmMarkerList(resultMap);
 		
-		return Result.success(map);
+		return Result.ok(map);
 	}
 	
 	/**
@@ -99,7 +99,7 @@ public class LmMarkerController {
 	public Object upload(@RequestParam(value="files") MultipartFile files,HttpServletRequest request, HttpServletResponse response) {
 		
 		String path = iLmMarkerService.upload(files);
-		return Result.success(path);
+		return Result.ok(path);
 	}
 	
 	/**
@@ -116,7 +116,7 @@ public class LmMarkerController {
 		//请求参数格式校验
 		Object dataParam = requestData.get("data");
 		if (dataParam == null) {
-			return Result.build(ResultEnum.PARAMETEREMPTY, "请求数据data不能为空！");
+			return Result.build(1333, "请求数据data不能为空！");
 		}
 		//根据token得到用户信息
 		String user = redisTemplate.opsForValue().get(requestData.get("accessToken"));
@@ -181,7 +181,7 @@ public class LmMarkerController {
 		
 		Map<String,Object> resultMap = iLmMarkerService.save(lm, lmp);
 		
-		return Result.build(resultMap.get("code").toString(), resultMap.get("msg").toString());
+		return Result.build(0000, resultMap.get("msg").toString());
 	}
 	
 	/**
@@ -198,7 +198,7 @@ public class LmMarkerController {
 		//请求参数格式校验
 		Object dataParam = requestData.get("data");
 		if (dataParam == null) {
-			return Result.build(ResultEnum.PARAMETEREMPTY, "请求数据data不能为空！");
+			return Result.build(1333, "请求数据data不能为空！");
 		}
 		//根据token得到用户信息
 		String user = redisTemplate.opsForValue().get(requestData.get("accessToken"));
@@ -266,7 +266,7 @@ public class LmMarkerController {
 		
 		Map<String,Object> resultMap = iLmMarkerService.update(lm, lmp);
 		
-		return Result.build(resultMap.get("code").toString(), resultMap.get("msg").toString());
+		return Result.build(0000, resultMap.get("msg").toString());
 	}
 	
 	/**
@@ -283,7 +283,7 @@ public class LmMarkerController {
 		//请求参数格式校验
 		Object dataParam = requestData.get("data");
 		if (dataParam == null) {
-			return Result.build(ResultEnum.PARAMETEREMPTY, "请求数据data不能为空！");
+			return Result.build(1333, "请求数据data不能为空！");
 		}
 		
 		Map<String, Object> data = (Map<String, Object>) requestData.get("data");
@@ -295,9 +295,9 @@ public class LmMarkerController {
 		
 		boolean b = iLmMarkerService.deleteByLmId(lmId);
 		if(b) {
-			return Result.build(ResultEnum.SUCCESS, "删除成功！！");
+			return Result.build(0000, "删除成功！！");
 		}else {
-			return Result.build(ResultEnum.ERROR, "删除失败！！");
+			return Result.build(9999, "删除失败！！");
 		}
 	}
 	
@@ -315,7 +315,7 @@ public class LmMarkerController {
 		//请求参数格式校验
 		Object dataParam = requestData.get("data");
 		if (dataParam == null) {
-			return Result.build(ResultEnum.PARAMETEREMPTY, "请求数据data不能为空！");
+			return Result.build(1333, "请求数据data不能为空！");
 		}
 		Map<String, Object> data = (Map<String, Object>) requestData.get("data");
 		Map<String, Object> resultMap = new HashMap<>();
@@ -341,7 +341,7 @@ public class LmMarkerController {
 		JSONObject dataObj = new JSONObject();
 		dataObj.put("filePath", path);
 		
-		return Result.success(dataObj);
+		return Result.ok(dataObj);
 	}
 	
 }

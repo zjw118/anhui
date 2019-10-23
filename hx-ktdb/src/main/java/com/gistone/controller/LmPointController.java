@@ -55,7 +55,7 @@ public class LmPointController {
         //请求参数格式校验
         Object dataParam = requestData.get("data");
         if (dataParam == null) {
-            return Result.build(ResultEnum.PARAMETEREMPTY, "请求数据data不能为空！");
+            return Result.build(1333, "请求数据data不能为空！");
         }
 
         Map<String, Object> data = (Map<String, Object>) requestData.get("data");
@@ -80,7 +80,7 @@ public class LmPointController {
 
         Map<String, Object> map = iLmPointService.selectLmPointList(resultMap);
 
-        return Result.success(map);
+        return Result.ok(map);
     }
 
     @PostMapping("/list")
@@ -123,7 +123,7 @@ public class LmPointController {
         //请求参数格式校验
         Object dataParam = requestData.get("data");
         if (dataParam == null) {
-            return Result.build(ResultEnum.PARAMETEREMPTY, "请求数据data不能为空！");
+            return Result.build(1333, "请求数据data不能为空！");
         }
         //根据token得到用户信息
         String user = redisTemplate.opsForValue().get(requestData.get("accessToken"));
@@ -172,7 +172,7 @@ public class LmPointController {
 
         Map<String, Object> resultMap = iLmPointService.insertLmPointInfor(lp);
 
-        return Result.build(resultMap.get("code").toString(), resultMap.get("msg").toString());
+        return Result.build(0000, resultMap.get("msg").toString());
     }
 
     /**
@@ -190,7 +190,7 @@ public class LmPointController {
         //请求参数格式校验
         Object dataParam = requestData.get("data");
         if (dataParam == null) {
-            return Result.build(ResultEnum.PARAMETEREMPTY, "请求数据data不能为空！");
+            return Result.build(1333, "请求数据data不能为空！");
         }
         //根据token得到用户信息
         String user = redisTemplate.opsForValue().get(requestData.get("accessToken"));
@@ -242,7 +242,7 @@ public class LmPointController {
 
         Map<String, Object> resultMap = iLmPointService.updateLmPointInfor(lp);
 
-        return Result.build(resultMap.get("code").toString(), resultMap.get("msg").toString());
+        return Result.build(0000, resultMap.get("msg").toString());
     }
 
     /**
@@ -260,7 +260,7 @@ public class LmPointController {
         //请求参数格式校验
         Object dataParam = requestData.get("data");
         if (dataParam == null) {
-            return Result.build(ResultEnum.PARAMETEREMPTY, "请求数据data不能为空！");
+            return Result.build(1333, "请求数据data不能为空！");
         }
 
         Map<String, Object> data = (Map<String, Object>) requestData.get("data");
@@ -273,9 +273,9 @@ public class LmPointController {
 
         boolean b = iLmPointService.deleteLmPointInfor(lpId);
         if (b) {
-            return Result.build(ResultEnum.SUCCESS, "删除成功！！");
+            return Result.build(0000, "删除成功！！");
         } else {
-            return Result.build(ResultEnum.ERROR, "删除失败！！");
+            return Result.build(9999, "删除失败！！");
         }
 
     }
@@ -295,7 +295,7 @@ public class LmPointController {
         //请求参数格式校验
         Object dataParam = requestData.get("data");
         if (dataParam == null) {
-            return Result.build(ResultEnum.PARAMETEREMPTY, "请求数据data不能为空！");
+            return Result.build(1333, "请求数据data不能为空！");
         }
         Map<String, Object> data = (Map<String, Object>) requestData.get("data");
         Map<String, Object> resultMap = new HashMap<>();
@@ -313,7 +313,7 @@ public class LmPointController {
         JSONObject dataObj = new JSONObject();
         dataObj.put("filePath", path);
 
-        return Result.success(dataObj);
+        return Result.ok(dataObj);
     }
 
     /**
@@ -331,7 +331,7 @@ public class LmPointController {
         //请求参数格式校验
         Object dataParam = requestData.get("data");
         if (dataParam == null) {
-            return Result.build(ResultEnum.PARAMETEREMPTY, "请求数据data不能为空！");
+            return Result.build(1333, "请求数据data不能为空！");
         }
         Map<String, Object> data = (Map<String, Object>) requestData.get("data");
         Map<String, Object> resultMap = new HashMap<>();
@@ -342,7 +342,7 @@ public class LmPointController {
 
         Map<String, Object> map = iLmPointService.getLmPointBysrld(resultMap);
 
-        return Result.success(map);
+        return Result.ok(map);
     }
 
     /**

@@ -24,7 +24,7 @@ public class Result {
 	private Integer total;
 	// 结果数组
 	private List rows;
-	
+
 	private JSONObject obj;
 	/**
 	 * 执行正常调用该方法
@@ -70,8 +70,8 @@ public class Result {
 		return new Result(rows, total, page);
 	}
 
-	
-	
+
+
     /**
      * 有参构造
      * @param status 状态码
@@ -111,8 +111,8 @@ public class Result {
 	 * 无参构造
 	 */
 	public Result() {}
-	
-	
+
+
 	public Result(JSONObject rows2, Integer total2, Integer page2) {
 		this.obj = rows2; //默认返回正常
 		this.total = total2;
