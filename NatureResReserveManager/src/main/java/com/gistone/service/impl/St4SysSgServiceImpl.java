@@ -166,12 +166,12 @@ public class St4SysSgServiceImpl extends ServiceImpl<St4SysSgMapper, St4SysSg> i
     @Override
     public Result getDataById(St4SysSg data, HttpServletRequest request) throws IOException {
         Result result = new Result();
-       /* if(data.getStrTime()!=null && data.getStrTime() != ""){
+        if(data.getStrTime()!=null && data.getStrTime() != ""){
             data.setStrTime(data.getStrTime()+" 00:00:00");
         }
         if(data.getEndTime()!=null && data.getEndTime() != ""){
             data.setEndTime(data.getEndTime()+" 23:59:59");
-        }*/
+        }
         List<St4SysSg> resList = st4SysSgMapper.getDataById(data);
         JSONObject borderJson = null;
         if(resList.size()>0){

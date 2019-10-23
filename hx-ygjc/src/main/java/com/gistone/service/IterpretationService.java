@@ -20,7 +20,7 @@ package com.gistone.service;
 
     void delete(List<Integer> id);
 
-    void insert(List<Map<String, Object>> data);
+    void insert(List<Map<String, Object>> data,Integer imageId,Integer createBy);
 
     void edit(Iterpretation entity);
     }

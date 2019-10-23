@@ -72,12 +72,24 @@ public class IterpretationController {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
         }
 
-        List<Map<String, Object>> data = (List<Map<String, Object>>) params.get("");
-        if(data==null||data.size()<=0){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"解译数据不能为空");
+        List<Map<String, Object>> data = (List<Map<String, Object>>) params.get("jsondata");
+        if (data == null || data.size() <= 0) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "解译数据不能为空");
         }
+
+        Integer imageId = (Integer) params.get("imageId");
+        if (imageId == null || imageId <= 0) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "影像id不能为空");
+        }
+
+        Integer createBy = (Integer) params.get("createBy");
+        if(createBy==null||createBy<=0){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"创建人id不能为空");
+        }
+
+
         //判断添加人是否为空
-        service.insert(data);
+        service.insert(data,imageId,createBy);
         return ResultVOUtil.success();
     }
 

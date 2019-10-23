@@ -6,8 +6,8 @@ import com.gistone.entity.Image;
 import com.gistone.service.ImageService;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultVOUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,8 +30,12 @@ public class ImageController {
     private ImageService service;
 
     @PostMapping("/list")
-    public ResultVO getList(@RequestBody Map<String, Object> params) {
-
+    public ResultVO getList(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
         Integer pageNum = (Integer) params.get("pageNum");
         Integer pageSize = (Integer) params.get("pageSize");
         String name = (String) params.get("name");
@@ -60,20 +64,47 @@ public class ImageController {
 
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResultVO add(@RequestBody Image entity, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
+    public ResultVO add(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
         }
+        String name = (String) params.get("name");
+        if(StringUtils.isBlank(name)){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"名称不能为空");
+        }
+
+        String url = (String) params.get("url");
+        if(StringUtils.isBlank(url)){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"地址不能为空");
+        }
+
+        String remark = (String) params.get("remark");
+
+       /* if(StringUtils.isBlank(remark)){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"");
+        }*/
         //判断添加人是否为空
-        service.insert(entity);
+        Integer createBy = (Integer) params.get("createBy");
+        if(createBy==null||createBy<=0){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"创建人不能为空");
+        }
+
+        service.insert(name,url,createBy,remark);
         return ResultVOUtil.success();
     }
 
 
     @RequestMapping(value = "/delete")
-    public ResultVO delete(@RequestBody Map<String, Object> params) {
-        List<Integer> id = (List<Integer>) params.get("ids");
-        if (id != null && id.size() > 0) {
+    public ResultVO delete(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        List<Integer> id = (List<Integer>) params.get("id");
+        if (id == null || id.size() < 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
         service.delete(id);
@@ -82,18 +113,39 @@ public class ImageController {
 
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResultVO update(@RequestBody Image entity, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
+    public ResultVO update(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
         }
-//判断更新人加人是否为空
-        service.edit(entity);
+
+        Integer id = (Integer) params.get("id");
+        if(id==null||id<=0){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"记录id不能为空");
+        }
+
+        String name = (String) params.get("name");
+        if(StringUtils.isBlank(name)){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"名称不能为空");
+        }
+
+        String url = (String) params.get("url");
+        if(StringUtils.isBlank(url)){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"地址不能为空");
+        }
+
+        Integer updateBy = (Integer) params.get("updateBy");
+        if(updateBy==null||updateBy<=0){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"更新人不能为空");
+        }
+        String remark = (String) params.get("remark");
+
+        //判断更新人加人是否为空
+        service.edit(id,name,url,updateBy,remark);
         return ResultVOUtil.success();
     }
 
-    @PostMapping("/hello")
-    public String hello() {
-        return "herllo";
-    }
+
 
 }

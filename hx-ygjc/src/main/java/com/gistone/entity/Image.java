@@ -38,10 +38,7 @@ public class Image extends Model<Image> {
      */
     private String url;
 
-    /**
-     * 描述
-     */
-    private String descri;
+
 
     /**
      * 创建人id

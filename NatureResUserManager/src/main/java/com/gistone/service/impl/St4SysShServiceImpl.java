@@ -1,9 +1,13 @@
 package com.gistone.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.entity.St4SysSh;
 import com.gistone.mapper.St4SysShMapper;
 import com.gistone.service.ISt4SysShService;
+import com.gistone.util.ObjectUtils;
 import com.gistone.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +26,7 @@ public class St4SysShServiceImpl extends ServiceImpl<St4SysShMapper, St4SysSh> i
     private St4SysShMapper st4SysShMapper;
     @Override
     public Result listLog(St4SysSh sh) {
-       /* if(ObjectUtils.isNotNullAndEmpty(sh.getStrTime())){
+        if(ObjectUtils.isNotNullAndEmpty(sh.getStrTime())){
             sh.setStrTime(sh.getStrTime()+" 00:00:00");
         }
         if(ObjectUtils.isNotNullAndEmpty(sh.getEndTime())){
@@ -38,10 +42,9 @@ public class St4SysShServiceImpl extends ServiceImpl<St4SysShMapper, St4SysSh> i
         result.setMsg("加载成功");
         result.setRows(ipage.getRecords());
         result.setTotal((int)ipage.getTotal());
-        result.setPage((int)ipage.getPages());*/
+        result.setPage((int)ipage.getPages());
 
-//        return result;
-        return null;
+        return result;
     }
 
 }

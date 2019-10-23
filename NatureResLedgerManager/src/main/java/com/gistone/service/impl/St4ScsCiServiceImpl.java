@@ -41,7 +41,7 @@ public class St4ScsCiServiceImpl extends ServiceImpl<St4ScsCiMapper, St4ScsCi> i
         if(sasjList!=null&&sasjList.size()>0){
             ci.setUnitId(sasjList.get(0).getSj001());
         }
-       /* QueryWrapper<St4ScsCi> wrapper = new QueryWrapper<>();
+        QueryWrapper<St4ScsCi> wrapper = new QueryWrapper<>();
         wrapper.eq("CI006",1);
         wrapper.like("CI002",ci.getCi002()==null?"":ci.getCi002());
         if(ci.getStrTime()!=null){
@@ -53,7 +53,7 @@ public class St4ScsCiServiceImpl extends ServiceImpl<St4ScsCiMapper, St4ScsCi> i
         if(ci.getCi005()!=null){
             wrapper.eq("CI005",ci.getCi005());
         }
-        wrapper.orderByDesc("CI004");*/
+        wrapper.orderByDesc("CI004");
         Page<St4ScsCi> page = new Page<>(ci.getPageNumber(),ci.getPageSize());
 
         IPage<St4ScsCi> ipage = st4ScsCiMapper.listAppWarn(page,ci);
