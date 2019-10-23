@@ -50,12 +50,12 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     public Result listCheckPointToView(St4ScsCd data) {
         QueryWrapper<St4ScsCd> queryWrapper = new QueryWrapper<>();
         //保护地id
-        if(data.getStrTime()!=null && data.getStrTime() != ""){
+      /*  if(data.getStrTime()!=null && data.getStrTime() != ""){
             data.setStrTime(data.getStrTime()+" 00:00:00");
         }
         if(data.getEndTime()!=null && data.getEndTime() != ""){
             data.setEndTime(data.getEndTime()+" 23:59:59");
-        }
+        }*/
         queryWrapper.eq("SG001",data.getSg001());
         List<St4ScsCd> list = st4ScsCdMapper.listCheckPointToView(data);
         Result res = new Result();

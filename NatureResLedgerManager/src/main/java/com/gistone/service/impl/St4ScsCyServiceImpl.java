@@ -2,13 +2,12 @@ package com.gistone.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.entity.St4ScsCy;
 import com.gistone.entity.St4SysSa;
 import com.gistone.mapper.St4ScsCyMapper;
 import com.gistone.mapper.St4SysSaMapper;
 import com.gistone.service.ISt4ScsCyService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.gistone.util.ObjectUtils;
 import com.gistone.util.Result;
 import com.gistone.util.ResultMsg;
 import org.apache.commons.lang3.StringUtils;
@@ -60,12 +59,12 @@ public class St4ScsCyServiceImpl extends ServiceImpl<St4ScsCyMapper, St4ScsCy> i
             }
         }
 
-        if(ObjectUtils.isNotNullAndEmpty(sy.getStrTime())){
+      /*  if(ObjectUtils.isNotNullAndEmpty(sy.getStrTime())){
             sy.setStrTime(sy.getStrTime()+" 00:00:00");
         }
         if(ObjectUtils.isNotNullAndEmpty(sy.getEndTime())){
             sy.setEndTime(sy.getEndTime()+" 23:59:59");
-        }
+        }*/
         Page<St4ScsCy> page = new Page<>(sy.getPageNumber(),sy.getPageSize());
         IPage<St4ScsCy> list = st4ScsCyMapper.listSailRecord(page,sy);
         Result result = new Result();

@@ -9,7 +9,6 @@ import com.gistone.entity.St4SysSa;
 import com.gistone.mapper.St4ScsCcMapper;
 import com.gistone.mapper.St4SysSaMapper;
 import com.gistone.service.ISt4ScsCcService;
-import com.gistone.util.ObjectUtils;
 import com.gistone.util.Result;
 import com.gistone.util.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,14 +106,14 @@ public class St4ScsCcServiceImpl extends ServiceImpl<St4ScsCcMapper, St4ScsCc> i
         if(cc.getCc012()!=null){
             wrapper.like("CC012",cc.getCc012());
         }*/
-        if(ObjectUtils.isNotNullAndEmpty(cc.getEndTime())){
+      /*  if(ObjectUtils.isNotNullAndEmpty(cc.getEndTime())){
             cc.setEndTime(cc.getEndTime()+" 23:59:59");
 
         }
         if(ObjectUtils.isNotNullAndEmpty(cc.getStrTime())){
             cc.setStrTime(cc.getStrTime()+" 00:00:00");
 
-        }
+        }*/
         Page<St4ScsCc> page = new Page<>(cc.getPageNumber(),cc.getPageSize());
         IPage<St4ScsCc> ipage = st4ScsCcMapper.getSailPointData(page,cc);
         result.setStatus(1000);
@@ -161,12 +160,12 @@ public class St4ScsCcServiceImpl extends ServiceImpl<St4ScsCcMapper, St4ScsCc> i
         if (st4ScsCc.getCc003() != null && "".equals(st4ScsCc.getCc003())) {
             queryWrapper.eq("CC003", st4ScsCc.getCc003());
         }
-        if (st4ScsCc.getStrTime() != null && "".equals(st4ScsCc.getStrTime())) {
+       /* if (st4ScsCc.getStrTime() != null && "".equals(st4ScsCc.getStrTime())) {
             queryWrapper.ge("CC007", st4ScsCc.getStrTime());
         }
         if (st4ScsCc.getEndTime() != null && "".equals(st4ScsCc.getEndTime())) {
             queryWrapper.le("CC007", st4ScsCc.getStrTime());
-        }
+        }*/
         if (st4ScsCc.getCc012() != null && "".equals(st4ScsCc.getCc012())) {
             queryWrapper.like("CC012", st4ScsCc.getCc012());
         }
