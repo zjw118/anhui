@@ -5,6 +5,7 @@ import com.gistone.entity.*;
 import com.gistone.mapper.*;
 import com.gistone.service.ISt4PoCdSaService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gistone.service.ISt4PoClCoService;
 import com.gistone.util.JPushUtil;
 import com.gistone.util.Result;
 import com.gistone.util.ResultCp;
@@ -34,6 +35,9 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
     private St4ScsClMapper st4ScsClMapper;
     @Autowired
     private St4PoClCoMapper st4PoClCoMapper;
+
+    @Autowired
+    private ISt4PoClCoService st4PoClCoService;
     @Autowired
     private St4PoCdCoMapper st4PoCdCoMapper;
 
@@ -42,7 +46,26 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
 
     @Autowired
     private SysUserMapper st4SysSaMapper;
-
+    @Override
+    public ResultCp taskLedger(List<Integer> ledgerIdList, Integer taskId) {
+        ResultCp resultCp = new ResultCp();
+        List<St4PoClCo> clcoList = new ArrayList<>();
+        St4PoClCo clco = null;
+        for (Integer lid:ledgerIdList) {
+            clco = new St4PoClCo();
+            clco.setCl001(taskId);
+            clco.setCo001(lid);
+            clcoList.add(clco);
+        }
+        if(!st4PoClCoService.saveBatch(clcoList)){
+            resultCp.setStatus(1003);
+            resultCp.setMsg(ResultMsg.MSG_1003);
+            return resultCp;
+        }
+        resultCp.setStatus(1000);
+        resultCp.setMsg("任务绑定台账"+ResultMsg.MSG_1000);
+        return resultCp;
+    }
 
     @Override
     public ResultCp givePoint(List<Integer> uids, Integer taskId) {
@@ -125,7 +148,7 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
                     JPushUtil.jiGuangPush(saa.getSa012(), "您有新的问题点需要接收！","1");
                 }*/
 
-            return ResultCp.build(1000,"问题点分配"+ResultMsg.MSG_1000);
+            return ResultCp.build(1000,"任务下发"+ResultMsg.MSG_1000);
         }
         return ResultCp.build(1005,ResultMsg.MSG_1005);
     }
