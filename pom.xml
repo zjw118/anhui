@@ -29,6 +29,9 @@
     <name>gistone</name>
     <description>Demo project for Spring Boot</description>
 
+
+
+
     <properties>
         <java.version>1.8</java.version>
         <swagger_version>2.7.0</swagger_version>
@@ -66,9 +69,10 @@
         <opencsv>4.2</opencsv>
         <easypoi>4.1.0</easypoi>
         <poi_version>3.7</poi_version>
-        <gt-swing>10.0</gt-swing>
-        <gt-shapefile>10.0</gt-shapefile>
+        <gt-swing>17.0</gt-swing>
+        <gt-shapefile>17.0</gt-shapefile>
         <gt-opengis>10.0</gt-opengis>
+    <!--    <gt-opengis>17.0</gt-opengis>-->
         <hutool-all>3.3.0</hutool-all>
         <thumbnailator>0.4.8</thumbnailator>
         <json-lib>2.4</json-lib>
@@ -152,7 +156,6 @@
             <optional>true</optional>
         </dependency>
 
-
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
@@ -168,26 +171,35 @@
             <artifactId>easypoi-base</artifactId>
             <version>${easypoi}</version>
         </dependency>
-        <dependency>
-            <groupId>cn.afterturn</groupId>
-            <artifactId>easypoi-annotation</artifactId>
-            <version>${easypoi}</version>
-        </dependency>
+
+
+
+
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-swing</artifactId>
-            <version>${gt-swing}</version>
+            <version>${gt-opengis}</version>
         </dependency>
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-shapefile</artifactId>
-            <version>${gt-shapefile}</version>
+            <version>${gt-opengis}</version>
         </dependency>
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-opengis</artifactId>
             <version>${gt-opengis}</version>
         </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-geojson</artifactId>
+            <version>${gt-opengis}</version>
+        </dependency>
+
+
+
+
+
         <dependency>
             <groupId>com.xiaoleilu</groupId>
             <artifactId>hutool-all</artifactId>
@@ -394,6 +406,7 @@
             <name>Boundless Maven Repository</name>
             <url>http://repo.boundlessgeo.com/main</url>
         </repository>
+
     </repositories>
 
 

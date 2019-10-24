@@ -64,6 +64,8 @@ public class IterpretationController {
     }
 
 
+
+
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResultVO add(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
@@ -83,7 +85,7 @@ public class IterpretationController {
         }
 
         Integer createBy = (Integer) params.get("createBy");
-        if(createBy==null||createBy<=0){
+        if(createBy==null||createBy<0){
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"创建人id不能为空");
         }
 
