@@ -84,7 +84,7 @@ import java.util.Map;
                 iterpretation.setActiveName(attributes.get("activeName")+"");
             }
             if(null!=attributes.get("activeType")){
-                iterpretation.setActiveType(Integer.valueOf(attributes.get("activeType")+""));
+                iterpretation.setActiveType(attributes.get("activeType")+"");
             }
             if(null!=attributes.get("area")){
                 iterpretation.setArea(Double.valueOf(attributes.get("area")+""));
