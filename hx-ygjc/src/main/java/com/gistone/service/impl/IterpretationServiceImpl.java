@@ -78,13 +78,20 @@ import java.util.Map;
            Map<String,Object> attributes = (Map<String, Object>) datum.get("attributes");
            //通过属性构造参数
             Iterpretation iterpretation = new Iterpretation();
-            iterpretation.setActiveName(attributes.get("ObjectID")+"");
-            iterpretation.setActiveName(attributes.get("puct")+"");
-            iterpretation.setActiveName(attributes.get("type")+"");
-            iterpretation.setActiveName(attributes.get("region")+"");
-            iterpretation.setActiveName(attributes.get("position")+"");
-            iterpretation.setActiveName(attributes.get("area")+"");
-            iterpretation.setActiveName(attributes.get("center")+"");
+            if(null!=attributes.get("area")){
+                iterpretation.setArea(Double.valueOf(attributes.get("area")+""));
+            }
+            if(null!=attributes.get("type")){
+                iterpretation.setActiveType(Integer.valueOf(attributes.get("type")+""));
+            }
+            if(null!=attributes.get("center")){
+                iterpretation.setActiveName(attributes.get("center")+"");
+            }
+            if(null!=attributes.get("type")){
+                iterpretation.setActiveType(Integer.valueOf(attributes.get("type")+""));
+            }
+            iterpretation.setImageId(imageId);
+            iterpretation.setCreateBy(createBy);
             iterpretationMapper.insert(iterpretation);
         }
         //执行写入shp文件操作，返回的地址插入到影像表中
