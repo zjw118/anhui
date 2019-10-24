@@ -462,7 +462,7 @@ public class ShpUtil {
 
             ShapefileDataStore newDataStore = (ShapefileDataStore) dataStoreFactory.createNewDataStore(params);
             //设置字符编码
-            Charset charset = Charset.forName("GBK");
+            Charset charset = Charset.forName("UTF-8");
             newDataStore.setCharset(charset);
 
             //TYPE被用作描述文件内容的模板
