@@ -67,7 +67,7 @@ public class Image extends Model<Image> {
 
     private Integer delFlag;
 
-
+    private String shp;
     @Override
     protected Serializable pkVal() {
         return this.id;
