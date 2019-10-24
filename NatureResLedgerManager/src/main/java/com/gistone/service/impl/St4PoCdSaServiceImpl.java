@@ -47,6 +47,49 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
     @Autowired
     private SysUserMapper st4SysSaMapper;
     @Override
+    public ResultCp deleteTaskLedger(List<Integer> ledgerIdList, Integer taskId) {
+
+        ResultCp resultCp = new ResultCp();
+        resultCp.setStatus(1000);
+
+        QueryWrapper<St4PoClCo> clCoQueryWrapper = new QueryWrapper<>();
+        //这里把之前绑定的旧的台账删除，然后把新的在赋上
+        clCoQueryWrapper.eq("cl001",taskId);
+        if(st4PoClCoMapper.delete(clCoQueryWrapper)<1){
+            return ResultCp.build(1003,ResultMsg.MSG_1003);
+        }
+        resultCp.setMsg("删除成功");
+        return resultCp;
+
+    }
+    @Override
+    public ResultCp updateTaskLedger(List<Integer> ledgerIdList, Integer taskId) {
+        QueryWrapper<St4PoClCo> clCoQueryWrapper = new QueryWrapper<>();
+        //这里把之前绑定的旧的台账删除，然后把新的在赋上
+        clCoQueryWrapper.eq("cl001",taskId);
+        if(st4PoClCoMapper.delete(clCoQueryWrapper)<1){
+            return ResultCp.build(1003,ResultMsg.MSG_1003);
+        }
+
+        ResultCp resultCp = new ResultCp();
+        List<St4PoClCo> clcoList = new ArrayList<>();
+        St4PoClCo clco = null;
+        for (Integer lid:ledgerIdList) {
+            clco = new St4PoClCo();
+            clco.setCl001(taskId);
+            clco.setCo001(lid);
+            clcoList.add(clco);
+        }
+        if(!st4PoClCoService.saveBatch(clcoList)){
+            resultCp.setStatus(1003);
+            resultCp.setMsg(ResultMsg.MSG_1003);
+            return resultCp;
+        }
+        resultCp.setStatus(1000);
+        resultCp.setMsg("修改"+ResultMsg.MSG_1000);
+        return resultCp;
+    }
+    @Override
     public ResultCp taskLedger(List<Integer> ledgerIdList, Integer taskId) {
         ResultCp resultCp = new ResultCp();
         List<St4PoClCo> clcoList = new ArrayList<>();

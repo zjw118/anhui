@@ -11,10 +11,7 @@ import com.gistone.mapper.St4ScsCdMapper;
 import com.gistone.mapper.St4ScsCkMapper;
 import com.gistone.mapper.St4SysSaMapper;
 import com.gistone.service.ISt4ScsCdService;
-import com.gistone.util.ObjectUtils;
-import com.gistone.util.PointHelp;
-import com.gistone.util.Result;
-import com.gistone.util.ResultMsg;
+import com.gistone.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +43,25 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     @Autowired
     private St4SysSaMapper st4SysSaMapper;
 
+    public ResultCp insertSpotDataFromApp (St4ScsCd id){
+        return null;
+    }
+    @Override
+    public ResultCp sysSpotData (Integer id){
+
+        ResultCp resultCp = new ResultCp();
+
+        resultCp.setStatus(1000);
+        try {
+            List<St4ScsCd> cdList = st4ScsCdMapper.sysSpotData(id);
+            resultCp.setMsg("同步数据成功");
+            resultCp.setData(cdList);
+        }catch (Exception e){
+            e.printStackTrace();
+            resultCp.setMsg("同步数据失败，服务器异常");
+        }
+        return resultCp;
+    }
     @Override
     public Result listCheckPointToView(St4ScsCd data) {
         QueryWrapper<St4ScsCd> queryWrapper = new QueryWrapper<>();
