@@ -29,7 +29,7 @@ public class Iterpretation extends Model<Iterpretation> {
     private Integer imageId;
     private String activeName;
     private String geometry;
-    private Integer activeType;
+    private String activeType;
     private Double area;
     private String descri;
     @TableField("create_by")
