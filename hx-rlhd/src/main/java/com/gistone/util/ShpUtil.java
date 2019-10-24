@@ -376,10 +376,10 @@ public class ShpUtil {
     }
     /**
      * 前端页面来源的json数据处理
-     * @param array：JSONArray格式数据
+     * @param array ：JSONArray格式数据
      * @return
      */
-    public static String handleWebData(JSONArray array,String filePath){
+    public static String handleWebData(JSONArray array, String filePath){
         try{
             final SimpleFeatureType TYPE = createFeatureType();
             //在我们创建功能时收集功能的列表
