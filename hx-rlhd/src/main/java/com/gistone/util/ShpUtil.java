@@ -462,7 +462,7 @@ public class ShpUtil {
 
             ShapefileDataStore newDataStore = (ShapefileDataStore) dataStoreFactory.createNewDataStore(params);
             //设置字符编码
-            Charset charset = Charset.forName("GBK");
+            Charset charset = Charset.forName("UTF-8");
             newDataStore.setCharset(charset);
 
             //TYPE被用作描述文件内容的模板
@@ -598,7 +598,7 @@ public class ShpUtil {
             params.put("url", file.toURI().toURL());
             ShapefileDataStoreFactory dataStoreFactory = new ShapefileDataStoreFactory();
             ShapefileDataStore newDataStore = (ShapefileDataStore) dataStoreFactory.createNewDataStore(params);
-            Charset charset = Charset.forName("GBK");
+            Charset charset = Charset.forName("UTF-8");
             newDataStore.setCharset(charset);
             String typeName = newDataStore.getTypeNames()[0];
             SimpleFeatureSource featureSource = newDataStore.getFeatureSource(typeName);

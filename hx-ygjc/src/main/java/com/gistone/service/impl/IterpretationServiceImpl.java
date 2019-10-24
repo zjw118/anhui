@@ -86,9 +86,9 @@ import java.util.Map;
             if(null!=attributes.get("activeType")){
                 iterpretation.setActiveType(Integer.valueOf(attributes.get("activeType")+""));
             }
-//            if(null!=attributes.get("area")){
-//                iterpretation.setArea(Double.valueOf(attributes.get("area")+""));
-//            }
+            if(null!=attributes.get("area")){
+                iterpretation.setArea(Double.valueOf(attributes.get("area")+""));
+            }
             if(null!=attributes.get("descri")){
                 iterpretation.setDescri(attributes.get("descri")+"");
             }
