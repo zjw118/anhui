@@ -71,7 +71,8 @@
         <poi_version>3.7</poi_version>
         <gt-swing>17.0</gt-swing>
         <gt-shapefile>17.0</gt-shapefile>
-        <gt-opengis>17.0</gt-opengis>
+        <gt-opengis>10.0</gt-opengis>
+    <!--    <gt-opengis>17.0</gt-opengis>-->
         <hutool-all>3.3.0</hutool-all>
         <thumbnailator>0.4.8</thumbnailator>
         <json-lib>2.4</json-lib>
@@ -177,12 +178,12 @@
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-swing</artifactId>
-            <version>10.0</version>
+            <version>${gt-opengis}</version>
         </dependency>
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-shapefile</artifactId>
-            <version>${gt-shapefile}</version>
+            <version>${gt-opengis}</version>
         </dependency>
         <dependency>
             <groupId>org.geotools</groupId>

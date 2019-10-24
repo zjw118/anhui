@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -29,6 +30,8 @@ public class PathUtile {
             SimpleDateFormat h = new SimpleDateFormat("HH");
             if(-1==path.indexOf("/")) path = path + "/";
             path = path + ymd.format(date)+"/"+h.format(date)+"/";
+            File ml = new File(path);
+            if(!ml.isDirectory()) ml.mkdirs();
             if(StringUtils.isNotBlank(name)){
                 name = UUID.randomUUID().toString().replace("-","")+name.substring(name.lastIndexOf("."));
             }

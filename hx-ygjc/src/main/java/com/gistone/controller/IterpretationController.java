@@ -83,7 +83,7 @@ public class IterpretationController {
         }
 
         Integer createBy = (Integer) params.get("createBy");
-        if(createBy==null||createBy<=0){
+        if(createBy==null||createBy<0){
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"创建人id不能为空");
         }
 

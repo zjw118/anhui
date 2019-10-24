@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d212b6b"],{aa1f:function(n,e,t){"use strict";t.r(e);var a=function(){var n=this,e=n.$createElement,t=n._self._c||e;return t("div",[n._v("\n  野外工作监管\n")])},u=[],r={name:"workRegulation",data:function(){return{}}},c=r,o=t("2877"),i=Object(o["a"])(c,a,u,!1,null,"068229d8",null);e["default"]=i.exports}}]);
+//# sourceMappingURL=chunk-2d212b6b.677a9fb0.js.map

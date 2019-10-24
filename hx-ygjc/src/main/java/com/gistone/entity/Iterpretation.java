@@ -26,6 +26,19 @@ public class Iterpretation extends Model<Iterpretation> {
 
     private static final long serialVersionUID = 1L;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
@@ -52,27 +65,27 @@ public class Iterpretation extends Model<Iterpretation> {
     /**
      * 说明
      */
-    private String desc;
+    private String descri;
 
     /**
      * 创建人id
      */
-    @TableField("createBy")
+    @TableField("create_by")
     private Integer createBy;
 
     /**
      * 创建时间
      */
-    @TableField("createDate")
+    @TableField("create_date")
     private LocalDateTime createDate;
 
     /**
      * 修改人
      */
-    @TableField("updateBy")
+    @TableField("update_by")
     private Integer updateBy;
 
-    @TableField("updateDate")
+    @TableField("update_date")
     private LocalDateTime updateDate;
 
     /**
@@ -83,7 +96,10 @@ public class Iterpretation extends Model<Iterpretation> {
     /**
      * 逻辑删除 0删除，1未删除
      */
+    @TableField("del_flag")
     private Integer delFlag;
+
+    private Integer desc;
 
 
     @Override
