@@ -28,17 +28,6 @@ public class Iterpretation extends Model<Iterpretation> {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
@@ -99,6 +88,7 @@ public class Iterpretation extends Model<Iterpretation> {
     @TableField("del_flag")
     private Integer delFlag;
 
+    @TableField(exist = false)
     private Integer desc;
 
 

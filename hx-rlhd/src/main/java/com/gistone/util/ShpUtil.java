@@ -555,7 +555,6 @@ public class ShpUtil {
                         }
                     }
                 }
-                System.out.println(lin.size());
 
                 Coordinate[] coords  = new Coordinate[lin.size()];
                 for (int j = 0; j <lin.size() ; j++) {
@@ -654,5 +653,10 @@ public class ShpUtil {
         }
 
     }
+
+
+
+
+
 }
 
