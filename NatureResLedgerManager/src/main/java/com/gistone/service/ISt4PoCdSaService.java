@@ -16,5 +16,23 @@ import java.util.List;
  * @since 2019-08-15
  */
 public interface ISt4PoCdSaService extends IService<St4PoCdSa> {
+    /**
+     * 下发任务
+     * @param uids
+     * @param taskId
+     * @return
+     */
     ResultCp givePoint(List<Integer> uids,Integer taskId);
+
+    /**
+     * 任务绑定台账
+     * @param ledgerIdList
+     * @param taskId
+     * @return
+     */
+    ResultCp taskLedger(List<Integer> ledgerIdList,Integer taskId);
+
+
+
+
 }
