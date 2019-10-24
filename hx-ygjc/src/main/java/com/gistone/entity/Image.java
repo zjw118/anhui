@@ -69,7 +69,7 @@ public class Image extends Model<Image> {
     private Integer delFlag;
 
 
-    
+
     @TableField(exist = false)
     private String shp;
     @Override

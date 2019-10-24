@@ -7,9 +7,8 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -23,75 +22,31 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class Iterpretation extends Model<Iterpretation> {
-
     private static final long serialVersionUID = 1L;
-
-
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-
-    /**
-     * 影像关联id
-     */
     private Integer imageId;
-
-    /**
-     * 活动名称
-     */
     private String activeName;
-
-    /**
-     * 活动类型
-     */
+    private String geometry;
     private Integer activeType;
-
-    /**
-     * 活动面积
-     */
     private Double area;
-
-    /**
-     * 说明
-     */
     private String descri;
-
-    /**
-     * 创建人id
-     */
     @TableField("create_by")
     private Integer createBy;
-
-    /**
-     * 创建时间
-     */
     @TableField("create_date")
-    private LocalDateTime createDate;
-
-    /**
-     * 修改人
-     */
+    private Date createDate;
     @TableField("update_by")
     private Integer updateBy;
-
     @TableField("update_date")
-    private LocalDateTime updateDate;
-
-    /**
-     * 备注
-     */
+    private Date updateDate;
+    @TableField("remark")
     private String remark;
-
-    /**
-     * 逻辑删除 0删除，1未删除
-     */
     @TableField("del_flag")
     private Integer delFlag;
 
     @TableField(exist = false)
     private Integer desc;
-
-
     @Override
     protected Serializable pkVal() {
         return this.id;
