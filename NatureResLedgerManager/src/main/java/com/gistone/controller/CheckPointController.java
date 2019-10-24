@@ -52,6 +52,9 @@ public class CheckPointController {
     private ISt4PoSaSgService st4PoSaSgService;
     @Autowired
     private ISt4ScsCrService st4ScsCrService;
+
+    @Autowired
+    private ISt4PoClCoService st4PoClCoService;
     /**
      * 一张图展示，问题点按保护地查询
      * @param
@@ -212,9 +215,9 @@ public class CheckPointController {
      * @param spSwagger
      * @return
      */
-    @ApiOperation(value="任务绑定台账",notes = "下发问题点",response = St4PoCdSa.class)
+    @ApiOperation(value="任务绑定台账",notes = "任务绑定台账",response = St4PoCdSa.class)
     @RequestMapping(value="/taskLedger",method = RequestMethod.POST)
-    public ResultCp taskLedger(@ApiParam(name="下发问题点", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
+    public ResultCp taskLedger(@ApiParam(name="任务绑定台账", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
         SharePoint sp = spSwagger.getData();
 
         Integer taskID = sp.getTaskId();
@@ -223,12 +226,53 @@ public class CheckPointController {
             return ResultCp.build(1001,"任务不能为空");
         }
         if(ledgerIdList==null||ledgerIdList.size()<1){
-            return ResultCp.build(1001,"下发人员不能为空");
+            return ResultCp.build(1001,"台账不能为空");
         }
 
         return checkUserRelavantService.taskLedger(ledgerIdList,taskID);
 
     }
+    /**
+     * 任务绑定台账修改接口
+     * @param spSwagger
+     * @return
+     */
+    @ApiOperation(value="任务绑定台账修改接口",notes = "任务绑定台账修改接口",response = St4PoCdSa.class)
+    @RequestMapping(value="/updateTaskLedger",method = RequestMethod.POST)
+    public ResultCp updateTaskLedger(@ApiParam(name="任务绑定台账修改接口", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
+
+        SharePoint sp = spSwagger.getData();
+
+        Integer taskID = sp.getTaskId();
+        List<Integer> ledgerIdList = sp.getLedgerIdList();
+        if(!ObjectUtils.isNotNullAndEmpty(taskID)){
+            return ResultCp.build(1001,"任务不能为空");
+        }
+        if(ledgerIdList==null||ledgerIdList.size()<1){
+            return ResultCp.build(1001,"台账不能为空");
+        }
+
+        return checkUserRelavantService.updateTaskLedger(ledgerIdList,taskID);
+    }
+    /**
+     * 任务绑定台账修改接口
+     * @param spSwagger
+     * @return
+     */
+    @ApiOperation(value="任务绑定台账删除接口",notes = "任务绑定台账删除接口",response = St4PoCdSa.class)
+    @RequestMapping(value="/deleteTaskLedger",method = RequestMethod.POST)
+    public ResultCp deleteTaskLedger(@ApiParam(name="任务绑定台账删除接口", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
+
+        SharePoint sp = spSwagger.getData();
+        Integer taskID = sp.getTaskId();
+        List<Integer> ledgerIdList = sp.getLedgerIdList();
+        if(!ObjectUtils.isNotNullAndEmpty(taskID)){
+            return ResultCp.build(1001,"任务不能为空");
+        }
+
+        return checkUserRelavantService.deleteTaskLedger(ledgerIdList,taskID);
+    }
+
     /**
      * 台账下拉多选接口
      * @param spSwagger
@@ -245,6 +289,7 @@ public class CheckPointController {
         List<St4ScsCo> coList = iSt4ScsCoService.list();
         resultCp.setData(coList);
         return resultCp;
+
     }
 
 

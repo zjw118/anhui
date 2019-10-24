@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.gistone.entity.St4ScsCd;
 import com.gistone.entity.St4SysSa;
 import com.gistone.util.Result;
+import com.gistone.util.ResultCp;
 
 /**
  * <p>
@@ -27,5 +28,14 @@ public interface ISt4ScsCdService extends IService<St4ScsCd> {
      * @return
      */
     Result sysPointDataLd (Integer roleId,Integer uid);
+
+    /**
+     * 安徽下发任务接口的查询到的斑点的集合
+     * @param uid
+     * @return
+     */
+    ResultCp sysSpotData (Integer uid);
+
+    ResultCp insertSpotDataFromApp (St4ScsCd cd);
 
 }

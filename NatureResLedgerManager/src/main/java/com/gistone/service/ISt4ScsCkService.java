@@ -6,6 +6,7 @@ import com.gistone.entity.St4ScsCk;
 import com.gistone.entity.St4SysSa;
 import com.gistone.entity.St4SysSd;
 import com.gistone.util.Result;
+import com.gistone.util.ResultCp;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -106,7 +107,7 @@ public interface ISt4ScsCkService extends IService<St4ScsCk> {
      * @param
      * @return
      */
-    Result insertLedgerLd(St4ScsCd ck,String userId);
+    ResultCp insertLedgerLd(St4ScsCd cd, String userId);
 
     /**
      * 导出excel

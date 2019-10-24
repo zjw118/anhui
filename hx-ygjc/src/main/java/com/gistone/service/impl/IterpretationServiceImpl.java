@@ -74,6 +74,8 @@ import java.util.Map;
         iterpretationMapper.delete(new QueryWrapper<Iterpretation>().eq("image_id",imageId));
         //从data中构造属性
 
+
+
         for (Map<String, Object> datum : data) {
            Map<String,Object> attributes = (Map<String, Object>) datum.get("attributes");
            //通过属性构造参数
@@ -84,20 +86,24 @@ import java.util.Map;
             if(null!=attributes.get("activeType")){
                 iterpretation.setActiveType(Integer.valueOf(attributes.get("activeType")+""));
             }
-            if(null!=attributes.get("area")){
-                iterpretation.setArea(Double.valueOf(attributes.get("area")+""));
-            }
+//            if(null!=attributes.get("area")){
+//                iterpretation.setArea(Double.valueOf(attributes.get("area")+""));
+//            }
             if(null!=attributes.get("descri")){
                 iterpretation.setDescri(attributes.get("descri")+"");
             }
             if(null!=attributes.get("remark")){
                 iterpretation.setRemark(attributes.get("remark")+"");
             }
-
+            iterpretation.setGeometry(datum.get("geometry")+"");
             iterpretation.setImageId(imageId);
-            iterpretation.setCreateBy(createBy);
+            iterpretation.setCreateBy(createBy);//创建人
+            iterpretation.setCreateDate(new Date());
+            iterpretation.setUpdateDate(new Date());
             iterpretationMapper.insert(iterpretation);
         }
+
+
         //执行写入shp文件操作，返回的地址插入到影像表中
         String url = PathUtile.getRandomPath("D:/epr/image/","x.shp");
         String res = ShpUtil.handleWebData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+""),url);
@@ -107,6 +113,9 @@ import java.util.Map;
             image.setUrl(url.split(":")[1]);
             imageMapper.updateById(image);
         }
+
+
+
 
     }
 

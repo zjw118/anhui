@@ -180,6 +180,12 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private St4ScsCn st4ScsCn;
 
+
+    @ApiModelProperty(name="st4ScsCo",value="安徽台账实体（包裹台账信息）",dataType = "object",example="")
+    @TableField(exist = false)
+    private St4ScsCo st4ScsCo;
+
+
     @ApiModelProperty(name="st4ScsCk",value="同步问题台账,CK088=0是原始台账，否则是核查台账",dataType = "object",example="")
     @TableField(exist = false)
     private List<St4ScsCk> st4ScsCkList;

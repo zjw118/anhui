@@ -1763,7 +1763,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
     }
 
     @Override
-    public Result insertLedgerLd(St4ScsCd param,String userId) {
+    public ResultCp insertLedgerLd(St4ScsCd param,String userId) {
         boolean hasTask=true;
         if(param.getCl001()==null){
             St4ScsCz cz = st4ScsCzMapper.getRecentTask(Integer.valueOf(userId));
@@ -1793,7 +1793,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
             wrapper1.eq("CD001",resData.get(0).getCd001());
             List<St4PoCdSa> list1 = st4PoCdSaMapper.selectList(wrapper1);
             if(list1!=null&&list1.size()<1){
-                return  Result.build(1008,"问题点编号"+ResultMsg.MSG_1008);
+                return  ResultCp.build(1008,"问题点编号"+ResultMsg.MSG_1008);
             }
             cdFlag=true;
         }
@@ -1831,7 +1831,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                         }
                         if(!st4PoCdSaService.saveBatch(cdsaList)){
                             //代表插入新的点失败
-                            return Result.build(1003,ResultMsg.MSG_1003);
+                            return ResultCp.build(1003,ResultMsg.MSG_1003);
                         };
                     }
 
@@ -1842,7 +1842,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                     cdsa.setCd001(cdId);
                     cdsa.setCdsa001(1);
                     if(!st4PoCdSaService.save(cdsa)){
-                        return Result.build(1003,ResultMsg.MSG_1003);
+                        return ResultCp.build(1003,ResultMsg.MSG_1003);
                     };
                 }
             }
@@ -1853,7 +1853,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
             cdsa.setCd001(cdId);
             cdsa.setSa001(Integer.valueOf(userId));
             if(st4PoCdSaMapper.submitPoint(cdsa)<1){
-                return Result.build(1003,ResultMsg.MSG_1003);
+                return ResultCp.build(1003,ResultMsg.MSG_1003);
             };
 
         }
@@ -1879,7 +1879,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
 
         //如果台账的记录大于等于小组人员的数量，说明该小组内成员都提交了台账，则不允许移动端再提交
         if(ckList.size() != 0 && userList.size() != 0 && ckList.size() >= userList.size()){
-            return Result.build(1008,ResultMsg.MSG_1008+"(,该分组下所有成员都已提交台账，请勿重复提交)");
+            return ResultCp.build(1008,ResultMsg.MSG_1008+"(,该分组下所有成员都已提交台账，请勿重复提交)");
         }
         //将问题点编号赋值到台账数据里面
         param.getSt4ScsCk().setCd004(param.getCd004());
@@ -1903,7 +1903,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
         //台账信息在cd包裹的ck里面
         St4ScsCk ck = param.getSt4ScsCk();
         if(!ObjectUtils.isNotNullAndEmpty(ck.getCk049())){
-            return Result.build(1003,"核查人ID不能为空");
+            return ResultCp.build(1003,"核查人ID不能为空");
         }
         isInsert = checkLedgerService.save(param.getSt4ScsCk());
         if(isInsert){
@@ -1926,7 +1926,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                 cdsa.setSa001(Integer.valueOf(userId));
                 if(hasTask){
                     if(st4PoCdSaMapper.submitPoint(cdsa)<1){
-                        return Result.build(1003,ResultMsg.MSG_1003);
+                        return ResultCp.build(1003,ResultMsg.MSG_1003);
                     };
                     /**
                      * 这里比如张三李四王五是在A任务下，当张三提交了核查信息之后，是必须要推送给李四和王五的
@@ -1948,11 +1948,11 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                         if(usersList!=null&&usersList.size()>0&&hasTask){
                             try{
                                 System.out.println("上传成功");
-                                return  Result.build(1000,"上传"+ResultMsg.MSG_1000);
+                                return  ResultCp.build(1000,"上传"+ResultMsg.MSG_1000);
                             }
                             catch (Exception e){
                                 System.out.println("上传成功");
-                                return  Result.build(1000,"上传"+ResultMsg.MSG_1000);
+                                return  ResultCp.build(1000,"上传"+ResultMsg.MSG_1000);
                             }finally {
 
                                 for (St4SysSa sa:usersList) {
@@ -1967,17 +1967,17 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                     }
                 }else {
                     System.out.println("上传成功");
-                    return  Result.build(1000,"上传"+ResultMsg.MSG_1000);
+                    return  ResultCp.build(1000,"上传"+ResultMsg.MSG_1000);
                 }
             }else{
-                return  Result.build(1003,ResultMsg.MSG_1003+",上传失败");
+                return  ResultCp.build(1003,ResultMsg.MSG_1003+",上传失败");
             }
 
         };
 
 
 
-        return  Result.build(1003,ResultMsg.MSG_1003+",上传失败");
+        return  ResultCp.build(1003,ResultMsg.MSG_1003+",上传失败");
     }
 
     @Override

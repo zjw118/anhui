@@ -12,6 +12,7 @@ import com.gistone.mapper.St4SysSaMapper;
 import com.gistone.pkname.Swagger;
 import com.gistone.util.ObjectUtils;
 import com.gistone.util.Result;
+import com.gistone.util.ResultCp;
 import com.gistone.util.ResultMsg;
 import com.gistone.service.*;
 import io.swagger.annotations.Api;
@@ -141,39 +142,7 @@ public class AppLedgerController {
         Integer roleId = null;
        return st4ScsCdService.sysPointDataLd(roleId,uid);
     }
-    /**
-     * （绿盾使用）台账表提交接口
-     * @param
-     * @return
-     */
-    @ApiOperation(value = "（绿盾使用）台账表提交接口", notes = "（绿盾使用）台账表提交接口", response = St4ScsCd.class)
-    @PostMapping("/insertLedgerLd")
-    public Result insertLedgerLd( @RequestBody @ApiParam(name = "（绿盾使用）台账表提交接口", value = "json格式", required = true)  Swagger<St4ScsCd>
-                                              data,HttpServletRequest request
-    ) {
 
-        St4ScsCd param = data.getData();
-        //问题点类型
-        if(!ObjectUtils.isNotNullAndEmpty(param.getCd007())){
-            return Result.build(1001,"问题点类型cd007"+ResultMsg.MSG_1001);
-        }
-        //问题点编号
-        if(!ObjectUtils.isNotNullAndEmpty(param.getCd004())){
-            return Result.build(1001,"问题点编号cd004"+ResultMsg.MSG_1001);
-        }
-        if(!ObjectUtils.isNotNullAndEmpty(param.getCd002())){
-            return Result.build(1001,"经度cd002"+ResultMsg.MSG_1001);
-        }
-        if(!ObjectUtils.isNotNullAndEmpty(param.getCd003())){
-            return Result.build(1001,"纬度cd003"+ResultMsg.MSG_1001);
-        }
-        String token = request.getHeader("token");// 从 http 请求头中取出 token
-        String userId = JWT.decode(token).getAudience().get(0);
-        Result res = st4ScsCkService.insertLedgerLd(param,userId);
-
-        return res;
-
-    }
     /**
      * 同步任务批次数据
      * @param data
