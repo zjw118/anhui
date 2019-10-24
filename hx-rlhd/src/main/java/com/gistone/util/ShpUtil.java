@@ -98,15 +98,15 @@ public class ShpUtil {
                     }
                 }else{
                     map2.put("type", "point");
-                    map2.put("rings", arrayList);
+                    map2.put("rings", arrayList );
                 }
                 //获取属性
                 Object map1 = myjObject.getJSONObject("properties");
                 Map<String,String> map11 = (Map) JSON.parse(((JSONObject) map1).toString());
                 //构建返回
                 Map<String, String> stringObjectMap = new HashMap<>();
-                stringObjectMap.put("attributes", map11+"");
-                stringObjectMap.put("geometry", map2+"");
+                stringObjectMap.put("attributes",net.sf.json.JSONArray.fromObject(map11)+"");
+                stringObjectMap.put("geometry",net.sf.json.JSONArray.fromObject(map2)+"");
 
 
 //                System.out.println("======="+net.sf.json.JSONArray.fromObject(stringObjectMap));

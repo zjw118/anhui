@@ -66,9 +66,7 @@ public class ImageController {
         Image entity = service.getById(id);
         entity.getUrl();
         ShpUtil.readShapeFileToStr("D:"+entity.getUrl(),1);
-
         String str = ShpUtil.readShapeFileToStr("D:"+entity.getUrl(),1)+"";
-//        System.out.println(net.sf.json.JSONArray.fromObject(str)+"");
 
         entity.setShp(net.sf.json.JSONArray.fromObject(str)+"");
         return ResultVOUtil.success(entity);
