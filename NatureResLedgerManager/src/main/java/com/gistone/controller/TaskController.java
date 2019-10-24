@@ -136,11 +136,12 @@ public class TaskController {
         if(!ObjectUtils.isNotNullAndEmpty(param.getPageNumber())&&!ObjectUtils.isNotNullAndEmpty(param.getPageSize())){
             return  ResultCp.build(1001,"pageSize和pageNumber"+ResultMsg.MSG_1001);
         }
-        //String token = request.getHeader("token");// 从 http 请求头中取出 token
-        //JWT.decode(token).getAudience().get(0);
-        HttpSession session = request.getSession();
-        SysUser user = (SysUser) session.getAttribute("user");
-        return  iSt4ScsClService.listTask(param,user);
+        String token = request.getHeader("token");// 从 http 请求头中取出 token
+        String userId ="1" ;//JWT.decode(token).getAudience().get(0);
+        SysUser serUser = new SysUser();
+        serUser.setId(Integer.valueOf(userId));
+        return  iSt4ScsClService.listTask(param,serUser);
+
     }
     /**
      * 任务批次下拉框列表接口

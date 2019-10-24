@@ -1,20 +1,21 @@
 package com.gistone.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.gistone.entity.St4PoCdSa;
-import com.gistone.entity.St4SysSa;
-import com.gistone.mapper.St4PoCdSaMapper;
-import com.gistone.mapper.St4SysSaMapper;
+import com.gistone.entity.*;
+import com.gistone.mapper.*;
 import com.gistone.service.ISt4PoCdSaService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gistone.service.ISt4PoClCoService;
 import com.gistone.util.JPushUtil;
 import com.gistone.util.Result;
+import com.gistone.util.ResultCp;
 import com.gistone.util.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -28,16 +29,58 @@ import java.util.List;
 public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa> implements ISt4PoCdSaService {
     @Autowired
     private St4PoCdSaMapper st4PoCdSaMapper;
+    @Autowired
+    private St4ScsCdMapper st4ScsCdMapper;
+    @Autowired
+    private St4ScsClMapper st4ScsClMapper;
+    @Autowired
+    private St4PoClCoMapper st4PoClCoMapper;
+
+    @Autowired
+    private ISt4PoClCoService st4PoClCoService;
+    @Autowired
+    private St4PoCdCoMapper st4PoCdCoMapper;
 
     @Autowired
     private ISt4PoCdSaService st4PoCdSaService;
 
     @Autowired
-    private St4SysSaMapper st4SysSaMapper;
-
+    private SysUserMapper st4SysSaMapper;
+    @Override
+    public ResultCp taskLedger(List<Integer> ledgerIdList, Integer taskId) {
+        ResultCp resultCp = new ResultCp();
+        List<St4PoClCo> clcoList = new ArrayList<>();
+        St4PoClCo clco = null;
+        for (Integer lid:ledgerIdList) {
+            clco = new St4PoClCo();
+            clco.setCl001(taskId);
+            clco.setCo001(lid);
+            clcoList.add(clco);
+        }
+        if(!st4PoClCoService.saveBatch(clcoList)){
+            resultCp.setStatus(1003);
+            resultCp.setMsg(ResultMsg.MSG_1003);
+            return resultCp;
+        }
+        resultCp.setStatus(1000);
+        resultCp.setMsg("任务绑定台账"+ResultMsg.MSG_1000);
+        return resultCp;
+    }
 
     @Override
-    public Result givePoint(List<Integer> uids, List<Integer> pointList) {
+    public ResultCp givePoint(List<Integer> uids, Integer taskId) {
+        /**
+         * 这里的业务逻辑是这样的:
+         * 1.拿到传递过来的任务id去找到对应的台账(可能是多个)
+         * 2.在拿每一个台账的id去拿斑点的的id
+         * 3.最终是把斑点下发到人员
+         */
+        List<St4ScsCd> cds= st4ScsCdMapper.getSpotByTaskId(taskId);
+        if(cds==null||cds.size()<1){
+            return ResultCp.build(1001,"由于此任务下的台账无绑定的斑点信息,下发失败");
+        }
+
+        List<Integer> pointList = cds.stream().map(St4ScsCd::getCd001).collect(Collectors.toList());
         List<St4PoCdSa> existsaList = null;
         St4PoCdSa saSg=null;
         boolean flag=true;
@@ -98,15 +141,15 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
 
 
         if(flag){
-                QueryWrapper<St4SysSa> wrapper = new QueryWrapper<>();
-                wrapper.in("SA001",uids);
-                List<St4SysSa> saList = st4SysSaMapper.selectList(wrapper);
-                for (St4SysSa saa:saList) {
+                QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
+                wrapper.in("id",uids);
+                List<SysUser> saList = st4SysSaMapper.selectList(wrapper);
+                /*for (SysUser saa:saList) {
                     JPushUtil.jiGuangPush(saa.getSa012(), "您有新的问题点需要接收！","1");
-                }
+                }*/
 
-            return Result.build(1000,"问题点分配"+ResultMsg.MSG_1000);
+            return ResultCp.build(1000,"任务下发"+ResultMsg.MSG_1000);
         }
-        return Result.build(1005,ResultMsg.MSG_1005);
+        return ResultCp.build(1005,ResultMsg.MSG_1005);
     }
 }

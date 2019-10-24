@@ -3,6 +3,7 @@ package com.gistone.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gistone.entity.St4ScsCaa;
 import com.gistone.util.Result;
+import com.gistone.util.ResultCp;
 
 /**
  * <p>
@@ -14,5 +15,5 @@ import com.gistone.util.Result;
  */
 public interface ISt4ScsCaaService extends IService<St4ScsCaa> {
 
-    Result getNewVersion(St4ScsCaa data);
+    ResultCp getNewVersion(St4ScsCaa data);
 }

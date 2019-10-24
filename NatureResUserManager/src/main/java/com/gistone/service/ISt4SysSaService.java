@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.gistone.entity.St4SysSa;
 import com.gistone.entity.SysUser;
 import com.gistone.util.Result;
+import com.gistone.util.ResultCp;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public interface ISt4SysSaService extends IService<St4SysSa> {
 
     Result listPhoneUserToView(St4SysSa data);
 
-    Result updateAppUser(St4SysSa data) throws Exception;
+    ResultCp updateAppUser(St4SysSa data) throws Exception;
     Result add(St4SysSa user, St4SysSa seUser, List<Integer> roleList, List<Integer> unitList);
 
     /**

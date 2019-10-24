@@ -51,6 +51,12 @@
             <artifactId>bcprov-jdk15on</artifactId>
             <version>${bcprov_jdk15on_version}</version>
         </dependency>
+        <dependency>
+            <groupId>com</groupId>
+            <artifactId>hx-ktdb</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 

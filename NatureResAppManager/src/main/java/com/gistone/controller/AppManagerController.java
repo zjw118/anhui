@@ -1,16 +1,14 @@
 package com.gistone.controller;
 
 
-import com.gistone.annotation.PassToken;
 import com.gistone.entity.St4ScsCaa;
-import com.gistone.entity.St4ScsCab;
 import com.gistone.entity.St4SysSa;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.ISt4ScsCaaService;
 import com.gistone.service.ISt4ScsCabService;
 import com.gistone.service.ISt4SysSaService;
 import com.gistone.util.RegUtil;
-import com.gistone.util.Result;
+import com.gistone.util.ResultCp;
 import com.gistone.util.ResultMsg;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -53,56 +51,24 @@ public class AppManagerController {
      * @param response
      * @return
      */
-    @PassToken
     @ApiOperation(value="app版本更新",notes = "app版本更新",response = St4ScsCaa.class)
     @RequestMapping(value = "/getNewVersion",method = RequestMethod.POST)
-    public Result getNewVersion(@RequestBody @ApiParam(name="当前APP版本号", value="json格式", required=true) Swagger<St4ScsCaa> data, HttpServletRequest request, HttpServletResponse response) {
+    public ResultCp getNewVersion(@RequestBody @ApiParam(name="当前APP版本号", value="json格式", required=true) Swagger<St4ScsCaa> data, HttpServletRequest request, HttpServletResponse response) {
         try {
             St4ScsCaa param = data.getData();
             //版本号
             if (!RegUtil.CheckParameter(param.getCaa003(), "Integer", null, false)) {
-                return Result.build(1001, "caa003版本号不能为空");
+                return ResultCp.build(1001, "caa003版本号不能为空");
             }
-            Result result = iSt4ScsCaaService.getNewVersion(param);
-            return result;
+            ResultCp result = iSt4ScsCaaService.getNewVersion(param);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Result.build(1005, ResultMsg.MSG_1005);
+        return ResultCp.build(1005, ResultMsg.MSG_1005);
     }
+
     /**
-     * app党建信息列表
-     * @param data
-     * @param request
-     * @param response
-     * @return
-     */
-    @PassToken
-    @ApiOperation(value="党建信息列表",notes = "党建信息列表",response = St4ScsCaa.class)
-    @RequestMapping(value = "/listForApp",method = RequestMethod.POST)
-    public Result listForApp(@RequestBody @ApiParam(name="pageSize页容，pageNumber页码", value="json格式", required=true) Swagger<St4ScsCab> data, HttpServletRequest request, HttpServletResponse response) {
-        try {
-            St4ScsCab param = data.getData();
-            //pageSize页容不能为空
-            if (!RegUtil.CheckParameter(param.getPageSize(), "Integer", null, false)) {
-                return Result.build(1001, "pageSize页容不能为空");
-            }
-            //pageNumber页码不能为空
-            if (!RegUtil.CheckParameter(param.getPageNumber(), "Integer", null, false)) {
-                return Result.build(1001, "pageNumber页码不能为空");
-            }
-            //cab015数据类型不能为空
-            if (!RegUtil.CheckParameter(param.getCab015(), "Integer", null, false)) {
-                return Result.build(1001, "cab015数据类型不能为空");
-            }
-            Result result = iSt4ScsCabService.listForApp(param);
-            return result;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return Result.build(1005, ResultMsg.MSG_1005);
-    }
-    /**
+     * //todo 这里得走安徽红线自己的修改密码的方法
      * app用户个人信息修改（包括修改密码）
      * @param data
      * @param request
@@ -111,18 +77,18 @@ public class AppManagerController {
      */
     @ApiOperation(value="app用户个人信息修改（包括修改密码）",notes = "app用户个人信息修改（包括修改密码）",response = St4ScsCaa.class)
     @RequestMapping(value = "/updateAppUser",method = RequestMethod.POST)
-    public Result updateAppUser(@RequestBody @ApiParam(name="app用户主键id,旧密码传：sa009Old", value="json格式", required=true) Swagger<St4SysSa> data, HttpServletRequest request, HttpServletResponse response) {
+    public ResultCp updateAppUser(@RequestBody @ApiParam(name="app用户主键id,旧密码传：sa009Old", value="json格式", required=true) Swagger<St4SysSa> data, HttpServletRequest request, HttpServletResponse response) {
         try {
             St4SysSa param = data.getData();
             //版本号
             if (!RegUtil.CheckParameter(param.getSa001(), "Integer", null, false)) {
-                return Result.build(1001, "sa001用户主键id不能为空");
+                return ResultCp.build(1001, "sa001用户主键id不能为空");
             }
-            Result result = iSt4SysSaService.updateAppUser(param);
+            ResultCp result = iSt4SysSaService.updateAppUser(param);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Result.build(1005, ResultMsg.MSG_1005);
+        return ResultCp.build(1005, ResultMsg.MSG_1005);
     }
 }

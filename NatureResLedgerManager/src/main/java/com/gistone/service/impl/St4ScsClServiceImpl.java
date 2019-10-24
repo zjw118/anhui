@@ -34,7 +34,7 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
     private St4ScsClMapper st4ScsClMapper;
 
     @Autowired
-    private St4SysSaMapper st4SysSaMapper;
+    private SysUserMapper st4SysSaMapper;
     @Autowired
     private SysUserMapper sysUserMapper;
 
@@ -51,8 +51,20 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
 
     @Override
     public ResultCp listTask(St4ScsCl data, SysUser seUser) {
+
+      /*  QueryWrapper<St4ScsCl> wrapper = new QueryWrapper<>();
+        Page<St4ScsCl>  page = new Page<>(data.getPageNumber(),data.getPageSize());
+        wrapper.eq("CL012",1);
+        wrapper.like("CL002",data.getCl002()==null?"":data.getCl002());
+        wrapper.like("CL010",data.getCl010()==null?"":data.getCl010());
+        wrapper.eq("CL013",seUser.getSa001());*/
+       /* seUser = st4SysSaMapper.selectById(seUser);
+        data.setCl013(seUser.getSa001());
+        if(seUser.getSa001()==1){
+=======
         data.setCl013(seUser.getId());
         if(seUser.getId()==1){
+>>>>>>> 9fa8b2c89aba5ada1c610716367e0a5c6ec9be2f
             data.setType(2);
         }else{
             if(seUser.getSA020()==0){
@@ -61,7 +73,7 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
             }else {
                 data.setType(0);
             }
-        }
+        }*/
 
 
         Page<St4ScsCl>  page = new Page<>(data.getPageNumber(),data.getPageSize());

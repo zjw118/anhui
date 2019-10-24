@@ -1,12 +1,17 @@
 package com.gistone.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gistone.entity.Image;
 import com.gistone.entity.Iterpretation;
+import com.gistone.mapper.ImageMapper;
 import com.gistone.mapper.IterpretationMapper;
 import com.gistone.service.IterpretationService;
+import com.gistone.util.PathUtile;
+import com.gistone.util.ShpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +36,11 @@ import java.util.Map;
     public class IterpretationServiceImpl extends ServiceImpl<IterpretationMapper, Iterpretation> implements IterpretationService {
 
     @Autowired
-    private IterpretationMapper mapper;
+    private IterpretationMapper iterpretationMapper;
+    @Autowired
+    private ImageMapper imageMapper;
+
+
     @Override
     public Map<String, Object> list(Integer pageNum, Integer pageSize,String userName) {
 
@@ -41,7 +50,7 @@ import java.util.Map;
     }
     // wrapper.eq("SA007",1);
     //wrapper.orderByDesc("SA003");
-    IPage<Iterpretation> iPage = mapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+    IPage<Iterpretation> iPage = iterpretationMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
 
 
     Map<String, Object> result = new HashMap<>();
@@ -60,18 +69,32 @@ import java.util.Map;
     @Override
     public void insert(List<Map<String, Object>> data,Integer imageId,Integer createBy) {
     //通过影像id先删除记录然后再插入,然后再写入shp文件，将地址更新到影像表中！
-        mapper.delete(new QueryWrapper<Iterpretation>().eq("image_id",""));
+        iterpretationMapper.delete(new QueryWrapper<Iterpretation>().eq("image_id",imageId));
         //从data中构造属性
         for (Map<String, Object> datum : data) {
            Map<String,Object> attributes = (Map<String, Object>) datum.get("attributes");
            //通过属性构造参数
             Iterpretation iterpretation = new Iterpretation();
-            mapper.insert(iterpretation);
+            iterpretation.setActiveName("ObjectID");
+            iterpretation.setActiveName("puct");
+            iterpretation.setActiveName("type");
+            iterpretation.setActiveName("region");
+            iterpretation.setActiveName("position");
+            iterpretation.setActiveName("area");
+            iterpretation.setActiveName("center");
+            iterpretationMapper.insert(iterpretation);
         }
         //执行写入shp文件操作，返回的地址插入到影像表中
+        JSONArray jSONArray = new JSONArray();
+        jSONArray.add(data);
+        String url = PathUtile.getRandomPath("D:/epr/image/","x.shp");
+        ShpUtil.handleWebData(jSONArray,url);
 
 
-
+        Image image = new Image();
+        image.setId(imageId);
+        image.setUrl(url);
+        imageMapper.updateById(image);
     }
 
 

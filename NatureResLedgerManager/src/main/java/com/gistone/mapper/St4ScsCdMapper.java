@@ -2,6 +2,7 @@ package com.gistone.mapper;
 
 import com.gistone.entity.St4ScsCd;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -25,4 +26,6 @@ public interface St4ScsCdMapper extends BaseMapper<St4ScsCd> {
     List<St4ScsCd> sysPointAndLedgerDataLd(@Param("list") List<Integer> cd001);
 
     List<St4ScsCd> getDataByCd004(St4ScsCd data);
+    List<St4ScsCd> getSpotByTaskId(Integer tid);
+
 }

@@ -124,8 +124,8 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
     }
 
     @Override
-    public Result updateAppUser(St4SysSa data) throws Exception {
-        Result result = new Result();
+    public ResultCp updateAppUser(St4SysSa data) throws Exception {
+        ResultCp result = new ResultCp();
         //如果旧密码不为空，则根据用户名验证密码是否正确
         if (RegUtil.CheckParameter(data.getSa009Old(), "String", null, false)) {
             String password = RSAEncrypt.decrypt(data.getSa009Old(), ResultMsg.KEY.toString());//密码解密

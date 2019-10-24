@@ -26,14 +26,9 @@
         CL001, CL002, CL003, CL004, CL005, CL006, CL007, CL008, CL009, CL010, CL011, CL012, CL013, CL014, CL015
     </sql>
 <select id="listTask" resultMap="BaseResultMap" >
-    select cl.* from st4_scs_cl cl left join st4_sys_sa sa on cl.CL013 = sa.SA001
+    select cl.* from st4_scs_cl cl left join sys_user sa on cl.CL013 = sa.id
     WHERE cl.CL012=1
-    <if test="cl.type==1">
-      AND   cl.CL013 = #{cl.cl013} OR sa.SA002= #{cl.cl013}
-    </if>
-    <if test="cl.type==0">
-        AND   cl.CL013 = #{cl.cl013}
-    </if>
+
     <if test="cl.cl004!=null ">
         AND   cl.CL004 = #{cl.cl004}
     </if>

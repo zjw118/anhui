@@ -3,15 +3,13 @@ package com.gistone.controller;
 
 import com.auth0.jwt.JWT;
 import com.gistone.annotation.PassToken;
-import com.gistone.entity.St4PoCdSa;
-import com.gistone.entity.St4ScsCd;
-import com.gistone.entity.St4ScsCl;
-import com.gistone.entity.St4SysSa;
+import com.gistone.entity.*;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.*;
 import com.gistone.swagger.SharePoint;
 import com.gistone.util.ObjectUtils;
 import com.gistone.util.Result;
+import com.gistone.util.ResultCp;
 import com.gistone.util.ResultMsg;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,7 +31,6 @@ import java.util.List;
  * @author LiuXiong
  * @since 2019-08-13
  */
-@Valid
 @RestController
 @RequestMapping("/api/checkPoint")
 @Api(value = "API-UserManage", tags = "问题点位管理接口", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -41,6 +38,8 @@ public class CheckPointController {
 
     @Autowired
     private ISt4ScsCdService iSt4ScsCdService;
+    @Autowired
+    private ISt4ScsCoService iSt4ScsCoService;
     @Autowired
     private ISt4ScsClService iSt4ScsClService;
     @Autowired
@@ -185,42 +184,68 @@ public class CheckPointController {
      * @param spSwagger
      * @return
      */
-    @PassToken
     @ApiOperation(value="下发问题点",notes = "下发问题点",response = St4PoCdSa.class)
     @RequestMapping(value="/sharePoint",method = RequestMethod.POST)
-    public Result sharePoint(@ApiParam(name="下发问题点", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
+    public ResultCp sharePoint(@ApiParam(name="下发问题点", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
+        /**
+         * 这里的业务逻辑是这样的:
+         * 1.拿到传递过来的任务id去找到对应的台账(可能是多个)
+         * 2.在拿每一个台账的id去拿斑点的的id
+         * 3.最终是把斑点下发到人员
+         */
         SharePoint sp = spSwagger.getData();
-        List<Integer> pointList = sp.getPointIdList();
+
+        Integer taskID = sp.getTaskId();
         List<Integer> uids = sp.getUidList();
-        if(pointList==null||pointList.size()<1){
-            return Result.build(1001,"核查任务不能为空");
+        if(!ObjectUtils.isNotNullAndEmpty(taskID)){
+            return ResultCp.build(1001,"任务不能为空");
         }
         if(uids==null||uids.size()<1){
-            return Result.build(1001,"下发人员不能为空");
+            return ResultCp.build(1001,"下发人员不能为空");
         }
 
-        return checkUserRelavantService.givePoint(uids,pointList);
+        return checkUserRelavantService.givePoint(uids,taskID);
 
     }
-  /*  *//**
-     * 活动设施类型展示下拉框
+    /**
+     * 任务绑定台账
      * @param spSwagger
      * @return
-     *//*
-    @PassToken
-    @ApiOperation(value="活动设施类型展示下拉框",notes = "活动设施类型展示下拉框",response = St4ScsCr.class)
-    @RequestMapping(value="/showActivity",method = RequestMethod.POST)
-    public Result showActivity(@ApiParam(name="下发问题点", value="json格式", required=true)@RequestBody Swagger<T> spSwagger) {
-        Result result = new Result();
+     */
+    @ApiOperation(value="任务绑定台账",notes = "下发问题点",response = St4PoCdSa.class)
+    @RequestMapping(value="/taskLedger",method = RequestMethod.POST)
+    public ResultCp taskLedger(@ApiParam(name="下发问题点", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
+        SharePoint sp = spSwagger.getData();
 
-        result.setStatus(1000);
-        result.setMsg("加载成功");
-        result.setData(st4ScsCrService.list());
+        Integer taskID = sp.getTaskId();
+        List<Integer> ledgerIdList = sp.getLedgerIdList();
+        if(!ObjectUtils.isNotNullAndEmpty(taskID)){
+            return ResultCp.build(1001,"任务不能为空");
+        }
+        if(ledgerIdList==null||ledgerIdList.size()<1){
+            return ResultCp.build(1001,"下发人员不能为空");
+        }
 
-        return result;
+        return checkUserRelavantService.taskLedger(ledgerIdList,taskID);
+
     }
-*/
+    /**
+     * 台账下拉多选接口
+     * @param spSwagger
+     * @return
+     */
+    @ApiOperation(value="台账下拉多选接口",notes = "台账下拉多选接口",response = St4ScsCo.class)
+    @RequestMapping(value="/ledgerSelect",method = RequestMethod.POST)
+    public ResultCp ledgerSelect(@ApiParam(name="台账下拉多选接口", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
 
+        ResultCp resultCp = new ResultCp();
+
+        resultCp.setStatus(1000);
+        resultCp.setMsg("加载成功");
+        List<St4ScsCo> coList = iSt4ScsCoService.list();
+        resultCp.setData(coList);
+        return resultCp;
+    }
 
 
 

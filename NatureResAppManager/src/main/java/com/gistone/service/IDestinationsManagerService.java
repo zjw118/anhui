@@ -1,7 +1,7 @@
 package com.gistone.service;
 
 import com.gistone.entity.*;
-import com.gistone.util.Result;
+import com.gistone.util.ResultCp;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public interface IDestinationsManagerService {
      * @param ceList 附件信息
      * @return Result
      */
-    Result insertDestinationsManager(List<St4ScsCc> ccList, List<St4ScsCk> ckList, List<St4ScsCf> cfList, List<St4ScsCe> ceList);
+    ResultCp insertDestinationsManager(List<St4ScsCc> ccList, List<St4ScsCk> ckList, List<St4ScsCf> cfList, List<St4ScsCe> ceList);
 
     /**
      * @explain :
@@ -38,7 +38,7 @@ public interface IDestinationsManagerService {
      * @param ceList 附件信息
      * @return Result
      */
-    Result insertDestinationsRecordManager(St4ScsCy scsCy, List<St4ScsCg> st4ScsCgs, List<St4ScsCc> ccList, List<St4ScsCk> ckList, List<St4ScsCf> cfList, List<St4ScsCe> ceList);
+    ResultCp insertDestinationsRecordManager(St4ScsCy scsCy, List<St4ScsCg> st4ScsCgs, List<St4ScsCc> ccList, List<St4ScsCk> ckList, List<St4ScsCf> cfList, List<St4ScsCe> ceList);
 
 
 
