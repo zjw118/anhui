@@ -1,51 +1,62 @@
 package com.gistone.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * <p>
- * 人类活动解译信息表
+ * 人类活动台账信息表
  * </p>
  *
  * @author zf1017@foxmail.com
- * @since 2019-10-18
+ * @since 2019-10-25
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Iterpretation extends Model<Iterpretation> {
+public class RlhdGroup extends Model<RlhdGroup> {
+
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-    private Integer imageId;
-    private String activeName;
-    private String geometry;
-    private String activeType;
-    private Double area;
-    private String descri;
-    @TableField("create_by")
+
+    /**
+     * 台账名称
+     */
+    private String name;
+
+    /**
+     * 创建人id
+     */
     private Integer createBy;
-    @TableField("create_date")
-    private Date createDate;
-    @TableField("update_by")
+
+    /**
+     * 创建时间
+     */
+    private LocalDateTime createDate;
+
     private Integer updateBy;
-    @TableField("update_date")
-    private Date updateDate;
-    @TableField("remark")
+
+    private LocalDateTime updateDate;
+
+    /**
+     * 备注
+     */
     private String remark;
-    @TableField("del_flag")
+
+    /**
+     * 逻辑删除 0删除，1未删除
+     */
     private Integer delFlag;
 
-    private Integer groupId;
 
     @Override
     protected Serializable pkVal() {

@@ -6,10 +6,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.annotation.PassToken;
 import com.gistone.entity.*;
 import com.gistone.pkname.Swagger;
-import com.gistone.service.ISt4PoSaCzService;
-import com.gistone.service.ISt4ScsClService;
-import com.gistone.service.ISt4ScsCzService;
-import com.gistone.service.ISt4SysSaService;
+import com.gistone.service.*;
+import com.gistone.swagger.SharePoint;
 import com.gistone.swagger.St4ScsCzSwagger;
 import com.gistone.util.ObjectUtils;
 import com.gistone.util.Result;
@@ -21,13 +19,12 @@ import io.swagger.annotations.ApiParam;
 import org.apache.poi.hssf.record.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -51,38 +48,61 @@ public class TaskController {
     @Autowired
     private ISt4ScsCzService iSt4ScsCzService;
 
-    @ApiOperation(value = "问题点批次", notes = "此接口返回问题点批次数据", response = Result.class)
+    @Autowired
+    private ISt4ScsCoService iSt4ScsCoService;
+
+    /*@ApiOperation(value = "问题点批次", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/listCheckPointToView")
     public Result listCheckPointToView(@RequestBody @ApiParam(name = "问题点批次", value = "json格式", required = true) Swagger<St4ScsCl> data) {
         St4ScsCl param = data.getData();
         return iSt4ScsClService.listForView(param);
-    }
+    }*/
 
     /**
      * 任务批次添加接口
      * @param data
      * @return
      */
-    @ApiOperation(value = "任务批次添加接口", notes = "此接口返回问题点批次数据", response = Result.class)
+    @ApiOperation(value = "任务批次添加接口(参数传递的时候ledgerIdList是必传项格式是ledgerIdList:[1,2,3])", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/insertTask")
-    public ResultCp insertTask(@RequestBody @ApiParam(name = "任务批次添加接口", value = "json格式", required = true) Swagger<St4ScsCl> data, HttpServletRequest request) {
+    public ResultCp insertTask(@RequestBody @ApiParam(name = "任务批次添加接口", value = "json格式", required = true) Swagger<St4ScsCl> data,
+                               HttpServletRequest request) {
         St4ScsCl param = data.getData();
         LocalDateTime date = LocalDateTime.now();
         //安徽项目没有巡护所以去掉验证
         /*if(param.getCl004()==null){
             return  Result.build(1001,"任务类型cl002"+ResultMsg.MSG_1001);
         }*/
-        St4SysSa seUser = new St4SysSa();
+        SysUser seUser = new SysUser();
         String token = request.getHeader("token");// 从 http 请求头中取出 token
         String userId ="1";// JWT.decode(token).getAudience().get(0);
-        seUser.setSa001(Integer.valueOf(userId));
-        param.setCl013(seUser.getSa001());
+        seUser.setId(Integer.valueOf(userId));
+        param.setCl013(seUser.getId());
         param.setCl014(date);
-
-        if(iSt4ScsClService.save(param)){
-            return  ResultCp.build(1000,"添加"+ ResultMsg.MSG_1000);
+        List<Integer> ledgerIdList = param.getLedgerIdList();
+        if(ledgerIdList==null||ledgerIdList.size()<1){
+            return ResultCp.build(1001,"绑定台账不能为空");
         }
-        return ResultCp.build(1005,ResultMsg.MSG_1005);
+
+        return iSt4ScsClService.insertTask(param,seUser);
+    }
+    /**
+     * 台账下拉多选接口
+     * @param spSwagger
+     * @return
+     */
+    @ApiOperation(value="台账下拉多选接口",notes = "台账下拉多选接口",response = St4ScsCo.class)
+    @RequestMapping(value="/ledgerSelect",method = RequestMethod.POST)
+    public ResultCp ledgerSelect(@ApiParam(name="台账下拉多选接口", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
+
+        ResultCp resultCp = new ResultCp();
+
+        resultCp.setStatus(1000);
+        resultCp.setMsg("加载成功");
+        List<St4ScsCo> coList = iSt4ScsCoService.list();
+        resultCp.setData(coList);
+        return resultCp;
+
     }
 
     /**
@@ -90,18 +110,23 @@ public class TaskController {
      * @param data
      * @return
      */
-    @PassToken
     @ApiOperation(value = "任务批次修改接口", notes = "此接口返回问题点批次数据", response = St4ScsCl.class)
     @PostMapping("/updateTask")
-    public ResultCp updateTask(@RequestBody @ApiParam(name = "任务批次修改接口", value = "json格式", required = true) Swagger<St4ScsCl> data) {
+    public ResultCp updateTask(@RequestBody @ApiParam(name = "任务批次修改接口", value = "json格式", required = true) Swagger<St4ScsCl> data
+            , HttpServletRequest request) {
         St4ScsCl param = data.getData();
         if(param.getCl001()==null){
             return  ResultCp.build(1001,"批次任务ciId"+ResultMsg.MSG_1001);
         }
-        if(iSt4ScsClService.updateById(param)){
-            return  ResultCp.build(1000,"修改"+ ResultMsg.MSG_1000);
+        List<Integer> ledgerIdList = param.getLedgerIdList();
+
+        if(ledgerIdList==null||ledgerIdList.size()<1){
+            return ResultCp.build(1001,"台账不能为空");
         }
-        return ResultCp.build(1005,ResultMsg.MSG_1005);
+        SysUser seUser = new SysUser();
+        String token = request.getHeader("token");// 从 http 请求头中取出 token
+        String userId ="1";
+        return iSt4ScsClService.updateTask(param,seUser);
     }
 
     /**
@@ -112,16 +137,16 @@ public class TaskController {
       
     @ApiOperation(value = "任务批次删除接口", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/deleteTask")
-    public ResultCp deleteTask(@RequestBody @ApiParam(name = "任务批次修改接口", value = "json格式", required = true) Swagger<St4ScsCl> data) {
+    public ResultCp deleteTask(@RequestBody @ApiParam(name = "任务批次修改接口", value = "json格式", required = true) Swagger<St4ScsCl> data, HttpServletRequest request) {
         St4ScsCl param = data.getData();
         if(param.getCl001()==null){
             return  ResultCp.build(1001,"批次任务ciId"+ResultMsg.MSG_1001);
         }
         param.setCl012(0);
-        if(iSt4ScsClService.updateById(param)){
-            return  ResultCp.build(1000,"删除"+ ResultMsg.MSG_1000);
-        }
-        return ResultCp.build(1005,ResultMsg.MSG_1005);
+        SysUser seUser = new SysUser();
+        String token = request.getHeader("token");// 从 http 请求头中取出 token
+        String userId ="1";
+        return iSt4ScsClService.deleteTask(param,seUser);
     }
 
     /**
@@ -170,30 +195,19 @@ public class TaskController {
     @PassToken
     @ApiOperation(value = "任务批次单个详情接口", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/getTaskById")
-    public Result getTaskById(@RequestBody @ApiParam(name = "任务批次单个详情接口", value = "json格式", required = true) Swagger<St4ScsCl> data) {
+    public ResultCp getTaskById(@RequestBody @ApiParam(name = "任务批次单个详情接口", value = "json格式", required = true) Swagger<St4ScsCl> data) {
         St4ScsCl param = data.getData();
         if(param.getCl001()==null){
-            return  Result.build(1001,"任务批次CL001"+ResultMsg.MSG_1001);
+            return  ResultCp.build(1001,"任务批次CL001"+ResultMsg.MSG_1001);
         }
-        param = iSt4ScsClService.getById(param.getCl001());
-        Result res = new Result();
-        res.setStatus(1000);
-        res.setMsg("加载"+ResultMsg.MSG_1000);
-        try{
-            res.setData(param);
-        }catch (Exception e){
-            e.printStackTrace();
-            return Result.build(1003,ResultMsg.MSG_1003);
-        }
-
-        return  res;
+       return  iSt4ScsClService.getTaskDetail(param);
     }
 
     /**
      * 新建巡护小组
      * @param data
      * @return
-     */
+     *//*
     @PassToken
     @ApiOperation(value = "新建巡护小组*****", notes = "新建巡护小组", response = St4ScsCz.class)
     @PostMapping("/insertGroup")
@@ -216,19 +230,19 @@ public class TaskController {
             return  Result.build(1001,"巡护人员集合uidList"+ResultMsg.MSG_1001);
         }
         return  iSt4ScsCzService.insertGroupData(param,request);
-    }
-    @PassToken
+    }*/
+    /*@PassToken
     @ApiOperation(value = "展示巡护小组应该显示的人(无需传参)", notes = "展示巡护小组应该显示的人", response = St4ScsCz.class)
     @PostMapping("/showUser")
     public Result showUserInCheck(@RequestBody @ApiParam(name = "展示巡护小组应该显示的人", value = "json格式", required = true) Swagger<T> data) {
 
         return  iSt4ScsCzService.showUserInCheck();
-    }
-    /**
+    }*/
+   /* *//**
      * 修改巡护人员小组信息
      * @param data
      * @return
-     */
+     *//*
     @PassToken
     @ApiOperation(value = "修改巡护小组信息*****", notes = "修改巡护人员小组信息", response = St4ScsCz.class)
     @PostMapping("/updateGroup")
@@ -239,14 +253,14 @@ public class TaskController {
             return  Result.build(1001,"巡护人员分组Id"+ResultMsg.MSG_1001);
         }
         return  iSt4ScsCzService.updateGroupData(param);
-    }
+    }*/
 
     /**
      * 删除巡护人员分组
      * @param data
      * @return
      */
-    @PassToken
+   /* @PassToken
     @ApiOperation(value = "删除巡护人员分组******", notes = "删除巡护人员分组", response = St4ScsCz.class)
     @PostMapping("/deleteGroup")
     public Result deleteGroup(@RequestBody @ApiParam(name = "删除巡护人员分组", value = "json格式", required = true) Swagger<St4ScsCz> data) {
@@ -267,14 +281,14 @@ public class TaskController {
 
         }
         return  Result.build(1005,ResultMsg.MSG_1005);
-    }
+    }*/
 
     /**
      * 人员分组详情接口
      * @param data
      * @return
      */
-    @PassToken
+    /*@PassToken
     @ApiOperation(value = "人员分组详情接口******", notes = "人员分组详情接口", response = St4ScsCz.class)
     @PostMapping("/getGroupUserDetail")
     public Result getGroupUserDetail(@RequestBody @ApiParam(name = "人员分组详情接口", value = "json格式", required = true) Swagger<St4ScsCz> data) {
@@ -284,13 +298,13 @@ public class TaskController {
             return  Result.build(1001,"巡护人员分组cz001"+ResultMsg.MSG_1001);
         }
         return  iSt4ScsCzService.getGroupUserDetail(param);
-    }
+    }*/
     /**
      * 巡护人员分组列表
      * @param data
      * @return
      */
-    @PassToken
+   /* @PassToken
     @ApiOperation(value = "巡护人员分组列表******", notes = "巡护人员分组列表", response = St4ScsCz.class)
     @PostMapping("/listGroup")
     public Result listGroup(@RequestBody @ApiParam(name = "巡护人员分组列表", value = "json格式", required = true)
@@ -305,7 +319,7 @@ public class TaskController {
         St4SysSa serUser = new St4SysSa();
         serUser.setSa001(Integer.valueOf(userId));
         return  iSt4ScsCzService.listGroup(param,serUser);
-    }
+    }*/
     /**
      * 测试mybatisplus多表关联查询接口
      * @param data

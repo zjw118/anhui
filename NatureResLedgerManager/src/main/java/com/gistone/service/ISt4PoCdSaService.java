@@ -24,29 +24,7 @@ public interface ISt4PoCdSaService extends IService<St4PoCdSa> {
      */
     ResultCp givePoint(List<Integer> uids,Integer taskId);
 
-    /**
-     * 任务绑定台账
-     * @param ledgerIdList
-     * @param taskId
-     * @return
-     */
-    ResultCp taskLedger(List<Integer> ledgerIdList,Integer taskId);
 
-    /**
-     * 修改任务绑定的台账接口
-      * @param ledgerIdList
-     * @param taskId
-     * @return
-     */
-    ResultCp updateTaskLedger(List<Integer> ledgerIdList,Integer taskId);
-
-    /**
-     * 任务绑定台账删除接口
-     * @param ledgerIdList
-     * @param taskId
-     * @return
-     */
-    ResultCp deleteTaskLedger(List<Integer> ledgerIdList,Integer taskId);
 
 
 
