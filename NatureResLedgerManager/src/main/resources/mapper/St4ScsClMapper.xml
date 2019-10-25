@@ -19,31 +19,55 @@
         <result column="CL013" property="cl013" />
         <result column="CL014" property="cl014" />
         <result column="CL015" property="cl015" />
+        <collection property="st4ScsCoList" ofType="com.gistone.entity.St4ScsCo">
+            <id column="co001" property="co001" />
+            <result column="name" property="name" />
+            <result column="year" property="year" />
+            <result column="admin_region" property="adminRegion" />
+            <result column="create_by" property="createBy" />
+            <result column="create_date" property="createDate" />
+            <result column="update_by" property="updateBy" />
+            <result column="update_date" property="updateDate" />
+            <result column="remark" property="remark" />
+            <result column="del_flag" property="delFlag" />
+        </collection>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         CL001, CL002, CL003, CL004, CL005, CL006, CL007, CL008, CL009, CL010, CL011, CL012, CL013, CL014, CL015
     </sql>
-<select id="listTask" resultMap="BaseResultMap" >
-    select cl.* from st4_scs_cl cl left join sys_user sa on cl.CL013 = sa.id
-    WHERE cl.CL012=1
+    <select id="listTask" resultMap="BaseResultMap" >
+        select cl.*,co.*,sa.* from (select cl.* from st4_scs_cl cl
+        WHERE cl.CL012=1
 
-    <if test="cl.cl004!=null ">
-        AND   cl.CL004 = #{cl.cl004}
-    </if>
+        <if test="cl.cl004!=null ">
+            AND   cl.CL004 = #{cl.cl004}
+        </if>
 
-    <if test="cl.cl002!=null and cl.cl002 != '' ">
-        AND   cl.CL002 like '%${cl.cl002}%'
-    </if>
+        <if test="cl.cl002!=null and cl.cl002 != '' ">
+            AND   cl.CL002 like '%${cl.cl002}%'
+        </if>
 
-    <if test="cl.cl010!=null and cl.cl010!='' ">
-        AND   cl.CL010 like '%${cl.cl010}%'
-    </if>
-    order by cl.CL014 desc
-
-</select>
-
+        <if test="cl.cl010!=null and cl.cl010!='' ">
+            AND   cl.CL010 like '%${cl.cl010}%'
+        </if>
+        order by cl.CL014 desc
+        <if test="cl.pageNumber!=null and cl.pageSize!=null and cl.pageNumber!='' and cl.pageSize!='' ">
+            limit #{cl.pageNumber},#{cl.pageSize}
+        </if>
+        )  cl
+        left join  st4_po_cl_co clco on cl.cl001 = clco.cl001
+        left join st4_scs_co co on co.co001=clco.co001
+        left join sys_user sa on cl.CL013 = sa.id
+    </select>
+    <select id="getTaskDetail" resultMap="BaseResultMap" >
+        select cl.*,co.* from st4_scs_cl cl
+        left join  st4_po_cl_co clco on cl.cl001 = clco.cl001
+        left join st4_scs_co co on co.co001=clco.co001
+        left join sys_user sa on cl.CL013 = sa.id
+        WHERE cl.cl001=#{cl001}
+    </select>
 
 
 </mapper>

@@ -26,7 +26,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="St4ScsCl对象", description="任务批次表")
+@ApiModel(value="St4ScsCl对象(没标记必传就是非必传)", description="任务批次表")
 public class St4ScsCl extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,7 +35,7 @@ public class St4ScsCl extends BaseEntity implements Serializable {
     @TableId(value = "CL001", type = IdType.AUTO)
     private Integer cl001;
 
-    @ApiModelProperty(name="cl002",value="任务批次任务名称",dataType = "String",required = false,example="")
+    @ApiModelProperty(name="cl002",value="任务批次任务名称(必传)",dataType = "String",required = false,example="")
     @TableField("CL002")
     private String cl002;
 
@@ -97,11 +97,24 @@ public class St4ScsCl extends BaseEntity implements Serializable {
     @ApiModelProperty(name="cl015",value="任务创建形式 0 系统创建   1移动端创建",dataType = "String",required = false,example="")
     @TableField("CL015")
     private Integer cl015;
+    @ApiModelProperty(name="uidList",value="绑定用户的id集合",dataType = "String",required = false,example="")
     @TableField(exist = false)
     private List<Integer> uidList;
+
+    @ApiModelProperty(value = "台账Id集合（核查任务添加修改必传）", required = true,example="1")
+    @TableField(exist = false)
+    private List<Integer> ledgerIdList;
+    @ApiModelProperty(value = "任务绑定的台账信息(返回的台账具体信息从这个里面取)", required = true,example="1")
+    @TableField(exist = false)
+    private  List<St4ScsCo> st4ScsCoList;
 
     @ApiModelProperty(name="type",value="权限用，不用管此字段",dataType = "String",required = false,example="")
     @TableField(exist = false)
     private Integer type;
+
+
+
+
+
 
 }

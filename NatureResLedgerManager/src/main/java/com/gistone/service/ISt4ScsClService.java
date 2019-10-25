@@ -19,4 +19,33 @@ public interface ISt4ScsClService extends IService<St4ScsCl> {
 
     Result listForView(St4ScsCl data);
     ResultCp listTask(St4ScsCl data, SysUser seUser);
+
+    /**
+     * 插入任务
+     * @param data
+     * @param seUser
+     * @return
+     */
+    ResultCp insertTask(St4ScsCl data, SysUser seUser);
+    /**
+     * 修改任务
+     * @param data
+     * @param seUser
+     * @return
+     */
+    ResultCp updateTask(St4ScsCl data, SysUser seUser);
+    /**
+     * 删除任务
+     * @param data
+     * @param seUser
+     * @return
+     */
+    ResultCp deleteTask(St4ScsCl data, SysUser seUser);
+
+    /**
+     * 任务详情
+     * @param data
+     * @return
+     */
+    ResultCp getTaskDetail(St4ScsCl data);
 }
