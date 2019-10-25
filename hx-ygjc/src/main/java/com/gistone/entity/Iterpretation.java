@@ -45,8 +45,8 @@ public class Iterpretation extends Model<Iterpretation> {
     @TableField("del_flag")
     private Integer delFlag;
 
-    @TableField(exist = false)
-    private Integer desc;
+    private Integer groupId;
+
     @Override
     protected Serializable pkVal() {
         return this.id;

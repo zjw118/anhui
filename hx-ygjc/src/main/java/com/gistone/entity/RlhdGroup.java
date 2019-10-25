@@ -1,7 +1,6 @@
 package com.gistone.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
@@ -13,16 +12,16 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 影像数据表
+ * 人类活动台账信息表
  * </p>
  *
  * @author zf1017@foxmail.com
- * @since 2019-10-21
+ * @since 2019-10-25
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Image extends Model<Image> {
+public class RlhdGroup extends Model<RlhdGroup> {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,17 +29,9 @@ public class Image extends Model<Image> {
     private Integer id;
 
     /**
-     * 影像名称
+     * 台账名称
      */
     private String name;
-
-    /**
-     * 服务地址
-     */
-    private String url;
-    private String shpurl;
-
-
 
     /**
      * 创建人id
@@ -48,18 +39,12 @@ public class Image extends Model<Image> {
     private Integer createBy;
 
     /**
-     * 创建日期
+     * 创建时间
      */
     private LocalDateTime createDate;
 
-    /**
-     * 修改人id
-     */
     private Integer updateBy;
 
-    /**
-     * 修改日期
-     */
     private LocalDateTime updateDate;
 
     /**
@@ -67,12 +52,12 @@ public class Image extends Model<Image> {
      */
     private String remark;
 
+    /**
+     * 逻辑删除 0删除，1未删除
+     */
     private Integer delFlag;
 
 
-
-    @TableField(exist = false)
-    private String shp;
     @Override
     protected Serializable pkVal() {
         return this.id;
