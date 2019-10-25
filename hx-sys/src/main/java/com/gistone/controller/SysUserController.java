@@ -7,16 +7,17 @@ import com.gistone.entity.SysUser;
 import com.gistone.service.ISysUserService;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultVOUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/sys/sysUser")
+@RequestMapping("/api/sys/")
+@Api(value = "API-UserManage", tags = "用户", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class SysUserController {
     @Autowired
     private ISysUserService iSysUserService;
@@ -29,15 +30,14 @@ public class SysUserController {
         sysUserQueryWrapper.eq("type",1);
         return iSysUserService.getOne(sysUserQueryWrapper);
     }
-
-    @RequestMapping(value = "/list")
+    @ApiOperation(value = "人员列表", notes = "人员列表", response = ResultVO.class)
+    @PostMapping(value = "/list")
     public ResultVO list(@RequestBody Map<String, Object> paramsMap){
         Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
         if (dataParam == null) {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
         }
-        String name = (String) dataParam.get("name");
-        Integer pageNum = (Integer) dataParam.get("pageNum");
+        Integer pageNum = (Integer) dataParam.get("pageNumber");
         Integer pageSize = (Integer) dataParam.get("pageSize");
         if (pageNum == null) {
             pageNum = 1;
@@ -46,7 +46,7 @@ public class SysUserController {
         if (pageSize == null) {
             pageSize = 10;
         }
-        Map<String,Object> result = iSysUserService.getList(name,pageNum,pageSize);
+        Map<String,Object> result = iSysUserService.getList(pageNum,pageSize);
 
         return ResultVOUtil.success(result);
     }
