@@ -38,6 +38,7 @@ public class Image extends Model<Image> {
      * 服务地址
      */
     private String url;
+    private String shpurl;
 
 
 

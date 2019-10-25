@@ -98,7 +98,7 @@ import java.util.Map;
         if("0".equals(res)){
             Image image = new Image();
             image.setId(imageId);
-            image.setUrl(url.split(":")[1]);
+            image.setShpurl(url.split(":")[1]);
             imageMapper.updateById(image);
         }
 
