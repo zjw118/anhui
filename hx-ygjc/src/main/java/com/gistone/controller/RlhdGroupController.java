@@ -118,4 +118,26 @@ public class RlhdGroupController {
         return ResultVOUtil.success();
     }
 
+    @PostMapping("addDataToGroup")
+    public ResultVO addDataToGroup(@RequestBody Map<String, Object> paramsMap){
+        //请求参数格式校验
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        Integer groupId = (Integer) params.get("groupId");
+        if(groupId==null||groupId<=0){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"台账id不能为空");
+        }
+        Integer id = (Integer) params.get("id");
+        if(id==null||id<=0){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"数据id不能为空");
+        }
+
+        service.addDataToGroup(groupId,id);
+
+        return ResultVOUtil.success();
+    }
+
+
 }

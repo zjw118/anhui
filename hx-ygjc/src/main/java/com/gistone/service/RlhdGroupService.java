@@ -26,4 +26,6 @@ package com.gistone.service;
     void edit(RlhdGroup entity);
 
     List<Iterpretation> getDetailById(Integer id);
+
+    void addDataToGroup(Integer groupId,Integer id);
     }

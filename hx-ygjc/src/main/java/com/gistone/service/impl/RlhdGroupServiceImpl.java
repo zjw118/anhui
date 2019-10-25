@@ -95,6 +95,13 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
         return group_id;
     }
 
+    @Override
+    public void addDataToGroup(Integer groupId, Integer id) {
+        Iterpretation iterpretation = iterpretationMapper.selectById(id);
+        iterpretation.setGroupId(groupId);
+        iterpretationMapper.updateById(iterpretation);
+    }
+
 }
 
 
