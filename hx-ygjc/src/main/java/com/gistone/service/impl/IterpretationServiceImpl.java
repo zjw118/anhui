@@ -44,23 +44,13 @@ import java.util.Map;
 
 
     @Override
-    public Map<String, Object> list(Integer pageNum, Integer pageSize,String userName) {
-
-    QueryWrapper<Iterpretation> wrapper = new QueryWrapper<>();
-    if(StringUtils.isNotBlank(userName)){
-    //wrapper.likeRight("SA008",userName);
+    public Map<String, Object> list(Integer pageNum, Integer pageSize,Integer id) {
+        QueryWrapper<Iterpretation> wrapper = new QueryWrapper<>();
+        wrapper.eq("image_id",id);
+        Map<String, Object> result = new HashMap<>();
+        result.put("data", iterpretationMapper.selectList(wrapper));
+        return result;
     }
-    // wrapper.eq("SA007",1);
-    //wrapper.orderByDesc("SA003");
-    IPage<Iterpretation> iPage = iterpretationMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
-
-
-    Map<String, Object> result = new HashMap<>();
-    result.put("rows", iPage.getRecords());
-    result.put("total", iPage.getTotal());
-
-    return result;
-}
 
     @Override
     public void delete(List<Integer> ids) {
@@ -73,9 +63,6 @@ import java.util.Map;
     //通过影像id先删除记录然后再插入,然后再写入shp文件，将地址更新到影像表中！
         iterpretationMapper.delete(new QueryWrapper<Iterpretation>().eq("image_id",imageId));
         //从data中构造属性
-
-
-
         for (Map<String, Object> datum : data) {
            Map<String,Object> attributes = (Map<String, Object>) datum.get("attributes");
            //通过属性构造参数
@@ -95,7 +82,8 @@ import java.util.Map;
             if(null!=attributes.get("remark")){
                 iterpretation.setRemark(attributes.get("remark")+"");
             }
-            iterpretation.setGeometry(datum.get("geometry")+"");
+            Map<String,Object> rings = (Map<String, Object>) datum.get("geometry");
+            iterpretation.setGeometry(rings.get("rings")+"");
             iterpretation.setImageId(imageId);
             iterpretation.setCreateBy(createBy);//创建人
             iterpretation.setCreateDate(new Date());

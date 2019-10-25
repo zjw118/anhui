@@ -107,19 +107,11 @@ public class ShpUtil {
                 Map<String, String> stringObjectMap = new HashMap<>();
                 stringObjectMap.put("attributes",net.sf.json.JSONObject.fromObject(map11)+"");
                 stringObjectMap.put("geometry",net.sf.json.JSONObject.fromObject(map2)+"");
-
-
-//                System.out.println("======="+net.sf.json.JSONArray.fromObject(stringObjectMap));
                 list.add(net.sf.json.JSONObject.fromObject(stringObjectMap)+"");
             }
-
             itertor.close();
-            //fsb.append(array.toString());
-            // fsb.append("}");
-
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-
+            System.out.println(e.toString());
         }
         return list;
 
