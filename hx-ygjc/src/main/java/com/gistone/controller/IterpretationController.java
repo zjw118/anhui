@@ -36,19 +36,18 @@ public class IterpretationController {
         if (params == null) {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
         }
-
-        Integer pageNum = (Integer) params.get("pageNum");
-        Integer pageSize = (Integer) params.get("pageSize");
-        String name = (String) params.get("name");
-        if (pageNum == null) {
-            pageNum = 1;
-        }
-
-        if (pageSize == null) {
-            pageSize = 10;
-        }
-
-        Map<String, Object> result = service.list(pageNum, pageSize, name);
+        Integer id = (Integer) params.get("id");
+//        Integer pageNum = (Integer) params.get("pageNum");
+//        Integer pageSize = (Integer) params.get("pageSize");
+//        String name = (String) params.get("name");
+//        if (pageNum == null) {
+//            pageNum = 1;
+//        }
+//        if (pageSize == null) {
+//            pageSize = 999999;
+//        }
+        Map<String, Object> result = service.list(1, 99999999, id);
+//        Map<String, Object> result = service.list(pageNum, pageSize, name);
         return ResultVOUtil.success(result);
     }
 
@@ -62,8 +61,6 @@ public class IterpretationController {
         Iterpretation entity = service.getById(id);
         return ResultVOUtil.success(entity);
     }
-
-
 
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)

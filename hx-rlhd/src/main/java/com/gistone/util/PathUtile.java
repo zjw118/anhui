@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 import java.util.UUID;
 
 @Data
@@ -25,11 +26,9 @@ public class PathUtile {
      */
     public static String getRandomPath(String path,String name){
         if(StringUtils.isNotBlank(path)){
-            Date date = new Date();
             SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
-            SimpleDateFormat h = new SimpleDateFormat("HH");
-            if(-1==path.indexOf("/")) path = path + "/";
-            path = path + ymd.format(date)+"/"+h.format(date)+"/";
+            if(!path.endsWith("/")) path += "/";
+            path = path + ymd.format(new Date())+"/"+new Random().nextInt(20)+"/";
             File ml = new File(path);
             if(!ml.isDirectory()) ml.mkdirs();
             if(StringUtils.isNotBlank(name)){

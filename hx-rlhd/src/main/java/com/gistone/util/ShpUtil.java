@@ -46,9 +46,9 @@ public class ShpUtil {
      * @return
      * @description 读取shp文件返回json数据,type 1面 2点
      */
-    public static List<Map<String, Object>> readShapeFileToStr(String filePath,Integer type) {
+    public static List<String> readShapeFileToStr(String filePath,Integer type) {
         String result = "";
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<String> list = new ArrayList<>();
         try {
             FeatureJSON fjson = new FeatureJSON();
             StringBuffer fsb = new StringBuffer();
@@ -76,7 +76,7 @@ public class ShpUtil {
                 array.add(json);
             }
             for (int i = 0; i < array.size(); i++) {
-                Map<String, Object> map2 = new HashMap<>();
+                Map<String, String> map2 = new HashMap<>();
                 //获取每一个JsonObject对象
                 JSONObject myjObject = array.getJSONObject(i);
                 //获取geometry属性
@@ -98,25 +98,20 @@ public class ShpUtil {
                     }
                 }else{
                     map2.put("type", "point");
-                    map2.put("rings", arrayList);
+                    map2.put("rings", arrayList );
                 }
                 //获取属性
                 Object map1 = myjObject.getJSONObject("properties");
-                Map map11 = (Map) JSON.parse(((JSONObject) map1).toString());
+                Map<String,String> map11 = (Map) JSON.parse(((JSONObject) map1).toString());
                 //构建返回
-                Map<String, Object> stringObjectMap = new HashMap<>();
-                stringObjectMap.put("attributes", map11);
-                stringObjectMap.put("geometry", map2);
-                list.add(stringObjectMap);
+                Map<String, String> stringObjectMap = new HashMap<>();
+                stringObjectMap.put("attributes",net.sf.json.JSONObject.fromObject(map11)+"");
+                stringObjectMap.put("geometry",net.sf.json.JSONObject.fromObject(map2)+"");
+                list.add(net.sf.json.JSONObject.fromObject(stringObjectMap)+"");
             }
-
             itertor.close();
-            //fsb.append(array.toString());
-            // fsb.append("}");
-
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-
+            System.out.println(e.toString());
         }
         return list;
 
@@ -598,7 +593,7 @@ public class ShpUtil {
             params.put("url", file.toURI().toURL());
             ShapefileDataStoreFactory dataStoreFactory = new ShapefileDataStoreFactory();
             ShapefileDataStore newDataStore = (ShapefileDataStore) dataStoreFactory.createNewDataStore(params);
-            Charset charset = Charset.forName("GBK");
+            Charset charset = Charset.forName("UTF-8");
             newDataStore.setCharset(charset);
             String typeName = newDataStore.getTypeNames()[0];
             SimpleFeatureSource featureSource = newDataStore.getFeatureSource(typeName);

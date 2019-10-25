@@ -1,12 +1,14 @@
 package com.gistone.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
 import com.gistone.service.ImageService;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultVOUtil;
 import com.gistone.util.ShpUtil;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -62,10 +64,8 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
         Image entity = service.getById(id);
-        entity.getUrl();
-        ShpUtil.readShapeFileToStr("D:"+entity.getUrl(),1);
-        entity.setShp(ShpUtil.readShapeFileToStr("D:"+entity.getUrl(),1)+"");
-
+        String str = ShpUtil.readShapeFileToStr("D:"+entity.getUrl(),1)+"";
+        entity.setShp(net.sf.json.JSONArray.fromObject(str)+"");
         return ResultVOUtil.success(entity);
     }
 

@@ -16,7 +16,7 @@ package com.gistone.service;
     public interface IterpretationService extends IService<Iterpretation> {
 
 
-    Map<String, Object> list(Integer pageNum,Integer pageSize,String Name);
+    Map<String, Object> list(Integer pageNum,Integer pageSize,Integer id);
 
     void delete(List<Integer> id);
 
