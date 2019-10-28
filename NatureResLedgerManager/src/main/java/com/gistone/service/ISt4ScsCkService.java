@@ -1,6 +1,7 @@
 package com.gistone.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.St4ScsCd;
 import com.gistone.entity.St4ScsCk;
 import com.gistone.entity.St4SysSa;
@@ -34,7 +35,7 @@ public interface ISt4ScsCkService extends IService<St4ScsCk> {
     Result deleteLedger(Integer cld);
 
 
-    Result listLedger(St4ScsCk checkLedger,St4SysSa seUser);
+    ResultVO listLedger(St4ScsCk checkLedger, St4SysSa seUser);
     Result listHkyLedger(St4ScsCk checkLedger,St4SysSa seUser);
 
     Result listLedgerSpace(Integer roleId, St4ScsCk checkLedger);
@@ -100,7 +101,7 @@ public interface ISt4ScsCkService extends IService<St4ScsCk> {
      * @param
      * @return
      */
-    Result pointStageExamine(St4ScsCk ck);
+    ResultVO pointStageExamine(St4ScsCk ck);
 
     /**
      * 提交台账（绿盾）

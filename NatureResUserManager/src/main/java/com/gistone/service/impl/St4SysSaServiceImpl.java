@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.*;
 import com.gistone.mapper.*;
 import com.gistone.entity.*;
@@ -76,13 +77,11 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
     }
 
     @Override
-    public Result listPhoneUserToView(St4SysSa data) {
+    public ResultVO listPhoneUserToView(St4SysSa data) {
         List<Map> list = st4SysSaMapper.listPhoneUserToView(data);
         Result result = new Result();
         result.setData(list);
-        result.setMsg("查询巡护人员列表成功");
-        result.setStatus(1000);
-        return result;
+        return ResultVOUtil.success(result);
     }
     @Override
     public  Result list(St4SysSa sa,St4SysSa seUser){

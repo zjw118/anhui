@@ -29,12 +29,7 @@ public interface ISt4ScsCdService extends IService<St4ScsCd> {
      */
     Result sysPointDataLd (Integer roleId,Integer uid);
 
-    /**
-     * 安徽下发任务接口的查询到的斑点的集合
-     * @param uid
-     * @return
-     */
-    ResultCp sysSpotData (Integer uid);
+
 
     ResultCp insertSpotDataFromApp (St4ScsCd cd);
 

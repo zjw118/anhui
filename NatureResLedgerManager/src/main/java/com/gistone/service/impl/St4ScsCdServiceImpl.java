@@ -46,22 +46,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     public ResultCp insertSpotDataFromApp (St4ScsCd id){
         return null;
     }
-    @Override
-    public ResultCp sysSpotData (Integer id){
 
-        ResultCp resultCp = new ResultCp();
-
-        resultCp.setStatus(1000);
-        try {
-            List<St4ScsCd> cdList = st4ScsCdMapper.sysSpotData(id);
-            resultCp.setMsg("同步数据成功");
-            resultCp.setData(cdList);
-        }catch (Exception e){
-            e.printStackTrace();
-            resultCp.setMsg("同步数据失败，服务器异常");
-        }
-        return resultCp;
-    }
     @Override
     public Result listCheckPointToView(St4ScsCd data) {
         QueryWrapper<St4ScsCd> queryWrapper = new QueryWrapper<>();

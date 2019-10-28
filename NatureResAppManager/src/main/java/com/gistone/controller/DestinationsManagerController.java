@@ -453,8 +453,7 @@ public class DestinationsManagerController {
      */
     @ApiOperation(value = "实时位置上传接口", notes = "实时位置上传接口", response = St4ScsCh.class)
     @PostMapping("/sendRealPositon")
-    public ResultCp sendRealPositon( @RequestBody @ApiParam(name = "", value = "json格式", required = true)  Swagger<St4ScsCh> data
-    ) {
+    public ResultCp sendRealPositon( @RequestBody @ApiParam(name = "", value = "json格式", required = true)  Swagger<St4ScsCh> data) {
 
         St4ScsCh param = data.getData();
 

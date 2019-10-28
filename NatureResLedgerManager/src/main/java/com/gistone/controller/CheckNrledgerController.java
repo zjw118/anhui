@@ -2,13 +2,12 @@ package com.gistone.controller;
 
 
 import com.auth0.jwt.JWT;
+import com.gistone.VO.ResultVO;
 import com.gistone.annotation.PassToken;
 import com.gistone.entity.*;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.*;
-import com.gistone.util.ObjectUtils;
-import com.gistone.util.Result;
-import com.gistone.util.ResultMsg;
+import com.gistone.util.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -39,7 +38,7 @@ import java.util.Map;
  */
 @Api(value="台账接口",tags = "台账相关的接口")
 @RestController
-@RequestMapping("/ledger")
+@RequestMapping("/api/ledger")
 public class CheckNrledgerController {
 
 
@@ -185,11 +184,11 @@ public class CheckNrledgerController {
      * @param request
      * @return
      */
-    @ApiOperation(value="台账列表",notes = "台账列表",response = St4ScsCk.class)
+    @ApiOperation(value="(安徽用)台账列表(目前模糊查询只查询台账的name字段即data里面在st4ScsCo对象里传递name值)",notes = "台账列表",response = St4ScsCk.class)
     @RequestMapping(value="/listStage",method = RequestMethod.POST)
-    public Result ledgerList(@RequestBody @ApiParam(name="台账列表pageSize和pageNumber必传其余的查询项是非必传", value="json格式", required=true)
+    public ResultVO ledgerList(@RequestBody @ApiParam(name="台账列表pageSize和pageNumber必传其余的查询项是非必传", value="json格式", required=true)
                                       Swagger<St4ScsCk> swagger,
-                              HttpServletRequest request) {
+                               HttpServletRequest request) {
         St4ScsCk checkLedger = swagger.getData();
         String token = request.getHeader("token");// 从 http 请求头中取出 token
         String userId ="1";// JWT.decode(token).getAudience().get(0);
@@ -198,7 +197,7 @@ public class CheckNrledgerController {
         Object pageNumber=checkLedger.getPageNumber();
         Object pageSize=checkLedger.getPageSize();
         if(!ObjectUtils.isNotNullAndEmpty(pageNumber)||!ObjectUtils.isNotNullAndEmpty(pageSize)){
-            return  Result.build(1001,"pageNumber，pageSize"+ ResultMsg.MSG_1001);
+            return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "pageNumber，pageSize不能为空");
         }
         return icheckLedgerService.listLedger(checkLedger,seUser);
     }
@@ -692,16 +691,16 @@ public class CheckNrledgerController {
      * @return
      */
     @PassToken
-    @ApiOperation(value="台账申诉审核(ck067必传,审核:未审核0 1是已审核 2是退回)",notes = "台账申诉审核",response = St4ScsCk.class)
+    @ApiOperation(value="(安徽用)台账审核(ck067必传,审核:未审核0 1是已审核 2是退回)",notes = "台账审核",response = St4ScsCk.class)
     @RequestMapping(value="/pointStageExamine",method = RequestMethod.POST)
-    public Result pointStageExamine(@RequestBody  @ApiParam(name="台账申诉审核）", value="json格式", required=true)
+    public ResultVO pointStageExamine(@RequestBody  @ApiParam(name="台账审核）", value="json格式", required=true)
                                            Swagger<St4ScsCk> ckSwagger,HttpServletRequest request,HttpServletResponse response) {
         St4ScsCk ck = ckSwagger.getData();
         if(ck.getCk001()==null){
-            return Result.build(1001,"台账主键ck001不能为空");
+            return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "台账主键ck001不能为空！");
         }
         if(ck.getCk067()==null){
-            return Result.build(1001,"审核状态不能为空");
+            return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "审核状态不能为空！");
         }
 
 

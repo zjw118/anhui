@@ -1,7 +1,10 @@
 package com.gistone.service;
 
+    import com.gistone.VO.ResultVO;
     import com.gistone.entity.Iterpretation;
     import com.baomidou.mybatisplus.extension.service.IService;
+    import com.gistone.util.ResultCp;
+
     import java.util.List;
     import java.util.Map;
 
@@ -23,4 +26,11 @@ package com.gistone.service;
     void insert(List<Map<String, Object>> data,Integer imageId,Integer createBy);
 
     void edit(Iterpretation entity);
+
+        /**
+         * 安徽下发任务接口的查询到的斑点的集合
+         * @param uid
+         * @return
+         */
+        ResultVO sysSpotData (Integer uid);
     }

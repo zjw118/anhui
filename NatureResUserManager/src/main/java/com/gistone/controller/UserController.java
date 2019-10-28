@@ -1,6 +1,7 @@
 package com.gistone.controller;
 
 import com.auth0.jwt.JWT;
+import com.gistone.VO.ResultVO;
 import com.gistone.annotation.PassToken;
 import com.gistone.entity.*;
 import com.gistone.pkname.Swagger;
@@ -267,14 +268,12 @@ public class UserController {
      * @param data
      * @return com.gistone.util.Ret
      */
-    @PassToken
-    @ApiOperation(value = "巡查人员一张图展示,ch003经度，ch004纬度，人员状态 0离线 1在线 2正在巡护中", notes = "巡查人员一张图展示", response = Result.class)
+    @ApiOperation(value = "(安徽用)巡查人员实时位置,ch003经度，ch004纬度，人员状态 0离线 1在线 2正在巡护中", notes = "巡查人员一张图展示", response = Result.class)
     @PostMapping("/listPhoneUserToView")
-    public Result listPhoneUserToView(HttpServletRequest request, @RequestBody Swagger<St4SysSa> data)throws Exception  {
+    public ResultVO listPhoneUserToView(HttpServletRequest request, @RequestBody Swagger<St4SysSa> data)throws Exception  {
 
             St4SysSa param = data.getData();
-            Result res = userService.listPhoneUserToView(param);
-            return res;
+            return   userService.listPhoneUserToView(param);
     }
 
     /**

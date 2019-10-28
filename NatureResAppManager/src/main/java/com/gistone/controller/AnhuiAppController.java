@@ -1,6 +1,7 @@
 package com.gistone.controller;
 
 import com.auth0.jwt.JWT;
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.St4ScsCd;
 import com.gistone.entity.St4ScsCk;
 import com.gistone.entity.St4ScsCo;
@@ -8,6 +9,7 @@ import com.gistone.pkname.Swagger;
 import com.gistone.service.ISt4ScsCdService;
 import com.gistone.service.ISt4ScsCkService;
 import com.gistone.service.ISysUserService;
+import com.gistone.service.IterpretationService;
 import com.gistone.util.ObjectUtils;
 import com.gistone.util.ResultCp;
 import com.gistone.util.ResultMsg;
@@ -27,14 +29,14 @@ public class AnhuiAppController {
     @Autowired
     private ISysUserService userService;
     @Autowired
-    private ISt4ScsCdService st4ScsCdService;
+    private IterpretationService iterpretationService;
     @Autowired
     private ISt4ScsCkService st4ScsCkService;
 
     @ApiOperation(value="app同步任务下的斑块信息接口",notes = "app同步任务下的斑块信息接口",response = St4ScsCd.class)
     @RequestMapping(value = "/sysSpotData",method = RequestMethod.POST)
-    public ResultCp sysSpotData(@ApiParam(name="app同步任务下的斑块信息接口", value="json格式", required=true)@RequestBody Swagger<St4ScsCd> data,
-                            HttpServletRequest request, HttpServletResponse response) {
+    public ResultVO sysSpotData(@ApiParam(name="app同步任务下的斑块信息接口", value="json格式", required=true)@RequestBody Swagger<St4ScsCd> data,
+                                HttpServletRequest request, HttpServletResponse response) {
         String token = request.getHeader("token");
         ResultCp cp = new ResultCp();
         cp.setStatus(1000);
@@ -44,9 +46,8 @@ public class AnhuiAppController {
         }catch (Exception e){
             e.printStackTrace();
             cp.setMsg("无token，请重新登录");
-            return cp;
         }
-        return st4ScsCdService.sysSpotData(Integer.valueOf(userId));
+        return iterpretationService.sysSpotData(Integer.valueOf(userId));
     }
     @ApiOperation(value="app提交核查信息接口",notes = "app提交核查信息接口",response = St4ScsCd.class)
     @RequestMapping(value = "/insertSpotDataFromApp",method = RequestMethod.POST)
