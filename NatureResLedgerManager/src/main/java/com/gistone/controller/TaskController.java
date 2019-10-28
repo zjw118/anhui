@@ -1,14 +1,14 @@
 package com.gistone.controller;
 
 
-import com.auth0.jwt.JWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.annotation.PassToken;
-import com.gistone.entity.*;
+import com.gistone.entity.St4ScsCl;
+import com.gistone.entity.St4ScsCo;
+import com.gistone.entity.SysUser;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.*;
 import com.gistone.swagger.SharePoint;
-import com.gistone.swagger.St4ScsCzSwagger;
 import com.gistone.util.ObjectUtils;
 import com.gistone.util.Result;
 import com.gistone.util.ResultCp;
@@ -16,13 +16,11 @@ import com.gistone.util.ResultMsg;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.poi.hssf.record.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -154,7 +152,7 @@ public class TaskController {
      * @param data
      * @return
      */
-    @ApiOperation(value = "任务批次列表接口", notes = "此接口返回问题点批次数据", response = Result.class)
+    @ApiOperation(value = "任务批次列表接口(模糊查询字段cl002(任务名称) cl010(年份) )", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/listTask")
     public ResultCp listTask(@RequestBody @ApiParam(name = "任务批次列表接口", value = "json格式", required = true)Swagger<St4ScsCl> data,HttpServletRequest request) {
         St4ScsCl param = data.getData();

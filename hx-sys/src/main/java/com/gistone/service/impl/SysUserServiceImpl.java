@@ -35,7 +35,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public Map<String, Object> getList(String name, Integer pageNum, Integer pageSize) {
+    public Map<String, Object> getList( Integer pageNum, Integer pageSize) {
         QueryWrapper<SysUser> sysUserQueryWrapper = new QueryWrapper<>();
         sysUserQueryWrapper.eq("type", 0);
         sysUserQueryWrapper.eq("enable", 1);

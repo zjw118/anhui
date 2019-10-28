@@ -18,7 +18,7 @@ import java.util.Map;
 public interface ISysUserService extends IService<SysUser> {
     List<SysRole> selectRoleOfUser(Integer userId);
 
-    Map<String,Object> getList(String name,Integer pageNum,Integer pageSize);
+    Map<String,Object> getList(Integer pageNum,Integer pageSize);
 
 
 }
