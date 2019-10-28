@@ -46,7 +46,7 @@ public interface ISt4SysSaService extends IService<St4SysSa> {
      * @param sa
      * @return
      */
-    Result listUser(St4SysSa sa);
+    ResultVO listUser(St4SysSa sa,St4SysSa seUser);
 
     /**
      * 用户详情接口

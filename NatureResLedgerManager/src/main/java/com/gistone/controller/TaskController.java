@@ -188,10 +188,10 @@ public class TaskController {
     @PassToken
     @ApiOperation(value = "任务批次单个详情接口", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/getTaskById")
-    public ResultCp getTaskById(@RequestBody @ApiParam(name = "任务批次单个详情接口", value = "json格式", required = true) Swagger<St4ScsCl> data) {
+    public ResultVO getTaskById(@RequestBody @ApiParam(name = "任务批次单个详情接口", value = "json格式", required = true) Swagger<St4ScsCl> data) {
         St4ScsCl param = data.getData();
         if(param.getCl001()==null){
-            return  ResultCp.build(1001,"任务批次CL001"+ResultMsg.MSG_1001);
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "任务批次CL001不能为空！");
         }
        return  iSt4ScsClService.getTaskDetail(param);
     }

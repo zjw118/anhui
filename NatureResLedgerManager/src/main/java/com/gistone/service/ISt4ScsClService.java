@@ -48,5 +48,5 @@ public interface ISt4ScsClService extends IService<St4ScsCl> {
      * @param data
      * @return
      */
-    ResultCp getTaskDetail(St4ScsCl data);
+    ResultVO getTaskDetail(St4ScsCl data);
 }

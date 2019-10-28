@@ -48,14 +48,12 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
     private St4PoClCoMapper st4PoClCoMapper;
 
     @Override
-    public ResultCp getTaskDetail(St4ScsCl data) {
+    public ResultVO getTaskDetail(St4ScsCl data) {
 
         St4ScsCl list = st4ScsClMapper.getTaskDetail(data);
         ResultCp res = new ResultCp();
         res.setData(list);
-        res.setStatus(1000);
-        res.setMsg("查询成功");
-        return res;
+        return ResultVOUtil.success(res);
     }
 
     @Override

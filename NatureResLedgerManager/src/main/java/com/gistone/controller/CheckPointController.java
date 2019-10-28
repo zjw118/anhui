@@ -2,15 +2,13 @@ package com.gistone.controller;
 
 
 import com.auth0.jwt.JWT;
+import com.gistone.VO.ResultVO;
 import com.gistone.annotation.PassToken;
 import com.gistone.entity.*;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.*;
 import com.gistone.swagger.SharePoint;
-import com.gistone.util.ObjectUtils;
-import com.gistone.util.Result;
-import com.gistone.util.ResultCp;
-import com.gistone.util.ResultMsg;
+import com.gistone.util.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -189,7 +187,7 @@ public class CheckPointController {
      */
     @ApiOperation(value="下发问题点",notes = "下发问题点",response = St4PoCdSa.class)
     @RequestMapping(value="/sharePoint",method = RequestMethod.POST)
-    public ResultCp sharePoint(@ApiParam(name="下发问题点", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
+    public ResultVO sharePoint(@ApiParam(name="下发问题点", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
         /**
          * 这里的业务逻辑是这样的:
          * 1.拿到传递过来的任务id去找到对应的台账(可能是多个)
@@ -201,10 +199,10 @@ public class CheckPointController {
         Integer taskID = sp.getTaskId();
         List<Integer> uids = sp.getUidList();
         if(!ObjectUtils.isNotNullAndEmpty(taskID)){
-            return ResultCp.build(1001,"任务不能为空");
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "任务不能为空不能为空！");
         }
         if(uids==null||uids.size()<1){
-            return ResultCp.build(1001,"下发人员不能为空");
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "下发人员不能为空不能为空！");
         }
 
         return checkUserRelavantService.givePoint(uids,taskID);

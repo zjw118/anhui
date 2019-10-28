@@ -51,8 +51,6 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
     private ISt4PoSaSjService st4PoSaSjService;
     @Autowired
     private St4SysShMapper st4SysShMapper;
-    @Autowired
-    private SysUserMapper sysUserMapper;
 
 
 
@@ -105,8 +103,8 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
     }
 
     @Override
-    public Result listUser(St4SysSa sa) {
-        Result result = new Result();
+    public ResultVO listUser(St4SysSa sa,St4SysSa seUser) {
+       /* Result result = new Result();
         PageBean pageBean = new PageBean();
         pageBean.setStr1(sa.getSa008()); //条件
 
@@ -119,7 +117,28 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
         result.setRows(sysUserMapper.selectPoList(pageBean));
         result.setPage(pageBean.getPageSum());
         result.setTotal(pageBean.getPoSum());
-        return result;
+        return result;*/
+        Page<St4SysSa> page = new Page<>(sa.getPageNumber(),sa.getPageSize());
+        Result result = new Result();
+        QueryWrapper<St4SysSa> wrapper = new QueryWrapper<St4SysSa>();
+        seUser = st4SysSaMapper.selectById(seUser);
+        seUser.setSa001(seUser.getSa001());
+        seUser.setSa002(seUser.getSa002());
+        if(seUser.getSa001()==1){
+            seUser.setPtype(2);
+        }else if(seUser.getSa020()==0){
+            seUser.setPtype(0);
+        }else if(seUser.getSa020()==1){
+            seUser.setPtype(1);
+        }
+
+        IPage<St4SysSa> iPage = st4SysSaMapper.listUser(page,sa);
+
+        result.setRows(iPage.getRecords());
+        result.setPage((int)iPage.getPages());
+        result.setTotal((int)iPage.getTotal());
+
+        return ResultVOUtil.success(result);
     }
 
     @Override

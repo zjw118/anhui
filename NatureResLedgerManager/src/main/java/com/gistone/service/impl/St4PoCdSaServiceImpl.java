@@ -1,15 +1,13 @@
 package com.gistone.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.*;
 import com.gistone.mapper.*;
 import com.gistone.service.ISt4PoCdSaService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.service.ISt4PoClCoService;
-import com.gistone.util.JPushUtil;
-import com.gistone.util.Result;
-import com.gistone.util.ResultCp;
-import com.gistone.util.ResultMsg;
+import com.gistone.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,7 +50,7 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
 
 
     @Override
-    public ResultCp givePoint(List<Integer> uids, Integer taskId) {
+    public ResultVO givePoint(List<Integer> uids, Integer taskId) {
         /**
          * 这里的业务逻辑是这样的:
          * 1.拿到传递过来的任务id去找到对应的台账(可能是多个)
@@ -61,7 +59,7 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
          */
         List<Iterpretation> cds= iterpretationMapper.getSpotByTaskId(taskId);
         if(cds==null||cds.size()<1){
-            return ResultCp.build(1001,"由于此任务下的台账无绑定的斑点信息,下发失败");
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "由于此任务下的台账无绑定的斑点信息,下发失败！");
         }
 
         List<Integer> pointList = cds.stream().map(Iterpretation::getId).collect(Collectors.toList());
@@ -132,8 +130,9 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
                     JPushUtil.jiGuangPush(saa.getSa012(), "您有新的问题点需要接收！","1");
                 }*/
 
-            return ResultCp.build(1000,"任务下发"+ResultMsg.MSG_1000);
+            return ResultVOUtil.success();
+        }else {
+            return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "服务器异常");
         }
-        return ResultCp.build(1005,ResultMsg.MSG_1005);
     }
 }

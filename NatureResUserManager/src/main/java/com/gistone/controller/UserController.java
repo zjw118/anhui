@@ -6,10 +6,7 @@ import com.gistone.annotation.PassToken;
 import com.gistone.entity.*;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.*;
-import com.gistone.util.ObjectUtils;
-import com.gistone.util.RegUtil;
-import com.gistone.util.Result;
-import com.gistone.util.ResultMsg;
+import com.gistone.util.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -113,20 +110,23 @@ public class UserController {
      * @throws Exception
      */
     @PassToken
-    @ApiOperation(value = "人员分组列表（有分页）******", notes = "人员分组列表（有分页）", response = St4SysSa.class)
+    @ApiOperation(value = "(安徽用)人员分组列表（有分页）真实姓名sa019手机号sa012", notes = "人员分组列表（有分页）", response = St4SysSa.class)
     @PostMapping("/listUser")
-    public Result listUser(@RequestBody @ApiParam(name = "人员分组列表（有分页）", value = "json格式", required = true) Swagger<St4SysSa> data,
+    public ResultVO listUser(@RequestBody @ApiParam(name = "人员分组列表（有分页）", value = "json格式", required = true) Swagger<St4SysSa> data,
                            HttpServletRequest request){
         St4SysSa sa = data.getData();
         if(sa.getPageNumber()== null){
-            return Result.build(1001,"pageNumber"+ResultMsg.MSG_1001);
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "pageNumber！");
         }
         if(sa.getPageSize()== null){
-            return Result.build(1001,"pageSize"+ResultMsg.MSG_1001);
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "pageSize不能为空！");
         }
+        String token = request.getHeader("token");// 从 http 请求头中取出 token
+        //String UserId = JWT.decode(token).getAudience().get(0);
+        St4SysSa seUser = new St4SysSa();
 
-        Result result = userService.listUser(sa);
-        return result;
+        seUser.setSa001(Integer.parseInt("1"));
+        return userService.listUser(sa,seUser);
     }
 
     /**
