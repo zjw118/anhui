@@ -104,7 +104,7 @@ public class SysUserLoginInterceptor implements HandlerInterceptor {
      */
     private void returnJson(HttpServletResponse response, String json) throws Exception{
         PrintWriter writer = null;
-        response.setCharacterEncoding("UTF-8");
+//        response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=utf-8");
         try {
             writer = response.getWriter();
