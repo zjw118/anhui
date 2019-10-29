@@ -275,10 +275,10 @@ public class ProjectAdmissionController {
                 analysisReport.setProjectId(projectAdmission.getId());
 
                 Integer redlineId = (Integer) detailInfo.get("redineId");
-                if (redlineId == null || redlineId <= 0) {
+                /*if (redlineId == null || redlineId <= 0) {
                     throw new ProjectException(ResultEnum.REDLINEID_EMPTY);
-                }
-                analysisReport.setRedlineId(redlineId);
+                }*/
+                analysisReport.setRedlineId(1111);
 
                 String intersectArea = (String) detailInfo.get("intersectArea");
                 if (intersectArea == null) {
