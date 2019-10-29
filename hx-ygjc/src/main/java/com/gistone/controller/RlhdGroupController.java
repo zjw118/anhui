@@ -2,7 +2,6 @@ package com.gistone.controller;
 
 
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.Iterpretation;
 import com.gistone.entity.RlhdGroup;
 import com.gistone.service.RlhdGroupService;
 import com.gistone.util.ResultEnum;
@@ -32,7 +31,12 @@ public class RlhdGroupController {
     private RlhdGroupService service;
 
     @PostMapping("/list")
-    public ResultVO getList(@RequestBody Map<String, Object> params) {
+    public ResultVO getList(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
 
         Integer pageNum = (Integer) params.get("pageNum");
         Integer pageSize = (Integer) params.get("pageSize");
@@ -61,7 +65,17 @@ public class RlhdGroupController {
         if (id == null || id < 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
-        List<Iterpretation> result = service.getDetailById(id);
+        Integer pageNum = (Integer) params.get("pageNum");
+        Integer pageSize = (Integer) params.get("pageSize");
+        String name = (String) params.get("name");
+        if (pageNum == null) {
+            pageNum = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = 10;
+        }
+       Map<String,Object> result = service.getDetailById(pageNum,pageSize,id);
         return ResultVOUtil.success(result);
     }
 
@@ -75,24 +89,21 @@ public class RlhdGroupController {
         }
 
         String name = (String) params.get("name");
-        if(StringUtils.isBlank(name)){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"台账名称不能为空");
+        if (StringUtils.isBlank(name)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "台账名称不能为空");
         }
         List<Integer> ids = (List<Integer>) params.get("id");
-        if(ids==null||ids.size()<0){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"id不能为空");
-        }
 
-        Integer createBy  = (Integer) params.get("createBy");
-        if(createBy==null||createBy<=0){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"创建人id不能为空");
+
+        Integer createBy = (Integer) params.get("createBy");
+        if (createBy == null || createBy <= 0) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "创建人id不能为空");
         }
 
         String remark = (String) params.get("remark");
 
 
-
-        service.insert(name,createBy,remark,ids);
+        service.insert(name, createBy, remark, ids);
         return ResultVOUtil.success();
     }
 
@@ -118,24 +129,52 @@ public class RlhdGroupController {
         return ResultVOUtil.success();
     }
 
-    @PostMapping("addDataToGroup")
-    public ResultVO addDataToGroup(@RequestBody Map<String, Object> paramsMap){
+    /**
+     * @param paramsMap
+     * @return com.gistone.VO.ResultVO
+     * @description:为台账添加数据
+     * @author zf1017@foxmail.com
+     * @motto: Talk is cheap,show me the code
+     * @date 2019/10/25 0025 14:08
+     */
+    @PostMapping("/addDataToGroup")
+    public ResultVO addDataToGroup(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
         if (params == null) {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
         }
         Integer groupId = (Integer) params.get("groupId");
-        if(groupId==null||groupId<=0){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"台账id不能为空");
+        if (groupId == null || groupId <= 0) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "台账id不能为空");
         }
-        Integer id = (Integer) params.get("id");
-        if(id==null||id<=0){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"数据id不能为空");
+        List<Integer> id = (List<Integer>) params.get("id");
+        if (id == null || id.size() <= 0) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "数据id不能为空");
         }
 
-        service.addDataToGroup(groupId,id);
+        service.addDataToGroup(groupId, id);
 
+        return ResultVOUtil.success();
+    }
+
+    @PostMapping("/deleteDataFromGroup")
+    public ResultVO deleteDataFromGroup(@RequestBody Map<String, Object> paramsMap){
+        //请求参数格式校验
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        Integer groupId = (Integer) params.get("groupId");
+        if (groupId == null || groupId <= 0) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "台账id不能为空");
+        }
+        List<Integer> id = (List<Integer>) params.get("id");
+        if (id == null || id.size() <= 0) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "数据id不能为空");
+        }
+
+        service.deleteDataFromGroup(groupId,id);
         return ResultVOUtil.success();
     }
 

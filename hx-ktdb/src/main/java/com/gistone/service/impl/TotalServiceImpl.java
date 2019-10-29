@@ -43,13 +43,13 @@ public class TotalServiceImpl implements TotalService {
 
             int board = totalMapper.selectBoardTotal(code);
 
-            int survey = totalMapper.selectSurveyTotal(code);
+//            int survey = totalMapper.selectSurveyTotal(code);
 
             result.put("redlineCount", redline);
             result.put("markerCount", marker);
             result.put("pointCount", point);
             result.put("boardCount", board);
-            result.put("surveyCount", survey);
+//            result.put("surveyCount", survey);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("查询统计总数异常，异常信息为：", e.getMessage());

@@ -1,7 +1,6 @@
 package com.gistone.aspect;
 
 import com.alibaba.fastjson.JSONObject;
-import com.auth0.jwt.JWT;
 import com.gistone.entity.SysLog;
 import com.gistone.util.ToolUtil;
 import org.aspectj.lang.JoinPoint;
@@ -52,9 +51,9 @@ public class WebLogAspect {
         HttpServletRequest request = attributes.getRequest();
         HttpSession session = (HttpSession) attributes.resolveReference(RequestAttributes.REFERENCE_SESSION);
         String token = request.getHeader("token");
-        String userId = JWT.decode(token).getAudience().get(0);
+//        String userId = JWT.decode(token).getAudience().get(0);
         sysLog = new SysLog();
-        sysLog.setCreateBy(userId);
+//        sysLog.setCreateBy(userId);
         sysLog.setClassMethod(joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
         sysLog.setHttpMethod(request.getMethod());
         //获取传入目标方法的参数
@@ -121,6 +120,7 @@ public class WebLogAspect {
         String retString = JSONObject.toJSONString(ret);
         sysLog.setResponse(retString.length()>5000? JSONObject.toJSONString("请求参数数据过长不与显示"):retString);
         sysLog.setUseTime(System.currentTimeMillis() - startTime.get());
+        System.out.println(sysLog.toString());
         sysLog.insert();
     }
 }

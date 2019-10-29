@@ -57,6 +57,8 @@ public class RlhdGroup extends Model<RlhdGroup> {
      */
     private Integer delFlag;
 
+    private Integer sonCount;
+
 
     @Override
     protected Serializable pkVal() {

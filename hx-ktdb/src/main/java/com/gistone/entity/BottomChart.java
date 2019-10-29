@@ -45,6 +45,8 @@ public class BottomChart extends Model<BottomChart> {
     @TableField("createBy")
     private Integer createBy;
 
+    private Integer type;
+
     /**
      * 创建日期
      */

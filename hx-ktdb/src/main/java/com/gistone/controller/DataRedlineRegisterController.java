@@ -117,7 +117,7 @@ public class DataRedlineRegisterController {
      */
     @RequestMapping("/import")
     public void importRedline() {
-        String path = "D:/Work/gistone/static/shapefile/redline_bk.shp";
+        String path = "D:/Work/gistone/static/anhuiepr/1.shp";
         ImportRedlineData importRedlineData = new ImportRedlineData();
         ArrayList<DataRedlineRegister> lmMarkerMobiles = importRedlineData.readShapeFile(path);
 

@@ -71,7 +71,7 @@ public class TotalController {
         //请求参数格式校验
         Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
         if (dataParam == null) {
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "请求数据data不能为空！");
         }
 
         String code = (String) dataParam.get("code");
