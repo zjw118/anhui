@@ -28,26 +28,14 @@ import java.util.Map;
 public class IterpretationController {
     @Autowired
     private IterpretationService service;
-
     @PostMapping("/list")
     public ResultVO getList(@RequestBody Map<String, Object> paramsMap) {
-        //请求参数格式校验
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
         if (params == null) {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
         }
         Integer id = (Integer) params.get("id");
-//        Integer pageNum = (Integer) params.get("pageNum");
-//        Integer pageSize = (Integer) params.get("pageSize");
-//        String name = (String) params.get("name");
-//        if (pageNum == null) {
-//            pageNum = 1;
-//        }
-//        if (pageSize == null) {
-//            pageSize = 999999;
-//        }
         Map<String, Object> result = service.list(1, 99999999, id);
-//        Map<String, Object> result = service.list(pageNum, pageSize, name);
         return ResultVOUtil.success(result);
     }
 
@@ -80,13 +68,10 @@ public class IterpretationController {
         if (imageId == null || imageId <= 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "影像id不能为空");
         }
-
         Integer createBy = (Integer) params.get("createBy");
         if(createBy==null||createBy<0){
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"创建人id不能为空");
         }
-
-
         //判断添加人是否为空
         service.insert(data,imageId,createBy);
         return ResultVOUtil.success();

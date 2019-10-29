@@ -102,8 +102,6 @@ import java.util.Map;
             iterpretation.setUpdateDate(new Date());
             iterpretationMapper.insert(iterpretation);
         }
-
-
         //执行写入shp文件操作，返回的地址插入到影像表中
         String url = PathUtile.getRandomPath("D:/epr/image/","x.shp");
         String res = ShpUtil.handleWebData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+""),url);
@@ -113,10 +111,6 @@ import java.util.Map;
             image.setShpurl(url.split(":")[1]);
             imageMapper.updateById(image);
         }
-
-
-
-
     }
 
 
