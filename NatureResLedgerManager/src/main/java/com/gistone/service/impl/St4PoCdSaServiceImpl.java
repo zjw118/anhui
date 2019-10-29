@@ -1,15 +1,13 @@
 package com.gistone.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.*;
 import com.gistone.mapper.*;
 import com.gistone.service.ISt4PoCdSaService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.service.ISt4PoClCoService;
-import com.gistone.util.JPushUtil;
-import com.gistone.util.Result;
-import com.gistone.util.ResultCp;
-import com.gistone.util.ResultMsg;
+import com.gistone.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,23 +43,26 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
     private ISt4PoCdSaService st4PoCdSaService;
 
     @Autowired
-    private SysUserMapper st4SysSaMapper;
+    private St4SysSaMapper st4SysSaMapper;
+
+    @Autowired
+    private IterpretationMapper iterpretationMapper;
 
 
     @Override
-    public ResultCp givePoint(List<Integer> uids, Integer taskId) {
+    public ResultVO givePoint(List<Integer> uids, Integer taskId) {
         /**
          * 这里的业务逻辑是这样的:
          * 1.拿到传递过来的任务id去找到对应的台账(可能是多个)
          * 2.在拿每一个台账的id去拿斑点的的id
          * 3.最终是把斑点下发到人员
          */
-        List<St4ScsCd> cds= st4ScsCdMapper.getSpotByTaskId(taskId);
+        List<Iterpretation> cds= iterpretationMapper.getSpotByTaskId(taskId);
         if(cds==null||cds.size()<1){
-            return ResultCp.build(1001,"由于此任务下的台账无绑定的斑点信息,下发失败");
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "由于此任务下的台账无绑定的斑点信息,下发失败！");
         }
 
-        List<Integer> pointList = cds.stream().map(St4ScsCd::getCd001).collect(Collectors.toList());
+        List<Integer> pointList = cds.stream().map(Iterpretation::getId).collect(Collectors.toList());
         List<St4PoCdSa> existsaList = null;
         St4PoCdSa saSg=null;
         boolean flag=true;
@@ -122,15 +123,16 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
 
 
         if(flag){
-                QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
-                wrapper.in("id",uids);
-                List<SysUser> saList = st4SysSaMapper.selectList(wrapper);
+                QueryWrapper<St4SysSa> wrapper = new QueryWrapper<>();
+                wrapper.in("sa001",uids);
+                List<St4SysSa> saList = st4SysSaMapper.selectList(wrapper);
                 /*for (SysUser saa:saList) {
                     JPushUtil.jiGuangPush(saa.getSa012(), "您有新的问题点需要接收！","1");
                 }*/
 
-            return ResultCp.build(1000,"任务下发"+ResultMsg.MSG_1000);
+            return ResultVOUtil.success();
+        }else {
+            return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "服务器异常");
         }
-        return ResultCp.build(1005,ResultMsg.MSG_1005);
     }
 }

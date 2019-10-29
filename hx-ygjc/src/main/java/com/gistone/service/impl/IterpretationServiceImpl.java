@@ -5,13 +5,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
 import com.gistone.entity.Iterpretation;
 import com.gistone.mapper.ImageMapper;
 import com.gistone.mapper.IterpretationMapper;
 import com.gistone.service.IterpretationService;
-import com.gistone.util.PathUtile;
-import com.gistone.util.ShpUtil;
+import com.gistone.util.*;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -42,7 +42,19 @@ import java.util.Map;
     @Autowired
     private ImageMapper imageMapper;
 
+    @Override
+    public ResultVO sysSpotData (Integer id){
 
+        try {
+            List<Iterpretation> cdList = iterpretationMapper.sysSpotData(id);
+            ResultCp cp = new ResultCp();
+            cp.setData(cdList);
+            return ResultVOUtil.success(cp);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "同步数据失败，服务器异常！");
+        }
+    }
     @Override
     public Map<String, Object> list(Integer pageNum, Integer pageSize,Integer id) {
         QueryWrapper<Iterpretation> wrapper = new QueryWrapper<>();
@@ -98,7 +110,7 @@ import java.util.Map;
         if("0".equals(res)){
             Image image = new Image();
             image.setId(imageId);
-            image.setUrl(url.split(":")[1]);
+            image.setShpurl(url.split(":")[1]);
             imageMapper.updateById(image);
         }
 

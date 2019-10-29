@@ -1,6 +1,7 @@
 package com.gistone.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.St4PoCdSa;
 import com.gistone.util.Result;
 import com.gistone.util.ResultCp;
@@ -22,7 +23,7 @@ public interface ISt4PoCdSaService extends IService<St4PoCdSa> {
      * @param taskId
      * @return
      */
-    ResultCp givePoint(List<Integer> uids,Integer taskId);
+    ResultVO givePoint(List<Integer> uids, Integer taskId);
 
 
 

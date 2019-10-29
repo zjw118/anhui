@@ -21,7 +21,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Iterpretation extends Model<Iterpretation> {
+public class Iterpretation extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
@@ -47,9 +47,5 @@ public class Iterpretation extends Model<Iterpretation> {
 
     private Integer groupId;
 
-    @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
 
 }

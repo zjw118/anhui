@@ -59,18 +59,8 @@
         sa.SA013, sa.SA014, sa.SA015, sa.SA016, sa.SA017, sa.SA018, sa.SA019, sa.SA020, sa.SG001
         from st4_scs_ch ch
         left join st4_sys_sa sa on sa.SA001 = ch.CH002
-        left join st4_po_sa_sj sasj on sasj.SA001= sa.SA001
-        LEFT JOIN st4_sys_sj sj on sj.SJ001 = sasj.SJ001
         where SA007 = 1
-        <if test="unitList!=null and unitList.size >0 ">
-            and sj.SJ001 IN
-            <foreach item="item" index="index"  collection="unitList" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </if>
-        <if test="sg001 != null">
-            and SG001 = #{sg001}
-        </if>
+
 
         ) a where 1=1
 

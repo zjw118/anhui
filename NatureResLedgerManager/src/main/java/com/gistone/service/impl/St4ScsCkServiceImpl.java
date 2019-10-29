@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.*;
 import com.gistone.mapper.*;
 import com.gistone.service.*;
@@ -306,7 +307,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
 
 
     @Override
-    public Result listLedger(St4ScsCk checkLedger,St4SysSa seUser) {
+    public ResultVO listLedger(St4ScsCk checkLedger, St4SysSa seUser) {
 
         seUser = st4SysSaMapper.selectById(seUser);
         checkLedger.setCk049(String.valueOf(seUser.getSa001()));
@@ -323,12 +324,9 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
         IPage<St4ScsCk> list = checkLedgerMapper.listLedger(page,checkLedger);
         Result result = new Result();
         result.setRows(list.getRecords());
-
-        result.setStatus(1000);
         result.setTotal((int)list.getTotal());
         result.setPage((int)list.getPages());
-        result.setMsg("加载"+ResultMsg.MSG_1000);
-        return result;
+        return ResultVOUtil.success(result);
 
 
     }
@@ -1733,12 +1731,12 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
         return  result;
     }
     @Override
-    public Result pointStageExamine(St4ScsCk ck){
+    public ResultVO pointStageExamine(St4ScsCk ck){
 
         if(checkLedgerMapper.updateById(ck)>0){
-            boolean flag= false;
-            boolean flagPush= false;
-            if(ck.getCk067()==2){
+           /* boolean flag= false;
+            boolean flagPush= false;*/
+            /*if(ck.getCk067()==2){
                 List<Map> list = checkLedgerMapper.getTaskMemberUnpass(ck);
                 if(list!=null&&list.size()>0){
                     for (Map map:list) {
@@ -1750,16 +1748,15 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
 
                 }
 
-            }
-            if(flag){
+            }*/
+           // if(flag){
 
-                return Result.build(1000,"审核成功");
-            }else {
-                return Result.build(1006,"审核"+ResultMsg.MSG_1006);
-            }
+                return ResultVOUtil.success();
+           // }else {
+               // return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "审核失败！");
+           // }
         }
-
-        return Result.build(1006,"审核"+ResultMsg.MSG_1006);
+        return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "审核失败！");
     }
 
     @Override

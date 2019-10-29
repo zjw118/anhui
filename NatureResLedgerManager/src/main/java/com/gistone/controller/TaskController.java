@@ -1,28 +1,24 @@
 package com.gistone.controller;
 
 
-import com.auth0.jwt.JWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.gistone.VO.ResultVO;
 import com.gistone.annotation.PassToken;
-import com.gistone.entity.*;
+import com.gistone.entity.St4ScsCl;
+import com.gistone.entity.St4ScsCo;
+import com.gistone.entity.SysUser;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.*;
 import com.gistone.swagger.SharePoint;
-import com.gistone.swagger.St4ScsCzSwagger;
-import com.gistone.util.ObjectUtils;
-import com.gistone.util.Result;
-import com.gistone.util.ResultCp;
-import com.gistone.util.ResultMsg;
+import com.gistone.util.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.poi.hssf.record.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -65,7 +61,7 @@ public class TaskController {
      */
     @ApiOperation(value = "任务批次添加接口(参数传递的时候ledgerIdList是必传项格式是ledgerIdList:[1,2,3])", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/insertTask")
-    public ResultCp insertTask(@RequestBody @ApiParam(name = "任务批次添加接口", value = "json格式", required = true) Swagger<St4ScsCl> data,
+    public ResultVO insertTask(@RequestBody @ApiParam(name = "任务批次添加接口", value = "json格式", required = true) Swagger<St4ScsCl> data,
                                HttpServletRequest request) {
         St4ScsCl param = data.getData();
         LocalDateTime date = LocalDateTime.now();
@@ -81,7 +77,7 @@ public class TaskController {
         param.setCl014(date);
         List<Integer> ledgerIdList = param.getLedgerIdList();
         if(ledgerIdList==null||ledgerIdList.size()<1){
-            return ResultCp.build(1001,"绑定台账不能为空");
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "绑定台账不能为空！");
         }
 
         return iSt4ScsClService.insertTask(param,seUser);
@@ -93,15 +89,13 @@ public class TaskController {
      */
     @ApiOperation(value="台账下拉多选接口",notes = "台账下拉多选接口",response = St4ScsCo.class)
     @RequestMapping(value="/ledgerSelect",method = RequestMethod.POST)
-    public ResultCp ledgerSelect(@ApiParam(name="台账下拉多选接口", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
+    public ResultVO ledgerSelect(@ApiParam(name="台账下拉多选接口", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
 
         ResultCp resultCp = new ResultCp();
 
-        resultCp.setStatus(1000);
-        resultCp.setMsg("加载成功");
         List<St4ScsCo> coList = iSt4ScsCoService.list();
         resultCp.setData(coList);
-        return resultCp;
+        return ResultVOUtil.success(resultCp);
 
     }
 
@@ -112,21 +106,22 @@ public class TaskController {
      */
     @ApiOperation(value = "任务批次修改接口", notes = "此接口返回问题点批次数据", response = St4ScsCl.class)
     @PostMapping("/updateTask")
-    public ResultCp updateTask(@RequestBody @ApiParam(name = "任务批次修改接口", value = "json格式", required = true) Swagger<St4ScsCl> data
+    public ResultVO updateTask(@RequestBody @ApiParam(name = "任务批次修改接口", value = "json格式", required = true) Swagger<St4ScsCl> data
             , HttpServletRequest request) {
         St4ScsCl param = data.getData();
         if(param.getCl001()==null){
-            return  ResultCp.build(1001,"批次任务ciId"+ResultMsg.MSG_1001);
+           return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "批次任务ciId不能为空！");
         }
         List<Integer> ledgerIdList = param.getLedgerIdList();
 
         if(ledgerIdList==null||ledgerIdList.size()<1){
-            return ResultCp.build(1001,"台账不能为空");
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据台账不能为空！");
         }
         SysUser seUser = new SysUser();
         String token = request.getHeader("token");// 从 http 请求头中取出 token
         String userId ="1";
         return iSt4ScsClService.updateTask(param,seUser);
+
     }
 
     /**
@@ -137,10 +132,10 @@ public class TaskController {
       
     @ApiOperation(value = "任务批次删除接口", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/deleteTask")
-    public ResultCp deleteTask(@RequestBody @ApiParam(name = "任务批次修改接口", value = "json格式", required = true) Swagger<St4ScsCl> data, HttpServletRequest request) {
+    public ResultVO deleteTask(@RequestBody @ApiParam(name = "任务批次修改接口", value = "json格式", required = true) Swagger<St4ScsCl> data, HttpServletRequest request) {
         St4ScsCl param = data.getData();
         if(param.getCl001()==null){
-            return  ResultCp.build(1001,"批次任务ciId"+ResultMsg.MSG_1001);
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "批次任务ciId不能为空！");
         }
         param.setCl012(0);
         SysUser seUser = new SysUser();
@@ -154,12 +149,12 @@ public class TaskController {
      * @param data
      * @return
      */
-    @ApiOperation(value = "任务批次列表接口", notes = "此接口返回问题点批次数据", response = Result.class)
+    @ApiOperation(value = "任务批次列表接口(模糊查询字段cl002(任务名称) cl010(年份) )", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/listTask")
-    public ResultCp listTask(@RequestBody @ApiParam(name = "任务批次列表接口", value = "json格式", required = true)Swagger<St4ScsCl> data,HttpServletRequest request) {
+    public ResultVO listTask(@RequestBody @ApiParam(name = "任务批次列表接口", value = "json格式", required = true)Swagger<St4ScsCl> data, HttpServletRequest request) {
         St4ScsCl param = data.getData();
         if(!ObjectUtils.isNotNullAndEmpty(param.getPageNumber())&&!ObjectUtils.isNotNullAndEmpty(param.getPageSize())){
-            return  ResultCp.build(1001,"pageSize和pageNumber"+ResultMsg.MSG_1001);
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "pageSize和pageNumber不能为空！");
         }
         String token = request.getHeader("token");// 从 http 请求头中取出 token
         String userId ="1" ;//JWT.decode(token).getAudience().get(0);
@@ -176,15 +171,13 @@ public class TaskController {
     @PassToken
     @ApiOperation(value = "任务批次下拉框列表接口", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/listTaskSelect")
-    public ResultCp listTaskSelect(@RequestBody @ApiParam(name = "任务批次下拉框列表接口", value = "json格式", required = true) Swagger<St4ScsCl> data) {
+    public ResultVO listTaskSelect(@RequestBody @ApiParam(name = "任务批次下拉框列表接口", value = "json格式", required = true) Swagger<St4ScsCl> data) {
         St4ScsCl param = data.getData();
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq("CL012",1);
         ResultCp res = new ResultCp();
-        res.setStatus(1000);
-        res.setMsg("加载"+ResultMsg.MSG_1000);
         res.setData(iSt4ScsClService.list(wrapper));
-        return  res;
+        return  ResultVOUtil.success(res);
     }
 
     /**
@@ -195,10 +188,10 @@ public class TaskController {
     @PassToken
     @ApiOperation(value = "任务批次单个详情接口", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/getTaskById")
-    public ResultCp getTaskById(@RequestBody @ApiParam(name = "任务批次单个详情接口", value = "json格式", required = true) Swagger<St4ScsCl> data) {
+    public ResultVO getTaskById(@RequestBody @ApiParam(name = "任务批次单个详情接口", value = "json格式", required = true) Swagger<St4ScsCl> data) {
         St4ScsCl param = data.getData();
         if(param.getCl001()==null){
-            return  ResultCp.build(1001,"任务批次CL001"+ResultMsg.MSG_1001);
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "任务批次CL001不能为空！");
         }
        return  iSt4ScsClService.getTaskDetail(param);
     }

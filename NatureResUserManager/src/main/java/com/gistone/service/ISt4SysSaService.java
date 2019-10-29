@@ -1,6 +1,7 @@
 package com.gistone.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.St4SysSa;
 import com.gistone.entity.SysUser;
 import com.gistone.util.Result;
@@ -28,7 +29,7 @@ public interface ISt4SysSaService extends IService<St4SysSa> {
      */
     Result searchSysUserByLogin(String username, String password);
 
-    Result listPhoneUserToView(St4SysSa data);
+    ResultVO listPhoneUserToView(St4SysSa data);
 
     ResultCp updateAppUser(St4SysSa data) throws Exception;
     Result add(St4SysSa user, St4SysSa seUser, List<Integer> roleList, List<Integer> unitList);
@@ -45,7 +46,7 @@ public interface ISt4SysSaService extends IService<St4SysSa> {
      * @param sa
      * @return
      */
-    Result listUser(St4SysSa sa);
+    ResultVO listUser(St4SysSa sa,St4SysSa seUser);
 
     /**
      * 用户详情接口

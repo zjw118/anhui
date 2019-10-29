@@ -152,6 +152,34 @@
             <result column="CD013" property="cd013" />
             <result column="CD014" property="cd014" />
         </association>
+        <association property="iterpretation" javaType="com.gistone.entity.Iterpretation">
+            <id column="id" property="id" />
+            <result column="image_id" property="imageId" />
+            <result column="active_name" property="activeName" />
+            <result column="active_type" property="activeType" />
+            <result column="area" property="area" />
+            <result column="descri" property="descri" />
+            <result column="create_by" property="createBy" />
+            <result column="create_date" property="createDate" />
+            <result column="update_by" property="updateBy" />
+            <result column="update_date" property="updateDate" />
+            <result column="remark" property="remark" />
+            <result column="del_flag" property="delFlag" />
+            <result column="geometry" property="geometry" />
+            <result column="group_id" property="groupId" />
+        </association>
+        <association property="st4ScsCo" javaType="com.gistone.entity.St4ScsCo">
+            <id column="co001" property="co001" />
+            <result column="name" property="name" />
+            <result column="year" property="year" />
+            <result column="admin_region" property="adminRegion" />
+            <result column="create_by" property="createBy" />
+            <result column="create_date" property="createDate" />
+            <result column="update_by" property="updateBy" />
+            <result column="update_date" property="updateDate" />
+            <result column="remark" property="remark" />
+            <result column="del_flag" property="delFlag" />
+        </association>
         <association property="st4ScsCl" javaType="com.gistone.entity.St4ScsCl">
             <id column="CL001" property="cl001" />
             <result column="CL002" property="cl002" />
@@ -194,7 +222,7 @@
     </sql>
 
     <sql id="Base_Column_List2">
-        CK001,CK002, cd.CD004, sg.SG001, CK005,cd.CD002 as ck007,cd.CD003 as ck008, CK006, CK009, CK010, CK011, CK012, CK013, CK014, CK015, CK016, CK017, CK018, CK019, CK020, CK021, CK022, CK023, CK024, CK025, CK026, CK027, CK028, CK029, CK030, CK031, CK032, CK033, CK034, CK035, CK036, CK037, CK038, CK039, CK040, CK041, CK042, CK043, CK044, CK045, CK046, CK047, CK048, CK049, CK050, CK051, CK052, CK053, CK054, CK055, CK056, CK057, CK058, CK059, CK060, CK061, CK062, CK063, CK064, CK065, CK066, CK067, CK068, CK069, CK070, CK071, CK072, CC002, CK074, CK075, CK076, CK077, CK078, CK079, CK080, CK081, CK082, CK083, CK084, CK085, CK086, CK087, CK088, CK089, CK090, CK091
+        CK001,CK002, cd.CD004, CK005,cd.CD002 as ck007,cd.CD003 as ck008, CK006, CK009, CK010, CK011, CK012, CK013, CK014, CK015, CK016, CK017, CK018, CK019, CK020, CK021, CK022, CK023, CK024, CK025, CK026, CK027, CK028, CK029, CK030, CK031, CK032, CK033, CK034, CK035, CK036, CK037, CK038, CK039, CK040, CK041, CK042, CK043, CK044, CK045, CK046, CK047, CK048, CK049, CK050, CK051, CK052, CK053, CK054, CK055, CK056, CK057, CK058, CK059, CK060, CK061, CK062, CK063, CK064, CK065, CK066, CK067, CK068, CK069, CK070, CK071, CK072, CC002, CK074, CK075, CK076, CK077, CK078, CK079, CK080, CK081, CK082, CK083, CK084, CK085, CK086, CK087, CK088, CK089, CK090, CK091
     </sql>
     <sql id="Base_Column_List4">
         ck.CK001,CK002, cd.CD004, sg.SG001, sg.SG008, CK005,cd.CD002 as ck007,cd.CD003 as ck008, CK006, CK009, CK010, CK011, CK012, CK013,
@@ -203,7 +231,9 @@
     <sql id="Base_Column_List3">
         CAC002, CAC003, CAC004, CAC005, CAC006, CAC007, CAC008, CAC009, CAC010, CAC011, CAC012, CAC013, CAC014, CAC015, CAC016, CAC017, CAC018, CAC019, CAC020, CAC021, CAC022, CAC023, CAC024, CAC025, CAC026, CAC027, CAC028, CAC029, CAC030, CAC031, CAC032, CAC033, CAC034, CAC035, CAC036
     </sql>
-    <!---->
+    <sql id="Base_Column_List5">
+        CK001, CK002, CD004, CK005, CK006, CK007, CK008, CK009, CK010, CK011, CK012, CK013, CK014, CK015, CK016, CK017, CK018, CK019, CK020, CK021, CK022, CK023, CK024, CK025, CK026, CK027, CK028, CK029, CK030, CK031, CK032, CK033, CK034, CK035, CK036, CK037, CK038, CK039, CK040, CK041, CK042, CK043, CK044, CK045, CK046, CK047, CK048, CK049, CK050, CK051, CK052, CK053, CK054, CK055, CK056, CK057, CK058, CK059, CK060, CK061, CK062, CK063, CK064, CK065, CK066, CK067, CK068, CK069, CK070, CK071, CK072, CC002, CK074, CK075, CK076, CK077, CK078, CK079, CK080, CK081, CK082, CK083, CK084, CK085, CK086, CK087, CK088, CK089, CK090, CK091
+    </sql>
 
 
     <insert id="insertAsHashMap" parameterType="HashMap" useGeneratedKeys="true" keyProperty="ck001" >
@@ -786,7 +816,7 @@
     </select>
     <select id="listLedger" resultMap="BaseResultMap"  >
         SELECT
-        <include refid="Base_Column_List2"/>,sa.SA019 as uname
+        <include refid="Base_Column_List5"/>,sa.SA019 as uname,cd.*,co.*
         FROM
 
         (
@@ -795,13 +825,16 @@
         INNER JOIN st4_scs_ck d ON t.ID= d.CK001
 
         )
-
-        ck left join st4_scs_cd cd on cd.CD004 = ck.CD004
-        left join  st4_sys_sg sg on cd.SG001 = SG.sg001
+        ck left join iterpretation cd on cd.id = ck.CD004
+        left join st4_scs_co co on co.co001 = cd.group_id
         left join  st4_sys_sa sa on sa.SA001= ck.CK049
         left join st4_scs_cl cl on cl.CL001=ck.CK091
         where CK085 = 1
-
+        <if test="ck.st4ScsCo!=null">
+            <if test="ck.st4ScsCo.name!=null and ck.st4ScsCo.name!='' ">
+              and   co.name like '%${ck.st4ScsCo.name}%'
+            </if>
+        </if>
 
         <if test="ck.uname != null">
             and sa.SA019 like '%${ck.uname}%'
@@ -811,9 +844,6 @@
         </if>
         <if test="ck.ptype==1">
             and ck.CK049=#{ck.ck049}
-        </if>
-        <if test="ck.sg001 != null" > and
-            cd.SG001 = #{ck.sg001}
         </if>
         <if test="ck.ck002 != null" > and
             CK002 = #{ck.ck002}

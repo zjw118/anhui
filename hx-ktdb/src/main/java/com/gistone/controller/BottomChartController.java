@@ -73,7 +73,7 @@ public class BottomChartController {
         //请求参数格式校验
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
         if (params == null) {
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "请求数据data不能为空！");
         }
 
         List<Integer> id = (List<Integer>) params.get("id");

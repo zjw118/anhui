@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.St4PoClCo;
 import com.gistone.entity.St4ScsCl;
 import com.gistone.entity.St4SysSa;
@@ -11,9 +12,7 @@ import com.gistone.entity.SysUser;
 import com.gistone.mapper.*;
 import com.gistone.service.ISt4PoClCoService;
 import com.gistone.service.ISt4ScsClService;
-import com.gistone.util.Result;
-import com.gistone.util.ResultCp;
-import com.gistone.util.ResultMsg;
+import com.gistone.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,14 +48,12 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
     private St4PoClCoMapper st4PoClCoMapper;
 
     @Override
-    public ResultCp getTaskDetail(St4ScsCl data) {
+    public ResultVO getTaskDetail(St4ScsCl data) {
 
         St4ScsCl list = st4ScsClMapper.getTaskDetail(data);
         ResultCp res = new ResultCp();
         res.setData(list);
-        res.setStatus(1000);
-        res.setMsg("查询成功");
-        return res;
+        return ResultVOUtil.success(res);
     }
 
     @Override
@@ -71,7 +68,7 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
     }
 
     @Override
-    public ResultCp listTask(St4ScsCl data, SysUser seUser) {
+    public ResultVO listTask(St4ScsCl data, SysUser seUser) {
 
       /*  QueryWrapper<St4ScsCl> wrapper = new QueryWrapper<>();
         Page<St4ScsCl>  page = new Page<>(data.getPageNumber(),data.getPageSize());
@@ -112,15 +109,13 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
         ResultCp res = new ResultCp();
         Integer tsize =st4ScsClMapper.listTask(data).size();
         res.setTotal(tsize);
-        res.setStatus(1000);
-        res.setMsg("加载"+ ResultMsg.MSG_1000);
-        res.setRows(list);;
+        res.setRows(list);
         res.setPage((int)Math.ceil((double)tsize/size));
-        return res;
+        return ResultVOUtil.success(res);
     }
 
     @Override
-    public ResultCp insertTask(St4ScsCl data, SysUser seUser) {
+    public ResultVO insertTask(St4ScsCl data, SysUser seUser) {
         List<Integer> ledgerIdList = data.getLedgerIdList();
         ResultCp resultCp = new ResultCp();
         List<St4PoClCo> clcoList = new ArrayList<>();
@@ -134,28 +129,24 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
                 clcoList.add(clco);
             }
             if(!st4PoClCoService.saveBatch(clcoList)){
-                resultCp.setStatus(1003);
-                resultCp.setMsg(ResultMsg.MSG_1003);
-                return resultCp;
+                return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "服务器异常！");
             }
-            resultCp.setStatus(1000);
-            resultCp.setMsg("创建"+ResultMsg.MSG_1000);
+            return ResultVOUtil.success();
         }
 
-        return resultCp;
+        return ResultVOUtil.success();
     }
 
     @Override
-    public ResultCp updateTask(St4ScsCl data, SysUser seUser) {
+    public ResultVO updateTask(St4ScsCl data, SysUser seUser) {
         ResultCp resultCp = new ResultCp();
-        resultCp.setStatus(1000);
 
         if(st4ScsClService.updateById(data)){
             QueryWrapper<St4PoClCo> clCoQueryWrapper = new QueryWrapper<>();
             //这里把之前绑定的旧的台账删除，然后把新的在赋上
             clCoQueryWrapper.eq("cl001",data.getCl001());
             if(st4PoClCoMapper.delete(clCoQueryWrapper)<1){
-                return ResultCp.build(1003,ResultMsg.MSG_1003);
+                return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "服务器异常！");
             }
             List<Integer> ledgerIdList = data.getLedgerIdList();
 
@@ -168,39 +159,30 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
                 clcoList.add(clco);
             }
             if(!st4PoClCoService.saveBatch(clcoList)){
-                resultCp.setStatus(1003);
-                resultCp.setMsg(ResultMsg.MSG_1003);
-                return resultCp;
+                return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "服务器异常！");
             }
-            resultCp.setStatus(1000);
-            resultCp.setMsg("修改"+ResultMsg.MSG_1000);
+            return ResultVOUtil.success();
         }else{
-            resultCp.setStatus(1003);
-            resultCp.setMsg("服务器异常");
+            return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "服务器异常！");
         }
 
-        return resultCp;
     }
 
     @Override
-    public ResultCp deleteTask(St4ScsCl data, SysUser seUser) {
+    public ResultVO deleteTask(St4ScsCl data, SysUser seUser) {
 
 
-        ResultCp resultCp = new ResultCp();
-        resultCp.setStatus(1000);
         if(st4ScsClService.updateById(data)){
             QueryWrapper<St4PoClCo> clCoQueryWrapper = new QueryWrapper<>();
             //这里把之前绑定的旧的台账删除，然后把新的在赋上
             clCoQueryWrapper.eq("cl001",data.getCl001());
             if(st4PoClCoMapper.delete(clCoQueryWrapper)<1){
-                return ResultCp.build(1003,ResultMsg.MSG_1003);
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "服务器异常！");
             }
-            resultCp.setMsg("删除成功");
+            return ResultVOUtil.success();
         }else{
-            resultCp.setStatus(1003);
-            resultCp.setMsg(ResultMsg.MSG_1003);
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "服务器异常！");
         }
 
-        return resultCp;
     }
 }
