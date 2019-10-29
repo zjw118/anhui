@@ -34,7 +34,6 @@ public class ImageController {
 
     @PostMapping("/list")
     public ResultVO getList(@RequestBody Map<String, Object> paramsMap) {
-        //请求参数格式校验
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
         if (params == null) {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
@@ -45,11 +44,9 @@ public class ImageController {
         if (pageNum == null) {
             pageNum = 1;
         }
-
         if (pageSize == null) {
             pageSize = 10;
         }
-
         Map<String, Object> result = service.list(pageNum, pageSize, name);
         return ResultVOUtil.success(result);
     }
@@ -64,7 +61,13 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
         Image entity = service.getById(id);
-        String str = ShpUtil.readShapeFileToStr("D:"+entity.getUrl(),1)+"";
+
+
+        String str = ShpUtil.readShapeFileToStr("D:"+entity.getShpurl(),1)+"";
+
+        System.out.println("==="+str);
+
+
         entity.setShp(net.sf.json.JSONArray.fromObject(str)+"");
         return ResultVOUtil.success(entity);
     }

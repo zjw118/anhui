@@ -38,17 +38,14 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName) {
         QueryWrapper<Image> wrapper = new QueryWrapper<>();
         if(StringUtils.isNotBlank(userName)){
-            wrapper.eq("name",userName);
+            wrapper.like("name",userName);
         }
         wrapper.eq("del_flag",1);
         wrapper.orderByDesc("create_date");
         IPage<Image> imageIPage = mapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
-
-
         Map<String, Object> result = new HashMap<>();
         result.put("rows", imageIPage.getRecords());
         result.put("total", imageIPage.getTotal());
-
         return result;
     }
 
