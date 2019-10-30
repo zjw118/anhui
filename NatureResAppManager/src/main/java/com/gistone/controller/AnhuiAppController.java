@@ -9,10 +9,7 @@ import com.gistone.pkname.Swagger;
 import com.gistone.service.ISt4ScsCdService;
 import com.gistone.service.ISt4ScsCkService;
 import com.gistone.service.ISysUserService;
-import com.gistone.service.IterpretationService;
-import com.gistone.util.ObjectUtils;
-import com.gistone.util.ResultCp;
-import com.gistone.util.ResultMsg;
+import com.gistone.util.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -29,7 +26,7 @@ public class AnhuiAppController {
     @Autowired
     private ISysUserService userService;
     @Autowired
-    private IterpretationService iterpretationService;
+    private ISt4ScsCdService iterpretationService;
     @Autowired
     private ISt4ScsCkService st4ScsCkService;
 
@@ -51,7 +48,7 @@ public class AnhuiAppController {
     }
     @ApiOperation(value="app提交核查信息接口",notes = "app提交核查信息接口",response = St4ScsCd.class)
     @RequestMapping(value = "/insertSpotDataFromApp",method = RequestMethod.POST)
-    public ResultCp insertSpotDataFromApp(@ApiParam(name="app提交核查信息接口", value="json格式", required=true)@RequestBody Swagger<St4ScsCd> data,
+    public ResultVO insertSpotDataFromApp(@ApiParam(name="app提交核查信息接口", value="json格式", required=true)@RequestBody Swagger<St4ScsCd> data,
                             HttpServletRequest request, HttpServletResponse response) {
         St4ScsCd cd = data.getData();
         String token = request.getHeader("token");
@@ -66,28 +63,28 @@ public class AnhuiAppController {
      */
     @ApiOperation(value = "（绿盾使用）台账表提交接口", notes = "（绿盾使用）台账表提交接口", response = St4ScsCd.class)
     @PostMapping("/insertLedgerLd")
-    public ResultCp insertLedgerLd( @RequestBody @ApiParam(name = "（绿盾使用）台账表提交接口", value = "json格式", required = true)  Swagger<St4ScsCd>
+    public ResultVO insertLedgerLd( @RequestBody @ApiParam(name = "（绿盾使用）台账表提交接口", value = "json格式", required = true)  Swagger<St4ScsCd>
                                             data,HttpServletRequest request
     ) {
 
         St4ScsCd param = data.getData();
         //问题点类型
         if(!ObjectUtils.isNotNullAndEmpty(param.getCd007())){
-            return ResultCp.build(1001,"问题点类型cd007"+ ResultMsg.MSG_1001);
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "问题点类型cd007不能为空！");
         }
         //问题点编号
         if(!ObjectUtils.isNotNullAndEmpty(param.getCd004())){
-            return ResultCp.build(1001,"问题点编号cd004"+ResultMsg.MSG_1001);
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "问题点编号cd004不能为空！");
         }
         if(!ObjectUtils.isNotNullAndEmpty(param.getCd002())){
-            return ResultCp.build(1001,"经度cd002"+ResultMsg.MSG_1001);
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "经度cd002不能为空！");
         }
         if(!ObjectUtils.isNotNullAndEmpty(param.getCd003())){
-            return ResultCp.build(1001,"纬度cd003"+ResultMsg.MSG_1001);
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "纬度cd003不能为空！");
         }
         String token = request.getHeader("token");// 从 http 请求头中取出 token
         String userId = JWT.decode(token).getAudience().get(0);
-        ResultCp res = st4ScsCkService.insertLedgerLd(param,userId);
+        ResultVO res = st4ScsCkService.insertLedgerLd(param,userId);
 
         return res;
 

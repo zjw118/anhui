@@ -42,7 +42,6 @@ public interface ISt4ScsCkService extends IService<St4ScsCk> {
 
     Result getDetail(St4ScsCk ck);
 
-    Result importExcelHky(Map<String, MultipartFile> map, St4SysSa seUser, Integer taskId, List<Integer> uidList);
 
     Result importExcelCommon(Map<String, MultipartFile> map, St4SysSa seUser, Integer taskId, List<Integer> uidList);
 
@@ -108,7 +107,7 @@ public interface ISt4ScsCkService extends IService<St4ScsCk> {
      * @param
      * @return
      */
-    ResultCp insertLedgerLd(St4ScsCd cd, String userId);
+    ResultVO insertLedgerLd(St4ScsCd cd, String userId);
 
     /**
      * 导出excel

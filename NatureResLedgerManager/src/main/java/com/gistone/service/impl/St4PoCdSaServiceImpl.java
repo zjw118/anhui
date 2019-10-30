@@ -28,25 +28,10 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
     @Autowired
     private St4PoCdSaMapper st4PoCdSaMapper;
     @Autowired
-    private St4ScsCdMapper st4ScsCdMapper;
-    @Autowired
-    private St4ScsClMapper st4ScsClMapper;
-    @Autowired
-    private St4PoClCoMapper st4PoClCoMapper;
-
-    @Autowired
-    private ISt4PoClCoService st4PoClCoService;
-    @Autowired
-    private St4PoCdCoMapper st4PoCdCoMapper;
-
-    @Autowired
     private ISt4PoCdSaService st4PoCdSaService;
-
     @Autowired
     private St4SysSaMapper st4SysSaMapper;
-
-    @Autowired
-    private IterpretationMapper iterpretationMapper;
+    private St4ScsCdMapper iterpretationMapper;
 
 
     @Override
@@ -57,12 +42,12 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
          * 2.在拿每一个台账的id去拿斑点的的id
          * 3.最终是把斑点下发到人员
          */
-        List<Iterpretation> cds= iterpretationMapper.getSpotByTaskId(taskId);
+        List<St4ScsCd> cds= iterpretationMapper.getSpotByTaskId(taskId);
         if(cds==null||cds.size()<1){
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "由于此任务下的台账无绑定的斑点信息,下发失败！");
         }
 
-        List<Integer> pointList = cds.stream().map(Iterpretation::getId).collect(Collectors.toList());
+        List<Integer> pointList = cds.stream().map(St4ScsCd::getCd001).collect(Collectors.toList());
         List<St4PoCdSa> existsaList = null;
         St4PoCdSa saSg=null;
         boolean flag=true;

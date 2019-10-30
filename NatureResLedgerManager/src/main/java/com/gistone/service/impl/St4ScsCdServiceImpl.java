@@ -1,24 +1,18 @@
 package com.gistone.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.gistone.entity.St4PoCdSa;
-import com.gistone.entity.St4ScsCd;
-import com.gistone.entity.St4ScsCk;
-import com.gistone.entity.St4SysSa;
-import com.gistone.mapper.St4PoCdSaMapper;
-import com.gistone.mapper.St4ScsCdMapper;
-import com.gistone.mapper.St4ScsCkMapper;
-import com.gistone.mapper.St4SysSaMapper;
+import com.gistone.VO.ResultVO;
+import com.gistone.entity.*;
+import com.gistone.mapper.*;
 import com.gistone.service.ISt4ScsCdService;
 import com.gistone.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -36,16 +30,18 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     private St4ScsCdMapper st4ScsCdMapper;
     @Autowired
     private St4PoCdSaMapper st4PoCdSaMapper;
-
     @Autowired
     private St4ScsCkMapper st4ScsCkMapper;
-
     @Autowired
     private St4SysSaMapper st4SysSaMapper;
+    @Autowired
+    private ImageMapper imageMapper;
 
-    public ResultCp insertSpotDataFromApp (St4ScsCd id){
-        return null;
-    }
+
+
+//    public ResultCp insertSpotDataFromApp (St4ScsCd id){
+//        return null;
+//    }
 
     @Override
     public Result listCheckPointToView(St4ScsCd data) {
@@ -193,5 +189,84 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
         res.setMsg("同步问题点位成功");
         return res;
     }
+
+
+    public ResultVO sysSpotData(Integer id){
+
+        try {
+            List<St4ScsCd> cdList = st4ScsCdMapper.sysSpotData(id);
+            ResultCp cp = new ResultCp();
+            cp.setData(cdList);
+            return ResultVOUtil.success(cp);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "同步数据失败，服务器异常！");
+        }
+    }
+    @Override
+    public Map<String, Object> list(Integer pageNum, Integer pageSize, Integer id) {
+        QueryWrapper<St4ScsCd> wrapper = new QueryWrapper<>();
+        wrapper.eq("image_id",id);
+        Map<String, Object> result = new HashMap<>();
+        result.put("data", st4ScsCdMapper.selectList(wrapper));
+        return result;
+    }
+
+    @Override
+    public void delete(List<Integer> ids) {
+        //具体逻辑
+
+    }
+
+    @Override
+    public void insert(List<Map<String, Object>> data,Integer imageId,Integer createBy) {
+        //通过影像id先删除记录然后再插入,然后再写入shp文件，将地址更新到影像表中！
+        st4ScsCdMapper.delete(new QueryWrapper<St4ScsCd>().eq("image_id",imageId));
+        //从data中构造属性
+        for (Map<String, Object> datum : data) {
+            Map<String,Object> attributes = (Map<String, Object>) datum.get("attributes");
+            //通过属性构造参数
+            St4ScsCd iterpretation = new St4ScsCd();
+            if(null!=attributes.get("activeName")){
+                iterpretation.setActiveName(attributes.get("activeName")+"");
+            }
+            if(null!=attributes.get("activeType")){
+                iterpretation.setActiveType(attributes.get("activeType")+"");
+            }
+            if(null!=attributes.get("area")){
+                iterpretation.setArea(attributes.get("area")+"");
+            }
+            if(null!=attributes.get("descri")){
+                iterpretation.setDescri(attributes.get("descri")+"");
+            }
+            if(null!=attributes.get("remark")){
+                iterpretation.setCd012(attributes.get("remark")+"");
+            }
+            Map<String,Object> rings = (Map<String, Object>) datum.get("geometry");
+            iterpretation.setGeometry(rings.get("rings")+"");
+            iterpretation.setImageId(imageId);
+            iterpretation.setCd010(createBy);
+            iterpretation.setCd011(LocalDateTime.now());
+            st4ScsCdMapper.insert(iterpretation);
+        }
+        //执行写入shp文件操作，返回的地址插入到影像表中
+        String url = PathUtile.getRandomPath("D:/epr/image/","x.shp");
+        String res = ShpUtil.handleWebData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+""),url);
+        if("0".equals(res)){
+            Image image = new Image();
+            image.setId(imageId);
+            image.setShpurl(url.split(":")[1]);
+            imageMapper.updateById(image);
+        }
+    }
+
+
+
+    @Override
+    public void edit(St4ScsCd entity) {
+        //具体逻辑
+    }
+
+
 
 }

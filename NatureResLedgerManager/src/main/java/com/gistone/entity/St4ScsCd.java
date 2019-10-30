@@ -18,20 +18,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * <p>
- * 问题点表
- * </p>
- *
- * @author zhaojingwei
- * @since 2019-08-13
- */
 
-//@JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="问题点实体类对象    其中cd001参数修改删除接口必传，pageNumber,pageSize列表查询接口必传，其余参数非必传", description="")
 public class St4ScsCd extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -217,6 +207,21 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private Integer type;
 
+
+    @TableField("image_id")
+    private Integer imageId;
+    @TableField("active_name")
+    private String activeName;
+    @TableField("active_type")
+    private String activeType;
+    @TableField("area")
+    private String area;
+    @TableField("descri")
+    private String descri;
+    @TableField("geometry")
+    private String geometry;
+    @TableField("group_id")
+    private Integer groupId;
 
 
 

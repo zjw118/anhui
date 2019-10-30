@@ -412,7 +412,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
 
     @Override
     public Result importExcelCommon(Map<String, MultipartFile> items, St4SysSa seUser,Integer taskId,List<Integer> uidList) {
-        Result result = new Result();
+       /* Result result = new Result();
         try{
             Iterator<MultipartFile> itr = items.values().iterator();
             while (itr.hasNext()) {
@@ -433,10 +433,10 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
 
                 //这里要验证问题编码不能重复
                 List<String> pointNumList = new ArrayList<>();
-                /**
+                *//**
                  * 这里的导入逻辑改变，编号可以重复，并且对于编号重复的问题点，先在问题点的表里进行基础信息的修改比如可能修改的值有分组信息所属保护地经纬度信息等等，然后
                  * 新增该问题点的。
-                 */
+                 *//*
                 int jj=2;
                 for (Map mapRe:list) {
                     //首先判断excel里面的问题点的序号不能为空且不能重复
@@ -493,7 +493,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                     }
                 }
 
-/*
+*//*
                 //这里的台账信息是没有用的因为只认编号，台账信息只涉及新增不再涉及更改
                 Collection<Integer> collection = new ArrayList<>();
                 if(repeatCodeList.size()>0){
@@ -514,7 +514,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                     repeatLedgerList = checkLedgerMapper.selectList(wrapper);
 
                 }
-*/
+*//*
                 Integer errRow = 0;
                 St4ScsCk checkLedger = null;
                 St4ScsCd checkPoint=null;
@@ -615,11 +615,11 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                     if(ObjectUtils.isNotNullAndEmpty(data.get("所在功能区"))){
                         checkLedger.setCk005(data.get("所在功能区").toString());
                     }
-                    /*if(!ObjectUtils.isNotNullAndEmpty(data.get("实际功能区"))){
+                    *//*if(!ObjectUtils.isNotNullAndEmpty(data.get("实际功能区"))){
                         flag = false;
                         result =  Result.build(1001,"第"+i+"行实际功能区"+ResultMsg.MSG_1001);
                         break;
-                    };*/
+                    };*//*
                     if(ObjectUtils.isNotNullAndEmpty(data.get("实际功能区"))){
                         checkLedger.setCk005(data.get("所在功能区").toString());
                     }
@@ -1014,493 +1014,11 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
             }
         }catch (Exception e){
             e.printStackTrace();
-        }
-
-        return result;
-    }
-    @Override
-    public Result  importExcelHky(Map<String, MultipartFile> items, St4SysSa seUser,Integer taskId,List<Integer> uidList) {
-        Result result = new Result();
-        try{
-            Iterator<MultipartFile> itr = items.values().iterator();
-            while (itr.hasNext()) {
-                Map<String,String> map=new HashMap<String, String>();
-                MultipartFile item = itr.next();
-                InputStream in=item.getInputStream();
-                boolean flag=true;//这个开关控制能不能执行插入操作
-                List<Map> list = ExcUtil.readExcelContent(in);
-                //这里要验证点位序号不能重复
-                List<String> pointNumList = new ArrayList<>();
-
-                for (Map mapRe:list) {
-                    //首先判断自身是否重复
-                    if(pointNumList.size()>0&&pointNumList.contains(mapRe.get("点位序号").toString())){
-                        //这里的逻辑改变针对北京环科院是更新原有的
-
-                        flag=false;
-                        result=Result.build(1008,ResultMsg.MSG_1008);
-                        break;
-                    }
-                    pointNumList.add(mapRe.get("点位序号").toString());
-                }
-                List<String> repeatCodeList = new ArrayList<>();//这个用来存放code重复的集合
-                //重复的干扰点的信息
-                if(pointNumList.size()>0){
-
-                    for (String code:pointNumList) {
-                        QueryWrapper<St4ScsCk> ckWrapper = new QueryWrapper<>();
-                        ckWrapper.eq("CD004",code);
-                        ckWrapper.eq("CK085",1);
-                        List<St4ScsCk> pointList = checkLedgerMapper.selectList(ckWrapper);
-                        if(pointList.size()>0){
-                            //这种情况代表数据库的有和excel里面的有重复的
-                            repeatCodeList.add(pointList.get(0).getCd004());
-                        }
-                    }
-
-                }
-
-
-                Collection<String> collection = new ArrayList<>();
-                if(repeatCodeList.size()>0){
-                    for (String code:repeatCodeList) {
-                        QueryWrapper<St4ScsCk> wrapperPo = new QueryWrapper<>();
-                        wrapperPo.eq("CD004",code);
-                        wrapperPo.eq("CK085",1);
-                        collection.add(checkLedgerMapper.selectList(wrapperPo).get(0).getCd004());
-                    }
-                }
-
-                //这里要存放重复了的台账信息供后面进行更新操作!!!!!!!!!!!!!!!
-                List<St4ScsCk> repeatLedgerList=new ArrayList<>();
-
-                if(collection.size()>0){
-                    QueryWrapper<St4ScsCk> wrapper = new QueryWrapper<>();
-                    wrapper.in("CD004",collection);
-                    repeatLedgerList = checkLedgerMapper.selectList(wrapper);
-
-                }
-                //这个是以后比较方便取出来的
-                Map<String,St4ScsCk> repeatledgerMap = new HashMap<>();
-                if(repeatLedgerList.size()>0){
-                    for (St4ScsCk ckk:repeatLedgerList) {
-                        repeatledgerMap.put(ckk.getCd004(),ckk);
-                    }
-                }
-
-
-                Integer errRow = 0;
-                St4ScsCk checkLedger = null;
-                int i = 2;
-                //行政区集合
-                Map<String,Integer> adminRegionMap = new HashMap<>();
-                QueryWrapper<St4SysSd> adminWrapper = new QueryWrapper<>();
-                adminWrapper.eq("SD007",1);
-                List<St4SysSd> adminList = baseAdminRegionMapper.selectList(adminWrapper);
-                for (St4SysSd bar:adminList) {
-                    adminRegionMap.put(bar.getSd008(),bar.getSd001());
-                }
-                //保护区集合
-                Map<String,Integer> reserveMap = new HashMap<>();
-                QueryWrapper<St4SysSg> reserveDataWrapper = new QueryWrapper<>();
-                reserveDataWrapper.eq("SG007",1);
-                List<St4SysSg> reserveDataList = reserveDataMapper.selectList(reserveDataWrapper);
-                for (St4SysSg rd:reserveDataList) {
-                    reserveMap.put(rd.getSg008(),rd.getSg001());
-                }
-                //这里有差异的台账是更新原有的还是新增还未定下
-                List<St4ScsCk> importLedgerList = new ArrayList<St4ScsCk>();//即将插入的台账信息
-                List<St4ScsCk> updateLedgerList = new ArrayList<>();//要更新的台账信息
-
-                List<St4ScsCac> cacUpdateList = new ArrayList<>();//要更新的时间提示信息
-
-                List<String> repairText = new ArrayList<>();
-                /**
-                 * 这里开始进行导入操作的核心处理逻辑 这里就不存问题点表这个概念，所有的信息都在ck表里面
-                 * 需求:
-                 * 实现导入更新的台账与原有台账内容的自动比对，如内容无差异则不更新，
-                 * 如内容有差异的填报内容则在原填报内容后自动增加更新台账的内容，
-                 * 并在更新内容后附更新时间。如第一次导入台账中整改措施内容为“2019年1月完成”，
-                 * 2019年1月份进行第二次更新台账时内容为“2019年2月完成”，
-                 * 则更新后整改措施一栏内容应为“2019年1月完成；2019年2月完成（2019年1月更新）”
-                 */
-                for(Map data:list){
-                    checkLedger = new St4ScsCk();
-                    checkLedger.setCk091(taskId);//设置所属任务
-                    checkLedger.setCk085(1);
-                    if(!ObjectUtils.isNotNullAndEmpty(data.get("行政区名称"))){
-                        flag = false;
-                        result =  Result.build(1001,"第"+i+"行行政区名称"+ResultMsg.MSG_1001);
-                        break;
-                    };
-                    checkLedger.setCk002(adminRegionMap.get(data.get("行政区名称").toString().trim()));
-                    if(!ObjectUtils.isNotNullAndEmpty(data.get("点位序号"))){
-                        flag = false;
-                        result =  Result.build(1001,"第"+i+"点位序号"+ResultMsg.MSG_1001);
-                        break;
-                    };
-                    Object code = data.get("点位序号");
-                    checkLedger.setCd004(code.toString());
-                    //这里得拿着这个点位序号去和数据库查出来的比较如果没有差异那就不更新，否则更新掉之前的
-                    if(!ObjectUtils.isNotNullAndEmpty(data.get("保护区名称"))){
-                        flag = false;
-                        result =  Result.build(1001,"第"+i+"行保护区名称"+ResultMsg.MSG_1001);
-                        break;
-                    };
-                    checkLedger.setSg001(reserveMap.get(data.get("保护区名称").toString().trim()));
-
-                    if(!ObjectUtils.isNotNullAndEmpty(data.get("所在功能区"))){
-                        flag = false;
-                        result =  Result.build(1001,"第"+i+"行所在功能区"+ResultMsg.MSG_1001);
-                        break;
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("所在功能区"))){
-                        checkLedger.setCk005(data.get("所在功能区").toString());
-                    }
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("实际功能区"))){
-                        checkLedger.setCk006(data.get("实际功能区").toString());
-                    }
-                    if(!ObjectUtils.isNotNullAndEmpty(data.get("经度"))){
-                        flag = false;
-                        result =  Result.build(1001,"第"+i+"行经度"+ResultMsg.MSG_1001);
-                        break;
-                    };
-                    String lon =data.get("经度").toString().trim();
-                    if(!LedgerHelp.checkLongude(lon)){
-                        if(!LedgerHelp.IsRulelon(lon)){
-
-                            flag = false;
-                            result =  Result.build(1007,"第"+i+"行经度"+ResultMsg.MSG_1007);
-                            break;
-                        }
-                    }
-                    checkLedger.setCk007(lon);
-                    if(!ObjectUtils.isNotNullAndEmpty(data.get("纬度"))){
-                        flag = false;
-                        result =  Result.build(1001,"第"+i+"行纬度"+ResultMsg.MSG_1001);
-                        break;
-                    };
-                    String lat =data.get("纬度").toString().trim();
-                    if(!LedgerHelp.checkItude(lat)){
-                        if(!LedgerHelp.IsRulelat(lat)){
-                            flag = false;
-                            result =  Result.build(1007,"第"+i+"行纬度"+ResultMsg.MSG_1007);
-                            break;
-                        }
-                    }
-                    checkLedger.setCk008(lat);
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("位置"))){
-                        checkLedger.setCk009(data.get("位置").toString().trim());
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("活动/设施名称"))){
-                        checkLedger.setCk010(data.get("活动/设施名称").toString().trim());
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("占地面积(㎡)"))){
-                        checkLedger.setCk011(data.get("占地面积(㎡)").toString().trim());
-                    };
-
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("面积(㎡)"))){
-                        checkLedger.setCk011(data.get("面积(㎡)").toString().trim());
-                    };
-
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("活动设施现状"))){
-                        checkLedger.setCk012(data.get("活动设施现状").toString().trim());
-                    };
-
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("变化类型"))){
-                        checkLedger.setCk013(data.get("变化类型").toString());
-                    };
-
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("是否违法违规"))){
-                        checkLedger.setCk014(LedgerHelp.setValueId(data.get("是否违法违规").toString().trim()));
-                    };
-
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("问题描述"))){
-                        checkLedger.setCk015(data.get("问题描述").toString().trim());
-                    };
-
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("问题类型(活动/设施类型)"))){
-                        checkLedger.setCk016(data.get("问题类型(活动/设施类型)").toString());
-                    };
-
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("下发问题类型"))){
-                        checkLedger.setCk016(data.get("下发问题类型").toString());
-                    };
-
-
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("实际问题类型(描述)"))){
-                        checkLedger.setCk017(data.get("实际问题类型(描述)").toString());
-                    };
-
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("存在问题及主要生态影响"))){
-                        checkLedger.setCk018(data.get("存在问题及主要生态影响").toString().trim());
-                    };
-
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("建设单位"))){
-                        checkLedger.setCk019(data.get("建设单位").toString().trim());
-                    };
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("建设时间"))){
-                        try{
-
-                            checkLedger.setCk020(data.get("建设时间").toString().trim());
-                            //checkLedger.setCk020(LocalDateTime.from(LocalDate.parse(data.get("建设时间").toString().trim(),dfMd).atStartOfDay()));
-                        }catch (Exception e){
-                            e.printStackTrace();
-                            flag=false;
-                            result=Result.build(1002,ResultMsg.MSG_1002);
-                            break;
-                        }
-
-                    }
-
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("是否处罚"))){
-                        checkLedger.setCk039(LedgerHelp.setValueId(data.get("是否处罚").toString().trim()));
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("处罚形式"))){
-                        checkLedger.setCk040(data.get("处罚形式").toString().trim());
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("罚款(万元)"))){
-                        checkLedger.setCk041(data.get("罚款(万元)").toString().trim());
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("整改时限"))){
-                        String rDate=ExcUtil.getStandardDate(data.get("整改时限").toString().trim());
-                        LocalDate beginDateTime = LocalDate.parse(rDate, DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-                        checkLedger.setCk042(beginDateTime);
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("整改措施"))){
-                        checkLedger.setCk043(data.get("整改措施").toString().trim());
-                    };
-
-                    repairText.add(data.get("整改进展")==null?"":data.get("整改进展").toString());
-
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("拆除建筑面积(㎡)"))){
-                        checkLedger.setCk044(data.get("拆除建筑面积(㎡)").toString().trim());
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("处理情况"))){
-                        checkLedger.setCk045(data.get("处理情况").toString().trim());
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("是否销号"))){
-                        checkLedger.setCk046(data.get("是否销号").toString().trim());
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("核查单位"))){
-                        checkLedger.setCk047(data.get("核查单位").toString().trim());
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("核查时间"))){
-                        checkLedger.setCk048(LocalDateTime.from(LocalDate.parse(data.get("核查时间").toString().trim(),dfMd).atStartOfDay()));
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("核查人"))){
-                        checkLedger.setCk049(data.get("核查人").toString().trim());
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("联系方式"))){
-                        checkLedger.setCk050(data.get("联系方式").toString().trim());
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("参与核查人数"))){
-                        checkLedger.setCk051(LedgerHelp.setValueId(data.get("参与核查人数").toString().trim()));
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("填表人"))){
-                        checkLedger.setCk052(data.get("填表人").toString().trim());
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("审核人"))){
-                        checkLedger.setCk053(data.get("审核人").toString().trim());
-                    };
-
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("备注"))){
-                        checkLedger.setCk076(data.get("备注").toString().trim());
-                    };
-
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("台账来源"))){
-                        checkLedger.setCk078(data.get("台账来源").toString().trim());
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("自用备注"))){
-                        checkLedger.setCk079(data.get("自用备注").toString().trim());
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("是否四类聚焦"))){
-                        checkLedger.setCk080(LedgerHelp.setValueId(data.get("是否四类聚焦").toString().trim()));
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("是否巡查台账"))){
-                        checkLedger.setCk081(LedgerHelp.setValueId(data.get("是否巡查台账").toString().trim()));
-                    };
-
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("是否市级巡查"))){
-                        checkLedger.setCk082(LedgerHelp.setValueId(data.get("是否市级巡查").toString().trim()));
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("是否国家点"))){
-                        checkLedger.setCk083(LedgerHelp.setValueId(data.get("是否国家点").toString().trim()));
-                    };
-                    if(ObjectUtils.isNotNullAndEmpty(data.get("是否重点台账"))){
-                        checkLedger.setCk084(LedgerHelp.setValueId((data.get("是否重点台账").toString().trim())));
-                    };
-
-                    LocalDateTime date = LocalDateTime.now();
-                    checkLedger.setCk086(date);
-                    checkLedger.setCk087(seUser.getSa001());
-                    St4ScsCac ssc = new St4ScsCac();
-
-                    if(repeatCodeList.contains(data.get("点位序号").toString())){
-                        //这里就在这里比较现在的这个checkLedger和数据库查询的是否有差异有则更新
-                        St4ScsCk ck1 = repeatledgerMap.get(data.get("点位序号").toString());
-                        ssc.setCk001(ck1.getCk001());
-                        St4ScsCn cn1 = checkLedgerAttachMapper.selectCn010ByCk001(ck1.getCk001());
-                        //ck1.equals(checkLedger)&&cn1.getCn010().equals(data.get("整改进展").toString())
-                        boolean repairflag=true;//代表无差异
-                        Object repObj = data.get("整改进展");
-                        if(ObjectUtils.isNotNullAndEmpty(repObj)&&cn1==null){
-                            repairflag=false;//代表有差异
-                        }else if(cn1!=null&&repObj==null){
-                            repairflag=false;//代表有差异
-                        }else if(!cn1.getCn010().equals(repObj.toString())){
-                            repairflag=false;//代表有差异
-                        }
-                        if(!ck1.equals(checkLedger)||!repairflag){
-                            //这里代表前后的值有差异
-                            //这里还得考虑初始值是  核心区，缓冲区(2019年1月更新)的截取的情况
-                            checkLedger.setCk001(ck1.getCk001());
-                            Calendar cal = Calendar.getInstance();
-                            Integer year = cal.get(Calendar.YEAR);
-                            Integer month = cal.get(Calendar.MONTH)+1;
-                            Integer mill = cal.get(Calendar.SECOND);
-                            String updateMsg="("+year+"年"+month+"月"+mill+"秒更新)";
-                            ssc.setCac003(updateMsg);//所在功能区
-                            ssc.setCac004(updateMsg);//实际功能区
-                            ssc.setCac007(updateMsg);//所在位置描述
-                            ssc.setCac012(updateMsg);//问题类型（活动/设施类型）
-                            ssc.setCac009(updateMsg);//变化类型
-                            ssc.setCac008(updateMsg);//面积(m²)
-                            ssc.setCac026(updateMsg);//台账来源
-                            ssc.setCac011(updateMsg);//问题描述
-                            ssc.setCac013(updateMsg);//实际问题类型
-                            ssc.setCac014(updateMsg);//建设单位
-                            ssc.setCac015(updateMsg);//建设时间
-                            ssc.setCac017(updateMsg);//处罚形式
-                            ssc.setCac018(updateMsg);//罚款（万元）
-                            ssc.setCac021(updateMsg);//拆除建筑面积
-                            ssc.setCac022(updateMsg);//是否销号
-                            ssc.setCac025(updateMsg);//备注
-                            ssc.setCac027(updateMsg);//自用备注
-                            ssc.setCac019(updateMsg);//整改时限
-                            ssc.setCac016(updateMsg);//是否处罚
-                            ssc.setCac010(updateMsg);//是否违法违规
-                            ssc.setCac028(updateMsg);//是否四类聚焦
-                            ssc.setCac029(updateMsg);//是否巡查台账
-                            ssc.setCac030(updateMsg);//是否市级巡查
-                            ssc.setCac031(updateMsg);//是否国家点
-                            ssc.setCac032(updateMsg);//是否重点台账*/
-                            ssc.setCac036(updateMsg);//整改进展*/
-
-                            cacUpdateList.add(ssc);
-                            updateLedgerList.add(checkLedger);
-                        }else {
-
-                        }
-                        //这里如果是第一次导入的没有整改进展，那么进度表里面是没有数据，第二次导入的时候还是这个点位序号，但是有整改进展了，应该怎么处理???
-                    }else{
-                        importLedgerList.add(checkLedger);
-
-                    }
-                    i++;
-                }
-                if(flag){
-
-                    //这里先进行更新操作
-                    Boolean upCnNum=false;
-                    int batch=0;
-                    int usize = updateLedgerList.size();
-                    int cacsize = cacUpdateList.size();
-                    boolean uflag=false;//台账表的更改操作结果
-                    boolean cacflag=false;//台账差异字段时间更新的更改操作结果
-                    if(usize>0&&cacsize>0){
-                        uflag=checkLedgerService.saveOrUpdateBatch(updateLedgerList);
-                        if(!uflag){
-                            return Result.build(1003,"导入失败,"+ResultMsg.MSG_1003);
-                        }
-                        for (St4ScsCac cac:cacUpdateList) {
-                            int num = st4ScsCacMapper.updateByCk001(cac);
-                            if(num<1){
-                                return Result.build(1003,"导入失败,"+ResultMsg.MSG_1003);
-                            }
-                        }
-                    }
-                    St4ScsCn cla = null;
-                    St4ScsCac cac = null;
-                    int j =0;
-                    List<St4ScsCn> claList = new ArrayList<>();//进度附件表的插入
-                    LocalDateTime date = LocalDateTime.now();
-                    if(repairText.size()>0&&updateLedgerList.size()>0){
-                        for (St4ScsCk cl:updateLedgerList) {
-                            cla= new St4ScsCn();
-                            cla.setCn003(date);
-                            cla.setCn006(seUser.getSa001());
-                            cla.setCn010(repairText.get(j));
-                            cla.setCk001(cl.getCk001());
-                            claList.add(cla);
-                            j++;
-                        }
-                        upCnNum = checkLedgerAttachService.saveOrUpdateBatch(claList);
-                        if(!upCnNum){
-                            return Result.build(1003,"导入失败,"+ResultMsg.MSG_1003);
-                        }
-                    }
-                    Integer isize=importLedgerList.size();
-                    if(isize>0){
-                        //这里得首先批量插入核查点  再拿着核查点给每一个台账的对象
-                        //批量插入
-                        int k = 0;
-                        boolean ckFlag=checkLedgerService.saveBatch(importLedgerList);
-                        if(!ckFlag){
-                            return Result.build(1003,"导入失败,"+ResultMsg.MSG_1003);
-                        }
-                        St4ScsCn cn = null;
-                        int jj =0;
-                        int mm =0;
-                        List<St4ScsCn> cnList = new ArrayList<>();//进度附件表的插入
-                        List<St4ScsCac> cacList = new ArrayList<>();//台账字段更新表的插入
-                        LocalDateTime date1 = LocalDateTime.now();
-
-                        if(importLedgerList.size()>0){
-                            if(repairText.size()>0){
-
-                                for (St4ScsCk cl:importLedgerList) {
-                                    cn= new St4ScsCn();
-                                    cn.setCn003(date1);
-                                    cn.setCn006(seUser.getSa001());
-                                    cn.setCn010(repairText.get(j));
-                                    cn.setCk001(cl.getCk001());
-                                    cnList.add(cn);
-                                    jj++;
-                                }
-                                boolean cnFlag = checkLedgerAttachService.saveBatch(cnList);
-                                if(!cnFlag){
-                                    return Result.build(1003,"导入失败,"+ResultMsg.MSG_1003);
-                                }
-                            }
-                            for (St4ScsCk cl:importLedgerList) {
-                                cac= new St4ScsCac();
-                                cac.setCk001(cl.getCk001());
-                                cacList.add(cac);
-
-                            }
-                            boolean cacFlag= st4ScsCacService.saveBatch(cacList);
-                            if(!cacFlag){
-                                return Result.build(1003,"导入失败,"+ResultMsg.MSG_1003);
-                            }
-
-                        }
-                        return Result.build(1000,"导入"+ResultMsg.MSG_1000);
-                    }
-                    return Result.build(1000,"导入"+ResultMsg.MSG_1000);
-                }else {
-                    return result;
-                }
-
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        }*/
 
         return null;
     }
+
 
 
     @Override
@@ -1760,8 +1278,8 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
     }
 
     @Override
-    public ResultCp insertLedgerLd(St4ScsCd param,String userId) {
-        boolean hasTask=true;
+    public ResultVO insertLedgerLd(St4ScsCd param,String userId) {
+       /* boolean hasTask=true;
         if(param.getCl001()==null){
             St4ScsCz cz = st4ScsCzMapper.getRecentTask(Integer.valueOf(userId));
             if(cz!=null){
@@ -1790,7 +1308,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
             wrapper1.eq("CD001",resData.get(0).getCd001());
             List<St4PoCdSa> list1 = st4PoCdSaMapper.selectList(wrapper1);
             if(list1!=null&&list1.size()<1){
-                return  ResultCp.build(1008,"问题点编号"+ResultMsg.MSG_1008);
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "问题点编号重复！");
             }
             cdFlag=true;
         }
@@ -1885,9 +1403,9 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
             param.getSt4ScsCk().setCk091(param.getCl001());
         }
         //app提交的如果是不详，则传递是空字符串，存数据库的时候存0001-00-00，标识为不详
-        /*if(param.getSt4ScsCk().getCk020() == ""){
+        *//*if(param.getSt4ScsCk().getCk020() == ""){
             param.getSt4ScsCk().setCk020("0001-00-00");
-        }*/
+        }*//*
         //移动端提交的台账
         if(cdFlag){
             param.getSt4ScsCk().setCk088(1);
@@ -1925,9 +1443,9 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                     if(st4PoCdSaMapper.submitPoint(cdsa)<1){
                         return ResultCp.build(1003,ResultMsg.MSG_1003);
                     };
-                    /**
+                    *//**
                      * 这里比如张三李四王五是在A任务下，当张三提交了核查信息之后，是必须要推送给李四和王五的
-                     */
+                     *//*
                     St4SysSa saUser = new St4SysSa();
                     saUser.setSa001(Integer.valueOf(ck.getCk049()));
                     saUser=st4SysSaMapper.selectById(saUser);
@@ -1971,15 +1489,16 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
             }
 
         };
+*/
 
 
-
-        return  ResultCp.build(1003,ResultMsg.MSG_1003+",上传失败");
+        //return  ResultCp.build(1003,ResultMsg.MSG_1003+",上传失败");
+        return ResultVOUtil.success();
     }
 
     @Override
     public void doExcel(St4ScsCk ck,HttpServletResponse response) {
-        //台账的导入逻辑
+        /*//台账的导入逻辑
         List<St4ScsCk> dataList = checkLedgerMapper.getExportData(ck);
         if(dataList!=null&&dataList.size()>0){
             ck = dataList.get(0);
@@ -2198,7 +1717,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                     e1.printStackTrace();
                 }
             }
-        }
+        }*/
 
     }
 

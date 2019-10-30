@@ -61,13 +61,7 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
         Image entity = service.getById(id);
-
-
         String str = ShpUtil.readShapeFileToStr("D:"+entity.getShpurl(),1)+"";
-
-        System.out.println("==="+str);
-
-
         entity.setShp(net.sf.json.JSONArray.fromObject(str)+"");
         return ResultVOUtil.success(entity);
     }
