@@ -275,29 +275,7 @@ public class CheckNrledgerController {
         return result;
     }
 
-    /**
-     * 导入台账Excel
-     * @param
-     * @param request
-     * @param response
-     * @return
-     */
-    @ApiOperation(value="环科院台账导入Excel",notes = "导入台账Excel",response = St4ScsCk.class)
-    @RequestMapping(value="/importExcelHky",method = RequestMethod.POST)
-    public Result importExcelHky(HttpServletRequest request,HttpServletResponse response) {
-        String token = request.getHeader("token");// 从 http 请求头中取出 token
-        String userId ="1"; //JWT.decode(token).getAudience().get(0);
-        St4SysSa seUser = new St4SysSa();
-        seUser.setSa001(Integer.valueOf(userId));
-        if(ObjectUtils.isNotNullAndEmpty(request.getParameter("taskId"))){
-            Integer taskId = Integer.valueOf(request.getParameter("taskId"));
-            MultipartHttpServletRequest req = (MultipartHttpServletRequest) request;
-            Map<String, MultipartFile> items = req.getFileMap();
-            List<Integer> uidList = new ArrayList<>();
-            return icheckLedgerService.importExcelHky(items,seUser,taskId,uidList);
-        }
-        return Result.build(1005,ResultMsg.MSG_1005);
-    }
+
 
     @ApiOperation(value="分配批次任务",notes = "分配批次任务",response = St4ScsCl.class)
     @RequestMapping(value="/shareTask",method = RequestMethod.POST)
@@ -628,14 +606,14 @@ public class CheckNrledgerController {
     @RequestMapping(value="/setImportantStage",method = RequestMethod.POST)
     public Result setImportantStage(@RequestBody  @ApiParam(name="设置重点台账）", value="json格式", required=true)
                                            Swagger<St4ScsCk> ckSwagger,HttpServletRequest request) {
-        St4ScsCk ck = ckSwagger.getData();
+        /*St4ScsCk ck = ckSwagger.getData();
         if(ck.getCk001()==null){
             return Result.build(1001,"主键ck001"+ResultMsg.MSG_1001);
         }
         ck.setCk084(1);
         if(icheckLedgerService.updateById(ck)){
             return Result.build(1000,"设置"+ResultMsg.MSG_1000);
-        }
+        }*/
         return Result.build(1003,ResultMsg.MSG_1003);
 
 

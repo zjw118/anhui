@@ -4,12 +4,17 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.entity.*;
 
 import com.gistone.service.*;
+import com.gistone.util.ReadJson;
+import com.gistone.util.Result;
 import com.gistone.util.ResultCp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,11 +49,13 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
     @Autowired
     private ISt4ScsCgService cgService;
 
+    @Autowired
+    private  MessageProperties config;
 
     @Override
     @Transactional
     public ResultCp insertDestinationsManager(List<St4ScsCc> ccList, List<St4ScsCk> ckList,
-                                              List<St4ScsCf> cfList, List<St4ScsCe> ceList) {
+                                            List<St4ScsCf> cfList, List<St4ScsCe> ceList) {
         //先判断基础信息表中的所有cc002是否存在，都不存在的情况下添加
         List<String> ccoo2s = ccList.stream().map(St4ScsCc::getCc002).collect(Collectors.toList());
         QueryWrapper<St4ScsCc> queryWrapper = new QueryWrapper<>();
@@ -76,9 +83,9 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
             List<St4ScsCn> cnList = new ArrayList<>();
             if(ckList!=null&&ckList.size()>0){
                 for (St4ScsCk ck1:ckList) {
-                    String repairProcess=ck1.getRepairProcess()== null?"":ck1.getRepairProcess();
-                    if(ck1.getPhos()!=null){
-                        List<String> urls = ck1.getPhos();
+                    String repairProcess=ck1.getCn010()== null?"":ck1.getCn010();
+                    if(ck1.getCn004()!=null){
+                        List<String> urls = ck1.getCn004();
                         for (String phourl:urls) {
                             cnn = new St4ScsCn();
                             cnn.setCn010(phourl);
@@ -106,9 +113,13 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
     @Override
     @Transactional
     public ResultCp insertDestinationsRecordManager(St4ScsCy scsCy, List<St4ScsCg> st4ScsCgs, List<St4ScsCc> ccList, List<St4ScsCk> ckList, List<St4ScsCf> cfList, List<St4ScsCe> ceList) {
-        QueryWrapper<St4ScsCy> queryWrapper = new QueryWrapper<>();
+        /*QueryWrapper<St4ScsCy> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("CY017", scsCy.getCy017());
         Integer cyCount = cyService.count(queryWrapper);
+        // 年月日文件夹
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        DateTimeFormatter sdf2 = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String baseDateDir = sdf.format(new Date());
         if (cyCount > 0) {
             return ResultCp.build(1001, "添加巡护重复");
         }
@@ -121,9 +132,23 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
                 return ResultCp.build(1001, "添加航点重复");
             }
         }
+        //巡护人id
+        scsCy.setCy012(scsCy.getSa001());
         Boolean cy = cyService.save(scsCy);
         if (!cy) {
             new RuntimeException("插入数据库巡护信息错误");
+        }
+        //遍历路段，将坐标转为json文件
+        for(St4ScsCg da : st4ScsCgs){
+            //将路段集合转成文件
+            try{
+                //将文件写在本地
+                ReadJson.writeGeoJson(da.getCg003().split(","),config.getUpPath() + "/nr_line/" + baseDateDir + "/" + da.getCy017() +"_" +sdf2.format(da.getCg004()) + ".json");
+                da.setCg003("/nr_line/" + baseDateDir + "/" + da.getCy017() +"_" + sdf2.format(da.getCg004()) + ".json");
+            }catch (Exception e) {
+                e.printStackTrace();
+                return ResultCp.build(1003, "轨迹数据处理异常");
+            }
         }
         Boolean cg = cgService.saveBatch(st4ScsCgs);
         if (!cg) {
@@ -144,7 +169,7 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
         Boolean ce = ceService.saveBatch(ceList);
         if (!ce) {
             new RuntimeException("插入数据库航点信息错误");
-        }
+        }*/
         return ResultCp.build(1000, "添加成功");
     }
 

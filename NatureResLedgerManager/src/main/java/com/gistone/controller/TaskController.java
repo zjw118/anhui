@@ -169,7 +169,7 @@ public class TaskController {
      * @return
      */
     @PassToken
-    @ApiOperation(value = "任务批次下拉框列表接口", notes = "此接口返回问题点批次数据", response = Result.class)
+    @ApiOperation(value = "(安徽用)任务批次下拉框列表接口", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/listTaskSelect")
     public ResultVO listTaskSelect(@RequestBody @ApiParam(name = "任务批次下拉框列表接口", value = "json格式", required = true) Swagger<St4ScsCl> data) {
         St4ScsCl param = data.getData();

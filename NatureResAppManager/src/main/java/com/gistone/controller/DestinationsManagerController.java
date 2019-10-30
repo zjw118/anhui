@@ -5,14 +5,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.auth0.jwt.JWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.SawggerModel.Destination;
+import com.gistone.annotation.PassToken;
 import com.gistone.entity.*;
 import com.gistone.pkname.Swagger;
-import com.gistone.service.IDestinationsManagerService;
-import com.gistone.service.ISt4ScsChService;
-import com.gistone.service.ISt4ScsCpService;
-import com.gistone.util.ObjectUtils;
-import com.gistone.util.ResultCp;
-import com.gistone.util.ResultMsg;
+import com.gistone.service.*;
+import com.gistone.util.*;
 import io.swagger.annotations.*;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +46,8 @@ public class DestinationsManagerController {
     private IDestinationsManagerService destinationsManagerService;
     @Autowired
     private ISt4ScsChService iSt4ScsChService;
+    @Autowired
+    private ISt4SysSdService st4SysSdService;
 
     /**
      * todo NPM航点是否能重复提交
@@ -57,7 +56,7 @@ public class DestinationsManagerController {
      * @return
      */
 
-    @ApiOperation(value = "插入航点信息", notes = "此接口返回插入成功与否", response = ResultCp.class)
+    @ApiOperation(value = "插入航点信息", notes = "此接口返回插入成功与否", response = Result.class)
     @PostMapping("/insertDestinations")
     public ResultCp insertDestinations(HttpServletRequest request,
                                      @RequestBody @ApiParam(name = "巡护信息添加", value = "json格式", required = true)
@@ -93,6 +92,13 @@ public class DestinationsManagerController {
         List<St4ScsCe> sysceList = new ArrayList<>();
         LocalDateTime date = LocalDateTime.now();//获取当前时间
         List<Destination> destinationlist = destinations.getDestination();
+        List<St4SysSd> sdList = st4SysSdService.list();
+        Map<String,Integer> sdMap = new HashMap<>();
+        if(sdList!=null&&sdList.size()>0){
+            for (St4SysSd sd:sdList) {
+                sdMap.put(sd.getSd008(),sd.getSd001());
+            }
+        }
         for (int i = 0; i < destinationlist.size(); i++) {
             Destination destination = destinationlist.get(i);
             //航点基础数据表
@@ -108,6 +114,10 @@ public class DestinationsManagerController {
             }
             if (scscc.getCc012() == null || "".equals(scscc.getCc012())) {
                 return ResultCp.build(1001, "航点名称不能为空");
+            }
+            String adminRegionName = LonLatToAddress.getAdd(scscc.getCc004(),scscc.getCc005());
+            if(ObjectUtils.isNotNullAndEmpty(adminRegionName)){
+                scscc.setSd001(sdMap.get(adminRegionName));
             }
             //先判断巡航点类型0巡护（st4_scs_cf）1核查(st4_scs_ck)
             if (scscc.getCc003() == 0) {//巡护表
@@ -198,7 +208,7 @@ public class DestinationsManagerController {
         return destinationsManagerService.insertDestinationsManager(scsCcList, scsCkList, scsCfList, sysceList);
     }
 
-    @ApiOperation(value = "插入巡护记录信息", notes = "此接口返回插入成功与否", response = ResultCp.class)
+    @ApiOperation(value = "插入巡护记录信息", notes = "此接口返回插入成功与否", response = Result.class)
     @PostMapping("/insertDestinationsRecord")
     public ResultCp insertDestinationsRecord(HttpServletRequest request, @RequestBody @ApiParam(name = "巡护信息添加", value = "json格式", required = true) Swagger<Destinations> data) {
         Destinations des  = data.getData();
@@ -451,9 +461,11 @@ public class DestinationsManagerController {
      * @param
      * @return
      */
+    @PassToken
     @ApiOperation(value = "实时位置上传接口", notes = "实时位置上传接口", response = St4ScsCh.class)
     @PostMapping("/sendRealPositon")
-    public ResultCp sendRealPositon( @RequestBody @ApiParam(name = "", value = "json格式", required = true)  Swagger<St4ScsCh> data) {
+    public ResultCp sendRealPositon( @RequestBody @ApiParam(name = "", value = "json格式", required = true)  Swagger<St4ScsCh> data
+    ) {
 
         St4ScsCh param = data.getData();
 
