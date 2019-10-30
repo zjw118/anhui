@@ -2,14 +2,17 @@ package com.gistone.controller;
 
 
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.Iterpretation;
-import com.gistone.service.IterpretationService;
+import com.gistone.entity.St4ScsCd;
+import com.gistone.entity.SysUser;
+import com.gistone.service.ISt4ScsCdService;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultVOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +30,9 @@ import java.util.Map;
 @RequestMapping("/api/ygjc/iterpretation")
 public class IterpretationController {
     @Autowired
-    private IterpretationService service;
+    private ISt4ScsCdService service;
+
+
     @PostMapping("/list")
     public ResultVO getList(@RequestBody Map<String, Object> paramsMap) {
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
@@ -46,31 +51,31 @@ public class IterpretationController {
         if (id == null || id < 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
-        Iterpretation entity = service.getById(id);
+        St4ScsCd entity = service.getById(id);
         return ResultVOUtil.success(entity);
     }
 
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResultVO add(@RequestBody Map<String, Object> paramsMap) {
+    public ResultVO add(@RequestBody Map<String, Object> paramsMap, HttpServletRequest request) {
         //请求参数格式校验
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
         if (params == null) {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
         }
-
         List<Map<String, Object>> data = (List<Map<String, Object>>) params.get("jsondata");
         if (data == null || data.size() <= 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "解译数据不能为空");
         }
-
         Integer imageId = (Integer) params.get("imageId");
         if (imageId == null || imageId <= 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "影像id不能为空");
         }
         Integer createBy = (Integer) params.get("createBy");
-        if(createBy==null||createBy<0){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"创建人id不能为空");
+        if(createBy==null||createBy<=0){
+            HttpSession session = request.getSession();
+            SysUser user = (SysUser) session.getAttribute("user");
+            createBy = user.getId();
         }
         //判断添加人是否为空
         service.insert(data,imageId,createBy);
@@ -90,13 +95,18 @@ public class IterpretationController {
 
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResultVO update(@RequestBody Iterpretation entity, BindingResult bindingResult) {
+    public ResultVO update(@RequestBody St4ScsCd entity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
-//判断更新人加人是否为空
+        //判断更新人加人是否为空
         service.edit(entity);
         return ResultVOUtil.success();
     }
+
+
+
+
+
 
 }

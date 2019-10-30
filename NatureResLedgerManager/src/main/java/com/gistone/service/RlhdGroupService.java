@@ -25,7 +25,7 @@ public interface RlhdGroupService extends IService<RlhdGroup> {
 
     void edit(RlhdGroup entity);
 
-    Map<String,Object> getDetailById(Integer pageNum,Integer pageSize,Integer id);
+    Map<String,Object> getDetailById(Integer pageNum, Integer pageSize, Integer id);
 
     void addDataToGroup(Integer groupId, List<Integer> id);
 

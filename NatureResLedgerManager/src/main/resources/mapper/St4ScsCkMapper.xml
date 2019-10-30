@@ -152,22 +152,22 @@
             <result column="CD013" property="cd013" />
             <result column="CD014" property="cd014" />
         </association>
-        <association property="iterpretation" javaType="com.gistone.entity.Iterpretation">
-            <id column="id" property="id" />
-            <result column="image_id" property="imageId" />
-            <result column="active_name" property="activeName" />
-            <result column="active_type" property="activeType" />
-            <result column="area" property="area" />
-            <result column="descri" property="descri" />
-            <result column="create_by" property="createBy" />
-            <result column="create_date" property="createDate" />
-            <result column="update_by" property="updateBy" />
-            <result column="update_date" property="updateDate" />
-            <result column="remark" property="remark" />
-            <result column="del_flag" property="delFlag" />
-            <result column="geometry" property="geometry" />
-            <result column="group_id" property="groupId" />
-        </association>
+<!--        <association property="iterpretation" javaType="com.gistone.entity.Iterpretation">-->
+<!--            <id column="id" property="id" />-->
+<!--            <result column="image_id" property="imageId" />-->
+<!--            <result column="active_name" property="activeName" />-->
+<!--            <result column="active_type" property="activeType" />-->
+<!--            <result column="area" property="area" />-->
+<!--            <result column="descri" property="descri" />-->
+<!--            <result column="create_by" property="createBy" />-->
+<!--            <result column="create_date" property="createDate" />-->
+<!--            <result column="update_by" property="updateBy" />-->
+<!--            <result column="update_date" property="updateDate" />-->
+<!--            <result column="remark" property="remark" />-->
+<!--            <result column="del_flag" property="delFlag" />-->
+<!--            <result column="geometry" property="geometry" />-->
+<!--            <result column="group_id" property="groupId" />-->
+<!--        </association>-->
         <association property="st4ScsCo" javaType="com.gistone.entity.St4ScsCo">
             <id column="co001" property="co001" />
             <result column="name" property="name" />
@@ -1468,7 +1468,7 @@
             #{item.ck091})
         </foreach>
     </insert>
-    <update id="batchUpdateByPrimaryKey"  parameterType="com.gistone.entity.St4ScsCk">
+ <!--   <update id="batchUpdateByPrimaryKey"  parameterType="com.gistone.entity.St4ScsCk">
         update st4_scs_ck
         <set >
             <if test="ck002 != null" >
@@ -1745,7 +1745,7 @@
 
         where CK001 = #{ck001}
 
-    </update>
+    </update>-->
 
 
 
