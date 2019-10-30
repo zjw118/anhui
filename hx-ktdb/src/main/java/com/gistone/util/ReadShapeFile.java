@@ -1,6 +1,24 @@
 package com.gistone.util;
 
 
+import com.gistone.entity.LmMarkerMobile;
+import org.geotools.data.DataStore;
+import org.geotools.data.DataStoreFinder;
+import org.geotools.data.FeatureSource;
+import org.geotools.data.shapefile.ShapefileDataStore;
+import org.geotools.feature.FeatureCollection;
+import org.geotools.feature.FeatureIterator;
+import org.opengis.feature.Property;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+
+import java.io.File;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 /**
  * @author zf1017@foxmail.com
  * @date 2019/4/30 0030 14:28
@@ -8,7 +26,7 @@ package com.gistone.util;
  */
 public class ReadShapeFile {
 
-    /*public ArrayList<LmMarkerMobile> readShapeFile(String filePath) {
+    public ArrayList<LmMarkerMobile> readShapeFile(String filePath) {
         ArrayList<LmMarkerMobile> modelList = new ArrayList<>();
         File folder = new File(filePath);
         if (!folder.isDirectory()) {
@@ -100,7 +118,7 @@ public class ReadShapeFile {
         return models;
     }
 
-    public String readShapeFileToStr(String filePath) {
+   /* public String readShapeFileToStr(String filePath) {
         String result = "";
         try {
             FeatureJSON fjson = new FeatureJSON();
@@ -161,14 +179,14 @@ public class ReadShapeFile {
 
         return result;
 
-    }
+    }*/
 
     public static void main(String[] args) {
         try {
             String path = "D:/Work/gistone/文档/祁连山生态红线/祁连山山水林田湖生态修复试点/Export_Output_3.shp";
             ReadShapeFile readShapeFile = new ReadShapeFile();
-            *//*String s = readShapeFile.readShapeFileToStr(path);
-            System.out.println(s);*//*
+//            String s = readShapeFile.readShapeFileToStr(path);
+//            System.out.println(s);
 //            ArrayList<LmMarkerMobile> lmMarkerMobiles = readShapeFile.readShapeFile(path);
 //            lmMarkerMobiles.forEach(System.out::println);
         } catch (Exception e) {
@@ -176,5 +194,4 @@ public class ReadShapeFile {
         }
 
     }
-*/
 }

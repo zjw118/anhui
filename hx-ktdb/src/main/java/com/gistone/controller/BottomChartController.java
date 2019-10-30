@@ -115,6 +115,7 @@ public class BottomChartController {
             bottomChart.setRemark(remark);
         }
         bottomChart.setCreateDate(new Date());
+        //类型没添加
         //判断添加人是否为空
         service.insert(bottomChart);
         return ResultVOUtil.success();
