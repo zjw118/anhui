@@ -9,7 +9,6 @@ import com.gistone.pkname.Swagger;
 import com.gistone.service.ISt4ScsCdService;
 import com.gistone.service.ISt4ScsCkService;
 import com.gistone.service.ISysUserService;
-import com.gistone.service.IterpretationService;
 import com.gistone.util.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,7 +26,7 @@ public class AnhuiAppController {
     @Autowired
     private ISysUserService userService;
     @Autowired
-    private IterpretationService iterpretationService;
+    private ISt4ScsCdService iterpretationService;
     @Autowired
     private ISt4ScsCkService st4ScsCkService;
 
