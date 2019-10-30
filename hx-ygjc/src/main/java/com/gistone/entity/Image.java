@@ -23,57 +23,35 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class Image extends Model<Image> {
-
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-
-    /**
-     * 影像名称
-     */
+    @TableId(value = "name")
     private String name;
-
-    /**
-     * 服务地址
-     */
+    @TableId(value = "url")
     private String url;
+    @TableId(value = "shpurl")
     private String shpurl;
-
-
-
-    /**
-     * 创建人id
-     */
+    @TableId(value = "create_by")
     private Integer createBy;
-
-    /**
-     * 创建日期
-     */
+    @TableId(value = "create_date")
     private LocalDateTime createDate;
-
-    /**
-     * 修改人id
-     */
+    @TableId(value = "update_by")
     private Integer updateBy;
-
-    /**
-     * 修改日期
-     */
+    @TableId(value = "update_date")
     private LocalDateTime updateDate;
-
-    /**
-     * 备注
-     */
+    @TableId(value = "remark")
     private String remark;
-
+    @TableId(value = "del_flag")
     private Integer delFlag;
-
-
-
     @TableField(exist = false)
     private String shp;
-    @Override
+
+
+
+
+
     protected Serializable pkVal() {
         return this.id;
     }

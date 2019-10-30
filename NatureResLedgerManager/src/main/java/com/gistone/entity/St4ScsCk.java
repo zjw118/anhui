@@ -480,7 +480,7 @@ public class St4ScsCk extends BaseEntity implements Serializable {
     private St4ScsCz st4ScsCz;
     @ApiModelProperty(name="iterpretation",value="图斑实体类(包裹图斑信息)",dataType = "object",example="")
     @TableField(exist = false)
-    private Iterpretation iterpretation;
+    private St4ScsCd iterpretation;
 
     @ApiModelProperty(name="st4ScsCo",value="安徽图斑绑定的台账表(模糊查询项)",dataType = "object",example="")
     @TableField(exist = false)

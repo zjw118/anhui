@@ -18,19 +18,10 @@ package com.gistone.service;
     */
     public interface IterpretationService extends IService<Iterpretation> {
 
+        void edit(Iterpretation entity);
+        void insert(List<Map<String, Object>> data,Integer imageId,Integer createBy);
+        void delete(List<Integer> ids);
+        Map<String, Object> list(Integer pageNum, Integer pageSize,Integer id);
+        ResultVO sysSpotData (Integer id);
 
-    Map<String, Object> list(Integer pageNum,Integer pageSize,Integer id);
-
-    void delete(List<Integer> id);
-
-    void insert(List<Map<String, Object>> data,Integer imageId,Integer createBy);
-
-    void edit(Iterpretation entity);
-
-        /**
-         * 安徽下发任务接口的查询到的斑点的集合
-         * @param uid
-         * @return
-         */
-        ResultVO sysSpotData (Integer uid);
     }

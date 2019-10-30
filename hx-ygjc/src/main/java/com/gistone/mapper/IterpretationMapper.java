@@ -15,6 +15,7 @@ import java.util.List;
  */
 public interface IterpretationMapper extends BaseMapper<Iterpretation> {
     List<Iterpretation> getSpotByTaskId(Integer tid);
-
     List<Iterpretation> sysSpotData(Integer tid);
+
+
 }

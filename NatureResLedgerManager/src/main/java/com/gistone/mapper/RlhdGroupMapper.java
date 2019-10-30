@@ -1,7 +1,7 @@
 package com.gistone.mapper;
 
-import com.gistone.entity.RlhdGroup;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.gistone.entity.RlhdGroup;
 
 /**
  * <p>
