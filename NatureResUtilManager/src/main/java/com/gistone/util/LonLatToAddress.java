@@ -3,6 +3,7 @@ package com.gistone.util;
 import net.sf.json.JSONObject;
 
 import java.net.URL;
+import java.util.Map;
 
 public class LonLatToAddress {
 
@@ -34,7 +35,8 @@ public class LonLatToAddress {
 	        //高德返回
 	        //return JSONObject.fromObject(JSONObject.fromObject(jsonObject.get("regeocode")).get("addressComponent")).get("district").toString();
 	        //	天地图
-	        return JSONObject.fromObject(JSONObject.fromObject(jsonObject.get("result")).get("addressComponent")).get("province").toString();
+			Map<Object,Object> obj = JSONObject.fromObject(JSONObject.fromObject(jsonObject.get("result")).get("addressComponent"));
+			return obj.get("province")==null?"":obj.get("province").toString();
 	    }
 	    public static void main(String[] args) {
 	    	System.out.println(LonLatToAddress.getAdd("116°59′38.4864″", "39°59′59.208″"));

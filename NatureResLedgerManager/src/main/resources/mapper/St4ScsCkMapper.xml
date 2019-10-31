@@ -96,6 +96,22 @@
         <result column="CK090" property="ck090" />
         <result column="CK091" property="ck091" />
         <result column="uname" property="uname" />
+        <result column="tzNum" property="tzNum" />
+        <result column="xhNum" property="xhNum" />
+        <result column="unxhNum" property="unxhNum" />
+        <result column="isPunishNum" property="isPunishNum" />
+        <result column="isNotPunishNum" property="isNotPunishNum" />
+
+        <result column="farmNum" property="farmNum" />
+        <result column="residentNum" property="residentNum" />
+        <result column="industrialNum" property="industrialNum" />
+        <result column="quarryNum" property="quarryNum" />
+        <result column="EnergyNum" property="EnergyNum" />
+        <result column="journeyNum" property="journeyNum" />
+        <result column="trafficNum" property="trafficNum" />
+        <result column="feetNum" property="feetNum" />
+        <result column="roadNum" property="roadNum" />
+        <result column="waterElectricityNum" property="waterElectricityNum" />
         <association property="st4ScsCac" javaType="com.gistone.entity.St4ScsCac">
             <result column="CK001" property="ck001" />
             <result column="CAC002" property="cac002" />
