@@ -29,4 +29,6 @@ package com.gistone.service;
     void importPreMarkerData(String url,String remark);
 
     void importPreBoardData(String url,String remark);
+
+    List<ShpBatch> getNewList();
     }

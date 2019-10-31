@@ -1,7 +1,9 @@
 package com.gistone.mapper;
 
-import com.gistone.entity.ShpBatch;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.gistone.entity.ShpBatch;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +14,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2019-10-29
  */
 public interface ShpBatchMapper extends BaseMapper<ShpBatch> {
+    List<ShpBatch> getNewList();
 
 }

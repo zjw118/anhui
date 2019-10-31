@@ -231,6 +231,12 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
         }
     }
 
+    @Override
+    public List<ShpBatch> getNewList() {
+       List<ShpBatch> shpBatches =  mapper.getNewList();
+       return shpBatches;
+    }
+
 }
 
 
