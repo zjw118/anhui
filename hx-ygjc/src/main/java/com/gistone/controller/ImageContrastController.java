@@ -1,10 +1,13 @@
 package com.gistone.controller;
 
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.ImageContrast;
 import com.gistone.entity.SysUser;
 import com.gistone.service.ImageContrastService;
 import com.gistone.util.PageBean;
 import com.gistone.util.Result;
+import com.gistone.util.ResultEnum;
+import com.gistone.util.ResultVOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,11 +29,11 @@ public class ImageContrastController {
      * @return
      */
     @PostMapping("/add")
-    public Result add(HttpServletRequest request, @RequestBody Map<String, Object> paramsMap) throws Exception {
+    public ResultVO add(HttpServletRequest request, @RequestBody Map<String, Object> paramsMap) throws Exception {
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-        if (params == null) return Result.build(2,"需要包含data");
-        if(null==params.get("image1Id"))return Result.build(2,"image1Id不能为空");
-        if(null==params.get("image2Id"))return Result.build(2,"image2Id不能为空");
+        if (params == null) return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"data结构");
+        if(null==params.get("image1Id"))return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"image1Id不能为空");
+        if(null==params.get("image2Id"))return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"image2Id不能为空");
         Integer id1 = Integer.valueOf(params.get("image1Id")+"");
         Integer id2 = Integer.valueOf(params.get("image2Id")+"");
 
@@ -53,11 +56,11 @@ public class ImageContrastController {
      * @return
      */
     @PostMapping("/list")
-    public Result list(HttpServletRequest request, @RequestBody Map<String, Object> paramsMap) {
+    public ResultVO list(HttpServletRequest request, @RequestBody Map<String, Object> paramsMap) {
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-        if (params == null) return Result.build(2,"需要包含data");
-        if(null==params.get("pageNum"))return Result.build(2,"pageNum不能为空");
-        if(null==params.get("pageSize"))return Result.build(2,"pageSize不能为空");
+        if (params == null) return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"data结构");
+        if(null==params.get("pageNum"))return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"pageNum不能为空");
+        if(null==params.get("pageSize"))return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"pageSize不能为空");
         PageBean pageBean = new PageBean();
         pageBean.setPageIndex(Integer.valueOf(params.get("pageNum")+""));
         pageBean.setPageSize(Integer.valueOf(params.get("pageSize")+""));
@@ -72,10 +75,10 @@ public class ImageContrastController {
      * @return
      */
     @PostMapping("/delete")
-    public Result delete(HttpServletRequest request, @RequestBody Map<String, Object> paramsMap) {
+    public ResultVO delete(HttpServletRequest request, @RequestBody Map<String, Object> paramsMap) {
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-        if (params==null) return Result.build(2,"需要包含data");
-        if (null==params.get("id")) return Result.build(2,"id不能为空");
+        if (params==null) return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"data结构");
+        if (null==params.get("id"))return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"id不能为空");
         return imageContrastService.delete(Integer.valueOf(params.get("id")+""));
     }
 
@@ -87,10 +90,10 @@ public class ImageContrastController {
      * @return
      */
     @PostMapping("/get")
-    public Result get(HttpServletRequest request, @RequestBody Map<String, Object> paramsMap) {
+    public ResultVO get(HttpServletRequest request, @RequestBody Map<String, Object> paramsMap) {
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-        if (params==null) return Result.build(2,"需要包含data");
-        if (null==params.get("id")) return Result.build(2,"id不能为空");
+        if (params==null) return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"data结构");
+        if (null==params.get("id"))return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"id不能为空");
         return imageContrastService.get(Integer.valueOf(params.get("id")+""));
     }
 
