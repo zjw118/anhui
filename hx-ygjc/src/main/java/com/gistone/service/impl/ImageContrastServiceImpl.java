@@ -1,13 +1,12 @@
 package com.gistone.service.impl;
 
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
 import com.gistone.entity.ImageContrast;
 import com.gistone.mapper.ImageContrastMapper;
 import com.gistone.mapper.ImageMapper;
 import com.gistone.service.ImageContrastService;
-import com.gistone.util.HttpUtil;
-import com.gistone.util.PageBean;
-import com.gistone.util.Result;
+import com.gistone.util.*;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,7 @@ public class ImageContrastServiceImpl implements ImageContrastService {
     private String IMAGE_SERVICE;
 
     @Override
-    public Result add(ImageContrast imageContrast) throws Exception {
+    public ResultVO add(ImageContrast imageContrast) throws Exception {
         Image image1 = imageMapper.getImageById(imageContrast.getImage1Id());
         Image image2 = imageMapper.getImageById(imageContrast.getImage2Id());
         String p1 = "?file1="+PATH+image1.getShpurl();
@@ -45,7 +44,6 @@ public class ImageContrastServiceImpl implements ImageContrastService {
         String p3 = "&f=pjson";
         String res = HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3,null);
         JSONObject jsonObject = JSONObject.fromObject(res);
-
         //异步
         String res2 = "";
         for (int i = 0; i < 5; i++) {
@@ -57,33 +55,33 @@ public class ImageContrastServiceImpl implements ImageContrastService {
         imageContrast.setData(res2);
         int addres = imageContrastMapper.insertImageContrast(imageContrast);
         if(addres>0){
-            return Result.ok(res2);
+            return ResultVOUtil.success(res2);
         }
-        return Result.build(2,"对比失败");
+        return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"对比失败");
     }
 
     @Override
-    public Result list(PageBean pageBean){
+    public ResultVO list(PageBean pageBean){
         pageBean.setPoSum(imageContrastMapper.getPoSum(pageBean));
         pageBean.setPoList(imageContrastMapper.selectPoList(pageBean));
-        return Result.ok(pageBean);
+        return ResultVOUtil.success(pageBean);
     }
 
     @Override
-    public Result delete(Integer id) {
+    public ResultVO delete(Integer id) {
         int res = imageContrastMapper.deleteImageContrast(id);
         if(0<res){
-            return Result.ok();
+            return ResultVOUtil.success();
         }
-        return Result.build(2,"删除失败");
+        return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"删除失败");
     }
 
     @Override
-    public Result get(Integer id) {
+    public ResultVO get(Integer id) {
         Map res = imageContrastMapper.getImageContrast(id);
         if(0<res.size()){
-            return Result.ok(res);
+            return ResultVOUtil.success(res);
         }
-        return Result.build(2,"获取失败");
+        return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"获取失败");
     }
 }
