@@ -12,5 +12,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2019-10-21
  */
 public interface ImageMapper extends BaseMapper<Image> {
+    Image getImageById(Integer id);
 
 }

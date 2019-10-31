@@ -2,23 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gistone.mapper.ImageMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.gistone.entity.Image">
-        <id column="id" property="id" />
-        <result column="name" property="name" />
-        <result column="url" property="url" />
-        <result column="descri" property="descri" />
-        <result column="create_by" property="createBy" />
-        <result column="create_date" property="createDate" />
-        <result column="update_by" property="updateBy" />
-        <result column="update_date" property="updateDate" />
-        <result column="remark" property="remark" />
-        <result column="del_flag" property="delFlag" />
-    </resultMap>
+    <select id="getImageById"  parameterType="java.lang.Integer" resultType="com.gistone.entity.Image">
+        SELECT * from image
+        WHERE id = #{id}
+        and del_flag = 1
+	</select>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        id, name, url, descri, create_by, create_date, update_by, update_date, remark, del_flag
-    </sql>
+
+
+
+
+
+
 
 </mapper>
