@@ -8,10 +8,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.entity.DataRedlineRegister;
+import com.gistone.entity.LmBoard;
 import com.gistone.entity.LmMarkerMobile;
 import com.gistone.entity.ShpBatch;
 import com.gistone.exception.ImportException;
 import com.gistone.mapper.DataRedlineRegisterMapper;
+import com.gistone.mapper.LmBoardMapper;
 import com.gistone.mapper.LmMarkerMobileMapper;
 import com.gistone.mapper.ShpBatchMapper;
 import com.gistone.service.ShpBatchService;
@@ -48,6 +50,9 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
 
     @Autowired
     private LmMarkerMobileMapper lmMarkerMobileMapper;
+
+    @Autowired
+    private LmBoardMapper lmBoardMapper;
 
     @Override
     public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName) {
@@ -99,7 +104,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             System.out.println(fileUrl);
             ShpUtil.importPreRedlinedata(jsonArray, fileUrl);
             //批次表中录入数据
-            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(1);
+            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(1);
             if (StringUtils.isNotBlank(remark)) {
                 shpBatch.setRemark(remark);
             }
@@ -139,7 +144,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
 
             ShpUtil.importPreMarkerdata(jsonArray, fileUrl);
             //批次表中录数据
-            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(2);
+            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(2);
             if (StringUtils.isNotBlank(remark)) {
                 shpBatch.setRemark(remark);
             }
@@ -184,16 +189,46 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
 
     @Override
     public void importPreBoardData(String url, String remark) {
-        String s = httpRequest(url, "GET", null);
+        try {
+            String s = httpRequest(url, "GET", null);
 
-        JSONObject parse = JSON.parseObject(s);
-        JSONArray jsonArray = (JSONArray) parse.get("features");
-        //将数据写入shp文件
-        String fileUrl = PathUtile.getRandomPath("D:/epr/shp/", "x.shp");
-        System.out.println(fileUrl);
+            JSONObject parse = JSON.parseObject(s);
+            JSONArray jsonArray = (JSONArray) parse.get("features");
+            //将数据写入shp文件
+            String fileUrl = PathUtile.getRandomPath("D:/epr/shp/", "x.shp");
+            System.out.println(fileUrl);
 
-        ShpUtil.importPreMarkerdata(jsonArray, fileUrl);
-        //批次表中录数据
+            ShpUtil.importPreBoarddata(jsonArray, fileUrl);
+            //批次表中录数据
+            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(2);
+            if (StringUtils.isNotBlank(remark)) {
+                shpBatch.setRemark(remark);
+            }
+            mapper.insert(shpBatch);
+
+            //读shp并且导入数据
+
+            String path = "D:/Work/gistone/static/shapefile/redline_p_bsp.shp";
+            ImportBoardData importRedlineData = new ImportBoardData();
+            ArrayList<LmBoard> lmMarkerMobiles = importRedlineData.readShapeFile(path);
+            int num = 1;
+            for (LmBoard lmMarkerMobile : lmMarkerMobiles) {
+                lmMarkerMobile.setType(0);
+                lmMarkerMobile.setSaveDate(new Date());
+                lmMarkerMobile.setNumber(String.valueOf(num));
+                num++;
+            }
+            lmBoardMapper.delete(null);
+            if (lmMarkerMobiles != null && lmMarkerMobiles.size() > 0) {
+                for (LmBoard lmMarkerMobile : lmMarkerMobiles) {
+                    lmBoardMapper.insert(lmMarkerMobile);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("导入预置标识牌数据失败，异常信息为:", e.getMessage());
+            throw new ImportException(ResultEnum.ERROR.getCode(), "导入预置标识牌数据失败");
+        }
     }
 
 }

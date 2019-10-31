@@ -608,7 +608,7 @@ public class ShpUtil {
 
     public static String importPreBoarddata(JSONArray array, String filePath) {
         try {
-            final SimpleFeatureType TYPE = createFeatureTypeForMarker();
+            final SimpleFeatureType TYPE = createFeatureTypeForBoard();
             //在我们创建功能时收集功能的列表
             List<SimpleFeature> features = new ArrayList<>();
             //geometryFactory将用于创建每个要素的几何体属性，使用多边形对象作为位置。
@@ -649,10 +649,10 @@ public class ShpUtil {
 
                 //这里按顺序添加属性
 
-                featureBuilder.add(jobj.getJSONObject("attributes").getString("jzcode"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("pac"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("longitude"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("latitude"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("hxcode"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("redline_id"));
 //                featureBuilder.add(jobj.getJSONObject("attributes").getString("attribute"));
                 //featureBuilder.add(jobj.getJSONObject("attributes").getString("center"));
@@ -831,10 +831,10 @@ public class ShpUtil {
         builder.setCRS(DefaultGeographicCRS.WGS84); // 坐标参考系
         // 按顺序添加属性
         builder.add("the_geom", MultiPolygon.class);
-        builder.add("jzcode", String.class);
         builder.length(100).add("pac", String.class);
         builder.length(100).add("longitude", Double.class);
         builder.length(100).add("latitude", Double.class);
+        builder.length(100).add("hxcode", String.class);
         builder.length(100).add("redline_id", Integer.class);
 
 

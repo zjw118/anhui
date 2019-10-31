@@ -117,16 +117,17 @@ public class ShpBatchController {
         service.importPreRedlineDate(url, remark);
         return ResultVOUtil.success();
     }
+
     /***
      * @description:通过服务导入预置界桩数据
      * @param paramsMap
-      * @return com.gistone.VO.ResultVO
+     * @return com.gistone.VO.ResultVO
      * @author zf1017@foxmail.com
      * @motto: Talk is cheap,show me the code
      * @date 2019/10/30 0030 15:04
      */
     @PostMapping("/importPreMarkerData")
-    public ResultVO importPreMarkerData(@RequestBody Map<String, Object> paramsMap){
+    public ResultVO importPreMarkerData(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
         Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
         if (dataParam == null) {
@@ -143,8 +144,16 @@ public class ShpBatchController {
         return ResultVOUtil.success();
     }
 
+    /**
+     * @param paramsMap
+     * @return com.gistone.VO.ResultVO
+     * @description:通过服务导入标识牌预置数据
+     * @author zf1017@foxmail.com
+     * @motto: Talk is cheap,show me the code
+     * @date 2019/10/30 0030 17:31
+     */
     @PostMapping("/importPreBoardData")
-    public ResultVO importPreBoardData(@RequestBody Map<String, Object> paramsMap){
+    public ResultVO importPreBoardData(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
         Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
         if (dataParam == null) {
@@ -160,7 +169,44 @@ public class ShpBatchController {
         service.importPreBoardData(url, remark);
         return ResultVOUtil.success();
     }
+    /**
+     * @description:导入预置数据统一接口
+     * @param paramsMap
+      * @return com.gistone.VO.ResultVO
+     * @author zf1017@foxmail.com
+     * @motto: Talk is cheap,show me the code
+     * @date 2019/10/30 0030 17:53
+     */
+    @PostMapping("/importPreData")
+    public ResultVO importPreData(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
+        if (dataParam == null) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "请求数据data不能为空！");
+        }
+        //服务地址
+        String url = (String) dataParam.get("url");
+        if (StringUtils.isBlank(url)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "服务地址不能为空");
+        }
+        String remark = (String) dataParam.get("remark");
 
+        Integer type = (Integer) dataParam.get("type");
+        if (type == null) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "类型不能为空");
+        }
+
+        if (type == 1) {
+            service.importPreRedlineDate(url, remark);
+        } else if (type == 2) {
+            service.importPreMarkerData(url, remark);
+        }
+        if (type == 3) {
+            service.importPreBoardData(url, remark);
+        }
+
+        return ResultVOUtil.success();
+    }
 
 
 }
