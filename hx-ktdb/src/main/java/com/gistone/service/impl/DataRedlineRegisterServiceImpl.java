@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +60,16 @@ public class DataRedlineRegisterServiceImpl extends ServiceImpl<DataRedlineRegis
 		}
 
 		IPage<DataRedlineRegister> IPage = dataRedlineRegisterMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+
+		if(IPage.getRecords()!=null&&IPage.getRecords().size()>0){
+			for (DataRedlineRegister record : IPage.getRecords()) {
+
+				BigDecimal b = new BigDecimal(record.getSrldArea());
+				System.out.println(b.toPlainString());
+				record.setSrldArea(b.toPlainString());
+
+			}
+		}
 
 		result.put("rows", IPage.getRecords());
 		result.put("total", IPage.getTotal());

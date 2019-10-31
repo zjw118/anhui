@@ -16,7 +16,7 @@ package com.gistone.service;
     public interface SysLogService extends IService<SysLog> {
 
 
-    Map<String, Object> list(Integer pageNum,Integer pageSize,String Name,String type);
+    Map<String, Object> list(Integer pageNum,Integer pageSize,String Name,String type,String category);
 
     void delete(List<Integer> id);
 

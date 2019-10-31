@@ -48,6 +48,11 @@ public class ShpBatchController {
         return ResultVOUtil.success(result);
     }
 
+   /* @PostMapping("/getNewList")
+    public ResultVO getNewList(){
+
+    }*/
+
 
     @PostMapping("/detail")
     public ResultVO getById(@RequestBody Map<String, Object> params) {

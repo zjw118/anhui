@@ -24,7 +24,7 @@ import java.util.Map;
     */
 
     @RestController
-    @RequestMapping("/sysLog")
+    @RequestMapping("/api/sys/sysLog")
         public class SysLogController {
     @Autowired
     private SysLogService service;
@@ -41,6 +41,7 @@ import java.util.Map;
     Integer pageSize = (Integer) params.get("pageSize");
     String name = (String)params.get("title");
     String type = (String) params.get("type");
+    String category = (String) params.get("category");
     if (pageNum == null) {
     pageNum = 1;
     }
@@ -49,7 +50,7 @@ import java.util.Map;
     pageSize = 10;
     }
 
-    Map<String, Object> result = service.list(pageNum, pageSize,name,type);
+    Map<String, Object> result = service.list(pageNum, pageSize,name,type,category);
     return ResultVOUtil.success(result);
     }
 

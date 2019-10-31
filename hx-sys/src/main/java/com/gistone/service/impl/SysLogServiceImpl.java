@@ -34,7 +34,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
     private SysLogMapper mapper;
 
     @Override
-    public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName, String type) {
+    public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName, String type,String category) {
 
         QueryWrapper<SysLog> wrapper = new QueryWrapper<>();
         if (StringUtils.isNotBlank(userName)) {
@@ -42,6 +42,9 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         }
         if (StringUtils.isNotBlank(type)) {
             wrapper.likeRight("type", type);
+        }
+        if(StringUtils.isNotBlank(category)){
+            wrapper.likeRight("http_method",category);
         }
         wrapper.eq("del_flag", 1);
         wrapper.orderByDesc("create_date");
