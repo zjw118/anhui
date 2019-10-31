@@ -18,7 +18,7 @@ import java.io.IOException;
  */
 public interface ISt4SysSgService extends IService<St4SysSg> {
 
-    Result list(St4SysSg data, St4SysSa seUser);
+    //Result list(St4SysSg data, St4SysSa seUser);
 
     Result listByParam(St4SysSg data);
 

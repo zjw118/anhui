@@ -44,7 +44,7 @@ public class St4ScsCzServiceImpl extends ServiceImpl<St4ScsCzMapper, St4ScsCz> i
     @Autowired
     private ISt4PoSaCzService iSt4PoSaCzService;
     @Override
-    public Result listGroup(St4ScsCz cz,St4SysSa seUser) {
+    public Result listGroup(St4ScsCz cz, St4SysSa seUser) {
         int size = cz.getPageSize();//每页条数
         int number = cz.getPageNumber();//开始索引
         int numberReal =0;
@@ -111,29 +111,29 @@ public class St4ScsCzServiceImpl extends ServiceImpl<St4ScsCzMapper, St4ScsCz> i
         result.setRows(list);
         return result;
     }
-
-    @Override
-    public Result getGroupUserDetail(St4ScsCz cz) {
-        Result result = new Result();
-
-        List<St4SysSa> list = st4ScsCzMapper.getGroupUserDetail(cz);
-        result.setStatus(1000);
-        QueryWrapper<St4ScsCz> wrapper = new QueryWrapper<>();
-        wrapper.eq("CZ001",cz.getCz001());
-        List<St4ScsCz> czList = st4ScsCzMapper.selectList(wrapper);
-        czList.get(0).setSt4SysSaList(list);
-        Integer captainId = czList.get(0).getCz006();
-        St4SysSa sa = st4SysSaMapper.selectById(captainId);
-        if(captainId!=0){
-            czList.get(0).setCaptainName(sa.getSa008());
-            czList.get(0).setCaptainRealName(sa.getSa019());
-            czList.get(0).setCaptainPhone(sa.getSa012());
-        }
-        result.setMsg("加载"+ ResultMsg.MSG_1000);
-        result.setData(czList);
-
-        return result;
-    }
+//
+//    @Override
+//    public Result getGroupUserDetail(St4ScsCz cz) {
+//        Result result = new Result();
+//
+//        List<St4SysSa> list = st4ScsCzMapper.getGroupUserDetail(cz);
+//        result.setStatus(1000);
+//        QueryWrapper<St4ScsCz> wrapper = new QueryWrapper<>();
+//        wrapper.eq("CZ001",cz.getCz001());
+//        List<St4ScsCz> czList = st4ScsCzMapper.selectList(wrapper);
+//        czList.get(0).setSt4SysSaList(list);
+//        Integer captainId = czList.get(0).getCz006();
+//        St4SysSa sa = st4SysSaMapper.selectById(captainId);
+//        if(captainId!=0){
+//            czList.get(0).setCaptainName(sa.getSa008());
+//            czList.get(0).setCaptainRealName(sa.getSa019());
+//            czList.get(0).setCaptainPhone(sa.getSa012());
+//        }
+//        result.setMsg("加载"+ ResultMsg.MSG_1000);
+//        result.setData(czList);
+//
+//        return result;
+//    }
 
     @Override
     public Result updateGroupData(St4ScsCzSwagger sw) {

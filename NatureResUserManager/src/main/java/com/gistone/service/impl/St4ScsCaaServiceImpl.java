@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.entity.St4ScsCaa;
 import com.gistone.mapper.St4ScsCaaMapper;
 import com.gistone.service.ISt4ScsCaaService;
-import com.gistone.util.Result;
 import com.gistone.util.ResultCp;
 import com.gistone.util.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;

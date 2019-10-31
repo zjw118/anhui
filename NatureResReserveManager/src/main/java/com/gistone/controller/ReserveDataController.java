@@ -76,7 +76,7 @@ public class ReserveDataController {
             String userId = JWT.decode(token).getAudience().get(0);
             St4SysSa seUser = new St4SysSa();
             seUser.setSa001(Integer.valueOf(userId));
-            Result list = iSt4SysSgService.list(param,seUser);
+            Result list = null;//iSt4SysSgService.list(param,seUser);
             return list;
         } catch (Exception e) {
             e.printStackTrace();

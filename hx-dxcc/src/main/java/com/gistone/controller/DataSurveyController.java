@@ -6,7 +6,6 @@ import com.gistone.entity.DataSurvey;
 import com.gistone.service.IDataSurveyService;
 import com.gistone.util.RegUtil;
 import com.gistone.util.Result;
-import com.gistone.util.ResultEnum;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;

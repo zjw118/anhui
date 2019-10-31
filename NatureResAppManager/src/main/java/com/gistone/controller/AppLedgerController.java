@@ -1,6 +1,5 @@
 package com.gistone.controller;
 
-import com.auth0.jwt.JWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.SawggerModel.SysData;
 import com.gistone.annotation.PassToken;
@@ -12,7 +11,6 @@ import com.gistone.mapper.St4SysSaMapper;
 import com.gistone.pkname.Swagger;
 import com.gistone.util.ObjectUtils;
 import com.gistone.util.Result;
-import com.gistone.util.ResultCp;
 import com.gistone.util.ResultMsg;
 import com.gistone.service.*;
 import io.swagger.annotations.Api;

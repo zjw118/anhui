@@ -5,14 +5,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.*;
-import com.gistone.mapper.*;
-import com.gistone.entity.*;
-import com.gistone.mapper.*;
-import com.gistone.service.ISt4PoSaSbService;
+import com.gistone.entity.St4PoSaSj;
+import com.gistone.entity.St4SysSa;
+import com.gistone.mapper.St4PoSaSjMapper;
+import com.gistone.mapper.St4SysSaMapper;
+import com.gistone.mapper.St4SysSjMapper;
 import com.gistone.service.ISt4PoSaSjService;
 import com.gistone.service.ISt4SysSaService;
-import com.gistone.util.*;
 import com.gistone.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,26 +35,18 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
     @Autowired
     private St4SysSaMapper st4SysSaMapper;
     @Autowired
-    private St4SysSbMapper st4SysSbMapper;
-    @Autowired
     private St4SysSjMapper st4SysSjMapper;
     @Autowired
-    private St4PoSaSbMapper st4PoSaSbMapper;
-    @Autowired
     private St4PoSaSjMapper st4PoSaSjMapper;
-    @Autowired
-    private ISt4PoSaSbService st4PoSaSbService;
     @Autowired
     private ISt4SysSaService st4SysSaService;
     @Autowired
     private ISt4PoSaSjService st4PoSaSjService;
-    @Autowired
-    private St4SysShMapper st4SysShMapper;
 
 
 
     @Override
-    public Result searchSysUserByLogin(String username, String password){
+    public ResultCp searchSysUserByLogin(String username, String password){
        /* QueryWrapper<St4SysSa> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("SA008", username).or().eq("SA012",username);
         queryWrapper.eq("SA007",1);*/
@@ -67,11 +58,11 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
         if (list.size() > 0 && list.size() < 2) {
             St4SysSa sysUser = list.stream().filter(sysUser1 -> sysUser1.getSa009().equals(MD5Util.md5Encode(password))).findAny().orElse(null);
             if (sysUser != null) {
-                return Result.build(1000, "登录成功",sysUser);
+                return ResultCp.build(1000, "登录成功",sysUser);
             }
-            return Result.build(1017, "登录失败，密码错误");
+            return ResultCp.build(1017, "登录失败，密码错误");
         }
-        return Result.build(1006, list.size() > 1 ? "登录失败，平台内账号重复，请联系管理员" : "登录失败，用户不存在");
+        return ResultCp.build(1006, list.size() > 1 ? "登录失败，平台内账号重复，请联系管理员" : "登录失败，用户不存在");
     }
 
     @Override
@@ -174,127 +165,127 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
         }
         return result;
     }
-    @Override
-    public Result getUserDetail(St4SysSa sa){
-        sa = st4SysSaMapper.selectById(sa);
-        sa.setSa009("");//此处密码不能返回
-        QueryWrapper<St4PoSaSb> wrapper = new QueryWrapper<>();
-        wrapper.eq("SA001",sa.getSa001());
-        List<St4PoSaSb> sasbList = st4PoSaSbMapper.selectList(wrapper);
-        List<Integer> roleList = new ArrayList<>();
-        if(sasbList.size()>0){
-            for (St4PoSaSb saSb :sasbList) {
-                roleList.add(saSb.getSb001());
-            }
-            QueryWrapper<St4SysSb> sbWrapper = new QueryWrapper<>();
-            sbWrapper.in("SB001",roleList);
-            List<St4SysSb> sbList = st4SysSbMapper.selectList(sbWrapper);
-            sa.setSbList(sbList);
-        }
-
-        QueryWrapper<St4PoSaSj> wrapper1 = new QueryWrapper<>();
-        wrapper1.eq("SA001",sa.getSa001());
-        List<St4PoSaSj> sasjList = st4PoSaSjMapper.selectList(wrapper1);
-        List<Integer> unitList = new ArrayList<>();
-        if(sasjList.size()>0){
-            for (St4PoSaSj saSj :sasjList) {
-                unitList.add(saSj.getSj001());
-            }
-            QueryWrapper<St4SysSj> sjWrapper = new QueryWrapper<>();
-            sjWrapper.in("SJ001",unitList);
-            List<St4SysSj> sjList = st4SysSjMapper.selectList(sjWrapper);
-            sa.setSjList(sjList);
-        }
-        Result result = new Result();
-        result.setStatus(1000);
-        result.setData(sa);
-        return result;
-    }
+//    @Override
+//    public Result getUserDetail(St4SysSa sa){
+//        sa = st4SysSaMapper.selectById(sa);
+//        sa.setSa009("");//此处密码不能返回
+//        QueryWrapper<St4PoSaSb> wrapper = new QueryWrapper<>();
+//        wrapper.eq("SA001",sa.getSa001());
+//        List<St4PoSaSb> sasbList = st4PoSaSbMapper.selectList(wrapper);
+//        List<Integer> roleList = new ArrayList<>();
+//        if(sasbList.size()>0){
+//            for (St4PoSaSb saSb :sasbList) {
+//                roleList.add(saSb.getSb001());
+//            }
+//            QueryWrapper<St4SysSb> sbWrapper = new QueryWrapper<>();
+//            sbWrapper.in("SB001",roleList);
+//            List<St4SysSb> sbList = st4SysSbMapper.selectList(sbWrapper);
+//            sa.setSbList(sbList);
+//        }
+//
+//        QueryWrapper<St4PoSaSj> wrapper1 = new QueryWrapper<>();
+//        wrapper1.eq("SA001",sa.getSa001());
+//        List<St4PoSaSj> sasjList = st4PoSaSjMapper.selectList(wrapper1);
+//        List<Integer> unitList = new ArrayList<>();
+//        if(sasjList.size()>0){
+//            for (St4PoSaSj saSj :sasjList) {
+//                unitList.add(saSj.getSj001());
+//            }
+//            QueryWrapper<St4SysSj> sjWrapper = new QueryWrapper<>();
+//            sjWrapper.in("SJ001",unitList);
+//            List<St4SysSj> sjList = st4SysSjMapper.selectList(sjWrapper);
+//            sa.setSjList(sjList);
+//        }
+//        Result result = new Result();
+//        result.setStatus(1000);
+//        result.setData(sa);
+//        return result;
+//    }
     //修改用户
-    @Override
-    public  Result updateUser(St4SysSa user,St4SysSa seUser,List<Integer> roleList, List<Integer> unitList)  {
+//    @Override
+//    public  Result updateUser(St4SysSa user,St4SysSa seUser,List<Integer> roleList, List<Integer> unitList)  {
+//
+//        //1.数据处理
+//        if(user.getSa009()!=null&&!"".equals(user.getSa009().trim())){
+//            //MD5加密
+//            user.setSa009(MD5Util.md5Encode(user.getSa009()));
+//        }else{
+//            St4SysSa user1  = st4SysSaMapper.selectById(user);
+//            user.setSa009(user1.getSa009());
+//        }
+//        user.setSa004(seUser.getSa004());
+//        LocalDateTime date = LocalDateTime.now();
+//        user.setSa005(date);
+//
+//        //2.调用Dao
+//        int number = st4SysSaMapper.updateById(user);
+//        Integer uid = user.getSa001();
+//        if(number>0){
+//            /**
+//             * 这里修改完基本信息的之后角色也要重新设置
+//             */
+//            if(roleList!=null&&roleList.size()>0){
+//                QueryWrapper<St4PoSaSb> wrapper = new QueryWrapper<St4PoSaSb>();
+//                wrapper.eq("SA001",user.getSa001());
+//                //如果当前人原来有绑定的角色那么就删除原来的
+//                if(st4PoSaSbMapper.selectList(wrapper).size()>0){
+//                    st4PoSaSbMapper.delete(wrapper);
+//                }
+//                St4PoSaSb surr = null;
+//                List<St4PoSaSb> surrList = new ArrayList<>();
+//
+//                for (Integer roleId:roleList ) {
+//                    surr = new St4PoSaSb();
+//                    surr.setSa001(uid);
+//                    surr.setSb001(roleId);
+//                    surrList.add(surr);
+//                }
+//                boolean rFlag = st4PoSaSbService.saveBatch(surrList);
+//                if(!rFlag){
+//                    return Result.build(1003,ResultMsg.MSG_1003);
+//                }
+//            }
+//            if(unitList!=null&&unitList.size()>0){
+//                QueryWrapper<St4PoSaSj> wrapper = new QueryWrapper<St4PoSaSj>();
+//                wrapper.eq("SA001",user.getSa001());
+//                //如果当前人原来有绑定的角色那么就删除原来的
+//                if(st4PoSaSjMapper.selectList(wrapper).size()>0){
+//                    st4PoSaSjMapper.delete(wrapper);
+//                }
+//                St4PoSaSj surr = null;
+//                List<St4PoSaSj> surrList = new ArrayList<>();
+//
+//                for (Integer unitId:unitList ) {
+//                    surr = new St4PoSaSj();
+//                    surr.setSa001(uid);
+//                    surr.setSj001(unitId);
+//                    surrList.add(surr);
+//                }
+//                boolean uFlag = st4PoSaSjService.saveBatch(surrList);
+//                if(!uFlag){
+//                    return Result.build(1003,ResultMsg.MSG_1003);
+//                }
+//            }
+//            //重新给当前人赋予新的角色
+//            if(number>0){
+//                //创建日志对象
+//                St4SysSh sh = new St4SysSh();
+//                sh.setSh002(user.getSa001());
+//                sh.setSh003(date);
+//                sh.setSh014("修改用户");
+//                st4SysShMapper.insert(sh);
+//                return Result.build(1000, "修改成功");
+//            };
+//
+//            return Result.build(1000, "修改成功");
+//        }else{
+//            return Result.build(1003, "服务器异常，修改失败");
+//        }
+//
+//
+//    }
 
-        //1.数据处理
-        if(user.getSa009()!=null&&!"".equals(user.getSa009().trim())){
-            //MD5加密
-            user.setSa009(MD5Util.md5Encode(user.getSa009()));
-        }else{
-            St4SysSa user1  = st4SysSaMapper.selectById(user);
-            user.setSa009(user1.getSa009());
-        }
-        user.setSa004(seUser.getSa004());
-        LocalDateTime date = LocalDateTime.now();
-        user.setSa005(date);
-
-        //2.调用Dao
-        int number = st4SysSaMapper.updateById(user);
-        Integer uid = user.getSa001();
-        if(number>0){
-            /**
-             * 这里修改完基本信息的之后角色也要重新设置
-             */
-            if(roleList!=null&&roleList.size()>0){
-                QueryWrapper<St4PoSaSb> wrapper = new QueryWrapper<St4PoSaSb>();
-                wrapper.eq("SA001",user.getSa001());
-                //如果当前人原来有绑定的角色那么就删除原来的
-                if(st4PoSaSbMapper.selectList(wrapper).size()>0){
-                    st4PoSaSbMapper.delete(wrapper);
-                }
-                St4PoSaSb surr = null;
-                List<St4PoSaSb> surrList = new ArrayList<>();
-
-                for (Integer roleId:roleList ) {
-                    surr = new St4PoSaSb();
-                    surr.setSa001(uid);
-                    surr.setSb001(roleId);
-                    surrList.add(surr);
-                }
-                boolean rFlag = st4PoSaSbService.saveBatch(surrList);
-                if(!rFlag){
-                    return Result.build(1003,ResultMsg.MSG_1003);
-                }
-            }
-            if(unitList!=null&&unitList.size()>0){
-                QueryWrapper<St4PoSaSj> wrapper = new QueryWrapper<St4PoSaSj>();
-                wrapper.eq("SA001",user.getSa001());
-                //如果当前人原来有绑定的角色那么就删除原来的
-                if(st4PoSaSjMapper.selectList(wrapper).size()>0){
-                    st4PoSaSjMapper.delete(wrapper);
-                }
-                St4PoSaSj surr = null;
-                List<St4PoSaSj> surrList = new ArrayList<>();
-
-                for (Integer unitId:unitList ) {
-                    surr = new St4PoSaSj();
-                    surr.setSa001(uid);
-                    surr.setSj001(unitId);
-                    surrList.add(surr);
-                }
-                boolean uFlag = st4PoSaSjService.saveBatch(surrList);
-                if(!uFlag){
-                    return Result.build(1003,ResultMsg.MSG_1003);
-                }
-            }
-            //重新给当前人赋予新的角色
-            if(number>0){
-                //创建日志对象
-                St4SysSh sh = new St4SysSh();
-                sh.setSh002(user.getSa001());
-                sh.setSh003(date);
-                sh.setSh014("修改用户");
-                st4SysShMapper.insert(sh);
-                return Result.build(1000, "修改成功");
-            };
-
-            return Result.build(1000, "修改成功");
-        }else{
-            return Result.build(1003, "服务器异常，修改失败");
-        }
-
-
-    }
-
-    //添加用户
+//    //添加用户
     @Override
     public Result add(St4SysSa user,St4SysSa seUser,List<Integer> roleList,List<Integer> unitList) {
 
@@ -317,14 +308,14 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
                     //st4SysSaService.save(user);
             int userId = user.getSa001();
 
-            List<St4PoSaSb> surrList = new ArrayList<>();
+           // List<St4PoSaSb> surrList = new ArrayList<>();
 
             if(userId>0){
                 /**
                  * 给用户角色关联表中插入记录
                  */
 
-                St4PoSaSb surr = null;
+               /* St4PoSaSb surr = null;
                 if(roleList!=null&&roleList.size()>0){
 
                     for (Integer roleId :  roleList) {
@@ -337,7 +328,7 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
                     if(!batchRoleFlag){
                         return Result.build(1003,ResultMsg.MSG_1003);
                     }
-                }
+                }*/
                 /**
                  *给用户单位表中插入记录
                  */
@@ -357,12 +348,7 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
                     }
                 }
                 if(flag>0){
-                    //创建日志对象
-                    St4SysSh sh = new St4SysSh();
-                    sh.setSh002(userId);
-                    sh.setSh003(date);
-                    sh.setSh014("添加用户");
-                    st4SysShMapper.insert(sh);
+
                     return Result.build(1000, "添加成功");
                 }
             }else{
@@ -371,20 +357,20 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
         }
         return Result.build(1001, "添加失败");
     }
-    @Override
-    public Result deleteUser(St4SysSa sa,St4SysSa seUser){
-        sa.setSa007(0);
-        if(st4SysSaMapper.updateById(sa)>0){
-            //创建日志对象
-            St4SysSh sh = new St4SysSh();
-            sh.setSh002(seUser.getSa001());
-            LocalDateTime date = LocalDateTime.now();
-            sh.setSh003(date);
-            sh.setSh014("删除用户");
-            st4SysShMapper.insert(sh);
-            return  Result.build(1000,"删除"+ResultMsg.MSG_1000);
-        }
-
-        return Result.build(1005,ResultMsg.MSG_1005);
-    }
+//    @Override
+//    public Result deleteUser(St4SysSa sa,St4SysSa seUser){
+//        sa.setSa007(0);
+//        if(st4SysSaMapper.updateById(sa)>0){
+//            //创建日志对象
+//            St4SysSh sh = new St4SysSh();
+//            sh.setSh002(seUser.getSa001());
+//            LocalDateTime date = LocalDateTime.now();
+//            sh.setSh003(date);
+//            sh.setSh014("删除用户");
+//            st4SysShMapper.insert(sh);
+//            return  Result.build(1000,"删除"+ResultMsg.MSG_1000);
+//        }
+//
+//        return Result.build(1005,ResultMsg.MSG_1005);
+//    }
 }

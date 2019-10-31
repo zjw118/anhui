@@ -1,13 +1,10 @@
 package com.gistone.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.St4PoClCo;
 import com.gistone.entity.St4ScsCl;
-import com.gistone.entity.St4SysSa;
 import com.gistone.entity.SysUser;
 import com.gistone.mapper.*;
 import com.gistone.service.ISt4PoClCoService;
@@ -56,16 +53,16 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
         return ResultVOUtil.success(res);
     }
 
-    @Override
-    public Result listForView(St4ScsCl data) {
-        QueryWrapper<St4ScsCl> queryWrapper = new QueryWrapper<>();
-        List<St4ScsCl> list = st4ScsClMapper.selectList(queryWrapper);
-        Result res = new Result();
-        res.setData(list);
-        res.setStatus(1000);
-        res.setMsg("查询问题点任务批次成功");
-        return res;
-    }
+//    @Override
+//    public Result listForView(St4ScsCl data) {
+//        QueryWrapper<St4ScsCl> queryWrapper = new QueryWrapper<>();
+//        List<St4ScsCl> list = st4ScsClMapper.selectList(queryWrapper);
+//        Result res = new Result();
+//        res.setData(list);
+//        res.setStatus(1000);
+//        res.setMsg("查询问题点任务批次成功");
+//        return res;
+//    }
 
     @Override
     public ResultVO listTask(St4ScsCl data, SysUser seUser) {
