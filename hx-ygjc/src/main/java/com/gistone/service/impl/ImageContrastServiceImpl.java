@@ -11,40 +11,45 @@ import com.gistone.util.Result;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.Map;
 
 
 @Service
 @Transactional
 @Slf4j
+@Component
 public class ImageContrastServiceImpl implements ImageContrastService {
     @Autowired
     private ImageMapper imageMapper;
     @Autowired
     private ImageContrastMapper imageContrastMapper;
 
-    //服务地址
-    private String url = "http://192.168.1.91:6080/arcgis/rest/services/ahhx/insectqufan/GPServer/insectqufan";
 
-
+    @Value("${PATH}")
+    private String PATH;
+    @Value("${IMAGE_SERVICE}")
+    private String IMAGE_SERVICE;
 
     @Override
     public Result add(ImageContrast imageContrast) throws Exception {
         Image image1 = imageMapper.getImageById(imageContrast.getImage1Id());
         Image image2 = imageMapper.getImageById(imageContrast.getImage2Id());
-        String p1 = "?file1=D:"+image1.getShpurl();
-        String p2 = "&file2=D:"+image2.getShpurl();
+        String p1 = "?file1="+PATH+image1.getShpurl();
+        String p2 = "&file2="+PATH+image2.getShpurl();
         String p3 = "&f=pjson";
-        String res = HttpUtil.GET(url+"/submitJob"+p1+p2+p3,null);
+        String res = HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3,null);
         JSONObject jsonObject = JSONObject.fromObject(res);
 
         //异步
         String res2 = "";
         for (int i = 0; i < 5; i++) {
-            res2 = HttpUtil.GET(url+"/jobs/"+jsonObject.get("jobId")+"/results/out_shp?f=pjson",null);
+            res2 = HttpUtil.GET(IMAGE_SERVICE+"/jobs/"+jsonObject.get("jobId")+"/results/out_shp?f=pjson",null);
             if(!"".equals(res2)&&-1==res2.indexOf("error")) break;
             Thread.sleep(1500);
         }
@@ -71,5 +76,14 @@ public class ImageContrastServiceImpl implements ImageContrastService {
             return Result.ok();
         }
         return Result.build(2,"删除失败");
+    }
+
+    @Override
+    public Result get(Integer id) {
+        Map res = imageContrastMapper.getImageContrast(id);
+        if(0<res.size()){
+            return Result.ok(res);
+        }
+        return Result.build(2,"获取失败");
     }
 }

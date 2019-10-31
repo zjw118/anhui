@@ -10,14 +10,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class HttpUtil {
-
-
-    public static void main(String[] args) throws Exception {
-        System.out.println(GET("http://192.168.1.91:6080/arcgis/rest/services/ahhx/insectqufan/GPServer/insectqufan/jobs/j16cd25e62bdb4fa6828c7b94a9fb5397/results/out_shp?f=pjson",null));
-    }
-
-
-
     /**
      * Get请求
      * @param url   请求地址  http://xxx/xxx?xx=x&xx=x
@@ -60,9 +52,7 @@ public class HttpUtil {
             return result;
         }
     }
-
-
-
+    
     /**
      * POST请求
      * @param url   请求地址
@@ -89,7 +79,6 @@ public class HttpUtil {
                     conn.setRequestProperty(entry.getKey(), entry.getValue());
                 }
             }
-            // 发送POST请求必须设置如下两行
             conn.setDoOutput(true);
             conn.setDoInput(true);
             out = new PrintWriter(conn.getOutputStream());
@@ -114,7 +103,6 @@ public class HttpUtil {
         }
         return result;
     }
-
 
 
 }

@@ -30,6 +30,17 @@
 	</update>
 
 
+    <select id="getImageContrast"  resultType="java.util.Map" parameterType="java.lang.Integer">
+        SELECT
+        a.*,
+        (SELECT name from image b where a.image1_id = b.id and b.del_flag = 1 and a.del_flag = 1)image1,
+        (SELECT name from image b where a.image2_id = b.id and b.del_flag = 1 and a.del_flag = 1)image2
+        from image_contrast a
+        where a.del_flag = 1
+        and a.id=#{id}
+    </select>
+
+
     <select id="getPoSum"  resultType="java.lang.Integer" parameterType="com.gistone.util.PageBean">
         SELECT count(*) from image_contrast
         where del_flag = 1
