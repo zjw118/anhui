@@ -38,10 +38,14 @@
         </if>
     </select>
     <select id="selectPoList"  resultType ="java.util.Map" parameterType="com.gistone.util.PageBean">
-        SELECT * from image_contrast
-        where del_flag = 1
+        SELECT
+        a.*,
+        (SELECT name from image b where a.image1_id = b.id and b.del_flag = 1 and a.del_flag = 1)image1,
+        (SELECT name from image b where a.image2_id = b.id and b.del_flag = 1 and a.del_flag = 1)image2
+        from image_contrast a
+        where a.del_flag = 1
         <if test="str1!=null and str1!=''">
-            and name like '%${str1}%'
+            and a.name like '%${str1}%'
         </if>
         LIMIT #{firstLimit},#{pageSize}
     </select>
