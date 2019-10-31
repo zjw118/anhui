@@ -9,6 +9,8 @@ import com.gistone.mapper.*;
 import com.gistone.service.ISt4ScsCdService;
 import com.gistone.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
  * @since 2019-08-13
  */
 @Service
+@Component
 public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> implements ISt4ScsCdService {
 
     @Autowired
@@ -37,6 +40,8 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     @Autowired
     private ImageMapper imageMapper;
 
+    @Value("${PATH}")
+    private String PATH;
 
 
 //    public ResultCp insertSpotDataFromApp (St4ScsCd id){
@@ -192,7 +197,6 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
 
 
     public ResultVO sysSpotData(Integer id){
-
         try {
             List<St4ScsCd> cdList = st4ScsCdMapper.sysSpotData(id);
             ResultCp cp = new ResultCp();
@@ -250,7 +254,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             st4ScsCdMapper.insert(iterpretation);
         }
         //执行写入shp文件操作，返回的地址插入到影像表中
-        String url = PathUtile.getRandomPath("D:/epr/image/","x.shp");
+        String url = PathUtile.getRandomPath(PATH+"/epr/image/","x.shp");
         String res = ShpUtil.handleWebData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+""),url);
         if("0".equals(res)){
             Image image = new Image();
