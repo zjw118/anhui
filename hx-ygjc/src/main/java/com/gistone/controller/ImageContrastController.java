@@ -56,10 +56,10 @@ public class ImageContrastController {
     public Result list(HttpServletRequest request, @RequestBody Map<String, Object> paramsMap) {
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
         if (params == null) return Result.build(2,"需要包含data");
-        if(null==params.get("pageIndex"))return Result.build(2,"pageIndex不能为空");
+        if(null==params.get("pageNum"))return Result.build(2,"pageNum不能为空");
         if(null==params.get("pageSize"))return Result.build(2,"pageSize不能为空");
         PageBean pageBean = new PageBean();
-        pageBean.setPageIndex(Integer.valueOf(params.get("pageIndex")+""));
+        pageBean.setPageIndex(Integer.valueOf(params.get("pageNum")+""));
         pageBean.setPageSize(Integer.valueOf(params.get("pageSize")+""));
         pageBean.setStr1(params.get("name")+"");
         return imageContrastService.list(pageBean);
@@ -77,6 +77,21 @@ public class ImageContrastController {
         if (params==null) return Result.build(2,"需要包含data");
         if (null==params.get("id")) return Result.build(2,"id不能为空");
         return imageContrastService.delete(Integer.valueOf(params.get("id")+""));
+    }
+
+
+    /**
+     * 删除
+     * @param request
+     * @param paramsMap
+     * @return
+     */
+    @PostMapping("/get")
+    public Result get(HttpServletRequest request, @RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params==null) return Result.build(2,"需要包含data");
+        if (null==params.get("id")) return Result.build(2,"id不能为空");
+        return imageContrastService.get(Integer.valueOf(params.get("id")+""));
     }
 
 

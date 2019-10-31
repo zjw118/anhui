@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.Map;
 
 
 @Service
@@ -75,5 +76,14 @@ public class ImageContrastServiceImpl implements ImageContrastService {
             return Result.ok();
         }
         return Result.build(2,"删除失败");
+    }
+
+    @Override
+    public Result get(Integer id) {
+        Map res = imageContrastMapper.getImageContrast(id);
+        if(0<res.size()){
+            return Result.ok(res);
+        }
+        return Result.build(2,"获取失败");
     }
 }

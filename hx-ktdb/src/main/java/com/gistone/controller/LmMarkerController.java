@@ -6,13 +6,11 @@ import com.gistone.service.ILmMarkerService;
 import com.gistone.util.DateUtils;
 import com.gistone.util.RegUtil;
 import com.gistone.util.Result;
-import com.gistone.util.ResultEnum;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
