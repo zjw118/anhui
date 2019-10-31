@@ -2,11 +2,13 @@ package com.gistone.aspect;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gistone.entity.SysLog;
+import com.gistone.service.SysLogService;
 import com.gistone.util.ToolUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
@@ -19,6 +21,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -34,6 +37,9 @@ public class WebLogAspect {
 
 //    @Autowired
 //    private ISysUserService sysUserService;
+
+    @Autowired
+    private SysLogService sysLogService;
 
 
     private SysLog sysLog = null;
@@ -121,6 +127,7 @@ public class WebLogAspect {
         sysLog.setResponse(retString.length()>5000? JSONObject.toJSONString("请求参数数据过长不与显示"):retString);
         sysLog.setUseTime(System.currentTimeMillis() - startTime.get());
         System.out.println(sysLog.toString());
-        sysLog.insert();
+        sysLog.setCreateDate(new Date());
+        sysLogService.save(sysLog);
     }
 }

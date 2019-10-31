@@ -58,7 +58,7 @@ public class HttpRequestUtil {
         JSONArray jsonArray = (JSONArray) parse.get("features");
 
         String url = PathUtile.getRandomPath("D:/epr/shp/", "x.shp");
-        ShpUtil.handleWebData(jsonArray, url);
+        ShpUtil.importPreRedlinedata(jsonArray, url);
         System.out.println(jsonArray);
     }
 }

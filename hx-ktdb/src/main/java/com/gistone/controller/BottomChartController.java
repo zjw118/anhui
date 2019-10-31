@@ -115,6 +115,12 @@ public class BottomChartController {
             bottomChart.setRemark(remark);
         }
         bottomChart.setCreateDate(new Date());
+        //类型没添加
+        Integer type = (Integer) params.get("type");
+        if(type==null){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"类型不能为空");
+        }
+        bottomChart.setType(type);
         //判断添加人是否为空
         service.insert(bottomChart);
         return ResultVOUtil.success();

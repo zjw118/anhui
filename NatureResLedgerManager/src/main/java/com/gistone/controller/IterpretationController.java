@@ -75,7 +75,10 @@ public class IterpretationController {
         if(createBy==null||createBy<=0){
             HttpSession session = request.getSession();
             SysUser user = (SysUser) session.getAttribute("user");
-            createBy = user.getId();
+            if(user!=null){
+                createBy = user.getId();
+            }
+
         }
         //判断添加人是否为空
         service.insert(data,imageId,createBy);

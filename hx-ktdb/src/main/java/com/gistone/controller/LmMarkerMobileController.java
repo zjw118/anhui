@@ -1342,7 +1342,6 @@ public class LmMarkerMobileController {
 
     @RequestMapping(value = "/import")
     public void importMarkerData() {
-/*
         String path = "D:/Work/gistone/static/shapefile/redline_p_jbjz.shp";
         ReadShapeFile readShapeFile = new ReadShapeFile();
         ArrayList<LmMarkerMobile> lmMarkerMobiles = readShapeFile.readShapeFile(path);
@@ -1369,7 +1368,7 @@ public class LmMarkerMobileController {
         //先将之前的数据删除
         lmMarkerMobileService.deleteAll();
 
-        lmMarkerMobileService.saveBatch(lmMarkerMobiles);*/
+        lmMarkerMobileService.saveBatch(lmMarkerMobiles);
     }
 
     @RequestMapping("export_PreExcel")
