@@ -48,10 +48,11 @@ public class ShpBatchController {
         return ResultVOUtil.success(result);
     }
 
-   /* @PostMapping("/getNewList")
+    @PostMapping("/getNewList")
     public ResultVO getNewList(){
-
-    }*/
+        List<ShpBatch> result = service.getNewList();
+        return ResultVOUtil.success(result);
+    }
 
 
     @PostMapping("/detail")
