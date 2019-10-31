@@ -13,10 +13,7 @@ import java.util.Random;
 import java.util.UUID;
 
 @Data
-@Component
-@Configuration
 public class PathUtile {
-
 
     /**
      * 目录打散+随机附件名
@@ -40,11 +37,7 @@ public class PathUtile {
     }
 
 
-    /**
-     * application 配置文件中配置 path=xxx
-     */
-    @Value("${path}")
-    private String path;
+
 
 
 

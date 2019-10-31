@@ -95,7 +95,7 @@ public class ImportRedlineData {
                 if(property.getName().toString().equals("hxcode")){
                     model.setSrldNumber(property.getValue().toString());
                 }
-                if(property.getName().toString().equals("面积")){
+                if(property.getName().toString().equals("area")){
                     model.setSrldArea(property.getValue().toString());
                 }
                 if(property.getName().toString().equals("attribute")){

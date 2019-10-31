@@ -39,9 +39,20 @@ public class IterpretationController {
         if (params == null) {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
         }
+        if(null==params.get("pageNum"))return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"pageNum不能为空");
+        if(null==params.get("pageSize"))return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"pageSize不能为空");
         Integer id = (Integer) params.get("id");
-        Map<String, Object> result = service.list(1, 99999999, id);
+        Map<String, Object> result = service.list(Integer.valueOf(params.get("pageNum")+""), Integer.valueOf(params.get("pageSize")+""),id);
         return ResultVOUtil.success(result);
+    }
+    @PostMapping("/list2")
+    public ResultVO getList2(@RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        Integer id = (Integer) params.get("id");
+        return ResultVOUtil.success(service.list2(id));
     }
 
 
@@ -75,7 +86,10 @@ public class IterpretationController {
         if(createBy==null||createBy<=0){
             HttpSession session = request.getSession();
             SysUser user = (SysUser) session.getAttribute("user");
-            createBy = user.getId();
+            if(user!=null){
+                createBy = user.getId();
+            }
+
         }
         //判断添加人是否为空
         service.insert(data,imageId,createBy);

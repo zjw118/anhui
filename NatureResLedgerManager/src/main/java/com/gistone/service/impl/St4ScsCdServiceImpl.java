@@ -2,6 +2,8 @@ package com.gistone.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.*;
@@ -207,13 +209,22 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "同步数据失败，服务器异常！");
         }
     }
+
+
     @Override
     public Map<String, Object> list(Integer pageNum, Integer pageSize, Integer id) {
         QueryWrapper<St4ScsCd> wrapper = new QueryWrapper<>();
         wrapper.eq("image_id",id);
+        IPage<St4ScsCd> iPage = st4ScsCdMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
         Map<String, Object> result = new HashMap<>();
-        result.put("data", st4ScsCdMapper.selectList(wrapper));
+        result.put("rows", iPage.getRecords());
+        result.put("total", iPage.getTotal());
         return result;
+    }
+    public List list2(Integer id) {
+        QueryWrapper<St4ScsCd> wrapper = new QueryWrapper<>();
+        wrapper.eq("image_id",id);
+        return st4ScsCdMapper.selectList(wrapper);
     }
 
     @Override

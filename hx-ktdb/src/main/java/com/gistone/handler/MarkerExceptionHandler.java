@@ -1,6 +1,7 @@
 package com.gistone.handler;
 
 import com.gistone.VO.ResultVO;
+import com.gistone.exception.ImportException;
 import com.gistone.exception.MarkerException;
 import com.gistone.util.ResultVOUtil;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -18,5 +19,12 @@ public class MarkerExceptionHandler {
     public ResultVO handlerSellerException(MarkerException e) {
         return ResultVOUtil.error(e.getCode(), e.getMessage());
     }
+
+    @ExceptionHandler(value = ImportException.class)
+    @ResponseBody
+    public ResultVO handlerImportException(ImportException e){
+        return ResultVOUtil.error(e.getCode(), e.getMessage());
+    }
+
 
 }
