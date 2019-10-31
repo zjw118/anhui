@@ -1,9 +1,19 @@
 package com.gistone.mapper;
 
+import com.gistone.entity.ImageContrast;
+import com.gistone.util.PageBean;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface ImageContrastMapper {
+    int insertImageContrast(ImageContrast imageContrast);
+    int deleteImageContrast(Integer id);
 
+    // 	分页查询-获取总条量
+    int getPoSum(PageBean pageBean);
+    //	分页查询-获取数据
+    List<Object> selectPoList(PageBean pageBean);
 
 }
