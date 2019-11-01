@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gistone.entity.*;
 import com.gistone.mapper.St4PoSaSjMapper;
-import com.gistone.mapper.St4PoSgSjMapper;
-import com.gistone.mapper.St4SysShMapper;
 import com.gistone.mapper.St4SysSjMapper;
-import com.gistone.service.ISt4PoSgSjService;
 import com.gistone.service.ISt4SysSjService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.util.Result;
@@ -34,16 +31,10 @@ public class St4SysSjServiceImpl extends ServiceImpl<St4SysSjMapper, St4SysSj> i
     private St4SysSjMapper st4SysSjMapper;
     @Autowired
     private St4PoSaSjMapper st4PoSaSjMapper;
-    @Autowired
-    private St4SysShMapper st4SysShMapper;
 
     @Autowired
     private ISt4SysSjService st4SysSjService;
 
-    @Autowired
-    private ISt4PoSgSjService st4PoSgSjService;
-    @Autowired
-    private St4PoSgSjMapper st4PoSgSjMapper;
 
     @Override
     public Result listUnit(St4SysSj sj, St4SysSa seUser) {
@@ -101,7 +92,7 @@ public class St4SysSjServiceImpl extends ServiceImpl<St4SysSjMapper, St4SysSj> i
         }
         int inNum = st4SysSjMapper.insert(sj);
         if(inNum>0){
-            Integer sjId = sj.getSj001();
+           /* Integer sjId = sj.getSj001();
             List<Integer> bidList = sj.getBidList();
             St4PoSgSj sgsj = null;
             List<St4PoSgSj> sgSjList = new ArrayList<>();
@@ -115,13 +106,7 @@ public class St4SysSjServiceImpl extends ServiceImpl<St4SysSjMapper, St4SysSj> i
             if(!flag){
                 return Result.build(1003, ResultMsg.MSG_1003);
             }
-            St4SysSh sh = new St4SysSh();
-            sh.setSh002(seUser.getSa001());
-            LocalDateTime date = LocalDateTime.now();
-            sh.setSh003(date);
-            sh.setSh014("新增单位");
-            st4SysShMapper.insert(sh);
-
+           */
             return Result.build(1000, "添加"+ResultMsg.MSG_1000);
         }else{
             return Result.build(1003, ResultMsg.MSG_1003);
@@ -133,7 +118,7 @@ public class St4SysSjServiceImpl extends ServiceImpl<St4SysSjMapper, St4SysSj> i
         sj.setSj005(seUser.getSa001());
         int inNum = st4SysSjMapper.updateById(sj);
         if(inNum>0){
-            QueryWrapper<St4PoSgSj> wrapper = new QueryWrapper<>();
+           /* QueryWrapper<St4PoSgSj> wrapper = new QueryWrapper<>();
             wrapper.eq("SJ001",sj.getSj001());
             st4PoSgSjMapper.delete(wrapper);
             Integer sjId = sj.getSj001();
@@ -150,12 +135,7 @@ public class St4SysSjServiceImpl extends ServiceImpl<St4SysSjMapper, St4SysSj> i
             if(!flag){
                 return Result.build(1003, ResultMsg.MSG_1003);
             }
-            St4SysSh sh = new St4SysSh();
-            sh.setSh002(seUser.getSa001());
-            LocalDateTime date = LocalDateTime.now();
-            sh.setSh003(date);
-            sh.setSh014("修改单位");
-            st4SysShMapper.insert(sh);
+           */
             return Result.build(1000, "修改"+ResultMsg.MSG_1000);
         }else{
             return Result.build(1003, ResultMsg.MSG_1003);
@@ -166,12 +146,7 @@ public class St4SysSjServiceImpl extends ServiceImpl<St4SysSjMapper, St4SysSj> i
     public Result deleteUnit(St4SysSj sj, St4SysSa seUser) {
         int inNum = st4SysSjMapper.deleteById(sj);
         if(inNum>0){
-            St4SysSh sh = new St4SysSh();
-            sh.setSh002(seUser.getSa001());
-            LocalDateTime date = LocalDateTime.now();
-            sh.setSh003(date);
-            sh.setSh014("删除单位");
-            st4SysShMapper.insert(sh);
+
             return Result.build(1000, "修改"+ResultMsg.MSG_1000);
         }else{
             return Result.build(1003, ResultMsg.MSG_1003);

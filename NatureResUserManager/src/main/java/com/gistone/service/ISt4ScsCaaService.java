@@ -2,7 +2,6 @@ package com.gistone.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gistone.entity.St4ScsCaa;
-import com.gistone.util.Result;
 import com.gistone.util.ResultCp;
 
 /**

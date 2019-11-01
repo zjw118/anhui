@@ -137,13 +137,13 @@ public class St4SysSa extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private List<Integer> unitList;
 
-    @ApiModelProperty(value = "详情接口返回参数，前台不必传")
+   /* @ApiModelProperty(value = "详情接口返回参数，前台不必传")
     @TableField(exist = false)
     private List<St4SysSb> sbList;
 
     @ApiModelProperty(value = "详情接口返回参数，前台不必传")
     @TableField(exist = false)
-    private List<St4SysSj> sjList;
+    private List<St4SysSj> sjList;*/
     @Ignore
     @ApiModelProperty(value = "列表权限用,不用管")
     @TableField(exist = false)

@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.entity.*;
-import com.gistone.mapper.St4PoSaSjMapper;
 import com.gistone.mapper.St4ScsCaMapper;
 import com.gistone.mapper.St4ScsCsMapper;
 import com.gistone.mapper.St4SysSgMapper;
@@ -42,49 +41,47 @@ public class St4SysSgServiceImpl extends ServiceImpl<St4SysSgMapper, St4SysSg> i
     private St4ScsCsMapper st4ScsCsMapper;
     @Autowired
     private MessageProperties config;
-    @Autowired
-    private St4PoSaSjMapper st4PoSaSjMapper;
 
-    @Override
-    public Result list(St4SysSg data, St4SysSa seUser) {
-        Page<St4SysSg> page = new Page<>(data.getPageNumber(),data.getPageSize());
-     /*   //保护地名称
-        if (RegUtil.CheckParameter(data.getRdName(), "String", null, false)) {
-            param.setRdName(data.getRdName());
-        }
-        //保护地行政区划
-        if (RegUtil.CheckParameter(data.getRdAdminRegion(), "Integer", null, false)) {
-            param.setRdAdminRegion(data.getRdAdminRegion());
-        }
-        //保护地类型
-        if (RegUtil.CheckParameter(data.getRdType(), "Integer", null, false)) {
-            param.setRdType(data.getRdType());
-        }
-        //保护地级别
-        if (RegUtil.CheckParameter(data.getRdRank(), "Integer", null, false)) {
-            param.setRdRank(data.getRdRank());
-        }*/
-        QueryWrapper<St4PoSaSj> sasjWrapper = new QueryWrapper<>();
-        sasjWrapper.eq("SA001",seUser.getSa001());
-        List<St4PoSaSj> sjList = st4PoSaSjMapper.selectList(sasjWrapper);
-        if(sjList!=null&&sjList.size()>0){
-            //这里暂时视作用户的单位视作唯一
-            Integer unitId = sjList.get(0).getSj001();
-            if(seUser.getSa001()==1){
-                data.setUnitId(null);
-            }else {
-                data.setUnitId(unitId);
-            }
-        }
-        IPage<St4SysSg> res = st4SysSgMapper.lists(page,data);
-
-        Result result = new Result();
-        result.setRows(res.getRecords());
-        result.setTotal((int)res.getTotal());
-        result.setPage((int)res.getPages());
-        result.setStatus(1000);
-        return result;
-    }
+//    @Override
+//    public Result list(St4SysSg data, St4SysSa seUser) {
+//        Page<St4SysSg> page = new Page<>(data.getPageNumber(),data.getPageSize());
+//     /*   //保护地名称
+//        if (RegUtil.CheckParameter(data.getRdName(), "String", null, false)) {
+//            param.setRdName(data.getRdName());
+//        }
+//        //保护地行政区划
+//        if (RegUtil.CheckParameter(data.getRdAdminRegion(), "Integer", null, false)) {
+//            param.setRdAdminRegion(data.getRdAdminRegion());
+//        }
+//        //保护地类型
+//        if (RegUtil.CheckParameter(data.getRdType(), "Integer", null, false)) {
+//            param.setRdType(data.getRdType());
+//        }
+//        //保护地级别
+//        if (RegUtil.CheckParameter(data.getRdRank(), "Integer", null, false)) {
+//            param.setRdRank(data.getRdRank());
+//        }*/
+//        QueryWrapper<St4PoSaSj> sasjWrapper = new QueryWrapper<>();
+//        sasjWrapper.eq("SA001",seUser.getSa001());
+//        List<St4PoSaSj> sjList = st4PoSaSjMapper.selectList(sasjWrapper);
+//        if(sjList!=null&&sjList.size()>0){
+//            //这里暂时视作用户的单位视作唯一
+//            Integer unitId = sjList.get(0).getSj001();
+//            if(seUser.getSa001()==1){
+//                data.setUnitId(null);
+//            }else {
+//                data.setUnitId(unitId);
+//            }
+//        }
+//        IPage<St4SysSg> res = st4SysSgMapper.lists(page,data);
+//
+//        Result result = new Result();
+//        result.setRows(res.getRecords());
+//        result.setTotal((int)res.getTotal());
+//        result.setPage((int)res.getPages());
+//        result.setStatus(1000);
+//        return result;
+//    }
 
     @Override
     public Result listByParam(St4SysSg data) {

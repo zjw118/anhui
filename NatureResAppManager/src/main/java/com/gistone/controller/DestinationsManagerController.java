@@ -169,6 +169,7 @@ public class DestinationsManagerController {
                         return ResultCp.build(1001, ret.get());
                     }
                     scsCk = fieldIsEmpty(null, ck, fields, ck.getClass());
+                    scsCk.setCc002(ck.getCc002());//航点信息唯一标识 这里特别注意一下 动态配置的时候考虑到移动端如果把cc002同步回去的话就会显示这里避免移动端做修改所以这里将cc002取出来
                     ck.setCk086(date);
                     ck.setCk087(userId);
                     scsCkList.add(scsCk);
@@ -350,7 +351,7 @@ public class DestinationsManagerController {
                         scsCk = fieldIsEmpty(null, ck, fields, ck.getClass());
                         scsCk.setCk086(date);
                         scsCk.setCk087(userId);
-                        scsCk.setCc002(ck.getCc002());//航点信息唯一标识
+                        scsCk.setCc002(ck.getCc002());//航点信息唯一标识 这里特别注意一下 动态配置的时候考虑到移动端如果把cc002同步回去的话就会显示这里避免移动端做修改所以这里将cc002取出来
                         scsCk.setCd004(ck.getCd004());//问题点的编码
                         scsCkList.add(scsCk);
                     }else {

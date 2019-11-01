@@ -168,7 +168,7 @@
             <result column="CD013" property="cd013" />
             <result column="CD014" property="cd014" />
         </association>
-<!--        <association property="iterpretation" javaType="com.gistone.entity.Iterpretation">-->
+<!--        <association property="cd" javaType="com.gistone.entity.cd">-->
 <!--            <id column="id" property="id" />-->
 <!--            <result column="image_id" property="imageId" />-->
 <!--            <result column="active_name" property="activeName" />-->
@@ -850,10 +850,18 @@
         INNER JOIN st4_scs_ck d ON t.ID= d.CK001
 
         )
-        ck left join iterpretation cd on cd.id = ck.CD004
+        ck left join st4_scs_cd cd on cd.CD001 = ck.CD004
         left join st4_scs_co co on co.co001 = cd.group_id
         left join st4_po_cl_co clco on clco.co001=co.CO001
         left join st4_scs_cl cl on cl.CL001=clco.cl001
+
+<!--
+        left join st4_scs_cd cd on cd.CD001 = ck.CD004
+        left join st4_scs_co co on co.co001 = cd.group_id
+        left join st4_po_cl_co clco on clco.co001=co.CO001
+        left join st4_scs_cl cl on cl.CL001=clco.cl001-->
+
+
         left join  st4_sys_sa sa on sa.SA001= ck.CK049
         where CK085 = 1
         <if test="ck.st4ScsCo!=null">
@@ -1814,7 +1822,7 @@
         ) cnn
         ) cn ON ck.CK001 = cn.CK001
         LEFT JOIN st4_sys_sa sa ON sa.SA001 = ck.CK049
-        left join iterpretation cd on cd.id = ck.CD004
+        left join st4_scs_cd cd on cd.CD001 = ck.CD004
         left join st4_scs_co co on co.co001 = cd.group_id
         left join st4_po_cl_co clco on clco.co001=co.CO001
         left join st4_scs_cl cl on cl.CL001=clco.cl001

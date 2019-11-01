@@ -3,7 +3,6 @@ package com.gistone.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.St4SysSa;
-import com.gistone.entity.SysUser;
 import com.gistone.util.Result;
 import com.gistone.util.ResultCp;
 
@@ -27,7 +26,7 @@ public interface ISt4SysSaService extends IService<St4SysSa> {
      * @param password 密码
      * @return com.gistone.util.Ret
      */
-    Result searchSysUserByLogin(String username, String password);
+    ResultCp searchSysUserByLogin(String username, String password) ;
 
     ResultVO listPhoneUserToView(St4SysSa data);
 
@@ -39,21 +38,21 @@ public interface ISt4SysSaService extends IService<St4SysSa> {
      * @param sa
      * @return
      */
-    Result list(St4SysSa sa,St4SysSa seUser);
+    Result list(St4SysSa sa, St4SysSa seUser);
 
     /**
      * 用户列表有分页
      * @param sa
      * @return
      */
-    ResultVO listUser(St4SysSa sa,St4SysSa seUser);
+    ResultVO listUser(St4SysSa sa, St4SysSa seUser);
 
     /**
      * 用户详情接口
      * @param sa
      * @return
      */
-    Result getUserDetail(St4SysSa sa);
+    //Result getUserDetail(St4SysSa sa);
 
     /**
      * 修改用户
@@ -62,14 +61,14 @@ public interface ISt4SysSaService extends IService<St4SysSa> {
      * @param roleList
      * @return
      */
-    Result updateUser(St4SysSa user, St4SysSa seUser, List<Integer> roleList, List<Integer> unitList);
+    //Result updateUser(St4SysSa user, St4SysSa seUser, List<Integer> roleList, List<Integer> unitList);
 
     /**
      * 删除用户
      * @param sa
      * @return
      */
-     Result deleteUser(St4SysSa sa,St4SysSa seUser);
+    // Result deleteUser(St4SysSa sa, St4SysSa seUser);
 
 
 

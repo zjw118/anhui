@@ -29,7 +29,7 @@ public interface ISt4ScsCzService extends IService<St4ScsCz> {
      * @param cz
      * @return
      */
-    Result getGroupUserDetail(St4ScsCz cz);
+   // Result getGroupUserDetail(St4ScsCz cz);
 
     /**
      * 修改分组信息包括小组内的人员

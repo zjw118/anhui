@@ -280,7 +280,40 @@
             #{item.cd010,jdbcType=INTEGER}, #{item.cd011,jdbcType=TIMESTAMP}, #{item.cd012,jdbcType=VARCHAR})
         </foreach>
     </insert>
+    <select id="getStaticPoint" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCd">
+        select
+        cd.cd001,ck.cd004,
+        IF(COUNT(*) IS NULL, 0, COUNT(*)) AS checkNum,
+        IFNULL(SUM(ck088=0),0) AS uncheckNum,
+        IFNULL(SUM(ck088=1),0) AS checkedNum,
+        IFNULL(SUM(DATE_FORMAT(CK048,'%Y-%m-%d')=DATE_FORMAT(NOW(),'%Y-%m-%d')),0) AS todayNum,
+        IFNULL(SUM(cd010!=0),0) AS addNum
+        from st4_scs_cd cd
+        LEFT JOIN st4_scs_ck ck on ck.CD004=cd.CD004
+        left join st4_sys_sa sa on sa.SA001=cd.CD010
+        LEFT JOIN st4_scs_cl cl ON cd.CL001 = cl.CL001
+        WHERE  cd.CD009 =1 and sa.SA020=1
 
+        <if test="st4ScsCl!=null">
+            <if test="st4ScsCl.cl001!=null and st4ScsCl.cl001!='' ">
+                and   cd.CL001=#{st4ScsCl.cl001}
+            </if>
+        </if>
+        <if test="st4SysSa!=null">
+            <if test="st4SysSa.sa001!=null and st4SysSa.sa001!='' ">
+                and   sa.SA001=#{st4SysSa.sa001}
+            </if>
+        </if>
+        <if test="groupByName==null or groupByName=='' ">
+            GROUP BY cl.CL001
+        </if>
+        <if test="groupByName=='cl001' ">
+            GROUP BY cl.CL001
+        </if>
+        <if test="groupByName=='sa001' ">
+            GROUP BY sa.SA001
+        </if>
+    </select>
     <select id="listCheckPoint"  resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCd">
         select *,sa.SA019 uname
         from st4_scs_cd cd
@@ -424,25 +457,25 @@
 
     <!--安徽同步下发给自己的斑块数据及台账信息!-->
     <select id="sysSpotData"  resultType="com.gistone.entity.St4ScsCd" parameterType="Integer">
-        select cd.*,co.*,cl.*  from iterpretation cd
-        left join  st4_po_cd_co cdco on cd.id = cdco.cd001
+        select cd.*,co.*,cl.*  from st4_scs_cd cd
+        left join  st4_po_cd_co cdco on cd.CD001 = cdco.cd001
         left join  st4_scs_co co on cdco.co001 = co.co001
         left join st4_po_cl_co clco on clco.co001 = co.co001
         left join st4_scs_cl cl on cl.cl001 = clco.cl001
-        left join st4_po_cd_sa cdsa on cdsa.cd001=cd.id
+        inner join st4_po_cd_sa cdsa on cdsa.cd001=cd.CD001
         left join st4_sys_sa sa on sa.sa001 =cdsa.sa001
-        WHERE cd.del_flag=1 and sa.sa001=#{id}
+        WHERE cd.CD009=1 and sa.sa001=#{id}
     </select>
     <!--安徽下发任务接口的查询到的斑点的集合!-->
     <select id="getSpotByTaskId"  resultType="com.gistone.entity.St4ScsCd" parameterType="Integer">
-        select cd.id from
+        select cd.CD001 from
         iterpretation cd
-        left join st4_po_cd_co cdco on cd.id =cdco.cd001
+        left join st4_po_cd_co cdco on cd.CD001 =cdco.cd001
         left join st4_scs_co co on cdco.co001 = co.co001
         LEFT JOIN st4_po_cl_co clco on  clco.co001=co.co001
         left join st4_scs_cl cl on cl.CL001 = clco.cl001
         where
-         cd.del_flag=1 and cl.CL001=#{cl001}
+         cd.CD009=1 and cl.CL001=#{cl001}
     </select>
 
 
