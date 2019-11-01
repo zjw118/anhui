@@ -21,6 +21,7 @@ import com.gistone.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -55,6 +56,8 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
     private LmBoardMapper lmBoardMapper;
 
     private final static String URL = "/0/query?returnGeometry=true&f=json&where=0%3D0&outFields=*";
+    @Value("${PATH}")
+    private String PATH ;
 
     @Override
     public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName) {
@@ -102,7 +105,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             JSONObject parse = JSON.parseObject(s);
             JSONArray jsonArray = (JSONArray) parse.get("features");
             //将数据写入shp文件
-            String fileUrl = PathUtile.getRandomPath("D:/epr/shp/", "x.shp");
+            String fileUrl = PathUtile.getRandomPath(PATH+"/epr/shp/", "x.shp");
             System.out.println(fileUrl);
             ShpUtil.importPreRedlinedata(jsonArray, fileUrl);
             //批次表中录入数据
@@ -141,7 +144,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             JSONObject parse = JSON.parseObject(s);
             JSONArray jsonArray = (JSONArray) parse.get("features");
             //将数据写入shp文件
-            String fileUrl = PathUtile.getRandomPath("D:/epr/shp/", "x.shp");
+            String fileUrl = PathUtile.getRandomPath(PATH+"/epr/shp/", "x.shp");
             System.out.println(fileUrl);
 
             ShpUtil.importPreMarkerdata(jsonArray, fileUrl);
@@ -197,7 +200,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             JSONObject parse = JSON.parseObject(s);
             JSONArray jsonArray = (JSONArray) parse.get("features");
             //将数据写入shp文件
-            String fileUrl = PathUtile.getRandomPath("D:/epr/shp/", "x.shp");
+            String fileUrl = PathUtile.getRandomPath(PATH +"/epr/shp/", "x.shp");
             System.out.println(fileUrl);
 
             ShpUtil.importPreBoarddata(jsonArray, fileUrl);
