@@ -61,14 +61,14 @@ public interface ISt4SysSaService extends IService<St4SysSa> {
      * @param roleList
      * @return
      */
-    //Result updateUser(St4SysSa user, St4SysSa seUser, List<Integer> roleList, List<Integer> unitList);
+    Result updateUser(St4SysSa user, St4SysSa seUser, List<Integer> roleList, List<Integer> unitList);
 
     /**
      * 删除用户
      * @param sa
      * @return
      */
-    // Result deleteUser(St4SysSa sa, St4SysSa seUser);
+     Result deleteUser(St4SysSa sa, St4SysSa seUser);
 
 
 

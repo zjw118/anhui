@@ -31,22 +31,6 @@ public class AnhuiAppController {
     @Autowired
     private ISt4ScsCkService st4ScsCkService;
 
-    @ApiOperation(value="app同步任务下的斑块信息接口",notes = "app同步任务下的斑块信息接口",response = St4ScsCd.class)
-    @RequestMapping(value = "/sysSpotData",method = RequestMethod.POST)
-    public ResultVO sysSpotData(@ApiParam(name="app同步任务下的斑块信息接口", value="json格式", required=true)@RequestBody Swagger<St4ScsCd> data,
-                                HttpServletRequest request, HttpServletResponse response) {
-        String token = request.getHeader("token");
-        ResultCp cp = new ResultCp();
-        cp.setStatus(1000);
-        String userId="78";
-        try{
-           // userId = JWT.decode(token).getAudience().get(0);
-        }catch (Exception e){
-            e.printStackTrace();
-            cp.setMsg("无token，请重新登录");
-        }
-        return st4ScsCdService.sysSpotData(Integer.valueOf(userId));
-    }
     @ApiOperation(value="app提交核查信息接口",notes = "app提交核查信息接口",response = St4ScsCd.class)
     @RequestMapping(value = "/insertSpotDataFromApp",method = RequestMethod.POST)
     public ResultVO insertSpotDataFromApp(@ApiParam(name="app提交核查信息接口", value="json格式", required=true)@RequestBody Swagger<St4ScsCd> data,

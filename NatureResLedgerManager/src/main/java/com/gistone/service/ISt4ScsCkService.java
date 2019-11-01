@@ -55,11 +55,11 @@ public interface ISt4ScsCkService extends IService<St4ScsCk> {
 
     /**
      * 同步问题点数据带有台账
-     * @param roleId
+     * @param taskSign
      * @param uid
      * @return
      */
-    Result sysPointData (Integer roleId,Integer uid);
+    Result sysPointData (Integer taskSign,Integer uid);
 
     /**
      * 一张图展示，查询头部保护地、问题点、巡护次数、巡护里程数量

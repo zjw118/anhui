@@ -10,12 +10,14 @@ import com.gistone.VO.ResultVO;
 import com.gistone.entity.*;
 import com.gistone.service.*;
 import com.gistone.util.*;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
@@ -35,6 +37,7 @@ import java.util.concurrent.TimeUnit;
  */
 @RestController
 //@Api(value = "登陆管理接口", tags = "API-Login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@Api(value = "API-UserManage", tags = "登录管理接口", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 @RequestMapping("/api/sys/login")
 @Slf4j
 public class LoginController {
@@ -70,7 +73,7 @@ public class LoginController {
      * @return
      */
 
-    @ApiOperation(value = "登录接口", notes = "此接口返回登录失败与否", response = Result.class)
+    @ApiOperation(value = "App登录接口", notes = "此接口返回登录失败与否", response = Result.class)
     @PostMapping("/loginCheck")
     public ResultCp loginCheck(HttpServletRequest request, @RequestBody Swagger<LoginUserSwagger> loginUser) throws Exception {
         if (loginUser.getData() == null || "".equals(loginUser.getData())) {
@@ -113,9 +116,9 @@ public class LoginController {
         }
         //判断是(1)手机端用户还是(0)pc端用户，pc验证验证码是否正确
         if (loginUser.getData().getType() == 0) {
-            if (privateKey == null) {
+            /*if (privateKey == null) {
                 return ResultCp.build(1006, "登录异常！");
-            }
+            }*/
             //04包不需要
            /* String kaptacha=RSAEncrypt.decrypt(loginUser.getData().getKaptcha(),privateKey.toString());//验证码解密
             if (loginUser.getData().getKaptcha()==null||"".equals(loginUser.getData().getKaptcha())) {
@@ -141,7 +144,7 @@ public class LoginController {
                 return ResultCp.build(1016, ResultMsg.MSG_1016);
             } else {
                 //如果是移动端用户，则验证密码是否正确
-                if (!(user.getSa009()).equals(MD5Util.md5Encode(password))) {
+                if (!(user.getSa009()).equals(Md5Util.md5Encode(password))) {
                     return ResultCp.build(1017, ResultMsg.MSG_1017);
                 }
             }
@@ -409,7 +412,8 @@ public class LoginController {
             ew.eq("username", user.getUsername());
             ew.eq("type", user.getType());*/
             List<SysUser> listParam = sysUserService.list(new QueryWrapper<SysUser>().eq("username", user.getUsername()).eq("type", user.getType()).eq("enable", 1));
-//            List<SysUser> listParam = sysUserService.selectList( user.getUsername(),user.getType());
+
+            //List<SysUser> listParam = sysUserService.selectList( user.getUsername(),user.getType());
             if (listParam.size() > 0) {
                 if (Md5Util.md5(user.getPassword()).equals(listParam.get(0).getPassword())) {
                     if (listParam.get(0).getEnable() != 1) {
