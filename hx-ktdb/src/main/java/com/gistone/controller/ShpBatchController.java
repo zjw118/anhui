@@ -2,6 +2,7 @@ package com.gistone.controller;
 
 
 import com.gistone.VO.ResultVO;
+import com.gistone.annotation.SysLog;
 import com.gistone.entity.ShpBatch;
 import com.gistone.service.ShpBatchService;
 import com.gistone.util.ResultEnum;
@@ -49,7 +50,7 @@ public class ShpBatchController {
     }
 
     @PostMapping("/getNewList")
-    public ResultVO getNewList(){
+    public ResultVO getNewList() {
         List<ShpBatch> result = service.getNewList();
         return ResultVOUtil.success(result);
     }
@@ -175,15 +176,17 @@ public class ShpBatchController {
         service.importPreBoardData(url, remark);
         return ResultVOUtil.success();
     }
+
     /**
-     * @description:导入预置数据统一接口
      * @param paramsMap
-      * @return com.gistone.VO.ResultVO
+     * @return com.gistone.VO.ResultVO
+     * @description:导入预置数据统一接口
      * @author zf1017@foxmail.com
      * @motto: Talk is cheap,show me the code
      * @date 2019/10/30 0030 17:53
      */
     @PostMapping("/importPreData")
+    @SysLog("导入预置数据")
     public ResultVO importPreData(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
         Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
@@ -209,6 +212,13 @@ public class ShpBatchController {
         }
         if (type == 3) {
             service.importPreBoardData(url, remark);
+        } else if (type == 4) {
+
+        } else if (type == 5) {
+            service.importPreVector(url, remark);
+        }
+        if (type == 6) {
+            service.importPreImage(url, remark);
         }
 
         return ResultVOUtil.success();

@@ -412,7 +412,8 @@ public class LoginController {
             ew.eq("username", user.getUsername());
             ew.eq("type", user.getType());*/
             List<SysUser> listParam = sysUserService.list(new QueryWrapper<SysUser>().eq("username", user.getUsername()).eq("type", user.getType()).eq("enable", 1));
-//            List<SysUser> listParam = sysUserService.selectList( user.getUsername(),user.getType());
+
+            //List<SysUser> listParam = sysUserService.selectList( user.getUsername(),user.getType());
             if (listParam.size() > 0) {
                 if (Md5Util.md5(user.getPassword()).equals(listParam.get(0).getPassword())) {
                     if (listParam.get(0).getEnable() != 1) {

@@ -31,4 +31,8 @@ package com.gistone.service;
     void importPreBoardData(String url,String remark);
 
     List<ShpBatch> getNewList();
+
+    void importPreVector(String url,String remark);
+
+    void importPreImage(String url,String remark);
     }
