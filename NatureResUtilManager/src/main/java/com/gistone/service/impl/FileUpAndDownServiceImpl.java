@@ -106,7 +106,7 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                             oldFile.createNewFile();
                             file.transferTo(oldFile);
                             // 压缩文件
-                            Thumbnails.of(oldFile).scale(config.getScaleRatio()).toFile(path);
+                            //Thumbnails.of(oldFile).scale(config.getScaleRatio()).toFile(path);
                             // 显示路径
                             json.put("path", "/ld/" +  dirId + "/" + baseDateDir +"/" + newUUID  + sufName);
                         } else {

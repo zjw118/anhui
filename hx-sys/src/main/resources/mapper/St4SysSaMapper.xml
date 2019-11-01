@@ -70,13 +70,15 @@
         ORDER BY a.CH005
     </select>
     <select id="login" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4SysSa" >
-        SELECT sa.*,sc.* FROM st4_sys_sa sa LEFT JOIN st4_po_sa_sb sasb ON sa.`SA001` = sasb.`SA001` LEFT JOIN st4_sys_sb sb ON sasb.`SB001` = sb.`SB001`
+        SELECT sa.* FROM st4_sys_sa sa
+        <!--
+        LEFT JOIN st4_po_sa_sb sasb ON sa.`SA001` = sasb.`SA001` LEFT JOIN st4_sys_sb sb ON sasb.`SB001` = sb.`SB001`
         LEFT JOIN st4_po_sb_sc sbsc ON sbsc.SB001 = sb.`SB001`
-        LEFT JOIN st4_sys_sc sc ON sc.`SC001` = sbsc.`SC001`
+        LEFT JOIN st4_sys_sc sc ON sc.`SC001` = sbsc.`SC001`-->
         where SA007 = 1 and SA008 = #{sa008} or SA012 = #{sa012}
-        <if test="sg001 != null" >
-          and  SG001 = #{sg001}
-        </if>
+        <!--<if test="sg001 != null" >-->
+          <!--and  SG001 = #{sg001}-->
+        <!--</if>-->
     </select>
 
     <!--根据人员id与问题点id查询该 点位所在任务的小组的组员-->

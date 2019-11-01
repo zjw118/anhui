@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.entity.*;
 
 import com.gistone.service.*;
+import com.gistone.util.Result;
 import com.gistone.util.ResultCp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,14 +80,25 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
             if(ckList!=null&&ckList.size()>0){
                 for (St4ScsCk ck1:ckList) {
                     String repairProcess=ck1.getCn010()== null?"":ck1.getCn010();
-                    if(ck1.getCn004()!=null){
+                    if(!(ck1.getCn010()==null&&ck1.getCn004()==null)){
                         List<String> urls = ck1.getCn004();
-                        for (String phourl:urls) {
+                        if(urls!=null&&urls.size()>0){
+                            for (String phourl:urls) {
+                                cnn = new St4ScsCn();
+                                cnn.setCn004(phourl);
+                                cnn.setCn010(repairProcess);
+                                //这里插入台账表主键
+                                cnn.setCk001(ck1.getCk001());
+                                cnList.add(cnn);
+                            }
+                        }else{
                             cnn = new St4ScsCn();
-                            cnn.setCn010(phourl);
-                            cnn.setCn004(repairProcess);
+                            cnn.setCn010(repairProcess);
+                            //这里插入台账表主键
+                            cnn.setCk001(ck1.getCk001());
                             cnList.add(cnn);
                         }
+
                         if(!cnService.saveBatch(cnList)){
                             new RuntimeException("插入数据库入整改照片及进展信息错误");
                         };
@@ -94,10 +106,11 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
                 }
             }
         }
-        Boolean cf = cfService.saveBatch(cfList);
+        //安徽没有巡护所以注释掉这里
+       /* Boolean cf = cfService.saveBatch(cfList);
         if (!cf) {
             new RuntimeException("插入数据库入航点信息错误");
-        }
+        }*/
         Boolean ce = ceService.saveBatch(ceList);
         if (!ce) {
             new RuntimeException("插入数据库航点信息错误");

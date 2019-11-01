@@ -32,6 +32,5 @@ public interface ISt4ScsCdService extends IService<St4ScsCd> {
     void delete(List<Integer> id);
     void insert(List<Map<String, Object>> data,Integer imageId,Integer createBy);
     void edit(St4ScsCd entity);
-    ResultVO sysSpotData (Integer uid);
 
 }
