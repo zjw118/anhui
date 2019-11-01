@@ -237,6 +237,25 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
        return shpBatches;
     }
 
+    @Override
+    public void importPreVector(String url, String remark) {
+        ShpBatch shpBatch = new ShpBatch().setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(5);
+        if (StringUtils.isNotBlank(remark)) {
+            shpBatch.setRemark(remark);
+        }
+        mapper.insert(shpBatch);
+
+    }
+
+    @Override
+    public void importPreImage(String url, String remark) {
+        ShpBatch shpBatch = new ShpBatch().setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(6);
+        if (StringUtils.isNotBlank(remark)) {
+            shpBatch.setRemark(remark);
+        }
+        mapper.insert(shpBatch);
+    }
+
 }
 
 
