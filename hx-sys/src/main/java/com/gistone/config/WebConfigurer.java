@@ -71,24 +71,26 @@ public class WebConfigurer implements WebMvcConfigurer {
 //    }
 
 
+ //---------------------------------------------------------------------
 
-    /**
-     * 自己定义的拦截器类
-     * @return
-     */
-    @Bean
-    SysUserLoginInterceptor sysUserLoginInterceptor() {
-        return new SysUserLoginInterceptor();
-    }
-    /**
-     * 添加拦截器
-     * @param registry
-     */
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(sysUserLoginInterceptor()).addPathPatterns("/**")
-                .excludePathPatterns("/cassso/getuseraccount")
 
-                ;
-    }
+//    /**
+//     * 自己定义的拦截器类
+//     * @return
+//     */
+//    @Bean
+//    SysUserLoginInterceptor sysUserLoginInterceptor() {
+//        return new SysUserLoginInterceptor();
+//    }
+//    /**
+//     * 添加拦截器
+//     * @param registry
+//     */
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(sysUserLoginInterceptor()).addPathPatterns("/**")
+//                .excludePathPatterns("/cassso/getuseraccount")
+//
+//                ;
+//    }
 
 }
