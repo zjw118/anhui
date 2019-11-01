@@ -44,6 +44,14 @@ public interface St4ScsCkMapper extends BaseMapper<St4ScsCk> {
      */
     List<St4ScsCk> sysPointAndLedgerData(Integer uid);
 
+
+    /**
+     * APP端同步问题点的原始台账接口
+     * @param uid
+     * @return
+     */
+    List<St4ScsCk> sysPointAndLedgerDataOrign(Integer uid);
+
     /**
      * 台账整改统计
      * NatureResDecodeManager

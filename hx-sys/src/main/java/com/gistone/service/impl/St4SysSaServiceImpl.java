@@ -56,7 +56,7 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
         da.setSa007(1);
         List<St4SysSa> list = st4SysSaMapper.login(da);
         if (list.size() > 0 && list.size() < 2) {
-            St4SysSa sysUser = list.stream().filter(sysUser1 -> sysUser1.getSa009().equals(MD5Util.md5Encode(password))).findAny().orElse(null);
+            St4SysSa sysUser = list.stream().filter(sysUser1 -> sysUser1.getSa009().equals(Md5Util.md5Encode(password))).findAny().orElse(null);
             if (sysUser != null) {
                 return ResultCp.build(1000, "登录成功",sysUser);
             }
@@ -139,7 +139,7 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
         if (RegUtil.CheckParameter(data.getSa009Old(), "String", null, false)) {
             String password = RSAEncrypt.decrypt(data.getSa009Old(), ResultMsg.KEY.toString());//密码解密
             St4SysSa selectData = st4SysSaMapper.selectById(data.getSa001());
-            password = MD5Util.md5Encode(password);
+            password = Md5Util.md5Encode(password);
             if(selectData != null && selectData.getSa009() !=null){
                 if(!password.equals(selectData.getSa009())){
                     result.setMsg("原密码错误");
@@ -151,7 +151,7 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
         //如果密码不为空，则为修改密码操作
         if (RegUtil.CheckParameter(data.getSa009(), "String", null, false)) {
             String password = RSAEncrypt.decrypt(data.getSa009(), ResultMsg.KEY.toString());//密码解密
-            data.setSa009(MD5Util.md5Encode(password));
+            data.setSa009(Md5Util.md5Encode(password));
         }
 
         int row = st4SysSaMapper.updateById(data);
@@ -202,88 +202,83 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
 //        return result;
 //    }
     //修改用户
-//    @Override
-//    public  Result updateUser(St4SysSa user,St4SysSa seUser,List<Integer> roleList, List<Integer> unitList)  {
-//
-//        //1.数据处理
-//        if(user.getSa009()!=null&&!"".equals(user.getSa009().trim())){
-//            //MD5加密
-//            user.setSa009(MD5Util.md5Encode(user.getSa009()));
-//        }else{
-//            St4SysSa user1  = st4SysSaMapper.selectById(user);
-//            user.setSa009(user1.getSa009());
-//        }
-//        user.setSa004(seUser.getSa004());
-//        LocalDateTime date = LocalDateTime.now();
-//        user.setSa005(date);
-//
-//        //2.调用Dao
-//        int number = st4SysSaMapper.updateById(user);
-//        Integer uid = user.getSa001();
-//        if(number>0){
-//            /**
-//             * 这里修改完基本信息的之后角色也要重新设置
-//             */
-//            if(roleList!=null&&roleList.size()>0){
-//                QueryWrapper<St4PoSaSb> wrapper = new QueryWrapper<St4PoSaSb>();
-//                wrapper.eq("SA001",user.getSa001());
-//                //如果当前人原来有绑定的角色那么就删除原来的
-//                if(st4PoSaSbMapper.selectList(wrapper).size()>0){
-//                    st4PoSaSbMapper.delete(wrapper);
-//                }
-//                St4PoSaSb surr = null;
-//                List<St4PoSaSb> surrList = new ArrayList<>();
-//
-//                for (Integer roleId:roleList ) {
-//                    surr = new St4PoSaSb();
-//                    surr.setSa001(uid);
-//                    surr.setSb001(roleId);
-//                    surrList.add(surr);
-//                }
-//                boolean rFlag = st4PoSaSbService.saveBatch(surrList);
-//                if(!rFlag){
-//                    return Result.build(1003,ResultMsg.MSG_1003);
-//                }
-//            }
-//            if(unitList!=null&&unitList.size()>0){
-//                QueryWrapper<St4PoSaSj> wrapper = new QueryWrapper<St4PoSaSj>();
-//                wrapper.eq("SA001",user.getSa001());
-//                //如果当前人原来有绑定的角色那么就删除原来的
-//                if(st4PoSaSjMapper.selectList(wrapper).size()>0){
-//                    st4PoSaSjMapper.delete(wrapper);
-//                }
-//                St4PoSaSj surr = null;
-//                List<St4PoSaSj> surrList = new ArrayList<>();
-//
-//                for (Integer unitId:unitList ) {
-//                    surr = new St4PoSaSj();
-//                    surr.setSa001(uid);
-//                    surr.setSj001(unitId);
-//                    surrList.add(surr);
-//                }
-//                boolean uFlag = st4PoSaSjService.saveBatch(surrList);
-//                if(!uFlag){
-//                    return Result.build(1003,ResultMsg.MSG_1003);
-//                }
-//            }
-//            //重新给当前人赋予新的角色
-//            if(number>0){
-//                //创建日志对象
-//                St4SysSh sh = new St4SysSh();
-//                sh.setSh002(user.getSa001());
-//                sh.setSh003(date);
-//                sh.setSh014("修改用户");
-//                st4SysShMapper.insert(sh);
-//                return Result.build(1000, "修改成功");
-//            };
-//
-//            return Result.build(1000, "修改成功");
-//        }else{
-//            return Result.build(1003, "服务器异常，修改失败");
-//        }
-//
-//
-//    }
+    @Override
+    public  Result updateUser(St4SysSa user,St4SysSa seUser,List<Integer> roleList, List<Integer> unitList)  {
+
+        //1.数据处理
+        if(user.getSa009()!=null&&!"".equals(user.getSa009().trim())){
+            //MD5加密
+            user.setSa009(Md5Util.md5Encode(user.getSa009()));
+        }else{
+            St4SysSa user1  = st4SysSaMapper.selectById(user);
+            user.setSa009(user1.getSa009());
+        }
+        user.setSa004(seUser.getSa004());
+        LocalDateTime date = LocalDateTime.now();
+        user.setSa005(date);
+
+        //2.调用Dao
+        int number = st4SysSaMapper.updateById(user);
+        Integer uid = user.getSa001();
+        if(number>0){
+            /**
+             * 这里修改完基本信息的之后角色也要重新设置
+             */
+           /* if(roleList!=null&&roleList.size()>0){
+                QueryWrapper<St4PoSaSb> wrapper = new QueryWrapper<St4PoSaSb>();
+                wrapper.eq("SA001",user.getSa001());
+                //如果当前人原来有绑定的角色那么就删除原来的
+                if(st4PoSaSbMapper.selectList(wrapper).size()>0){
+                    st4PoSaSbMapper.delete(wrapper);
+                }
+                St4PoSaSb surr = null;
+                List<St4PoSaSb> surrList = new ArrayList<>();
+
+                for (Integer roleId:roleList ) {
+                    surr = new St4PoSaSb();
+                    surr.setSa001(uid);
+                    surr.setSb001(roleId);
+                    surrList.add(surr);
+                }
+                boolean rFlag = st4PoSaSbService.saveBatch(surrList);
+                if(!rFlag){
+                    return Result.build(1003,ResultMsg.MSG_1003);
+                }
+            }*/
+            if(unitList!=null&&unitList.size()>0){
+                QueryWrapper<St4PoSaSj> wrapper = new QueryWrapper<St4PoSaSj>();
+                wrapper.eq("SA001",user.getSa001());
+                //如果当前人原来有绑定的角色那么就删除原来的
+                if(st4PoSaSjMapper.selectList(wrapper).size()>0){
+                    st4PoSaSjMapper.delete(wrapper);
+                }
+                St4PoSaSj surr = null;
+                List<St4PoSaSj> surrList = new ArrayList<>();
+
+                for (Integer unitId:unitList ) {
+                    surr = new St4PoSaSj();
+                    surr.setSa001(uid);
+                    surr.setSj001(unitId);
+                    surrList.add(surr);
+                }
+                boolean uFlag = st4PoSaSjService.saveBatch(surrList);
+                if(!uFlag){
+                    return Result.build(1003,ResultMsg.MSG_1003);
+                }
+            }
+            //重新给当前人赋予新的角色
+            if(number>0){
+
+                return Result.build(1000, "修改成功");
+            };
+
+            return Result.build(1000, "修改成功");
+        }else{
+            return Result.build(1003, "服务器异常，修改失败");
+        }
+
+
+    }
 
 //    //添加用户
     @Override
@@ -299,7 +294,7 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
             //2.添加用户
             //时间处理
 
-            user.setSa009(MD5Util.md5Encode(user.getSa009()));
+            user.setSa009(Md5Util.md5Encode(user.getSa009()));
             LocalDateTime date = LocalDateTime.now();
             user.setSa003(date);	//添加时间
             user.setSa007(1);
@@ -357,20 +352,14 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
         }
         return Result.build(1001, "添加失败");
     }
-//    @Override
-//    public Result deleteUser(St4SysSa sa,St4SysSa seUser){
-//        sa.setSa007(0);
-//        if(st4SysSaMapper.updateById(sa)>0){
-//            //创建日志对象
-//            St4SysSh sh = new St4SysSh();
-//            sh.setSh002(seUser.getSa001());
-//            LocalDateTime date = LocalDateTime.now();
-//            sh.setSh003(date);
-//            sh.setSh014("删除用户");
-//            st4SysShMapper.insert(sh);
-//            return  Result.build(1000,"删除"+ResultMsg.MSG_1000);
-//        }
-//
-//        return Result.build(1005,ResultMsg.MSG_1005);
-//    }
+    @Override
+    public Result deleteUser(St4SysSa sa,St4SysSa seUser){
+        sa.setSa007(0);
+        if(st4SysSaMapper.updateById(sa)>0){
+
+            return  Result.build(1000,"删除"+ResultMsg.MSG_1000);
+        }
+
+        return Result.build(1005,ResultMsg.MSG_1005);
+    }
 }

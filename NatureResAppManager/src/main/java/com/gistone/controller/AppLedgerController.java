@@ -102,21 +102,19 @@ public class AppLedgerController {
      * @return
      */
     @PassToken
-    @ApiOperation(value="同步问题点数据",notes = "同步问题点数据",response = St4SysSa.class)
+    @ApiOperation(value="(安徽用)app同步任务下的斑块信息接口",notes = "同步问题点数据",response = St4SysSa.class)
     @RequestMapping(value = "/sysPointData",method = RequestMethod.POST)
     public Result sysPointData(@ApiParam(name="同步问题点数据", value="json格式", required=true)@RequestBody Swagger<St4SysSa> data,
                                HttpServletRequest request, HttpServletResponse response) {
-        //TODO 传递过来巡护人员的id
-        //从redis或者session里面取出来roleId
         St4SysSa param = data.getData();
         if(param ==null || param.getSa001() == null){
             return Result.build(1006,"用户id"+ResultMsg.MSG_1001);
         }
 
         Integer uid = param.getSa001();
-        Integer roleId = 1;
-       return st4ScsCkService.sysPointData(roleId,uid);
-//        return Result.build(1005, ResultMsg.MSG_1005);
+        //todo 这里后续加上按照任务同步回去问题点的的台账信息  QueryWrapper<>
+        Integer taskSign = 1;
+       return st4ScsCkService.sysPointData(taskSign,uid);
     }
     /**
      * 同步问题点数据(绿盾巡查暂时使用)
@@ -125,7 +123,7 @@ public class AppLedgerController {
      * @param response
      * @return
      */
-    @ApiOperation(value="绿盾同步问题点数据 st4PoCdSaList里面 sa001:巡护人ID cdsa001：点位台账状态0待确认1已核查 sa019:巡查员姓名 ",notes = "绿盾同步问题点数据",response = St4SysSa.class)
+    /*@ApiOperation(value="绿盾同步问题点数据 st4PoCdSaList里面 sa001:巡护人ID cdsa001：点位台账状态0待确认1已核查 sa019:巡查员姓名 ",notes = "绿盾同步问题点数据",response = St4SysSa.class)
     @RequestMapping(value = "/sysPointDataLd",method = RequestMethod.POST)
     public Result sysPointDataLd(@ApiParam(name="绿盾同步问题点数据", value="json格式", required=true)@RequestBody Swagger<St4SysSa> data,
                                HttpServletRequest request, HttpServletResponse response) {
@@ -139,7 +137,7 @@ public class AppLedgerController {
         Integer uid = param.getSa001();
         Integer roleId = null;
        return st4ScsCdService.sysPointDataLd(roleId,uid);
-    }
+    }*/
 
     /**
      * 同步任务批次数据
