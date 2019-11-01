@@ -1,19 +1,20 @@
 package com.gistone.controller;
 
 
-import com.gistone.VO.ResultVO;
-import com.gistone.entity.BottomChart;
-import com.gistone.service.BottomChartService;
-import com.gistone.util.ResultEnum;
-import com.gistone.util.ResultVOUtil;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+        import com.gistone.VO.ResultVO;
+        import com.gistone.annotation.SysLog;
+        import com.gistone.entity.BottomChart;
+        import com.gistone.service.BottomChartService;
+        import com.gistone.util.ResultEnum;
+        import com.gistone.util.ResultVOUtil;
+        import lombok.extern.slf4j.Slf4j;
+        import org.apache.commons.lang.StringUtils;
+        import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+        import java.util.Date;
+        import java.util.List;
+        import java.util.Map;
 
 /**
  * <p>
@@ -33,6 +34,14 @@ public class BottomChartController {
     @Autowired
     private BottomChartService service;
 
+    /**
+     * @param paramsMap
+     * @return com.gistone.VO.ResultVO
+     * @description:底图服务列表
+     * @author zf1017@foxmail.com
+     * @motto: Talk is cheap,show me the code
+     * @date 2019/11/1 0001 14:38
+     */
     @PostMapping("/list")
     public ResultVO getBottomChartList(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
@@ -68,6 +77,7 @@ public class BottomChartController {
     }
 
     @RequestMapping(value = "/delete")
+    @SysLog("底图服务删除")
     public ResultVO delete(@RequestBody Map<String, Object> paramsMap) {
 
         //请求参数格式校验
@@ -85,6 +95,7 @@ public class BottomChartController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @SysLog("底图服务添加")
     public ResultVO add(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
@@ -117,8 +128,8 @@ public class BottomChartController {
         bottomChart.setCreateDate(new Date());
         //类型没添加
         Integer type = (Integer) params.get("type");
-        if(type==null){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"类型不能为空");
+        if (type == null) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "类型不能为空");
         }
         bottomChart.setType(type);
         //判断添加人是否为空
@@ -128,6 +139,7 @@ public class BottomChartController {
 
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @SysLog("底图服务编辑")
     public ResultVO update(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");

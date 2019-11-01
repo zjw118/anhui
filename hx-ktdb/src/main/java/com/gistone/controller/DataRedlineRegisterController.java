@@ -37,7 +37,6 @@ public class DataRedlineRegisterController {
     private ILmPointService iLmPointService;
 
 
-
     /**
      * 查询红线块
      *

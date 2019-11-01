@@ -6,6 +6,7 @@ import cn.afterturn.easypoi.word.WordExportUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.VO.PositionVO;
 import com.gistone.VO.ResultVO;
+import com.gistone.annotation.SysLog;
 import com.gistone.entity.EXCEL.LmMarkerMobileVO;
 import com.gistone.entity.*;
 import com.gistone.exception.MarkerException;
@@ -81,6 +82,7 @@ public class LmMarkerMobileController {
      * @return
      */
     @RequestMapping(value = "/add")
+    @SysLog("添加界桩接口")
     public ResultVO add(@RequestParam("data") String data, MultipartFile[] file) {
 
         if (StringUtils.isBlank(data)) {
@@ -700,6 +702,7 @@ public class LmMarkerMobileController {
      * @date 2019/9/26 0026 15:28
      */
     @PostMapping("/exportWord")
+    @SysLog("导出word界桩登记表")
     public ResultVO exportWord(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
         Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");

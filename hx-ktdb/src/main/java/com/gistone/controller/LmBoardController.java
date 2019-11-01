@@ -5,6 +5,7 @@ import cn.afterturn.easypoi.entity.ImageEntity;
 import cn.afterturn.easypoi.word.WordExportUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.VO.ResultVO;
+import com.gistone.annotation.SysLog;
 import com.gistone.entity.EXCEL.LmBoardVO;
 import com.gistone.entity.LmBoard;
 import com.gistone.entity.LmBoardDeviceID;
@@ -75,6 +76,7 @@ public class LmBoardController {
     private String PATH;
 
     @PostMapping(value = "/add")
+    @SysLog("添加标识牌")
     public ResultVO addBoard(@RequestParam("data") String data, MultipartFile[] file) {
         if (StringUtils.isBlank(data)) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "data不能为空");
@@ -458,6 +460,7 @@ public class LmBoardController {
     }
 
     @PostMapping("/exportWord")
+    @SysLog("导出word登记表")
     public ResultVO exportWord(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
         Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
@@ -610,6 +613,7 @@ public class LmBoardController {
     }
 
     @PostMapping("/exportStandardExport")
+    @SysLog("导出word标准登记表")
     public ResultVO exportStandardExport(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
         Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
@@ -948,6 +952,7 @@ public class LmBoardController {
     }
 
     @PostMapping(value = "/delete")
+    @SysLog("删除标识牌")
     public ResultVO delete(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
         Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
@@ -989,6 +994,7 @@ public class LmBoardController {
     }
 
     @PostMapping("/recover")
+    @SysLog("恢复删除的标识牌")
     public ResultVO recover(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
         Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
@@ -1006,6 +1012,7 @@ public class LmBoardController {
     }
 
     @PostMapping("/deleteForever")
+    @SysLog("永久删除标识牌")
     public ResultVO deleteForever(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
         Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");

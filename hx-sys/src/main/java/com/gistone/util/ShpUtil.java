@@ -496,11 +496,11 @@ public class ShpUtil {
 
 //                featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("FID"));
 
-                featureBuilder.add(jobj.getJSONObject("attributes").getString("area"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getString("hxcode"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getString("type"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getString("attribute"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("Id"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("面积"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("编号"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("类型").substring(0,2));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("类型").substring(2));
+                featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("OBJECTID"));
                 //featureBuilder.add(jobj.getJSONObject("attributes").getString("center"));
 //                featureBuilder.set("center",jobj.getJSONObject("attributes").getString("center"));
 //				featureBuilder.add(jobj.getJSONObject("attributes").getString("peopleNum"));
@@ -545,6 +545,9 @@ public class ShpUtil {
                 SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(TYPE);
                 JSONObject jobj = (JSONObject) array.get(i);
                 JSONArray zhj = jobj.getJSONObject("geometry").getJSONArray("rings");
+                if(zhj!=null){
+
+
                 if (zhj.size() > 1) {
                     //大于1说明在一条记录中有两个面，需要进行判断
                     //根据面的数量先创建数组，用于最终比较
@@ -573,13 +576,17 @@ public class ShpUtil {
                     Polygon polygon = geometryFactory.createPolygon(coords);
                     featureBuilder.add(polygon);
                 }
-
+                }else{
+                    Coordinate coordinate = new Coordinate(jobj.getJSONObject("geometry").getDoubleValue("X"),jobj.getJSONObject("geometry").getDoubleValue("Y"));
+                    Point point = geometryFactory.createPoint(coordinate);
+                    featureBuilder.add(point);
+                }
                 //这里按顺序添加属性
 
-                featureBuilder.add(jobj.getJSONObject("attributes").getString("jzcode"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("编号"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("pac"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("longitude"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("latitude"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("X坐标"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("Y坐标"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("redline_id"));
 //                featureBuilder.add(jobj.getJSONObject("attributes").getString("attribute"));
                 //featureBuilder.add(jobj.getJSONObject("attributes").getString("center"));
@@ -618,6 +625,9 @@ public class ShpUtil {
                 SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(TYPE);
                 JSONObject jobj = (JSONObject) array.get(i);
                 JSONArray zhj = jobj.getJSONObject("geometry").getJSONArray("rings");
+                if(zhj!=null){
+
+
                 if (zhj.size() > 1) {
                     //大于1说明在一条记录中有两个面，需要进行判断
                     //根据面的数量先创建数组，用于最终比较
@@ -636,24 +646,30 @@ public class ShpUtil {
                     MultiPolygon mp = geometryFactory.createMultiPolygon(polygon);
                     featureBuilder.add(mp);
                 } else {
-                    //根据实际坐标的多少创建数组
-                    Coordinate[] coords = new Coordinate[zhj.getJSONArray(0).size()];
-                    //跳一级循环，直接获取最终的坐标数组
-                    for (int k = 0; k < zhj.getJSONArray(0).size(); k++) {
-                        coords[k] = new Coordinate(zhj.getJSONArray(0).getJSONArray(k).getDouble(0), zhj.getJSONArray(0).getJSONArray(k).getDouble(1));
+                        //根据实际坐标的多少创建数组
+                        Coordinate[] coords = new Coordinate[zhj.getJSONArray(0).size()];
+                        //跳一级循环，直接获取最终的坐标数组
+                        for (int k = 0; k < zhj.getJSONArray(0).size(); k++) {
+                            coords[k] = new Coordinate(zhj.getJSONArray(0).getJSONArray(k).getDouble(0), zhj.getJSONArray(0).getJSONArray(k).getDouble(1));
+                        }
+                        //构造具有给定外部边界的多边形
+                        Polygon polygon = geometryFactory.createPolygon(coords);
+                        featureBuilder.add(polygon);
                     }
-                    //构造具有给定外部边界的多边形
-                    Polygon polygon = geometryFactory.createPolygon(coords);
-                    featureBuilder.add(polygon);
+                }else{
+                    Coordinate coordinate = new Coordinate(jobj.getJSONObject("geometry").getDoubleValue("X"),jobj.getJSONObject("geometry").getDoubleValue("Y"));
+                    Point point = geometryFactory.createPoint(coordinate);
+                    featureBuilder.add(point);
                 }
 
                 //这里按顺序添加属性
 
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("pac"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("longitude"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("latitude"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("X坐标"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("Y坐标"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("hxcode"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("redline_id"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("编号"));
 //                featureBuilder.add(jobj.getJSONObject("attributes").getString("attribute"));
                 //featureBuilder.add(jobj.getJSONObject("attributes").getString("center"));
 //                featureBuilder.set("center",jobj.getJSONObject("attributes").getString("center"));
@@ -836,6 +852,7 @@ public class ShpUtil {
         builder.length(100).add("latitude", Double.class);
         builder.length(100).add("hxcode", String.class);
         builder.length(100).add("redline_id", Integer.class);
+        builder.length(100).add("number",String.class);
 
 
         // 生成类型

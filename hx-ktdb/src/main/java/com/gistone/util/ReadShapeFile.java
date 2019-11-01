@@ -96,19 +96,19 @@ public class ReadShapeFile {
 //                if(property.getName().toString().equals("attribute")){
 //                    target = property.getValue().toString();
 //                }
-                if (property.getName().toString().equals("pac")) {
-                    model.setCode(property.getValue().toString());
-//                    code = property.getValue().toString();
-                }
+//                if (property.getName().toString().equals("pac")) {
+//                    model.setCode(property.getValue().toString());
+////                    code = property.getValue().toString();
+//                }
                 if (property.getName().toString().equals("longitude")) {
                     model.setLongitude(Double.parseDouble(property.getValue().toString()));
                 }
                 if (property.getName().toString().equals("latitude")) {
                     model.setLatitude(Double.parseDouble(property.getValue().toString()));
                 }
-                if (property.getName().toString().equals("redline_id")) {
-                    model.setRedlineId(Integer.parseInt(property.getValue().toString()));
-                }
+//                if (property.getName().toString().equals("redline_id")) {
+//                    model.setRedlineId(Integer.parseInt(property.getValue().toString()));
+//                }
 //                model.setJzNumber(code+"-"+type+target+"-"+hxcode);
 
 
