@@ -46,8 +46,9 @@ public class DestinationsManagerController {
     private IDestinationsManagerService destinationsManagerService;
     @Autowired
     private ISt4ScsChService iSt4ScsChService;
+
     @Autowired
-    private ISt4SysSdService st4SysSdService;
+    private ISysCompanyService sysCompanyService;
 
     /**
      * todo NPM航点是否能重复提交
@@ -67,7 +68,7 @@ public class DestinationsManagerController {
         Integer userId = 0;
         try {
             String token = request.getHeader("token");// 从 http 请求头中取出 token
-            String UserId = JWT.decode(token).getAudience().get(0);
+            String UserId = "1";//JWT.decode(token).getAudience().get(0);
             userId = Integer.parseInt(UserId);
         } catch (Exception e) {
             request.setAttribute("attrname", "token无效，请重新登录");
@@ -92,11 +93,11 @@ public class DestinationsManagerController {
         List<St4ScsCe> sysceList = new ArrayList<>();
         LocalDateTime date = LocalDateTime.now();//获取当前时间
         List<Destination> destinationlist = destinations.getDestination();
-        List<St4SysSd> sdList = st4SysSdService.list();
+        List<SysCompany> sdList = sysCompanyService.list();
         Map<String,Integer> sdMap = new HashMap<>();
         if(sdList!=null&&sdList.size()>0){
-            for (St4SysSd sd:sdList) {
-                sdMap.put(sd.getSd008(),sd.getSd001());
+            for (SysCompany sd:sdList) {
+                sdMap.put(sd.getComName(),sd.getComFPkid());
             }
         }
         for (int i = 0; i < destinationlist.size(); i++) {
@@ -170,6 +171,8 @@ public class DestinationsManagerController {
                     }
                     scsCk = fieldIsEmpty(null, ck, fields, ck.getClass());
                     scsCk.setCc002(ck.getCc002());//航点信息唯一标识 这里特别注意一下 动态配置的时候考虑到移动端如果把cc002同步回去的话就会显示这里避免移动端做修改所以这里将cc002取出来
+                    scsCk.setCd004(ck.getCd004());
+                    scsCk.setCn010(ck.getCn010());
                     ck.setCk086(date);
                     ck.setCk087(userId);
                     scsCkList.add(scsCk);
@@ -349,10 +352,12 @@ public class DestinationsManagerController {
                             return ResultCp.build(1001, ret.get());
                         }
                         scsCk = fieldIsEmpty(null, ck, fields, ck.getClass());
-                        scsCk.setCk086(date);
-                        scsCk.setCk087(userId);
+                        //下面这2个字段不是可选的但是是必传所以这里必须处理
                         scsCk.setCc002(ck.getCc002());//航点信息唯一标识 这里特别注意一下 动态配置的时候考虑到移动端如果把cc002同步回去的话就会显示这里避免移动端做修改所以这里将cc002取出来
-                        scsCk.setCd004(ck.getCd004());//问题点的编码
+                        scsCk.setCd004(ck.getCd004());
+                        scsCk.setCn010(ck.getCn010());
+                        ck.setCk086(date);
+                        ck.setCk087(userId);
                         scsCkList.add(scsCk);
                     }else {
                         ResultCp.build(1001,"核查任务taskId"+ResultMsg.MSG_1001);

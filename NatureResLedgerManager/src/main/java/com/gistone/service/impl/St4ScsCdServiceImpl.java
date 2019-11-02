@@ -198,18 +198,6 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     }
 
 
-    public ResultVO sysSpotData(Integer id){
-        try {
-            List<St4ScsCd> cdList = st4ScsCdMapper.sysSpotData(id);
-            ResultCp cp = new ResultCp();
-            cp.setData(cdList);
-            return ResultVOUtil.success(cp);
-        }catch (Exception e){
-            e.printStackTrace();
-            return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "同步数据失败，服务器异常！");
-        }
-    }
-
 
     @Override
     public Map<String, Object> list(Integer pageNum, Integer pageSize, Integer id) {

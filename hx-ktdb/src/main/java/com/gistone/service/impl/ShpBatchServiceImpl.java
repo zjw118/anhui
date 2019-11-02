@@ -21,6 +21,7 @@ import com.gistone.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -53,6 +54,10 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
 
     @Autowired
     private LmBoardMapper lmBoardMapper;
+
+    private final static String URL = "/0/query?returnGeometry=true&f=json&where=0%3D0&outFields=*";
+    @Value("${PATH}")
+    private String PATH ;
 
     @Override
     public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName) {
@@ -95,16 +100,16 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
     public void importPreRedlineDate(String url, String remark) {
         //获取服务数据
         try {
-            String s = httpRequest(url, "GET", null);
+            String s = httpRequest(url+URL, "GET", null);
 
             JSONObject parse = JSON.parseObject(s);
             JSONArray jsonArray = (JSONArray) parse.get("features");
             //将数据写入shp文件
-            String fileUrl = PathUtile.getRandomPath("D:/epr/shp/", "x.shp");
+            String fileUrl = PathUtile.getRandomPath(PATH+"/epr/shp/", "x.shp");
             System.out.println(fileUrl);
             ShpUtil.importPreRedlinedata(jsonArray, fileUrl);
             //批次表中录入数据
-            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(1);
+            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url+URL).setCreateBy(1).setType(1);
             if (StringUtils.isNotBlank(remark)) {
                 shpBatch.setRemark(remark);
             }
@@ -134,17 +139,17 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
     public void importPreMarkerData(String url, String remark) {
         //从服务获取数据
         try {
-            String s = httpRequest(url, "GET", null);
+            String s = httpRequest(url+URL, "GET", null);
 
             JSONObject parse = JSON.parseObject(s);
             JSONArray jsonArray = (JSONArray) parse.get("features");
             //将数据写入shp文件
-            String fileUrl = PathUtile.getRandomPath("D:/epr/shp/", "x.shp");
+            String fileUrl = PathUtile.getRandomPath(PATH+"/epr/shp/", "x.shp");
             System.out.println(fileUrl);
 
             ShpUtil.importPreMarkerdata(jsonArray, fileUrl);
             //批次表中录数据
-            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(2);
+            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url+URL).setCreateBy(1).setType(2);
             if (StringUtils.isNotBlank(remark)) {
                 shpBatch.setRemark(remark);
             }
@@ -190,17 +195,17 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
     @Override
     public void importPreBoardData(String url, String remark) {
         try {
-            String s = httpRequest(url, "GET", null);
+            String s = httpRequest(url+URL, "GET", null);
 
             JSONObject parse = JSON.parseObject(s);
             JSONArray jsonArray = (JSONArray) parse.get("features");
             //将数据写入shp文件
-            String fileUrl = PathUtile.getRandomPath("D:/epr/shp/", "x.shp");
+            String fileUrl = PathUtile.getRandomPath(PATH +"/epr/shp/", "x.shp");
             System.out.println(fileUrl);
 
             ShpUtil.importPreBoarddata(jsonArray, fileUrl);
             //批次表中录数据
-            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(2);
+            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url+URL).setCreateBy(1).setType(2);
             if (StringUtils.isNotBlank(remark)) {
                 shpBatch.setRemark(remark);
             }
@@ -208,9 +213,8 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
 
             //读shp并且导入数据
 
-            String path = "D:/Work/gistone/static/shapefile/redline_p_bsp.shp";
             ImportBoardData importRedlineData = new ImportBoardData();
-            ArrayList<LmBoard> lmMarkerMobiles = importRedlineData.readShapeFile(path);
+            ArrayList<LmBoard> lmMarkerMobiles = importRedlineData.readShapeFile(fileUrl);
             int num = 1;
             for (LmBoard lmMarkerMobile : lmMarkerMobiles) {
                 lmMarkerMobile.setType(0);

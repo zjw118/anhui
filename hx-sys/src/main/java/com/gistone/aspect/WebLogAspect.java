@@ -92,13 +92,13 @@ public class WebLogAspect {
         Map<String,String> browserMap = ToolUtil.getOsAndBrowserInfo(request);
         sysLog.setBrowser(browserMap.get("os")+"-"+browserMap.get("browser"));
 
-        if(!"127.0.0.1".equals(ip)){
-            Map<String,String> map = ToolUtil.getAddressByIP(ToolUtil.getClientIp(request));
-            sysLog.setArea(map.get("area"));
-            sysLog.setProvince(map.get("province"));
-            sysLog.setCity(map.get("city"));
-            sysLog.setIsp(map.get("isp"));
-        }
+//        if(!"127.0.0.1".equals(ip)){
+//            Map<String,String> map = ToolUtil.getAddressByIP(ToolUtil.getClientIp(request));
+//            sysLog.setArea(map.get("area"));
+//            sysLog.setProvince(map.get("province"));
+//            sysLog.setCity(map.get("city"));
+//            sysLog.setIsp(map.get("isp"));
+//        }
         sysLog.setType(ToolUtil.isAjax(request)?"Ajax请求":"普通请求");
         //获取用户
        /* if(MySysUser.ShiroUser() != null) {

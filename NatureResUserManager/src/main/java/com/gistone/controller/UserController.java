@@ -192,7 +192,7 @@ public class UserController {
         addUser.setSa009(addUser.getSa009().toString());
         St4SysSa seUser = new St4SysSa();
         String token = request.getHeader("token");// 从 http 请求头中取出 token
-        String userId = JWT.decode(token).getAudience().get(0);
+        String userId ="1";// JWT.decode(token).getAudience().get(0);
         seUser.setSa001(Integer.valueOf(userId));
         if("1".equals(userId)){
             addUser.setSa002(Integer.valueOf(userId));
@@ -214,51 +214,49 @@ public class UserController {
     public Result updateUser(@RequestBody@ApiParam(name="修改用户", value="json格式", required=true)Swagger<St4SysSa> user,
                              HttpServletRequest request) {
 
-//        String token = request.getHeader("token");// 从 http 请求头中取出 token
-//        String userId = JWT.decode(token).getAudience().get(0);
-//        St4SysSa seUser = new St4SysSa();
-//        seUser.setSa001(Integer.valueOf(userId));
-//        //2.获取前端传递的参数
-//        St4SysSa addUser = user.getData();
-//        //Id
-//        if (!RegUtil.CheckParameter(addUser.getSa001(), "Integer", null, false)) {
-//            return Result.build(1002, "用户ID不能为空");
-//        }
-//
-//
-//        List<Integer> roleList=new ArrayList<Integer>();
-//        //绿盾暂不加 产品加
-//        if (RegUtil.CheckParameter(addUser.getRoleList(), null, null, false)) {
-//
-//            roleList = addUser.getRoleList();
-//        }
-//
-//        List<Integer> unitList=new ArrayList<Integer>();
-//        if (RegUtil.CheckParameter(addUser.getUnitList(), null, null, false)) {
-//            /**
-//             * 这里考虑到以后一个人可能在多个部门所以这里的部门是一个数组
-//             */
-//            unitList = addUser.getUnitList();
-//        }
-//
-//
-//
-//        Result result = userService.updateUser(addUser,seUser,roleList,unitList);
+        String token = request.getHeader("token");// 从 http 请求头中取出 token
+        String userId ="1";// JWT.decode(token).getAudience().get(0);
+        St4SysSa seUser = new St4SysSa();
+        seUser.setSa001(Integer.valueOf(userId));
+        //2.获取前端传递的参数
+        St4SysSa addUser = user.getData();
+        //Id
+        if (!RegUtil.CheckParameter(addUser.getSa001(), "Integer", null, false)) {
+            return Result.build(1002, "用户ID不能为空");
+        }
 
-      //  return result;
-        return null;
+
+        List<Integer> roleList=new ArrayList<Integer>();
+        //绿盾暂不加 产品加
+        if (RegUtil.CheckParameter(addUser.getRoleList(), null, null, false)) {
+
+            roleList = addUser.getRoleList();
+        }
+
+        List<Integer> unitList=new ArrayList<Integer>();
+        if (RegUtil.CheckParameter(addUser.getUnitList(), null, null, false)) {
+            /**
+             * 这里考虑到以后一个人可能在多个部门所以这里的部门是一个数组
+             */
+            unitList = addUser.getUnitList();
+        }
+
+
+
+        Result result = userService.updateUser(addUser,seUser,roleList,unitList);
+
+        return result;
     }
     @ApiOperation(value="删除用户",notes = "删除用户",response = St4SysSa.class)
     @PostMapping(value="/deleteUser")
     public Result deleteUser(@RequestBody@ApiParam(name="删除用户", value="json格式", required=true)Swagger<St4SysSa> user) {
-//        St4SysSa sa = user.getData();
-//        if(sa.getSa001()==null){
-//            return Result.build(1001,"用户ID"+ResultMsg.MSG_1001);
-//        }
-//        sa.setSa007(0);
-//        St4SysSa seUser = user.getData();
-//        return userService.deleteUser(sa,seUser);
-        return null;
+        St4SysSa sa = user.getData();
+        if(sa.getSa001()==null){
+            return Result.build(1001,"用户ID"+ResultMsg.MSG_1001);
+        }
+        sa.setSa007(0);
+        St4SysSa seUser = user.getData();
+        return userService.deleteUser(sa,seUser);
     }
 
 

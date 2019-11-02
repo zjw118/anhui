@@ -13,22 +13,18 @@ import com.gistone.mapper.*;
 import com.gistone.service.*;
 import com.gistone.util.*;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.poi.hssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.alibaba.fastjson.JSON.parseObject;
 
@@ -1022,7 +1018,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
 
 
     @Override
-    public Result sysPointData(Integer roleId,Integer uid) {
+    public Result sysPointData(Integer taskSign,Integer uid) {
         Map<String,String> checkChangeTypeMap = new HashMap<>();
         QueryWrapper<St4ScsCm> checkChangeTypeWrapper = new QueryWrapper<>();
         List<St4ScsCm> CheckChangeTypeList = checkChangeTypeMapper.selectList(checkChangeTypeWrapper);
@@ -1030,15 +1026,17 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
             checkChangeTypeMap.put(cfa.getCm001().toString(),cfa.getCm002());
         }
         Result result = new Result();
-        List<St4ScsCk> ckList = checkLedgerMapper.sysPointAndLedgerData(uid);
-        if(roleId == null){
+        List<St4ScsCk> ckList = checkLedgerMapper.sysPointAndLedgerData(uid);//最新台账
+
+        List<St4ScsCk> ckHistoryList = checkLedgerMapper.sysPointAndLedgerDataOrign(uid);//最新台账
+        /*if(taskSign == null){
             result.setData(ckList);
             result.setStatus(1000);
             result.setMsg("同步问题点"+ResultMsg.MSG_1000);
             return result;
-        }
+        }*/
         QueryWrapper<St4ScsCp> wrapper = new QueryWrapper<>();
-        wrapper.eq("CP003",roleId);
+        wrapper.eq("CP003",taskSign);
         List<St4ScsCp> list = st4ScsCpMapper.selectList(wrapper);
         St4ScsCp cp = null;
         if(list!=null&&list.size()>0){
@@ -1086,49 +1084,39 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                             Object key1 = newDataLedger.get("id").toString().toLowerCase();
                             Object value = mapledger.get(newDataLedger.get("id").toString().toLowerCase());
                             //这里可以根据type的来控制返回的value是字符串还是数组
-                            if(key1.toString().contains("cn")&&cnList.size()>0){
-                                if(ObjectUtils.isNotNullAndEmpty(cnList)){
-                                    Object type = newDataLedger.get("type");
-                                    if(Integer.valueOf(newDataLedger.get("type").toString())==9){
-                                        newDataLedgerJson.put("value",phoList);
-                                    }else if(Integer.valueOf(newDataLedger.get("type").toString())==1){
-                                        //newDataLedgerJson.put("value",mapCn==null||mapCn.get(key1.toString())==null?"":mapCn.get(key1.toString()));
+                            if(key1.toString().contains("cn")){
+                                Object type = newDataLedger.get("type");
+                                if(Integer.valueOf(newDataLedger.get("type").toString())==9){
+                                    newDataLedgerJson.put("value",phoList);
+                                }else if(Integer.valueOf(newDataLedger.get("type").toString())==1){
+                                    if(cnList!=null&&cnList.size()>0){
                                         newDataLedgerJson.put("value",BeanUtils.describe(cnList.get(0)).get(key1.toString()));
+                                    }else{
+                                        newDataLedgerJson.put("value","");
                                     }
                                 }
                             }else if(Integer.valueOf(newDataLedger.get("type").toString())==5){
                                 Object aaa =mapledger.get(key1);
                                 List<String> cList = new ArrayList<>();
                                 String valList = mapledger.get(key1.toString());
-                                if(valList.contains(";")){
+                                if(valList!=null&&valList.contains(";")){
                                     String[] vals=valList.split(";");
                                     for (String val:vals) {
                                         cList.add(val);
                                     }
-                                }else {
-                                    cList.add(valList);
                                 }
                                 newDataLedgerJson.put("value",cList);
-                            }/*else if(key1.toString().contains("ck005")){
-                                Object aaa =mapledger.get(key1);
-                                JSONArray ck005Array = new JSONArray();
-                                JSONObject ck005Json = new JSONObject();
-                                ck005Array.add(mapledger.get("ck005"));
-                                newDataLedgerJson.put("value",ck005Array);
-                            }*/
+                            }
                             else if(Integer.valueOf(newDataLedger.get("type").toString())==10){
                                 List<String> cList = new ArrayList<>();
                                 String valList = mapledger.get(key1.toString());
-                                if(valList.contains(";")){
+                                if(valList!=null&&valList.contains(";")){
                                     String[] vals=valList.split(";");
                                     for (String val:vals) {
                                         cList.add(val);
                                     }
-                                }else {
-                                    cList.add(valList);
                                 }
-
-                               newDataLedgerJson.put("value",cList);
+                                newDataLedgerJson.put("value",cList);
                             }else{
                                 newDataLedgerJson.put("value",value==null?"":value);
                             }
@@ -1137,13 +1125,85 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                         }
                         newDataJson.put("ledger",jarrLedger);
                         cd = ck.getSt4ScsCd();
-                        cd.setTaskName(ck.getSt4ScsCl()==null?"":ck.getSt4ScsCl().getCl002());
+                        St4ScsCl cl = ck.getSt4ScsCl();
+                        cd.setTaskName(cl==null?"":cl.getCl002());
+                        cd.setYear(cl==null?"":cl.getCl010());
                         cd.setReserveName(ck.getSt4SysSg()==null?"":ck.getSt4SysSg().getSg008());
                         cd.setAdminRegionName(ck.getSt4SysSd()==null?"":ck.getSt4SysSd().getSd008());
                         newDataJson.put("point",BeanUtils.describe(cd));
                         jarr.add(newDataJson);
                     }
                 }
+                //开始操作返回历史台账信息
+                int i=0;
+                for (St4ScsCk ck:ckHistoryList) {
+                    cnList=ck.getSt4ScsCnList();
+                    //这里之所以做这个操作是为了得到map因为这是2张表的数据，ck表中的数据在这里已经查询出来了但是要取哪些值是存在cp表中的
+                    //这里就必须把ck表的数据整理成hashMap再拿cp表中的key去取value值
+                    mapledger = BeanUtils.describe(ck);
+                    List<String> phoList = new ArrayList<>();
+                    if(cnList!=null){
+                        for (St4ScsCn cn:cnList) {
+                            if(ObjectUtils.isNotNullAndEmpty(cn.getCn004())){
+                                phoList.add(cn.getCn004());
+                            }
+                        }
+                    }
+                    Object obj = jarr.get(i);
+                    JSONObject jsonn =(JSONObject)obj;
+                    jarrLedger = new JSONArray();
+                    newDataJson =new JSONObject();
+                    for (Object key:dataList) {
+
+                        newDataLedgerJson = new JSONObject();
+                        newDataLedger= parseObject(key.toString());
+                        newDataLedgerJson = newDataLedger;
+                        Object key1 = newDataLedger.get("id").toString().toLowerCase();
+                        Object value = mapledger.get(newDataLedger.get("id").toString().toLowerCase());
+                        //这里可以根据type的来控制返回的value是字符串还是数组
+                        if(key1.toString().contains("cn")){
+                            Object type = newDataLedger.get("type");
+                            if(Integer.valueOf(newDataLedger.get("type").toString())==9){
+                                newDataLedgerJson.put("value",phoList);
+                            }else if(Integer.valueOf(newDataLedger.get("type").toString())==1){
+                                if(cnList!=null&&cnList.size()>0){
+                                    newDataLedgerJson.put("value",BeanUtils.describe(cnList.get(0)).get(key1.toString()));
+                                }else{
+                                    newDataLedgerJson.put("value","");
+                                }
+                            }
+                        }else if(Integer.valueOf(newDataLedger.get("type").toString())==5){
+                            Object aaa =mapledger.get(key1);
+                            List<String> cList = new ArrayList<>();
+                            String valList = mapledger.get(key1.toString());
+                            if(valList!=null&&valList.contains(";")){
+                                String[] vals=valList.split(";");
+                                for (String val:vals) {
+                                    cList.add(val);
+                                }
+                            }
+                            newDataLedgerJson.put("value",cList);
+                        }
+                        else if(Integer.valueOf(newDataLedger.get("type").toString())==10){
+                            List<String> cList = new ArrayList<>();
+                            String valList = mapledger.get(key1.toString());
+                            if(valList!=null&&valList.contains(";")){
+                                String[] vals=valList.split(";");
+                                for (String val:vals) {
+                                    cList.add(val);
+                                }
+                            }
+                            newDataLedgerJson.put("value",cList);
+                        }else{
+                            newDataLedgerJson.put("value",value==null?"":value);
+                        }
+
+                        jarrLedger.add(newDataLedgerJson);
+                    }
+                    jsonn.put("historyLedger",jarrLedger);
+                    i++;
+                }
+
             }
         } catch (Exception e) {
             e.printStackTrace();

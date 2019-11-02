@@ -40,8 +40,6 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
     @Autowired
     private ISt4PoClCoService st4PoClCoService;
     @Autowired
-    private St4PoCdCoMapper st4PoCdCoMapper;
-    @Autowired
     private St4PoClCoMapper st4PoClCoMapper;
 
     @Override
