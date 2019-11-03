@@ -109,7 +109,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             System.out.println(fileUrl);
             ShpUtil.importPreRedlinedata(jsonArray, fileUrl);
             //批次表中录入数据
-            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url+URL).setCreateBy(1).setType(1);
+            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(1);
             if (StringUtils.isNotBlank(remark)) {
                 shpBatch.setRemark(remark);
             }
@@ -149,7 +149,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
 
             ShpUtil.importPreMarkerdata(jsonArray, fileUrl);
             //批次表中录数据
-            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url+URL).setCreateBy(1).setType(2);
+            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(2);
             if (StringUtils.isNotBlank(remark)) {
                 shpBatch.setRemark(remark);
             }
@@ -205,7 +205,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
 
             ShpUtil.importPreBoarddata(jsonArray, fileUrl);
             //批次表中录数据
-            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url+URL).setCreateBy(1).setType(2);
+            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(2);
             if (StringUtils.isNotBlank(remark)) {
                 shpBatch.setRemark(remark);
             }
