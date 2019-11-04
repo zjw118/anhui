@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.alibaba.fastjson.JSON.parseObject;
 
@@ -1018,7 +1019,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
 
 
     @Override
-    public Result sysPointData(Integer taskSign,Integer uid) {
+    public Result sysPointData(Integer uid) {
         Map<String,String> checkChangeTypeMap = new HashMap<>();
         QueryWrapper<St4ScsCm> checkChangeTypeWrapper = new QueryWrapper<>();
         List<St4ScsCm> CheckChangeTypeList = checkChangeTypeMapper.selectList(checkChangeTypeWrapper);
@@ -1026,31 +1027,36 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
             checkChangeTypeMap.put(cfa.getCm001().toString(),cfa.getCm002());
         }
         Result result = new Result();
-        List<St4ScsCk> ckList = checkLedgerMapper.sysPointAndLedgerData(uid);//最新台账
+        /**
+         * 这里必须先去拿点再去拿台账信息 因为越到后面很大程度上点可能不在一个任务下所以台账中要核查的字段都不一样
+         *
+         */
+        List<St4ScsCd> cdList =new ArrayList<>();
+        cdList = checkPointMapper.getPointBySa001(uid);
+        //这里准备打算得到存放任务和台账字段信息的map
+        List<String> taskSigns = new ArrayList<>();
+        //这个首先是要获取到点的任务的的标识供下面使用
+        List<St4ScsCl> clList = new ArrayList<>();
+        if(cdList!=null&&cdList.size()>0){
+            clList=cdList.stream().map(St4ScsCd::getSt4ScsCl).collect(Collectors.toList());
+        }
+        taskSigns=clList.stream().map(St4ScsCl::getCl003).collect(Collectors.toList());
 
-        List<St4ScsCk> ckHistoryList = checkLedgerMapper.sysPointAndLedgerDataOrign(uid);//最新台账
-        /*if(taskSign == null){
-            result.setData(ckList);
-            result.setStatus(1000);
-            result.setMsg("同步问题点"+ResultMsg.MSG_1000);
-            return result;
-        }*/
         QueryWrapper<St4ScsCp> wrapper = new QueryWrapper<>();
-        wrapper.eq("CP003",taskSign);
+        wrapper.in("CP003",taskSigns);
         List<St4ScsCp> list = st4ScsCpMapper.selectList(wrapper);
         St4ScsCp cp = null;
-        if(list!=null&&list.size()>0){
-            cp=list.get(0);
-        }
-        String data = cp.getCp002();
-        Map<String,Object> dataMap = new net.sf.json.JSONObject().fromObject(data);
-        List dataList = (List) dataMap.get("data");
-        Map<String, String> mapledger = null;
-        Map<String, String> mapCn = null;
+
         JSONArray jarr = new JSONArray();
-        JSONArray jarrLedger =null;
+
+        List<St4ScsCk> ckList = checkLedgerMapper.sysPointAndLedgerData(uid,taskSigns);//最新台账
+
+        List<St4ScsCk> ckHistoryList = checkLedgerMapper.sysPointAndLedgerDataOrign(uid,taskSigns);//历史台账
+
 
         try {
+
+
             JSONObject newDataJson =null;
             JSONObject json = new JSONObject();
             JSONObject newDataLedger =null;
@@ -1060,7 +1066,18 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
             St4ScsCd cd = null;
             List<St4ScsCn> cnList = null;
             if(ckList!=null&&ckList.size()>0){
+                Map<String, String> mapledger = null;
+                Map<String, String> mapCn = null;
+
+                JSONArray jarrLedger =null;
+                List dataList=null;
                 for (St4ScsCk ck:ckList) {
+                    //这里是拿到当前任务下的要核查的台账字段的信息
+                    //获取到任务唯一标识这里得动态的获取data值因为是一个任务标识对应一个data
+                    String data = ck.getSt4ScsCp().getCp002();
+                    Map<String,Object> dataMap = new net.sf.json.JSONObject().fromObject(data);
+                    dataList = (List) dataMap.get("data");
+
                     cnList=ck.getSt4ScsCnList();
                     //这里之所以做这个操作是为了得到map因为这是2张表的数据，ck表中的数据在这里已经查询出来了但是要取哪些值是存在cp表中的
                     //这里就必须把ck表的数据整理成hashMap再拿cp表中的key去取value值
@@ -1137,6 +1154,11 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                 //开始操作返回历史台账信息
                 int i=0;
                 for (St4ScsCk ck:ckHistoryList) {
+                    //这里是拿到当前任务下的要核查的台账字段的信息
+                    //获取到任务唯一标识这里得动态的获取data值因为是一个任务标识对应一个data
+                    String data = ck.getSt4ScsCp().getCp002();
+                    Map<String,Object> dataMap = new net.sf.json.JSONObject().fromObject(data);
+                    dataList = (List) dataMap.get("data");
                     cnList=ck.getSt4ScsCnList();
                     //这里之所以做这个操作是为了得到map因为这是2张表的数据，ck表中的数据在这里已经查询出来了但是要取哪些值是存在cp表中的
                     //这里就必须把ck表的数据整理成hashMap再拿cp表中的key去取value值
@@ -1215,6 +1237,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
 
         return result;
     }
+
 
     @Override
     public Result selectReserveNumTiew(St4SysSd data) {

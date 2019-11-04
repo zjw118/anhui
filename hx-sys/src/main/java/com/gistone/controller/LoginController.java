@@ -223,12 +223,12 @@ public class LoginController {
         //app返回权限的主要功能
         List<St4SysSc> appMain = new ArrayList<St4SysSc>();
         LinkedHashMap<String, String> mainMap = new LinkedHashMap<>();
-        //mainMap.put("任务管理","main_001");
-        //mainMap.put("航迹管理","main_002");
-        //mainMap.put("航点管理","main_003");
+        mainMap.put("任务管理","main_001");
+        mainMap.put("航迹管理","main_002");
+        mainMap.put("航点管理","main_003");
         mainMap.put("问题点管理","main_004");
-        //mainMap.put("保护地管理","main_005");
-        //mainMap.put("物种查询","main_006");
+        mainMap.put("保护地管理","main_005");
+        mainMap.put("物种查询","main_006");
         mainMap.put("消息中心","main_007");
         St4SysSc sc = new St4SysSc();
         for (String main:mainMap.keySet()) {

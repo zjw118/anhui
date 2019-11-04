@@ -106,15 +106,15 @@ public class AppLedgerController {
     @RequestMapping(value = "/sysPointData",method = RequestMethod.POST)
     public Result sysPointData(@ApiParam(name="同步问题点数据", value="json格式", required=true)@RequestBody Swagger<St4SysSa> data,
                                HttpServletRequest request, HttpServletResponse response) {
+        //TODO 传递过来巡护人员的id
+        //从redis或者session里面取出来roleId
         St4SysSa param = data.getData();
         if(param ==null || param.getSa001() == null){
             return Result.build(1006,"用户id"+ResultMsg.MSG_1001);
         }
 
         Integer uid = param.getSa001();
-        //todo 这里后续加上按照任务同步回去问题点的的台账信息  QueryWrapper<>
-        Integer taskSign = 1;
-       return st4ScsCkService.sysPointData(taskSign,uid);
+        return st4ScsCkService.sysPointData(uid);
     }
     /**
      * 同步问题点数据(绿盾巡查暂时使用)
