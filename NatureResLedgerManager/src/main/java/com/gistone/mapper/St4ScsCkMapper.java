@@ -38,11 +38,11 @@ public interface St4ScsCkMapper extends BaseMapper<St4ScsCk> {
     List<St4ScsCk> selectSt4ScsCk(St4ScsCk st4ScsCk);
 
     /**
-     * APP端同步问题点的接口
+     * APP端同步问题点的接口及原始台账接口
      * @param uid
      * @return
      */
-    List<St4ScsCk> sysPointAndLedgerData(Integer uid);
+    List<St4ScsCk> sysPointAndLedgerData(@Param("sa001") Integer uid,@Param("list") List<String> cl003list);
 
 
     /**
@@ -50,7 +50,7 @@ public interface St4ScsCkMapper extends BaseMapper<St4ScsCk> {
      * @param uid
      * @return
      */
-    List<St4ScsCk> sysPointAndLedgerDataOrign(Integer uid);
+    List<St4ScsCk> sysPointAndLedgerDataOrign(@Param("sa001") Integer uid,@Param("list")  List<String>   cl003list);
 
     /**
      * 台账整改统计

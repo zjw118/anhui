@@ -446,6 +446,10 @@ public class St4ScsCk extends BaseEntity implements Serializable {
     //任务批次集合(安徽因为co台账可以重复被多个任务绑定所以返回的可能是任务的集合)
     @TableField(exist = false)
     private List<St4ScsCl> st4ScsClList;
+    //动态配置的核查信息
+    @TableField(exist = false)
+    private St4ScsCp st4ScsCp;
+
     //人员
     @TableField(exist = false)
     private St4SysSa st4SysSa;

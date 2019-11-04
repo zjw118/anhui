@@ -59,7 +59,7 @@ public interface ISt4ScsCkService extends IService<St4ScsCk> {
      * @param uid
      * @return
      */
-    Result sysPointData (Integer taskSign,Integer uid);
+    Result sysPointData (Integer uid);
 
     /**
      * 一张图展示，查询头部保护地、问题点、巡护次数、巡护里程数量

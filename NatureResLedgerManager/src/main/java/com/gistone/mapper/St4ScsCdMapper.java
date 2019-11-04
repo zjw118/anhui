@@ -30,5 +30,6 @@ public interface St4ScsCdMapper extends BaseMapper<St4ScsCd> {
 
     List<St4ScsCd> getSpotByTaskId(Integer tid);
     List<St4ScsCd> sysSpotData(Integer tid);
+    List<St4ScsCd>  getPointBySa001(Integer uid);
 
 }
