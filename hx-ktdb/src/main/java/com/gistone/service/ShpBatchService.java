@@ -35,4 +35,9 @@ package com.gistone.service;
     void importPreVector(String url,String remark);
 
     void importPreImage(String url,String remark);
+
+    void importPreVectorMarker(String url,String remark);
+
+    void importPreImageMarker(String url,String remark);
+
     }

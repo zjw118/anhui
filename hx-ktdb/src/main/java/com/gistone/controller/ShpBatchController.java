@@ -239,8 +239,12 @@ public class ShpBatchController {
         } else if (type == 5) {
             service.importPreVector(url, remark);
         }
-        if (type == 6) {
+        else if (type == 6) {
             service.importPreImage(url, remark);
+        }else if(type==7){
+            service.importPreVectorMarker(url,remark);
+        }else if(type==8){
+            service.importPreImageMarker(url,remark);
         }
 
         return ResultVOUtil.success();

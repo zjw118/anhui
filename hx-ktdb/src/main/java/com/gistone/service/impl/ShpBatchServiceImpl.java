@@ -205,7 +205,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
 
             ShpUtil.importPreBoarddata(jsonArray, fileUrl);
             //批次表中录数据
-            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(2);
+            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(3);
             if (StringUtils.isNotBlank(remark)) {
                 shpBatch.setRemark(remark);
             }
@@ -254,6 +254,24 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
     @Override
     public void importPreImage(String url, String remark) {
         ShpBatch shpBatch = new ShpBatch().setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(6);
+        if (StringUtils.isNotBlank(remark)) {
+            shpBatch.setRemark(remark);
+        }
+        mapper.insert(shpBatch);
+    }
+
+    @Override
+    public void importPreVectorMarker(String url, String remark) {
+        ShpBatch shpBatch = new ShpBatch().setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(7);
+        if (StringUtils.isNotBlank(remark)) {
+            shpBatch.setRemark(remark);
+        }
+        mapper.insert(shpBatch);
+    }
+
+    @Override
+    public void importPreImageMarker(String url, String remark) {
+        ShpBatch shpBatch = new ShpBatch().setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(8);
         if (StringUtils.isNotBlank(remark)) {
             shpBatch.setRemark(remark);
         }
