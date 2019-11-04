@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.entity.BottomChart;
 import com.gistone.mapper.BottomChartMapper;
 import com.gistone.service.BottomChartService;
+import com.gistone.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,11 @@ public class BottomChartServiceImpl extends ServiceImpl<BottomChartMapper, Botto
         wrapper.eq("del_flag", 1);
 
         IPage<BottomChart> iPage = mapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
-
+        if(iPage.getRecords()!=null&&iPage.getRecords().size()>0){
+            for (BottomChart record : iPage.getRecords()) {
+                record.setCreateTime(DateUtils.format(record.getCreateDate(),"yyyy-MM-dd"));
+            }
+        }
 
         Map<String, Object> result = new HashMap<>();
         result.put("rows", iPage.getRecords());

@@ -65,6 +65,12 @@ public class BottomChart extends Model<BottomChart> {
     private Date updateDate;
 
     /**
+     * 创建时间
+     */
+    @TableField(exist = false)
+    private String createTime;
+
+    /**
      * 逻辑删除 0 删除，1 未删除
      */
     private Integer delFlag;

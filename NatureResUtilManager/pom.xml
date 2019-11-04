@@ -32,6 +32,34 @@
             <scope>compile</scope>
         </dependency>
 
+         <dependency>
+                  <groupId>org.apache.poi</groupId>
+                  <artifactId>poi-ooxml-schemas</artifactId>
+                  <exclusions>
+                      <exclusion>
+                          <groupId>xerces</groupId>
+                          <artifactId>xercesImpl</artifactId>
+                      </exclusion>
+                  </exclusions>
+                  <version>3.7</version>
+              </dependency>
+              <dependency>
+                  <groupId>org.apache.poi</groupId>
+                  <artifactId>poi</artifactId>
+                  <version>3.7</version>
+              </dependency>
+              <dependency>
+                  <groupId>org.apache.poi</groupId>
+                  <artifactId>poi-scratchpad</artifactId>
+                  <version>3.7</version>
+                  <optional>true</optional>
+              </dependency>
+              <dependency>
+                  <groupId>org.apache.poi</groupId>
+                  <artifactId>poi-ooxml-schemas</artifactId>
+                  <version>3.7</version>
+              </dependency>
+
 
     </dependencies>
 </project>

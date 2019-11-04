@@ -274,7 +274,7 @@ public class ProjectAdmissionController {
                 AnalysisReport analysisReport = new AnalysisReport();
                 analysisReport.setProjectId(projectAdmission.getId());
 
-                Integer redlineId = (Integer) detailInfo.get("redineId");
+//                Integer redlineId = (Integer) detailInfo.get("redineId");
                 /*if (redlineId == null || redlineId <= 0) {
                     throw new ProjectException(ResultEnum.REDLINEID_EMPTY);
                 }*/

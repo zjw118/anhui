@@ -67,8 +67,6 @@
         <druid>1.1.11</druid>
         <commons-httpclient>3.1</commons-httpclient>
         <opencsv>4.2</opencsv>
-        <easypoi>4.1.0</easypoi>
-        <poi_version>3.7</poi_version>
         <gt-swing>17.0</gt-swing>
         <gt-shapefile>17.0</gt-shapefile>
         <gt-opengis>10.0</gt-opengis>
@@ -143,11 +141,7 @@
             <artifactId>opencsv</artifactId>
             <version>${opencsv}</version>
         </dependency>
-        <dependency>
-            <groupId>cn.afterturn</groupId>
-            <artifactId>easypoi-base</artifactId>
-            <version>${easypoi}</version>
-        </dependency>
+
 
 
 
@@ -263,33 +257,7 @@
             <version>${freemarker_version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml-schemas</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>xerces</groupId>
-                    <artifactId>xercesImpl</artifactId>
-                </exclusion>
-            </exclusions>
-            <version>${poi_version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-            <version>${poi_version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-scratchpad</artifactId>
-            <version>${poi_version}</version>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml-schemas</artifactId>
-            <version>${poi_version}</version>
-        </dependency>
+
 
 
         <dependency>
