@@ -10,6 +10,7 @@ import com.gistone.entity.*;
 import com.gistone.mapper.*;
 import com.gistone.service.ISt4ScsCdService;
 import com.gistone.util.*;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -209,10 +210,13 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
         result.put("total", iPage.getTotal());
         return result;
     }
-    public List list2(Integer id) {
+    public Map list2(Integer id) {
         QueryWrapper<St4ScsCd> wrapper = new QueryWrapper<>();
         wrapper.eq("image_id",id);
-        return st4ScsCdMapper.selectList(wrapper);
+        List<St4ScsCd> st4ScsCds = st4ScsCdMapper.selectList(wrapper);
+        Map map = new HashMap();
+        map.put("data",st4ScsCds);
+        return map;
     }
 
     @Override
