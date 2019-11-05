@@ -4,6 +4,7 @@ package com.gistone.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.VO.ResultVO;
 import com.gistone.annotation.PassToken;
+import com.gistone.entity.RlhdGroup;
 import com.gistone.entity.St4ScsCl;
 import com.gistone.entity.St4ScsCo;
 import com.gistone.entity.SysUser;
@@ -43,6 +44,8 @@ public class TaskController {
     private ISt4PoSaCzService iSt4PoSaCzService;
     @Autowired
     private ISt4ScsCzService iSt4ScsCzService;
+    @Autowired
+    private RlhdGroupService rlhdGroupService;
 
     @Autowired
     private ISt4ScsCoService iSt4ScsCoService;
@@ -93,7 +96,7 @@ public class TaskController {
 
         ResultCp resultCp = new ResultCp();
 
-        List<St4ScsCo> coList = iSt4ScsCoService.list();
+        List<RlhdGroup> coList = rlhdGroupService.list();
         resultCp.setData(coList);
         return ResultVOUtil.success(resultCp);
 
