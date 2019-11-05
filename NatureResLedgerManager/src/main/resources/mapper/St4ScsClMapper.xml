@@ -19,17 +19,16 @@
         <result column="CL013" property="cl013" />
         <result column="CL014" property="cl014" />
         <result column="CL015" property="cl015" />
-        <collection property="st4ScsCoList" ofType="com.gistone.entity.St4ScsCo">
-            <id column="co001" property="co001" />
+        <collection property="rlhdGroupList" ofType="com.gistone.entity.RlhdGroup">
+            <id column="id" property="id" />
             <result column="name" property="name" />
-            <result column="year" property="year" />
-            <result column="admin_region" property="adminRegion" />
             <result column="create_by" property="createBy" />
             <result column="create_date" property="createDate" />
             <result column="update_by" property="updateBy" />
             <result column="update_date" property="updateDate" />
             <result column="remark" property="remark" />
             <result column="del_flag" property="delFlag" />
+            <result column="son_count" property="sonCount" />
         </collection>
     </resultMap>
 
@@ -58,15 +57,18 @@
         </if>
         )  cl
         left join  st4_po_cl_co clco on cl.cl001 = clco.cl001
-        left join st4_scs_co co on co.co001=clco.co001
+        left join rlhd_group co on co.id=clco.co001
         left join sys_user sa on cl.CL013 = sa.id
+
+        order by cl.CL014 DESC
     </select>
     <select id="getTaskDetail" resultMap="BaseResultMap" >
         select cl.*,co.* from st4_scs_cl cl
         left join  st4_po_cl_co clco on cl.cl001 = clco.cl001
-        left join st4_scs_co co on co.co001=clco.co001
+        left join rlhd_group co on co.id=clco.co001
         left join sys_user sa on cl.CL013 = sa.id
         WHERE cl.cl001=#{cl001}
+
     </select>
 
 
