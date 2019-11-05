@@ -223,7 +223,7 @@
 
        <if test="level==1">
            SELECT
-           COM_NAME AS NAME,
+           COM_NAME AS name,
            IFNULL(ROUND(SUM(a), 2), 0) AS area,
            IFNULL(SUM(b), 0) AS redlineSum
            FROM
