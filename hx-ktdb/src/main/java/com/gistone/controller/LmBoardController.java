@@ -583,8 +583,8 @@ public class LmBoardController {
                 params.put("remark", lmBoard.getRemarks());
             }
             params.put("time", DateUtils.format(lmBoard.getCreateDate()));
-            lmBoard.setStrLat(LongitudeUtil.dblToLocation(lmBoard.getProofLat()));
-            lmBoard.setStrLon(LongitudeUtil.dblToLocation(lmBoard.getProofLon()));
+           /* lmBoard.setStrLat(LongitudeUtil.dblToLocation(lmBoard.getProofLat()));
+            lmBoard.setStrLon(LongitudeUtil.dblToLocation(lmBoard.getProofLon()));*/
             params.put("data", lmBoard);
 
             try {

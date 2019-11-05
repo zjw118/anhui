@@ -94,9 +94,9 @@ public class ImportBoardData {
 //                if(property.getName().toString().equals("hxcode")){
 //                    model.setRedlineNum(property.getValue().toString());
 //                }
-//                if(property.getName().toString().equals("pac")){
-//                    model.setCode(property.getValue().toString());
-//                }
+                if(property.getName().toString().equals("pac")){
+                    model.setCode(property.getValue().toString());
+                }
 
 
             }
