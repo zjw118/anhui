@@ -5,7 +5,6 @@ import com.gistone.entity.ImageContrast;
 import com.gistone.entity.SysUser;
 import com.gistone.service.ImageContrastService;
 import com.gistone.util.PageBean;
-import com.gistone.util.Result;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultVOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +38,6 @@ public class ImageContrastController {
 
         HttpSession session = request.getSession();
         SysUser user = (SysUser) session.getAttribute("user");
-
         ImageContrast imageContrast = new ImageContrast();
         imageContrast.setImage1Id(id1);
         imageContrast.setImage2Id(id2);

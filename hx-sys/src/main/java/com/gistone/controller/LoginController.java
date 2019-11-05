@@ -348,19 +348,14 @@ public class LoginController {
             if (login.getAccessToken().equals("")) {
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "参数不能为空！");
             }
-
             String code = stringRedisTemplate.opsForValue().get(login.getAccessToken());
-
             //删除redis中的缓存
             if (StringUtils.isNotBlank(code)) {
                 stringRedisTemplate.delete(login.getAccessToken());
             }
 
-
             User user = login.getData();
-
             List<SysUser> listParam = sysUserService.list(new QueryWrapper<SysUser>().eq("username", user.getUsername()).eq("type", user.getType()));
-
             LoginLog loginLog = new LoginLog();
             loginLog.setLoginType(1);
 
@@ -386,10 +381,6 @@ public class LoginController {
 
     }
 
-
-    public static void main(String[] args) {
-        System.out.println(Md5Util.md5("PW123456"));
-    }
 
     @RequestMapping(value = "/check", method = RequestMethod.POST)
     public ResultVO getLoginInfo(@RequestBody LoginParameter login, HttpServletRequest request) {
@@ -561,6 +552,21 @@ public class LoginController {
         token.append(JWT.create().withAudience(st4SysSa.getSa001().toString()).sign(Algorithm.HMAC256(st4SysSa.getSa008())));
         return token.toString();
     }
+
+
+    @PostMapping(value = "/list")
+    public ResultVO getLoginList(@RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"data结构");
+        if(null==params.get("pageNum"))return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"pageNum不能为空");
+        if(null==params.get("pageSize"))return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"pageSize不能为空");
+        PageBean pageBean = new PageBean();
+        pageBean.setPageIndex(Integer.valueOf(params.get("pageNum")+""));
+        pageBean.setPageSize(Integer.valueOf(params.get("pageSize")+""));
+        pageBean.setStr1(params.get("name")+"");
+        return loginLogService.list(pageBean);
+    }
+
 }
 
 @Data

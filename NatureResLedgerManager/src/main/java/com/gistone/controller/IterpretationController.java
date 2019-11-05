@@ -32,9 +32,19 @@ public class IterpretationController {
     @Autowired
     private ISt4ScsCdService service;
 
-
+    //无分页
     @PostMapping("/list")
     public ResultVO getList(@RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        Integer id = (Integer) params.get("id");
+        return ResultVOUtil.success(service.list2(id));
+    }
+    //有分页
+    @PostMapping("/list2")
+    public ResultVO getList2(@RequestBody Map<String, Object> paramsMap) {
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
         if (params == null) {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
@@ -44,15 +54,6 @@ public class IterpretationController {
         Integer id = (Integer) params.get("id");
         Map<String, Object> result = service.list(Integer.valueOf(params.get("pageNum")+""), Integer.valueOf(params.get("pageSize")+""),id);
         return ResultVOUtil.success(result);
-    }
-    @PostMapping("/list2")
-    public ResultVO getList2(@RequestBody Map<String, Object> paramsMap) {
-        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-        if (params == null) {
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
-        }
-        Integer id = (Integer) params.get("id");
-        return ResultVOUtil.success(service.list2(id));
     }
 
 
