@@ -495,7 +495,7 @@ public class ShpUtil {
                 //这里按顺序添加属性
 
 //                featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("FID"));
-
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("行政区代码"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("面积"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("编号"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("类型").substring(0,2));
@@ -664,7 +664,7 @@ public class ShpUtil {
 
                 //这里按顺序添加属性
 
-                featureBuilder.add(jobj.getJSONObject("attributes").getString("pac"));
+
                 featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("X坐标"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("Y坐标"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("hxcode"));
@@ -802,6 +802,7 @@ public class ShpUtil {
         // builder.length(100).add("position", String.class);
 
 //        String area = new String("面积".getBytes("ISO-8859-1"), "UTF-8");
+        builder.length(100).add("pac", String.class);
         builder.length(100).add("area", String.class);
 
         builder.length(100).add("hxcode", String.class);
