@@ -1144,6 +1144,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                         cd = ck.getSt4ScsCd();
                         St4ScsCl cl = ck.getSt4ScsCl();
                         cd.setTaskName(cl==null?"":cl.getCl002());
+                        cd.setTaskSign(cl==null?"":cl.getCl003());
                         cd.setYear(cl==null?"":cl.getCl010());
                         cd.setReserveName(ck.getSt4SysSg()==null?"":ck.getSt4SysSg().getSg008());
                         cd.setAdminRegionName(ck.getSt4SysSd()==null?"":ck.getSt4SysSd().getSd008());

@@ -70,7 +70,7 @@ public class ImageContrastController {
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
         if (params == null) return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"data结构");
 //        if(null==params.get("name"))return null;
-        return imageContrastService.like(params.get("name")+"");
+        return imageContrastService.like(params.get("name")==null?"":params.get("name")+"");
     }
 
 

@@ -183,6 +183,9 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     @ApiModelProperty(name="taskName",value="任务名称(移动端用)",dataType = "{}",required = false,example="")
     @TableField(exist = false)
     private String taskName;
+    @ApiModelProperty(name="taskSign",value="任务唯一标识(移动端用)",dataType = "{}",required = false,example="")
+    @TableField(exist = false)
+    private String taskSign;
     @ApiModelProperty(name="reserveName",value="保护区名称(移动端用)",dataType = "{}",required = false,example="")
     @TableField(exist = false)
     private String reserveName;
