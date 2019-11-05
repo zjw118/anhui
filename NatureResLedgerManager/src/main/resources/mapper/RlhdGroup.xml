@@ -12,6 +12,7 @@
         <result column="update_date" property="updateDate" />
         <result column="remark" property="remark" />
         <result column="del_flag" property="delFlag" />
+        <result column="son_count" property="sonCount" />
     </resultMap>
 
     <!-- 通用查询结果列 -->

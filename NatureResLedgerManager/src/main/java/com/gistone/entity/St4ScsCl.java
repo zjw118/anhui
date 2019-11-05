@@ -106,7 +106,7 @@ public class St4ScsCl extends BaseEntity implements Serializable {
     private List<Integer> ledgerIdList;
     @ApiModelProperty(value = "任务绑定的台账信息(返回的台账具体信息从这个里面取)", required = true,example="1")
     @TableField(exist = false)
-    private  List<St4ScsCo> st4ScsCoList;
+    private  List<RlhdGroup> rlhdGroupList;
 
     @ApiModelProperty(name="type",value="权限用，不用管此字段",dataType = "String",required = false,example="")
     @TableField(exist = false)

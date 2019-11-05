@@ -31,6 +31,7 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
     private ISt4PoCdSaService st4PoCdSaService;
     @Autowired
     private St4SysSaMapper st4SysSaMapper;
+    @Autowired
     private St4ScsCdMapper iterpretationMapper;
 
 
