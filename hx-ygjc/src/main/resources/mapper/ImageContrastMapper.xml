@@ -61,4 +61,12 @@
         LIMIT #{firstLimit},#{pageSize}
     </select>
 
+
+    <select id="likeList"  resultType ="com.gistone.entity.Image" parameterType="com.gistone.entity.Image">
+        SELECT *
+        FROM image
+        WHERE del_flag = 1
+        and name like '%${name}%'
+    </select>
+
 </mapper>
