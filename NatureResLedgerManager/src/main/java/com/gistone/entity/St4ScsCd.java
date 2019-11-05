@@ -222,6 +222,16 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     private String geometry;
     @TableField("group_id")
     private Integer groupId;
+
+    @TableField("region")
+    private String region;
+
+    @TableField("position")
+    private String position;
+
+
+
+
     @ApiModelProperty(name="year",value="同步图斑信息返回",dataType = "{}",required = false,example="")
     @TableField(exist = false)
     private String year;
