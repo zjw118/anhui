@@ -848,7 +848,6 @@ public class ShpUtil {
         builder.setCRS(DefaultGeographicCRS.WGS84); // 坐标参考系
         // 按顺序添加属性
         builder.add("the_geom", MultiPolygon.class);
-        builder.length(100).add("pac", String.class);
         builder.length(100).add("longitude", Double.class);
         builder.length(100).add("latitude", Double.class);
         builder.length(100).add("hxcode", String.class);
