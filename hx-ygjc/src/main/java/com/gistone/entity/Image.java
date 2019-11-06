@@ -45,6 +45,7 @@ public class Image extends Model<Image> {
     private String remark;
     @TableId(value = "del_flag")
     private Integer delFlag;
+
     @TableField(exist = false)
     private String shp;
 

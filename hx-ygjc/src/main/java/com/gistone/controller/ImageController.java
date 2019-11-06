@@ -11,6 +11,8 @@ import com.gistone.util.ShpUtil;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,11 +28,16 @@ import java.util.Map;
  * @since 2019-10-18
  */
 
+
 @RestController
 @RequestMapping("/api/ygjc/image")
 public class ImageController {
     @Autowired
     private ImageService service;
+
+    @Value("${PATH}")
+    private String PATH;
+
 
     @PostMapping("/list")
     public ResultVO getList(@RequestBody Map<String, Object> paramsMap) {
@@ -61,7 +68,11 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
         Image entity = service.getById(id);
-        String str = ShpUtil.readShapeFileToStr("D:"+entity.getShpurl(),1)+"";
+        
+        System.out.println(PATH);
+        String str = ShpUtil.readShapeFileToStr(PATH+entity.getShpurl(),1)+"";
+        System.out.println(str);
+
         entity.setShp(net.sf.json.JSONArray.fromObject(str)+"");
         return ResultVOUtil.success(entity);
     }
