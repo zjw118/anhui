@@ -488,7 +488,7 @@ public class St4ScsCk extends BaseEntity implements Serializable {
 
     @ApiModelProperty(name="st4ScsCo",value="安徽图斑绑定的台账表(模糊查询项)",dataType = "object",example="")
     @TableField(exist = false)
-    private St4ScsCo st4ScsCo;
+    private RlhdGroup rlhdGroup;
 
     ///整改进展，移动上传方便数据传输结构用，其余接口不用关心
     @ApiModelProperty(value="整改进展，移动上传方便数据传输结构用，其余接口不用关心",example = "")

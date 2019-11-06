@@ -68,7 +68,19 @@
         left join rlhd_group co on co.id=clco.co001
         left join sys_user sa on cl.CL013 = sa.id
         WHERE cl.cl001=#{cl001}
+    </select>
 
+
+    <select id="getTaskSign" resultMap="BaseResultMap" >
+        SELECT cl.*
+        FROM st4_scs_cd cd
+        inner JOIN rlhd_group co ON co.id = cd.group_id
+        inner  JOIN st4_po_cl_co clco ON clco.co001 = co.id
+        inner JOIN st4_scs_cl cl ON clco.cl001 = cl.CL001
+        where cd.cd001 in
+        <foreach item="item" index="index"  collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
     </select>
 
 

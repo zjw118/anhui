@@ -83,6 +83,8 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
     St4PoSaCzMapper st4PoSaCzMapper;
     @Autowired
     St4ScsCzMapper st4ScsCzMapper;
+    @Autowired
+    St4ScsClMapper st4ScsClMapper;
 
     DateTimeFormatter dfMd = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     @Override
@@ -1037,10 +1039,12 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
         List<String> taskSigns = new ArrayList<>();
         //这个首先是要获取到点的任务的的标识供下面使用
         List<St4ScsCl> clList = new ArrayList<>();
+        List<Integer> pointIds = cdList.stream().map(St4ScsCd::getCd001).collect(Collectors.toList());
         if(cdList!=null&&cdList.size()>0){
-            clList=cdList.stream().map(St4ScsCd::getSt4ScsCl).collect(Collectors.toList());
+            clList=st4ScsClMapper.getTaskSign(pointIds);
+            taskSigns=clList.stream().map(St4ScsCl::getCl003).collect(Collectors.toList());
         }
-        taskSigns=clList.stream().map(St4ScsCl::getCl003).collect(Collectors.toList());
+
 
         QueryWrapper<St4ScsCp> wrapper = new QueryWrapper<>();
         wrapper.in("CP003",taskSigns);
