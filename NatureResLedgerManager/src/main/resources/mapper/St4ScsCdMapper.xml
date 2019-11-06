@@ -32,17 +32,16 @@
             <result column="CL002" property="cl002" />
             <result column="CL003" property="cl003" />
         </association>
-        <association property="st4ScsCo" javaType="com.gistone.entity.St4ScsCo">
-            <id column="co001" property="co001" />
+        <association property="rlhdGroup" javaType="com.gistone.entity.RlhdGroup">
+            <id column="id" property="id" />
             <result column="name" property="name" />
-            <result column="year" property="year" />
-            <result column="admin_region" property="adminRegion" />
             <result column="create_by" property="createBy" />
             <result column="create_date" property="createDate" />
             <result column="update_by" property="updateBy" />
             <result column="update_date" property="updateDate" />
             <result column="remark" property="remark" />
             <result column="del_flag" property="delFlag" />
+            <result column="son_count" property="sonCount" />
         </association>
         <association property="st4ScsCn" javaType="com.gistone.entity.St4ScsCn">
             <id column="CN001" property="cn001" />
@@ -474,10 +473,10 @@
     <!--安徽下发任务接口的查询到的斑点的集合!-->
     <select id="getSpotByTaskId"  resultMap="BaseResultMap" parameterType="Integer">
         select cd.CD001 from
-        iterpretation cd
+        st4_scs_cd cd
         left join st4_po_cd_co cdco on cd.CD001 =cdco.cd001
-        left join st4_scs_co co on cdco.co001 = co.co001
-        LEFT JOIN st4_po_cl_co clco on  clco.co001=co.co001
+        left join rlhd_group co on cdco.co001 = co.id
+        LEFT JOIN st4_po_cl_co clco on  clco.co001=co.id
         left join st4_scs_cl cl on cl.CL001 = clco.cl001
         where
          cd.CD009=1 and cl.CL001=#{cl001}

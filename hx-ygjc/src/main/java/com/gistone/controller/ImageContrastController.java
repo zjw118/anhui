@@ -69,6 +69,16 @@ public class ImageContrastController {
         pageBean.setStr1(params.get("name") + "");
         return imageContrastService.list(pageBean);
     }
+    @PostMapping("/like")
+    public ResultVO like(HttpServletRequest request, @RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"data结构");
+//        if(null==params.get("name"))return null;
+        return imageContrastService.like(params.get("name")==null?"":params.get("name")+"");
+    }
+
+
+
 
     /**
      * 删除

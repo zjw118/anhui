@@ -24,6 +24,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.time.LocalTime;
@@ -226,9 +227,7 @@ public class LoginController {
         mainMap.put("任务管理","main_001");
         mainMap.put("航迹管理","main_002");
         mainMap.put("航点管理","main_003");
-        mainMap.put("问题点管理","main_004");
-        mainMap.put("保护地管理","main_005");
-        mainMap.put("物种查询","main_006");
+        mainMap.put("斑块管理","main_004");
         mainMap.put("消息中心","main_007");
         St4SysSc sc = new St4SysSc();
         for (String main:mainMap.keySet()) {
@@ -283,6 +282,9 @@ public class LoginController {
         map.put("base", appBase);//app基础功能
         map.put("tool", appTool);//app工具箱
         map.put("pType", appPType);//巡查类型
+
+
+
         return ResultCp.build(1000, "登录成功", map);
     }
     //-----------------------------------------------------------------移动端代码结束
@@ -368,6 +370,10 @@ public class LoginController {
             loginLog.setCreateTime(new Date());
             loginLog.setLoginName(user.getUsername());
 
+
+            HttpSession session = request.getSession();
+            session.removeAttribute("user");
+
             //记录登出日志
             loginLogService.save(loginLog);
         } catch (Exception e) {
@@ -375,10 +381,7 @@ public class LoginController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "登出异常");
 
         }
-
         return ResultVOUtil.success();
-
-
     }
 
 
@@ -406,7 +409,7 @@ public class LoginController {
 
             //List<SysUser> listParam = sysUserService.selectList( user.getUsername(),user.getType());
             if (listParam.size() > 0) {
-                if (Md5Util.md5(user.getPassword()).equals(listParam.get(0).getPassword())) {
+                   if (Md5Util.md5(user.getPassword()).equals(listParam.get(0).getPassword())) {
                     if (listParam.get(0).getEnable() != 1) {
                         return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "账号过期，请联系管理员！");
                     }
@@ -419,7 +422,11 @@ public class LoginController {
                     loginLog.setLoginIp(ipAdress);
                     loginLog.setLoginType(0);
 
-                    if (user.getType() == 0) {//pc端一小时过期 ，查询该级以下行政区划，查询该级行政区划名称级别
+
+                       HttpSession session = request.getSession();
+                       session.setAttribute("user",listParam.get(0));
+
+                       if (user.getType() == 0) {//pc端一小时过期 ，查询该级以下行政区划，查询该级行政区划名称级别
 
                         String token = getToken(listParam.get(0));
                         String uuid = UUID.randomUUID().toString().replaceAll("-", "");

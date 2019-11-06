@@ -171,9 +171,9 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     private St4ScsCn st4ScsCn;
 
 
-    @ApiModelProperty(name="st4ScsCo",value="安徽台账实体（包裹台账信息）",dataType = "object",example="")
+    @ApiModelProperty(name="rlhdGroup",value="安徽台账实体（包裹台账信息）",dataType = "object",example="")
     @TableField(exist = false)
-    private St4ScsCo st4ScsCo;
+    private RlhdGroup rlhdGroup;
 
 
     @ApiModelProperty(name="st4ScsCk",value="同步问题台账,CK088=0是原始台账，否则是核查台账",dataType = "object",example="")
@@ -183,6 +183,9 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     @ApiModelProperty(name="taskName",value="任务名称(移动端用)",dataType = "{}",required = false,example="")
     @TableField(exist = false)
     private String taskName;
+    @ApiModelProperty(name="taskSign",value="任务唯一标识(移动端用)",dataType = "{}",required = false,example="")
+    @TableField(exist = false)
+    private String taskSign;
     @ApiModelProperty(name="reserveName",value="保护区名称(移动端用)",dataType = "{}",required = false,example="")
     @TableField(exist = false)
     private String reserveName;
@@ -222,6 +225,16 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     private String geometry;
     @TableField("group_id")
     private Integer groupId;
+
+    @TableField("region")
+    private String region;
+
+    @TableField("position")
+    private String position;
+
+
+
+
     @ApiModelProperty(name="year",value="同步图斑信息返回",dataType = "{}",required = false,example="")
     @TableField(exist = false)
     private String year;

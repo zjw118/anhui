@@ -4,13 +4,17 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.entity.*;
 
 import com.gistone.service.*;
+import com.gistone.util.ReadJson;
 import com.gistone.util.Result;
 import com.gistone.util.ResultCp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,7 +58,7 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
                                             List<St4ScsCf> cfList, List<St4ScsCe> ceList) {
         //先判断基础信息表中的所有cc002是否存在，都不存在的情况下添加
         List<String> ccoo2s = ccList.stream().map(St4ScsCc::getCc002).collect(Collectors.toList());
-        QueryWrapper<St4ScsCc> queryWrapper = new QueryWrapper<>();
+        /*QueryWrapper<St4ScsCc> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("CC002", ccoo2s);
         if (ccService.count(queryWrapper) > 0) {
             return ResultCp.build(1001, "添加航点重复");
@@ -64,7 +68,7 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
         queryWrapper.eq("CC012", sailNames);
         if (ccService.count(queryWrapper) > 0) {
             return ResultCp.build(1001, "航点名称不能重复");
-        }
+        }*/
 
         Boolean cc = ccService.saveBatch(ccList);
         if (!cc) {
@@ -107,10 +111,10 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
             }
         }
         //安徽没有巡护所以注释掉这里
-       /* Boolean cf = cfService.saveBatch(cfList);
+        Boolean cf = cfService.saveBatch(cfList);
         if (!cf) {
             new RuntimeException("插入数据库入航点信息错误");
-        }*/
+        }
         Boolean ce = ceService.saveBatch(ceList);
         if (!ce) {
             new RuntimeException("插入数据库航点信息错误");
@@ -121,7 +125,7 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
     @Override
     @Transactional
     public ResultCp insertDestinationsRecordManager(St4ScsCy scsCy, List<St4ScsCg> st4ScsCgs, List<St4ScsCc> ccList, List<St4ScsCk> ckList, List<St4ScsCf> cfList, List<St4ScsCe> ceList) {
-        /*QueryWrapper<St4ScsCy> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<St4ScsCy> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("CY017", scsCy.getCy017());
         Integer cyCount = cyService.count(queryWrapper);
         // 年月日文件夹
@@ -131,15 +135,7 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
         if (cyCount > 0) {
             return ResultCp.build(1001, "添加巡护重复");
         }
-        //先判断基础信息表中的所有cc002是否存在，都不存在的情况下添加
-        if(ccList!=null&&ccList.size()>0){
-            List<String> ccoo2s = ccList.stream().map(St4ScsCc::getCc002).collect(Collectors.toList());
-            QueryWrapper<St4ScsCc> queryWrapperCC = new QueryWrapper<>();
-            queryWrapperCC.in("CC002", ccoo2s);
-            if (ccService.count(queryWrapperCC) > 0) {
-                return ResultCp.build(1001, "添加航点重复");
-            }
-        }
+
         //巡护人id
         scsCy.setCy012(scsCy.getSa001());
         Boolean cy = cyService.save(scsCy);
@@ -169,6 +165,37 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
         Boolean ck = ckService.saveBatch(ckList);
         if (!ck) {
             new RuntimeException("插入数据库航点信息错误");
+        }else {
+            St4ScsCn cnn = null;
+            List<St4ScsCn> cnList = new ArrayList<>();
+            if(ckList!=null&&ckList.size()>0){
+                for (St4ScsCk ck1:ckList) {
+                    String repairProcess=ck1.getCn010()== null?"":ck1.getCn010();
+                    if(!(ck1.getCn010()==null&&ck1.getCn004()==null)){
+                        List<String> urls = ck1.getCn004();
+                        if(urls!=null&&urls.size()>0){
+                            for (String phourl:urls) {
+                                cnn = new St4ScsCn();
+                                cnn.setCn004(phourl);
+                                cnn.setCn010(repairProcess);
+                                //这里插入台账表主键
+                                cnn.setCk001(ck1.getCk001());
+                                cnList.add(cnn);
+                            }
+                        }else{
+                            cnn = new St4ScsCn();
+                            cnn.setCn010(repairProcess);
+                            //这里插入台账表主键
+                            cnn.setCk001(ck1.getCk001());
+                            cnList.add(cnn);
+                        }
+
+                        if(!cnService.saveBatch(cnList)){
+                            new RuntimeException("插入数据库入整改照片及进展信息错误");
+                        };
+                    }
+                }
+            }
         }
         Boolean cf = cfService.saveBatch(cfList);
         if (!cf) {
@@ -177,7 +204,7 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
         Boolean ce = ceService.saveBatch(ceList);
         if (!ce) {
             new RuntimeException("插入数据库航点信息错误");
-        }*/
+        }
         return ResultCp.build(1000, "添加成功");
     }
 

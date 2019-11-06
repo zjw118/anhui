@@ -191,17 +191,16 @@
 <!--            <result column="geometry" property="geometry" />-->
 <!--            <result column="group_id" property="groupId" />-->
 <!--        </association>-->
-        <association property="st4ScsCo" javaType="com.gistone.entity.St4ScsCo">
-            <id column="co001" property="co001" />
+        <association property="rlhdGroup" javaType="com.gistone.entity.RlhdGroup">
+            <id column="id" property="id" />
             <result column="name" property="name" />
-            <result column="year" property="year" />
-            <result column="admin_region" property="adminRegion" />
             <result column="create_by" property="createBy" />
             <result column="create_date" property="createDate" />
             <result column="update_by" property="updateBy" />
             <result column="update_date" property="updateDate" />
             <result column="remark" property="remark" />
             <result column="del_flag" property="delFlag" />
+            <result column="son_count" property="sonCount" />
         </association>
         <association property="st4ScsCl" javaType="com.gistone.entity.St4ScsCl">
             <id column="CL001" property="cl001" />
@@ -2268,8 +2267,8 @@
         (SELECT MAX(CK001) AS CK001 FROM st4_scs_ck c
         WHERE CK085 = 1  GROUP BY CD004) cks ON cks.CK001 = ck2.CK001
         ) ck3 ON cd.CD001 = ck3.CD004
-        left join st4_scs_co co on co.co001 = cd.group_id
-        left join st4_po_cl_co clco on clco.co001=co.co001
+        left join rlhd_group co on co.id = cd.group_id
+        left join st4_po_cl_co clco on clco.co001=co.id
         LEFT JOIN st4_scs_cl cl ON clco.cl001=cl.CL001
         left join (
         SELECT *
@@ -2307,8 +2306,8 @@
         (SELECT MAX(CK001) AS CK001 FROM st4_scs_ck c
         WHERE CK085 = 1  GROUP BY CD004) cks ON cks.CK001 = ck2.CK001
         ) ck3 ON cd.CD001 = ck3.CD004
-        left join st4_scs_co co on co.co001 = cd.group_id
-        left join st4_po_cl_co clco on clco.co001=co.co001
+        left join rlhd_group co on co.id = cd.group_id
+        left join st4_po_cl_co clco on clco.co001=co.id
         LEFT JOIN st4_scs_cl cl ON clco.cl001=cl.CL001
         left join (
         SELECT *

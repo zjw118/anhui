@@ -68,6 +68,13 @@ public class ImageContrastServiceImpl implements ImageContrastService {
     }
 
     @Override
+    public ResultVO like(String name) {
+        Image image = new Image();
+        image.setName(name);
+        return ResultVOUtil.success(imageContrastMapper.likeList(image));
+    }
+
+    @Override
     public ResultVO delete(Integer id) {
         int res = imageContrastMapper.deleteImageContrast(id);
         if(0<res){

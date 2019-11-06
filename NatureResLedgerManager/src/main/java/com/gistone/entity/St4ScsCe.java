@@ -42,7 +42,7 @@ public class St4ScsCe implements Serializable {
     @TableField("CE003")
     private String ce003;
 
-    @ApiModelProperty(value = "文件类型")
+    @ApiModelProperty(value = "文件类型（0近景照片、1录音、2视频,4远景照片）")
     @TableField("CE004")
     private Integer ce004;
 
@@ -55,6 +55,10 @@ public class St4ScsCe implements Serializable {
     @ApiModelProperty(value = "添加人")
     @TableField("CE006")
     private Integer ce006;
+
+    @ApiModelProperty(value = "拍摄方位(东南西北)")
+    @TableField("CE007")
+    private String ce007;
 
 
 }

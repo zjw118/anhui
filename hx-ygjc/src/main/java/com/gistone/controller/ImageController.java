@@ -3,6 +3,7 @@ package com.gistone.controller;
 
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
+import com.gistone.mapper.ImageMapper;
 import com.gistone.service.ILmPointService;
 import com.gistone.service.ImageService;
 import com.gistone.util.ResultEnum;
@@ -10,6 +11,7 @@ import com.gistone.util.ResultVOUtil;
 import com.gistone.util.ShpUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -27,11 +29,19 @@ import java.util.Map;
  * @since 2019-10-18
  */
 
+
 @RestController
 @RequestMapping("/api/ygjc/image")
 public class ImageController {
     @Autowired
     private ImageService service;
+    @Autowired
+    private ImageMapper mapper;
+
+
+    @Value("${PATH}")
+    private String PATH;
+
 
     @Autowired
     private ILmPointService iLmPointService;
@@ -63,8 +73,12 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
         Image entity = service.getById(id);
-        String str = ShpUtil.readShapeFileToStr("D:" + entity.getShpurl(), 1) + "";
-        entity.setShp(net.sf.json.JSONArray.fromObject(str) + "");
+
+        String str = ShpUtil.readShapeFileToStr(PATH+entity.getShpurl(),1)+"";
+        entity.setShp(net.sf.json.JSONArray.fromObject(str)+"");
+        System.out.println(mapper.selectISt4ScsCd(id).toString());
+        entity.setList(mapper.selectISt4ScsCd(id));
+
         return ResultVOUtil.success(entity);
     }
 
