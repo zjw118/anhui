@@ -52,9 +52,15 @@
             <id column="SG001" property="sg001" />
             <result column="SG008" property="sg008" />
         </association>
-        <association property="st4SysSd" javaType="com.gistone.entity.St4SysSd">
-            <id column="SD001" property="sd001" />
-            <result column="SD008" property="sd008" />
+        <association property="sysCompany" javaType="com.gistone.entity.SysCompany">
+            <id column="PK_ID" property="pkId" />
+            <result column="COM_NAME" property="comName" />
+            <result column="COM_CODE" property="comCode" />
+            <result column="COM_LEVEL" property="comLevel" />
+            <result column="COM_F_CODE" property="comFCode" />
+            <result column="COM_F_PKID" property="comFPkid" />
+            <result column="LAT" property="lat" />
+            <result column="LON" property="lon" />
         </association>
         <association property="st4ScsCk" javaType="com.gistone.entity.St4ScsCk">
             <id column="CK001" property="ck001" />
@@ -347,7 +353,7 @@
         cn ON ck.CK001 = cn.CK001
         left join st4_scs_cl cl on cd.CL001 = cl.CL001
         left join st4_sys_sg sg on cd.SG001 = sg.SG001
-        left join st4_sys_sd sd on cd.SD001 = sd.SD001
+        left join sys_company sd on cd.SD001 = sd.PK_ID
         LEFT JOIN st4_sys_sa sa ON cd.CD010 = sa.SA001
 
         where
@@ -433,7 +439,7 @@
         GROUP BY CD004) cks ON cks.CK001 = ck2.CK001 ) ck3 ON ck3.CD004 = cd.CD004
         LEFT JOIN st4_sys_sg sg ON cd.SG001=sg.SG001
         LEFT JOIN st4_scs_cl cl ON cd.CL001=cl.CL001
-        LEFT JOIN st4_sys_sd sd ON cd.SD001 = SD.SD001
+        LEFT JOIN sys_company sd ON cd.SD001 = sd.PK_ID
         LEFT JOIN st4_scs_cn cn ON ck3.CK001 = cn.CK001
         WHERE cd.CD009 = 1 AND
 
@@ -456,7 +462,7 @@
         inner JOIN (SELECT ck2.* FROM st4_scs_ck ck2 INNER JOIN (SELECT MAX(CK001) AS CK001 FROM st4_scs_ck c WHERE CK085 = 1 AND CK088 != 0 GROUP BY CD004) cks ON cks.CK001 = ck2.CK001 ) ck3 ON cd.CD004 = ck3.CD004
         LEFT JOIN st4_sys_sg sg ON cd.SG001=sg.SG001
         LEFT JOIN st4_scs_cl cl ON cd.CL001=cl.CL001
-        LEFT JOIN st4_sys_sd sd ON cd.SD001 = SD.SD001
+        LEFT JOIN sys_company sd ON cd.SD001 = sd.PK_ID
         LEFT JOIN st4_scs_cn cn ON ck3.CK001 = cn.CK001
         WHERE cd.CD009 = 1 AND
         cdsa.CD001 IN

@@ -151,7 +151,7 @@
     order by SG005 ) a ON a.CA001 = d.`CA001`
     left join st4_scs_cs b on a.SG001 = b.SG001
     LEFT JOIN st4_scs_cb e ON e.`CB001` = a.CB001
-    LEFT JOIN st4_sys_sd c ON a.SD001 = c.SD001
+    LEFT JOIN sys_company c ON a.SD001 = c.PK_ID
     where a.SG007 = 1
     GROUP BY SG001 ) f
     <!--GROUP BY rvd_reserve_data_id-->

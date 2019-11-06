@@ -158,9 +158,9 @@ public class St4ScsCd extends BaseEntity implements Serializable {
 
 
     //行政区
-    @ApiModelProperty(name="st4SysSd",value="行政区实体",dataType = "{}",required = false,example="")
+    @ApiModelProperty(name="sysCompany",value="行政区实体",dataType = "{}",required = false,example="")
     @TableField(exist = false)
-    private St4SysSd st4SysSd;
+    private SysCompany sysCompany;
 
     @ApiModelProperty(name="st4ScsCk",value="提交问题台账对象(查询接口的整改进展塞在这个里面传递，参数名叫ck016)",dataType = "object",example="")
     @TableField(exist = false)
