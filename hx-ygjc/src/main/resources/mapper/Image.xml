@@ -8,6 +8,11 @@
         and del_flag = 1
 	</select>
 
+    <select id="selectISt4ScsCd"  parameterType="java.lang.Integer" resultType="com.gistone.entity.St4ScsCdVo">
+        SELECT * from st4_scs_cd
+        where CD009 = 1
+        and image_id = #{id}
+	</select>
 
 
 

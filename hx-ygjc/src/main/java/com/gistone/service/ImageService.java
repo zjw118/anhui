@@ -3,21 +3,20 @@ package com.gistone.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gistone.entity.Image;
+import com.gistone.util.ResultVOUtil;
 
 import java.util.List;
 import java.util.Map;
 
 /**
-    * <p>
-    * 影像数据表 服务类
-    * </p>
-    *
-    * @author zf1017@foxmail.com
-    * @since 2019-10-18
-    */
-    public interface ImageService extends IService<Image> {
-
-
+* <p>
+* 影像数据表 服务类
+* </p>
+*
+* @author zf1017@foxmail.com
+* @since 2019-10-18
+*/
+public interface ImageService extends IService<Image> {
     Map<String, Object> list(Integer pageNum, Integer pageSize, String Name);
 
     void delete(List<Integer> id);
@@ -25,4 +24,6 @@ import java.util.Map;
     void insert(String name, String url, Integer createBy,String remark);
 
     void edit(Integer id,String name,String url,Integer updateBy,String remark);
-    }
+
+
+}

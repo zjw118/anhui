@@ -425,9 +425,8 @@ public class LoginController {
                     loginLog.setLoginType(0);
 
 
-                   HttpSession session = request.getSession();
-                   session.setAttribute("user",listParam.get(0));
-
+                       HttpSession session = request.getSession();
+                       session.setAttribute("user",listParam.get(0));
 
                        if (user.getType() == 0) {//pc端一小时过期 ，查询该级以下行政区划，查询该级行政区划名称级别
 

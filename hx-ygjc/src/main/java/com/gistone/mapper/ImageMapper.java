@@ -2,6 +2,9 @@ package com.gistone.mapper;
 
 import com.gistone.entity.Image;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.gistone.entity.St4ScsCdVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,5 +16,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface ImageMapper extends BaseMapper<Image> {
     Image getImageById(Integer id);
+    List<St4ScsCdVo> selectISt4ScsCd(Integer id);
 
 }

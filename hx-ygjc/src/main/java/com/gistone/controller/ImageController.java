@@ -4,6 +4,7 @@ package com.gistone.controller;
 import com.alibaba.fastjson.JSON;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
+import com.gistone.mapper.ImageMapper;
 import com.gistone.service.ImageService;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultVOUtil;
@@ -34,6 +35,9 @@ import java.util.Map;
 public class ImageController {
     @Autowired
     private ImageService service;
+    @Autowired
+    private ImageMapper mapper;
+
 
     @Value("${PATH}")
     private String PATH;
@@ -68,12 +72,10 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
         Image entity = service.getById(id);
-        
-        System.out.println(PATH);
         String str = ShpUtil.readShapeFileToStr(PATH+entity.getShpurl(),1)+"";
-        System.out.println(str);
-
         entity.setShp(net.sf.json.JSONArray.fromObject(str)+"");
+        System.out.println(mapper.selectISt4ScsCd(id).toString());
+        entity.setList(mapper.selectISt4ScsCd(id));
         return ResultVOUtil.success(entity);
     }
 

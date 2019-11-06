@@ -10,6 +10,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -48,6 +49,8 @@ public class Image extends Model<Image> {
 
     @TableField(exist = false)
     private String shp;
+    @TableField(exist = false)
+    private List list;
 
 
 
