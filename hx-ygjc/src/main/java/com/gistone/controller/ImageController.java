@@ -1,18 +1,19 @@
 package com.gistone.controller;
 
 
-import com.alibaba.fastjson.JSON;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
+import com.gistone.service.ILmPointService;
 import com.gistone.service.ImageService;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultVOUtil;
 import com.gistone.util.ShpUtil;
-import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +32,9 @@ import java.util.Map;
 public class ImageController {
     @Autowired
     private ImageService service;
+
+    @Autowired
+    private ILmPointService iLmPointService;
 
     @PostMapping("/list")
     public ResultVO getList(@RequestBody Map<String, Object> paramsMap) {
@@ -52,8 +56,6 @@ public class ImageController {
     }
 
 
-
-
     @PostMapping("/detail")
     public ResultVO getById(@RequestBody Map<String, Object> params) {
         Integer id = (Integer) params.get("id");
@@ -61,8 +63,8 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
         Image entity = service.getById(id);
-        String str = ShpUtil.readShapeFileToStr("D:"+entity.getShpurl(),1)+"";
-        entity.setShp(net.sf.json.JSONArray.fromObject(str)+"");
+        String str = ShpUtil.readShapeFileToStr("D:" + entity.getShpurl(), 1) + "";
+        entity.setShp(net.sf.json.JSONArray.fromObject(str) + "");
         return ResultVOUtil.success(entity);
     }
 
@@ -75,13 +77,13 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
         }
         String name = (String) params.get("name");
-        if(StringUtils.isBlank(name)){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"名称不能为空");
+        if (StringUtils.isBlank(name)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "名称不能为空");
         }
 
         String url = (String) params.get("url");
-        if(StringUtils.isBlank(url)){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"地址不能为空");
+        if (StringUtils.isBlank(url)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "地址不能为空");
         }
 
         String remark = (String) params.get("remark");
@@ -91,11 +93,11 @@ public class ImageController {
         }*/
         //判断添加人是否为空
         Integer createBy = (Integer) params.get("createBy");
-        if(createBy==null||createBy<=0){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"创建人不能为空");
+        if (createBy == null || createBy <= 0) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "创建人不能为空");
         }
 
-        service.insert(name,url,createBy,remark);
+        service.insert(name, url, createBy, remark);
         return ResultVOUtil.success();
     }
 
@@ -125,31 +127,102 @@ public class ImageController {
         }
 
         Integer id = (Integer) params.get("id");
-        if(id==null||id<=0){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"记录id不能为空");
+        if (id == null || id <= 0) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "记录id不能为空");
         }
 
         String name = (String) params.get("name");
-        if(StringUtils.isBlank(name)){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"名称不能为空");
+        if (StringUtils.isBlank(name)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "名称不能为空");
         }
 
         String url = (String) params.get("url");
-        if(StringUtils.isBlank(url)){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"地址不能为空");
+        if (StringUtils.isBlank(url)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "地址不能为空");
         }
 
         Integer updateBy = (Integer) params.get("updateBy");
-        if(updateBy==null||updateBy<=0){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"更新人不能为空");
+        if (updateBy == null || updateBy <= 0) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "更新人不能为空");
         }
         String remark = (String) params.get("remark");
 
         //判断更新人加人是否为空
-        service.edit(id,name,url,updateBy,remark);
+        service.edit(id, name, url, updateBy, remark);
         return ResultVOUtil.success();
     }
 
+    /**
+     * @param
+     * @return com.gistone.VO.ResultVO
+     * @description:人类活动解译按类型统计面积
+     * @author zf1017@foxmail.com
+     * @motto: Talk is cheap,show me the code
+     * @date 2019/11/6 0006 10:23
+     */
+    @PostMapping("/getRlhdTotal")
+    public ResultVO getRlhdTotal() {
+        List<Map<String, Object>> result = service.getRlhdTotal();
+        return ResultVOUtil.success(result);
+    }
+
+    /**
+     * @param paramsMap
+     * @return com.gistone.VO.ResultVO
+     * @description:核查点数量统计
+     * @author zf1017@foxmail.com
+     * @motto: Talk is cheap,show me the code
+     * @date 2019/11/6 0006 9:54
+     */
+    @PostMapping("/getPointTotal")
+    public ResultVO getPointTotal(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
+        if (dataParam == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+
+        //获取当前日期和前十五天日期
+        LocalDate currentTime = LocalDate.now();
+        LocalDate beforeTime = currentTime.minusDays(14);
+
+
+        String code = (String) dataParam.get("code");
+        /*if (StringUtils.isBlank(code)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "行政区划号不能为空");
+        }*/
+
+        String codes = null;
+        if (StringUtils.isNotBlank(code)) {
+            Integer level = iLmPointService.getLevelByCode(code);
+            if (level != null && level > 0) {
+                if (level == 1 && code.length() > 3) {
+                    codes = code.substring(0, 2);
+                } else if (level == 2 && code.length() > 5) {
+                    codes = code.substring(0, 4);
+                } else {
+                    codes = code;
+                }
+            } else {
+                codes = code;
+            }
+        }
+        Map<String, Object> result = new HashMap<>();
+        //获取
+        //获取界桩统计
+        List<Map<String, Object>> markerList = service.getCount(codes, currentTime, beforeTime);
+
+
+        int count = service.getBeforeCount(codes, beforeTime);
+
+
+        //获取调查表统计
+//        List<Map<String, Object>> surveyList = totalService.getSurveyCount(codes, currentTime, beforeTime);
+        result.put("markerCount", markerList);
+        result.put("beforeMarkerCount", count);
+
+        return ResultVOUtil.success(result);
+    }
 
 
 }

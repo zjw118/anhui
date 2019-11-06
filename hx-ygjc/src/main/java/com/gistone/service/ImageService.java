@@ -4,6 +4,7 @@ package com.gistone.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gistone.entity.Image;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -25,4 +26,10 @@ import java.util.Map;
     void insert(String name, String url, Integer createBy,String remark);
 
     void edit(Integer id,String name,String url,Integer updateBy,String remark);
+
+    List<Map<String, Object>> getCount(String code, LocalDate currentTime, LocalDate beforeTime);
+
+    int getBeforeCount(String code,LocalDate beforeTime);
+
+    List<Map<String, Object>> getRlhdTotal();
     }

@@ -1,7 +1,12 @@
 package com.gistone.mapper;
 
-import com.gistone.entity.Image;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.gistone.entity.Image;
+import org.apache.ibatis.annotations.Param;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -14,4 +19,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface ImageMapper extends BaseMapper<Image> {
     Image getImageById(Integer id);
 
+    List<Map<String,Object>> selectCount(@Param("code") String code, @Param("currentTime") LocalDate currentTime, @Param("beforeTime") LocalDate beforeTime);
+
+    int selectBeforeCount(@Param("code") String code, @Param("beforeTime") LocalDate beforeTime);
+
+    int getLastDataId();
+
+    List<Map<String,Object>> getAreaGroupByType(int id);
 }
