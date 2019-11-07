@@ -10,8 +10,11 @@ import com.gistone.service.ImageService;
 import com.gistone.util.PageBean;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultVOUtil;
+import com.gistone.util.ShpUtil;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +33,10 @@ public class ImageContrastController {
     private ImageContrastService imageContrastService;
     @Autowired
     private ImageService imageService;
+    @Value("${PATH}")
+    private String PATH;
+
+
 
     /**
      * 添加对比
@@ -116,14 +123,69 @@ public class ImageContrastController {
         if (params==null) return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"data结构");
         if (null==params.get("id"))return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"id不能为空");
 
+        //详情
         ImageContrast imageContrast = imageContrastService.getById(Integer.valueOf(params.get("id")+""));
         QueryWrapper<Image> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("id",imageContrast.getImage1Id()).or().eq("id",imageContrast.getImage2Id());
-        List<Image> entity = imageService.list(queryWrapper);
+        queryWrapper.eq("id",imageContrast.getImage1Id());
+        Image entity1 = imageService.getOne(queryWrapper);
+        QueryWrapper<Image> queryWrapper2 = new QueryWrapper<>();
+        queryWrapper2.eq("id",imageContrast.getImage2Id());
+        Image entity2 = imageService.getOne(queryWrapper2);
+
+
+        //数据变化对比
+        JSONArray jsonArray1 = JSONArray.fromObject(imageContrast.getData1());
+        JSONArray jsonArray2 = JSONArray.fromObject(imageContrast.getData2());
+
+
+        int area = 0;
+        int Shape_area = 0;
+        int area_1 = 0;
+        int Join_Count = 0;
+        int area_12 = 0;
+        int FID__file2 = 0;
+        int FID__file1 = 0;
+        int zhoumianbi = 0;
+        int center_12 = 0;
+        int Shape_leng = 0;
+
+
+        for (Object o : jsonArray1) {
+            JSONObject jsonObject = JSONObject.fromObject(o);
+            Object attributes = jsonObject.get("attributes");
+            JSONObject data = JSONObject.fromObject(attributes);
+
+            area += Integer.valueOf(data.get("area")+"");
+            Shape_area += Integer.valueOf(data.get("Shape_area")+"");
+            area_1 += Integer.valueOf(data.get("area_1")+"");
+            Join_Count += Integer.valueOf(data.get("Join_Count")+"");
+            area_12 += Integer.valueOf(data.get("area_12")+"");
+            FID__file2 += Integer.valueOf(data.get("FID__file2")+"");
+            FID__file1 += Integer.valueOf(data.get("FID__file1")+"");
+            zhoumianbi += Integer.valueOf(data.get("zhoumianbi")+"");
+            center_12 += Integer.valueOf(data.get("center_12")+"");
+            Shape_leng += Integer.valueOf(data.get("Shape_leng")+"");
+
+        }
+        for (Object o : jsonArray2) {
+            JSONObject jsonObject = JSONObject.fromObject(o);
+            Object attributes = jsonObject.get("attributes");
+            JSONObject data = JSONObject.fromObject(attributes);
+
+        }
+
+
+
+
+
 
         Map map = new HashMap();
         map.put("imageContrast",imageContrast);
-        map.put("image",entity);
+        map.put("image1",entity1);
+        map.put("image2",entity2);
+
+
+
 
         return ResultVOUtil.success(map);
     }
