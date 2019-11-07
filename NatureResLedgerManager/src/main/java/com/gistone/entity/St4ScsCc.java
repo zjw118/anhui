@@ -14,6 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -102,7 +103,9 @@ public class St4ScsCc extends BaseEntity implements Serializable {
     private  St4ScsCk st4ScsCk;
 
 
-
+    @ApiModelProperty(value = "航点附件")
+    @TableField(exist = false)
+    private List<St4ScsCe> st4ScsCe;
 
 
     /**
