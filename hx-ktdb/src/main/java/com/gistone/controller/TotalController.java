@@ -334,6 +334,11 @@ public class TotalController {
         return ResultVOUtil.success(result);
     }*/
 
+    public static void main(String[] args) {
+        int a = 2560;
+        System.out.println(a/1000);
+    }
+
 
 
 
