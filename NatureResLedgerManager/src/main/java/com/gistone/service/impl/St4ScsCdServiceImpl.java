@@ -266,9 +266,13 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             iterpretation.setCd011(LocalDateTime.now());
             st4ScsCdMapper.insert(iterpretation);
         }
-        //执行写入shp文件操作，返回的地址插入到影像表中
+
+
+        //写入shp文件
         String url = PathUtile.getRandomPath(PATH+"/epr/image/","x.shp");
         String res = ShpUtil.handleWebData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+""),url);
+
+        //插入影像表
         if("0".equals(res)){
             Image image = new Image();
             image.setId(imageId);

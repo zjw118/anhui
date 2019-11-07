@@ -417,12 +417,13 @@ public class ShpUtil {
                 }
 
                 //这里按顺序添加属性
-
                 featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("ObjectID"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("area"));
-                //featureBuilder.add(jobj.getJSONObject("attributes").getString("center"));
-                featureBuilder.set("center", jobj.getJSONObject("attributes").getString("center"));
-//				featureBuilder.add(jobj.getJSONObject("attributes").getString("peopleNum"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("center"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("name"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("position"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("region"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("type"));
                 SimpleFeature feature = featureBuilder.buildFeature(null);
                 features.add(feature);
             }
