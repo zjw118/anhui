@@ -12,6 +12,7 @@ import com.gistone.util.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.omg.CORBA.OBJ_ADAPTER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -97,42 +98,79 @@ public class CheckNrledgerController {
 
     }
 
-
-
-
     /**
-     * 台账删除2
-     * @param request
+     * 人类活动台账管理新增
      * @return
      */
-    /*@ApiOperation(value="台账删除2",notes = "台账删除2",response = St4ScsCk.class)
-    @RequestMapping(value="/deleteStage2",method = RequestMethod.POST)
-    public Result deleteLedger2(@RequestBody @ApiParam(name="台账删除2", value="json格式", required=true) CheckLedger checkLedger,
-                                HttpServletRequest request,
-                                HttpServletResponse response) {
-       *//* if(checkLedger.getClId()<1){
-            return  Result.build(1001,"主键clId"+ ResultMsg.MSG_1001);
+    @ApiOperation(value="(安徽用)人类活动台账管理新增",notes = "人类活动台账管理新增",response = St4ScsCk.class)
+    @RequestMapping(value="/insertHumanStage",method = RequestMethod.POST)
+    public Result insertHumanStage(@RequestBody @ApiParam(name="人类活动台账管理新增", value="json格式", required=true)
+                                           Swagger<St4ScsCkrl> swagger) {
+        St4ScsCkrl ckl = swagger.getData();
+        if(!ObjectUtils.isNotNullAndEmpty(ckl.getCd004())){
+            return  Result.build(1001,"问题点编号"+ ResultMsg.MSG_1001);
         }
-        return  icheckLedgerService.deleteLedger(checkLedger.getClId());*//*
+        if(iSt4ScsCkrlService.save(ckl)){
+            return Result.build(1000,"保存成功");
+        }else {
+            return Result.build(1003,"服务器处理结果失败");
+        }
+
     }
-*/
+
+    /**
+     * 人类活动台账管理修改
+     * @return
+     */
+    @ApiOperation(value="(安徽用)人类活动台账管理修改",notes = "人类活动台账管理修改",response = St4ScsCk.class)
+    @RequestMapping(value="/updateHumanStage",method = RequestMethod.POST)
+    public Result updateHumanStage(@RequestBody @ApiParam(name="人类活动台账管理修改", value="json格式", required=true)
+                                           Swagger<St4ScsCkrl> swagger) {
+        St4ScsCkrl ckl = swagger.getData();
+        if(!ObjectUtils.isNotNullAndEmpty(ckl.getCk001())){
+            return  Result.build(1001,"主键"+ ResultMsg.MSG_1001);
+        }
+        if(iSt4ScsCkrlService.updateById(ckl)){
+            return Result.build(1000,"修改成功");
+        }else {
+            return Result.build(1003,"服务器处理结果失败");
+        }
+
+    }
+    /**
+     * 人类活动台账管理删除
+     * @return
+     */
+    @ApiOperation(value="(安徽用)人类活动台账管理删除",notes = "人类活动台账管理删除",response = St4ScsCk.class)
+    @RequestMapping(value="/deleteHumanStage",method = RequestMethod.POST)
+    public Result deleteHumanStage(@RequestBody @ApiParam(name="人类活动台账管理列表pageSize和pageNumber必传其余的查询项是非必传", value="json格式", required=true)
+                                            Swagger<St4ScsCkrl> swagger) {
+        St4ScsCkrl ckl = swagger.getData();
+        if(!ObjectUtils.isNotNullAndEmpty(ckl.getCk001())){
+            return  Result.build(1001,"主键"+ ResultMsg.MSG_1001);
+        }
+        ckl.setCk085(0);
+        if(iSt4ScsCkrlService.updateById(ckl)){
+            return Result.build(1000,"删除成功");
+        }else {
+            return Result.build(1003,"服务器处理结果失败");
+        }
+
+    }
+
     @ApiOperation(value="(安徽用)人类活动台账管理列表",notes = "人类活动台账管理列表人类活动台账管理列表",response = St4ScsCkrl.class)
     @RequestMapping(value="/listHumanStage",method = RequestMethod.POST)
-    public Result listHkyStage(@Validated@RequestBody @ApiParam(name="人类活动台账管理列表pageSize和pageNumber必传其余的查询项是非必传", value="json格式", required=true)
-                                     Swagger<St4ScsCkrl> swagger,BindingResult blindResult,
+    public Result listHkyStage(@RequestBody @ApiParam(name="人类活动台账管理列表pageSize和pageNumber必传其余的查询项是非必传", value="json格式", required=true)
+                                     Swagger<St4ScsCkrl> swagger,
                              HttpServletRequest request) {
-        if(blindResult.getErrorCount()>0){
-            List<FieldError> errorFields = blindResult.getFieldErrors();
-            for (FieldError fieldError:errorFields) {
-                return Result.build(1001,fieldError.getDefaultMessage());
-            }
-        }
+
         St4ScsCkrl checkLedger = swagger.getData();
 
-
-        /*if(!ObjectUtils.isNotNullAndEmpty(pageNumber)||!ObjectUtils.isNotNullAndEmpty(pageSize)){
+        Object pageNumber=checkLedger.getPageNumber();
+        Object pageSize=checkLedger.getPageSize();
+        if(!ObjectUtils.isNotNullAndEmpty(pageNumber)||!ObjectUtils.isNotNullAndEmpty(pageSize)){
             return  Result.build(1001,"pageNumber，pageSize"+ ResultMsg.MSG_1001);
-        }*/
+        }
         return iSt4ScsCkrlService.listHumanStage(checkLedger);
 
     }
@@ -215,16 +253,13 @@ public class CheckNrledgerController {
         Result result= new Result();
         String token = request.getHeader("token");// 从 http 请求头中取出 token
         try{
-            String userId =JWT.decode(token).getAudience().get(0);
+
             St4SysSa seUser = new St4SysSa();
-            seUser.setSa001(Integer.valueOf(userId));
-            if(ObjectUtils.isNotNullAndEmpty(request.getParameter("taskId"))){
-                Integer taskId = Integer.valueOf(request.getParameter("taskId"));
-                MultipartHttpServletRequest req = (MultipartHttpServletRequest) request;
-                Map<String, MultipartFile> items = req.getFileMap();
-                List<Integer> uidList = new ArrayList<>();
-                return icheckLedgerService.importExcelCommon(items,seUser,taskId,uidList);
-            }
+            seUser.setSa001(1);
+            MultipartHttpServletRequest req = (MultipartHttpServletRequest) request;
+            Map<String, MultipartFile> items = req.getFileMap();
+            List<Integer> uidList = new ArrayList<>();
+            return iSt4ScsCkrlService.importHumanStage(items,seUser);
         }catch (Exception e){
             result.setStatus(1000);
             result.setMsg("无token，请重新登录");

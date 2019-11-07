@@ -1,6 +1,6 @@
 package com.gistone.service.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.entity.St4ScsCy;
@@ -8,21 +8,18 @@ import com.gistone.entity.St4SysSa;
 import com.gistone.mapper.St4ScsCyMapper;
 import com.gistone.mapper.St4SysSaMapper;
 import com.gistone.service.ISt4ScsCyService;
+import com.gistone.util.ObjectUtils;
 import com.gistone.util.Result;
 import com.gistone.util.ResultMsg;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
  * <p>
  * 巡护记录表 服务实现类
  * </p>
- *
  * @author zhaojingwei
  * @since 2019-08-17
  */
@@ -44,6 +41,8 @@ public class St4ScsCyServiceImpl extends ServiceImpl<St4ScsCyMapper, St4ScsCy> i
 
         return result;
     }
+
+
     @Override
     public Result listRecord(St4ScsCy sy, St4SysSa seUser){
 
@@ -59,44 +58,38 @@ public class St4ScsCyServiceImpl extends ServiceImpl<St4ScsCyMapper, St4ScsCy> i
             }
         }
 
-      /*  if(ObjectUtils.isNotNullAndEmpty(sy.getStrTime())){
+        if(ObjectUtils.isNotNullAndEmpty(sy.getStrTime())){
             sy.setStrTime(sy.getStrTime()+" 00:00:00");
         }
         if(ObjectUtils.isNotNullAndEmpty(sy.getEndTime())){
             sy.setEndTime(sy.getEndTime()+" 23:59:59");
-        }*/
+        }
         Page<St4ScsCy> page = new Page<>(sy.getPageNumber(),sy.getPageSize());
-        IPage<St4ScsCy> list = st4ScsCyMapper.listSailRecord(page,sy);
+
+        List<St4ScsCy> list = st4ScsCyMapper.listSailRecord(sy);
+        int size = sy.getPageSize();//每页条数
+        int number = sy.getPageNumber();//开始索引
+        int numberReal =0;
+        if(0==number){
+            numberReal = number;
+        }else{
+            numberReal= (number-1)*size;
+        }
+        sy.setPageNumber(numberReal);
+        sy.setPageSize(size);
+        List<St4ScsCy> sylist = st4ScsCyMapper.listSailRecord(sy);
+        sy.setPageNumber(null);
+        sy.setPageSize(null);
         Result result = new Result();
         result.setStatus(1000);
-        result.setTotal((int)list.getTotal());
-        result.setPage((int)list.getPages());
+        Integer tsize =st4ScsCyMapper.listSailRecord(sy).size();
+        result.setTotal(tsize);
+        result.setPage((int)Math.ceil((double)tsize/size));
         result.setMsg("加载"+ResultMsg.MSG_1000);
-        result.setRows(list.getRecords());
-
+        result.setRows(list);
         return result;
     }
-    @Override
-    public Result listPatrol(St4ScsCy st4ScsCy)throws Exception{
-        String kssj = st4ScsCy.getKssj();
-        String jssj = st4ScsCy.getJssj();
-        if(!StringUtils.isBlank(kssj)){
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            st4ScsCy.setKssj(simpleDateFormat.format(new Date(Long.valueOf(kssj))));
-        }
-        if(!StringUtils.isBlank(jssj)){
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            st4ScsCy.setJssj(simpleDateFormat.format(new Date(Long.valueOf(jssj))));
-        }
-        List list = st4ScsCyMapper.selectPoList(st4ScsCy);
-//        Result result = new Result();
-//        result.setRows(list);
-//        result.setTotal(zys);
-//        result.setPage(pageNumber);
-//        result.setMsg("查询成功");
-//        result.setStatus(1000);
-        return Result.build(1000,"查询成功",list);
-    }
+
 
     @Override
     public Result listPatrolBySA001(St4ScsCy st4ScsCy) throws Exception {

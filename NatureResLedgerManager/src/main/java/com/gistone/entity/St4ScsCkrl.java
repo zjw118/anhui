@@ -1,16 +1,16 @@
 package com.gistone.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.time.LocalDate;
-import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -25,7 +25,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @ApiModel(value="St4ScsCkrl对象", description="")
 public class St4ScsCkrl  extends  BaseEntity implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "唯一主键")
@@ -42,7 +41,7 @@ public class St4ScsCkrl  extends  BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "保护地数据id")
     @TableField("SG001")
-    private Integer sg001;
+    private String sg001;
 
     @ApiModelProperty(value = "所在功能区")
     @TableField("CK005")
@@ -82,7 +81,7 @@ public class St4ScsCkrl  extends  BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "是否违法违规")
     @TableField("CK014")
-    private Integer ck014;
+    private String ck014;
 
     @ApiModelProperty(value = "问题描述")
     @TableField("CK015")
@@ -110,7 +109,7 @@ public class St4ScsCkrl  extends  BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "有无环评手续(1是 0无)")
     @TableField("CK021")
-    private Integer ck021;
+    private String ck021;
 
     @ApiModelProperty(value = "环评手续批复及验收文号")
     @TableField("CK022")
@@ -118,7 +117,7 @@ public class St4ScsCkrl  extends  BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "有无林业相关审批手续(1是 0无)")
     @TableField("CK023")
-    private Integer ck023;
+    private String ck023;
 
     @ApiModelProperty(value = "林业手续批复及验收文号")
     @TableField("CK024")
@@ -126,7 +125,7 @@ public class St4ScsCkrl  extends  BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "有无养殖业相关审批手续(1是 0无)")
     @TableField("CK025")
-    private Integer ck025;
+    private String ck025;
 
     @ApiModelProperty(value = "养殖业手续批复及验收文号")
     @TableField("CK026")
@@ -134,7 +133,7 @@ public class St4ScsCkrl  extends  BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "有无发改部门相关手续(1是 0无)")
     @TableField("CK027")
-    private Integer ck027;
+    private String ck027;
 
     @ApiModelProperty(value = "发改部门相关手续")
     @TableField("CK028")
@@ -142,7 +141,7 @@ public class St4ScsCkrl  extends  BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "有无规划相关审批手续(1是 0无)")
     @TableField("CK029")
-    private Integer ck029;
+    private String ck029;
 
     @ApiModelProperty(value = "规划手续批复及验收文号")
     @TableField("CK030")
@@ -150,7 +149,7 @@ public class St4ScsCkrl  extends  BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "有无旅游相关手续(1是 0无)")
     @TableField("CK031")
-    private Integer ck031;
+    private String ck031;
 
     @ApiModelProperty(value = "旅游手续批复及验收文号")
     @TableField("CK032")
@@ -158,7 +157,7 @@ public class St4ScsCkrl  extends  BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "有无财政部门相关资金手续(1是 0无)")
     @TableField("CK033")
-    private Integer ck033;
+    private String ck033;
 
     @ApiModelProperty(value = "财政部门相关资金手续批复文号")
     @TableField("CK034")
@@ -166,7 +165,7 @@ public class St4ScsCkrl  extends  BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "有无工商营业执照(1是 0无)")
     @TableField("CK035")
-    private Integer ck035;
+    private String ck035;
 
     @ApiModelProperty(value = "营业执照注册号或统一社会信用代码")
     @TableField("CK036")
@@ -174,7 +173,7 @@ public class St4ScsCkrl  extends  BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "有无其他相关审批手续或行政许可手续(1是 0无)")
     @TableField("CK037")
-    private Integer ck037;
+    private String ck037;
 
     @ApiModelProperty(value = "其他相关审批手续或行政许可手续(绿盾使用)")
     @TableField("CK038")
@@ -182,7 +181,7 @@ public class St4ScsCkrl  extends  BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "是否处罚(1是 0否)")
     @TableField("CK039")
-    private Integer ck039;
+    private String ck039;
 
     @ApiModelProperty(value = "处罚方式")
     @TableField("CK040")
@@ -194,7 +193,7 @@ public class St4ScsCkrl  extends  BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "整改时限")
     @TableField("CK042")
-    private LocalDate ck042;
+    private String ck042;
 
     @ApiModelProperty(value = "整改措施")
     @TableField("CK043")
@@ -218,7 +217,7 @@ public class St4ScsCkrl  extends  BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "核查时间")
     @TableField("CK048")
-    private LocalDateTime ck048;
+    private String ck048;
 
     @ApiModelProperty(value = "核查人（必填）")
     @TableField("CK049")
@@ -230,7 +229,7 @@ public class St4ScsCkrl  extends  BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "参与核查人数")
     @TableField("CK051")
-    private Integer ck051;
+    private String ck051;
 
     @ApiModelProperty(value = "填表人")
     @TableField("CK052")
@@ -346,23 +345,23 @@ public class St4ScsCkrl  extends  BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "是否四类聚焦(1是 0否)")
     @TableField("CK080")
-    private Integer ck080;
+    private String ck080;
 
     @ApiModelProperty(value = "是否巡查台账(1是 0否)")
     @TableField("CK081")
-    private Integer ck081;
+    private String ck081;
 
     @ApiModelProperty(value = "是否市级巡查(1是 0否)")
     @TableField("CK082")
-    private Integer ck082;
+    private String ck082;
 
     @ApiModelProperty(value = "是否国家点(1是 0否)")
     @TableField("CK083")
-    private Integer ck083;
+    private String ck083;
 
     @ApiModelProperty(value = "是否重点台账(1是 0否)")
     @TableField("CK084")
-    private Integer ck084;
+    private String ck084;
 
     @ApiModelProperty(value = "删除状态  0已删除 1未删除 默认1未删除")
     @TableField("CK085")

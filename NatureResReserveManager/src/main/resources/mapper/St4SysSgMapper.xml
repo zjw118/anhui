@@ -472,7 +472,7 @@
          ) a
         left join st4_scs_cs b on a.SG001 = b.SG001
         LEFT JOIN st4_sys_sn e ON e.`SN001` = a.CB001
-        left join st4_sys_sm d ON a.SM001 = d.`CA001`
+        left join st4_sys_sm d ON a.CA001 = d.`SM001`
         LEFT JOIN sys_company c ON a.SD001 = c.PK_ID
         where a.SG007 = 1
         GROUP BY SG001 ORDER BY CONVERT(SG008 USING gbk) COLLATE gbk_chinese_ci ASC

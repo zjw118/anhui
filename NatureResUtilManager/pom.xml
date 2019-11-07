@@ -10,6 +10,18 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <artifactId>NatureResUtilManager</artifactId>
+    <repositories>
+        <!-- 阿里云镜像配置 -->
+        <repository>
+            <id>aliyun</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        </repository>
+        <!--<repository>-->
+        <!--<id>osgeo</id>-->
+        <!--<name>Open Source Geospatial Foundation Repository</name>-->
+        <!--<url>http://download.osgeo.org/webdav/geotools/</url>-->
+        <!--</repository>-->
+    </repositories>
     <dependencies>
 
 
@@ -31,34 +43,40 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.9</version>
+            <scope>compile</scope>
+        </dependency>
 
-       <!--  <dependency>
-                  <groupId>org.apache.poi</groupId>
-                  <artifactId>poi-ooxml-schemas</artifactId>
-                  <exclusions>
-                      <exclusion>
-                          <groupId>xerces</groupId>
-                          <artifactId>xercesImpl</artifactId>
-                      </exclusion>
-                  </exclusions>
-                  <version>3.7</version>
-              </dependency>
-              <dependency>
-                  <groupId>org.apache.poi</groupId>
-                  <artifactId>poi</artifactId>
-                  <version>3.7</version>
-              </dependency>
-              <dependency>
-                  <groupId>org.apache.poi</groupId>
-                  <artifactId>poi-scratchpad</artifactId>
-                  <version>3.7</version>
-                  <optional>true</optional>
-              </dependency>
-              <dependency>
-                  <groupId>org.apache.poi</groupId>
-                  <artifactId>poi-ooxml-schemas</artifactId>
-                  <version>3.7</version>
-              </dependency>-->
+        <!--  <dependency>
+                   <groupId>org.apache.poi</groupId>
+                   <artifactId>poi-ooxml-schemas</artifactId>
+                   <exclusions>
+                       <exclusion>
+                           <groupId>xerces</groupId>
+                           <artifactId>xercesImpl</artifactId>
+                       </exclusion>
+                   </exclusions>
+                   <version>3.7</version>
+               </dependency>
+               <dependency>
+                   <groupId>org.apache.poi</groupId>
+                   <artifactId>poi</artifactId>
+                   <version>3.7</version>
+               </dependency>
+               <dependency>
+                   <groupId>org.apache.poi</groupId>
+                   <artifactId>poi-scratchpad</artifactId>
+                   <version>3.7</version>
+                   <optional>true</optional>
+               </dependency>
+               <dependency>
+                   <groupId>org.apache.poi</groupId>
+                   <artifactId>poi-ooxml-schemas</artifactId>
+                   <version>3.7</version>
+               </dependency>-->
 
 
     </dependencies>
