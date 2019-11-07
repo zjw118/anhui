@@ -284,8 +284,8 @@
             ON cc.CC008=sa.SA001
             LEFT JOIN st4_sys_sg sg
             ON sa.SA001=sg.SG001
-            LEFT JOIN st4_sys_sd sd
-            on sg.SD001=sd.SD001
+            LEFT JOIN sys_company sd
+            on sg.sd001=sd.PK_ID
             WHERE cc.CC011 = 1
             and sa.SA007 = 1
             and sg.SG007 = 1
@@ -317,8 +317,8 @@
         ON cc.CC008=sa.SA001
         LEFT JOIN st4_sys_sg sg
         ON sa.SA001=sg.SG001
-        LEFT JOIN st4_sys_sd sd
-        on sg.SD001=sd.SD001
+        LEFT JOIN sys_company sd
+        on sg.SD001=sd.PK_ID
         WHERE cc.CC011 = 1
         and sa.SA007 = 1
         and sg.SG007 = 1
@@ -341,8 +341,8 @@
         ON cc.CC008=sa.SA001
         LEFT JOIN st4_sys_sg sg
         ON sa.SA001=sg.SG001
-        LEFT JOIN st4_sys_sd sd
-        on sg.SD001=sd.SD001
+        LEFT JOIN sys_company sd
+        on sg.SD001=sd.PK_ID
         WHERE cc.CC011 = 1
         and sa.SA007 = 1
         and sg.SG007 = 1

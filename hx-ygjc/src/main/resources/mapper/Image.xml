@@ -14,7 +14,61 @@
         and image_id = #{id}
 	</select>
 
+    <select id="selectCount" resultType="java.util.Map">
+        SELECT
+           COUNT(*) as sum,
+	      substring(CK086, 6, 5) AS date
+        FROM
+            `st4_scs_ck`
+        WHERE
 
+         CK086 &lt;= #{currentTime}
+        AND CK086 &gt;= #{beforeTime}
+
+        GROUP BY
+        LEFT (CK086, 10)
+    </select>
+
+    <select id="selectBeforeCount" resultType="java.lang.Integer">
+         SELECT
+           COUNT(*)
+        FROM
+            `st4_scs_ck`
+        WHERE
+           CK086 &lt;= #{beforeTime}
+
+    </select>
+
+    <select id="getLastDataId" resultType="java.lang.Integer">
+        SELECT
+            s.image_id
+        FROM
+            (
+                SELECT
+                    COUNT(*),
+                    image_id
+                FROM
+                    `st4_scs_cd` a
+                GROUP BY
+                    image_id
+            ) s
+        LEFT JOIN image b ON s.image_id = b.id
+        ORDER BY
+            b.create_date
+        LIMIT 1
+    </select>
+
+    <select id="getAreaGroupByType" resultType="java.util.Map">
+        SELECT
+            SUM(area) area,
+            active_type
+        FROM
+            st4_scs_cd
+        WHERE
+            image_id = #{id}
+        GROUP BY
+            active_type
+    </select>
 
 
 

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.gistone.entity.St4SysSa;
 import com.gistone.entity.St4SysSg;
 import com.gistone.util.Result;
+import com.gistone.util.ResultCp;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -30,9 +31,9 @@ public interface ISt4SysSgService extends IService<St4SysSg> {
 
     Result delete(St4SysSg data);
 
-    Result appList(St4SysSg data);
+    ResultCp appList(St4SysSg data);
 
-    Result appListToPoint(St4SysSg data);
+    ResultCp appListToPoint(St4SysSg data);
 
     Result getDataById(St4SysSg data, HttpServletRequest request) throws IOException;
     //查询出当前人员已授权的保护地边界

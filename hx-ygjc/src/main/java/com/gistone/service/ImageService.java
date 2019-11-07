@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.gistone.entity.Image;
 import com.gistone.util.ResultVOUtil;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -26,4 +27,13 @@ public interface ImageService extends IService<Image> {
     void edit(Integer id,String name,String url,Integer updateBy,String remark);
 
 
+    List<Map<String, Object>> getCount(String code, LocalDate currentTime, LocalDate beforeTime);
+
+    int getBeforeCount(String code,LocalDate beforeTime);
+
+    List<Map<String, Object>> getRlhdTotal();
+
+
+
 }
+

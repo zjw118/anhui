@@ -236,9 +236,15 @@
             <id column="SG001" property="sg001" />
             <result column="SG008" property="sg008" />
         </association>
-        <association property="st4SysSd" javaType="com.gistone.entity.St4SysSd">
-            <id column="SD001" property="sd001" />
-            <result column="SD008" property="sd008" />
+        <association property="sysCompany" javaType="com.gistone.entity.SysCompany">
+            <id column="PK_ID" property="pkId" />
+            <result column="COM_NAME" property="comName" />
+            <result column="COM_CODE" property="comCode" />
+            <result column="COM_LEVEL" property="comLevel" />
+            <result column="COM_F_CODE" property="comFCode" />
+            <result column="COM_F_PKID" property="comFPkid" />
+            <result column="LAT" property="lat" />
+            <result column="LON" property="lon" />
         </association>
         <association property="st4ScsCn" javaType="com.gistone.entity.St4ScsCn">
             <id column="CN001" property="cn001" />
@@ -2060,8 +2066,8 @@
             )d
             on x.CK002=d.xzq
             )y
-            LEFT JOIN st4_sys_sd sd
-            ON y.CK002=sd.SD001
+            LEFT JOIN sys_company sd
+            ON y.CK002=sd.PK_ID
         </if>-->
 	</select>
 
@@ -2340,7 +2346,7 @@
             ON ck.CK001 = cm.CK001
             left  join st4_scs_cd cd on cd.CD004 = ck.CD004
             left join st4_sys_sg sg on cd.SG001 = sg.SG001
-            LEFT JOIN st4_sys_sd sd on sd.SD001 = cd.SD001
+            LEFT JOIN sys_company sd on sd.PK_ID = cd.SD001
             left join  st4_scs_cl cl on cd.CL001 = cl.CL001
             left join st4_scs_cb cb on sg.CB001 = cb.CB001
             WHERE ck.CK085=1 AND cd.CD009=1 and ck.CK001=#{ck001}

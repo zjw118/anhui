@@ -12,6 +12,7 @@ import com.gistone.mapper.St4SysSgMapper;
 import com.gistone.service.ISt4SysSgService;
 import com.gistone.util.ReadJson;
 import com.gistone.util.Result;
+import com.gistone.util.ResultCp;
 import com.gistone.util.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -139,21 +140,21 @@ public class St4SysSgServiceImpl extends ServiceImpl<St4SysSgMapper, St4SysSg> i
     }
 
     @Override
-    public Result appList(St4SysSg data) {
+    public ResultCp appList(St4SysSg data) {
             List<St4SysSg> res = st4SysSgMapper.appList(data);
-            Result result = new Result();
+        ResultCp result = new ResultCp();
             result.setData(res);
             result.setMsg("查询保护地列表成功");
             result.setStatus(1000);
             return result;
         }
     @Override
-    public Result appListToPoint(St4SysSg data) {
+    public ResultCp appListToPoint(St4SysSg data) {
             int page = (data.getPageNumber() / data.getPageSize()) + 1;//当前页码
             data.setPageSize(data.getPageSize());
             data.setPageNumber((data.getPageNumber()-1)*data.getPageSize());
             List<St4SysSg> res = st4SysSgMapper.appListToPoint(data);
-            Result result = new Result();
+        ResultCp result = new ResultCp();
             result.setData(res);
             result.setMsg("查询保护地列表成功");
             result.setStatus(1000);

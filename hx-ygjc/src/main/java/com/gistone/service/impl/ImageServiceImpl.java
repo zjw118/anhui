@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -80,6 +81,28 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             image.setRemark(remark);
         }
         mapper.updateById(image);
+    }
+
+    @Override
+    public List<Map<String, Object>> getCount(String code, LocalDate currentTime, LocalDate beforeTime) {
+        List<Map<String, Object>> mapList = mapper.selectCount(code, currentTime, beforeTime);
+        return mapList;
+    }
+
+    @Override
+    public int getBeforeCount(String code, LocalDate beforeTime) {
+        int sum = mapper.selectBeforeCount(code,beforeTime);
+        return sum;
+    }
+
+    @Override
+    public List<Map<String, Object>> getRlhdTotal() {
+
+        //获取到最新数据的id
+        int id = mapper.getLastDataId();
+        //通过此id分组统计面积
+        List<Map<String,Object>> result = mapper.getAreaGroupByType(id);
+        return result;
     }
 
 }
