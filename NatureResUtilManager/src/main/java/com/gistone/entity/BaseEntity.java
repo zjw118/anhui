@@ -14,11 +14,9 @@ import javax.validation.constraints.NotNull;
 @Accessors(chain = true)
 @ApiModel(value="基础类",description = "参数")
 public class BaseEntity {
-	@NotNull(message = "pageNumber不能为空")
 	@ApiModelProperty(name="pageNumber",value="页码，列表查询接口必传",dataType = "Integer",required = false,example = "1")
 	@TableField(exist = false)
 	private Integer pageNumber;
-	@NotNull(message = "pageSize不能为空")
 	@ApiModelProperty(name="pageSize",value="页容，列表查询接口必传",dataType = "Integer",required = false,example = "10")
 	@TableField(exist = false)
 	private Integer pageSize;
