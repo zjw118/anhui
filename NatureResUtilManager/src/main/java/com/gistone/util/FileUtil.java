@@ -1,7 +1,13 @@
 package com.gistone.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * Created by qiang on 2017/8/1.
@@ -226,6 +232,28 @@ public class FileUtil {
         }
         return ret;
     }
+
+
+
+
+    /**
+     * 创建目录并打散
+     * @param path  前置路径
+     * @return
+     */
+    public static String getPath(String path){
+        if(StringUtils.isNotBlank(path)){
+            SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
+            if(!path.endsWith("/")) path += "/";
+            path = path + ymd.format(new Date())+"/"+new Random().nextInt(20)+"/";
+            File ml = new File(path);
+            if(!ml.isDirectory()) ml.mkdirs();
+            return path;
+        }
+        return "";
+    }
+
+
 
 
 }

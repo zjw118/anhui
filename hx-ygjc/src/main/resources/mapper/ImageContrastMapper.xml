@@ -9,7 +9,8 @@
             image1_id,
             image2_id,
             name,
-            data,
+            data1,
+            data2,
             date,
             user_id,
             remark
@@ -18,7 +19,8 @@
             #{image1Id},
             #{image2Id},
             #{name},
-            #{data},
+            #{data1},
+            #{data2},
             #{date},
             #{userId},
             #{remark}

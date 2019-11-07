@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.Map;
 
 @RestController
@@ -41,9 +42,10 @@ public class ImageContrastController {
         ImageContrast imageContrast = new ImageContrast();
         imageContrast.setImage1Id(id1);
         imageContrast.setImage2Id(id2);
-        imageContrast.setUserId(user.getId());
         imageContrast.setName(params.get("name")+"");
         imageContrast.setRemark(params.get("remark")+"");
+        imageContrast.setDate(new Date());
+        if(null!=user) imageContrast.setUserId(user.getId());
         return imageContrastService.add(imageContrast);
     }
 
