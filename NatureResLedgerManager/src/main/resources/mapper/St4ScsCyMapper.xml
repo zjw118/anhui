@@ -113,8 +113,8 @@
         from st4_scs_cy cy
         LEFT JOIN st4_sys_sg sg
         on cy.CY010=sg.SG001
-        left join st4_sys_sd sd
-        on sg.SD001= sd.SD001
+        left join sys_company sd
+        on sg.SD001= sd.PK_ID
         LEFT JOIN st4_sys_sa sa
         on cy.SA001=sa.SA001
         where cy.CY016 =1

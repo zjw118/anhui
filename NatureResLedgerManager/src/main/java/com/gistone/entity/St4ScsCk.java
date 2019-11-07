@@ -471,7 +471,7 @@ public class St4ScsCk extends BaseEntity implements Serializable {
 
     //行政区
     @TableField(exist = false)
-    private St4SysSd st4SysSd;
+    private SysCompany sysCompany;
 
     //整改状态
     @TableField(exist = false)
@@ -694,7 +694,7 @@ public class St4ScsCk extends BaseEntity implements Serializable {
                 ck049, ck050, ck051, ck052, ck053, ck054, ck055, ck056, ck057, ck058, ck059, ck060, ck061, ck062, ck063, ck064, ck065,
                 ck066, ck067, ck068, ck069, ck070, ck071, ck072, cc002, ck074, ck075, ck076, ck077, ck078, ck079, ck080, ck081, ck082,
                 ck083, ck084, ck085, ck086, ck087, ck088, ck089, ck090, ck091, checkLedgerAttach, st4ScsCd, processStatus, st4ScsCn,
-                st4ScsCl, st4ScsCb, st4SysSg, st4SysSd, st4ScsCnList, st4ScsCz, taskYear, cl001, bhqmc, wzg, zgz, zgwc, wxzg, SG008,
+                st4ScsCl, st4ScsCb, st4SysSg, sysCompany, st4ScsCnList, st4ScsCz, taskYear, cl001, bhqmc, wzg, zgz, zgwc, wxzg, SG008,
                 SD008, type, ptype);
     }
 }

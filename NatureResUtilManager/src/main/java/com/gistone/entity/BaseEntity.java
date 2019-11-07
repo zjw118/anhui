@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
@@ -15,7 +17,6 @@ public class BaseEntity {
 	@ApiModelProperty(name="pageNumber",value="页码，列表查询接口必传",dataType = "Integer",required = false,example = "1")
 	@TableField(exist = false)
 	private Integer pageNumber;
-
 	@ApiModelProperty(name="pageSize",value="页容，列表查询接口必传",dataType = "Integer",required = false,example = "10")
 	@TableField(exist = false)
 	private Integer pageSize;

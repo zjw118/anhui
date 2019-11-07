@@ -234,23 +234,27 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             Map<String,Object> attributes = (Map<String, Object>) datum.get("attributes");
             //通过属性构造参数
             St4ScsCd iterpretation = new St4ScsCd();
-            if(null!=attributes.get("activeName")){
-                iterpretation.setActiveName(attributes.get("activeName")+"");
+            if(null!=attributes.get("name")){
+                iterpretation.setActiveName(attributes.get("name")+"");
             }
-            if(null!=attributes.get("activeType")){
-                iterpretation.setActiveType(attributes.get("activeType")+"");
+            if(null!=attributes.get("center")){
+                iterpretation.setCenter(attributes.get("center")+"");
             }
             if(null!=attributes.get("area")){
                 iterpretation.setArea(attributes.get("area")+"");
             }
-            if(null!=attributes.get("descri")){
-                iterpretation.setDescri(attributes.get("descri")+"");
+            if(null!=attributes.get("position")){
+                iterpretation.setPosition(attributes.get("position")+"");
             }
             if(null!=attributes.get("region")){
                 iterpretation.setRegion(attributes.get("region")+"");
             }
-            if(null!=attributes.get("position")){
-                iterpretation.setPosition(attributes.get("position")+"");
+            if(null!=attributes.get("type")){
+                iterpretation.setActiveType(attributes.get("type")+"");
+            }
+
+            if(null!=attributes.get("descri")){
+                iterpretation.setDescri(attributes.get("descri")+"");
             }
             if(null!=attributes.get("remark")){
                 iterpretation.setCd012(attributes.get("remark")+"");
@@ -262,13 +266,18 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             iterpretation.setCd011(LocalDateTime.now());
             st4ScsCdMapper.insert(iterpretation);
         }
-        //执行写入shp文件操作，返回的地址插入到影像表中
+
+
+        //写入shp文件
         String url = PathUtile.getRandomPath(PATH+"/epr/image/","x.shp");
         String res = ShpUtil.handleWebData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+""),url);
+
+        //插入影像表
         if("0".equals(res)){
             Image image = new Image();
             image.setId(imageId);
             image.setShpurl(url.split(":")[1]);
+            image.setData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+"")+"");
             imageMapper.updateById(image);
         }
     }

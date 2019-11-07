@@ -46,19 +46,15 @@
             <result column="CS011" property="cs011" jdbcType="VARCHAR" />
             <result column="CS012" property="cs012" jdbcType="VARCHAR" />
         </association>
-        <association property="adminRegion" javaType="com.gistone.entity.St4SysSd">
-            <id column="SD001" property="sd001" />
-            <result column="SD002" property="sd002" />
-            <result column="SD003" property="sd003" />
-            <result column="SD004" property="sd004" />
-            <result column="SD005" property="sd005" />
-            <result column="SD006" property="sd006" />
-            <result column="SD007" property="sd007" />
-            <result column="SD008" property="sd008" />
-            <result column="SD009" property="sd009" />
-            <result column="SD010" property="sd010" />
-            <result column="SD011" property="sd011" />
-            <result column="SD012" property="sd012" />
+        <association property="adminRegion" javaType="com.gistone.entity.SysCompany">
+            <id column="PK_ID" property="pkId" />
+            <result column="COM_NAME" property="comName" />
+            <result column="COM_CODE" property="comCode" />
+            <result column="COM_LEVEL" property="comLevel" />
+            <result column="COM_F_CODE" property="comFCode" />
+            <result column="COM_F_PKID" property="comFPkid" />
+            <result column="LAT" property="lat" />
+            <result column="LON" property="lon" />
         </association>
     </resultMap>
 
@@ -80,8 +76,8 @@
         ON sgsj.SG001 = sg.SG001
         LEFT JOIN st4_sys_sj sj
         ON sj.SJ001 = sgsj.SJ001
-        LEFT JOIN st4_sys_sd sd
-        ON sd.SD001 = sg.SD001
+        LEFT JOIN sys_company sd
+        ON sd.PK_ID = sg.SD001
         LEFT JOIN st4_scs_ca ca
         ON ca.CA001 = sg.CA001
         LEFT JOIN st4_scs_cb cb
@@ -406,8 +402,8 @@
 
     <select id="appList" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4SysSg" >
         select a.*,Max(b.CS003) as CS003,b.CS004,CS005,
-        b.CS006,c.`SD008`,c.`SD001`,c.`SD012` , d.`SM002`,d.SM001,
-        e.`CB002`, e.`CB001`  from  ( select
+        b.CS006,c.`COM_NAME`,c.`PK_ID`,c.`COM_F_PKID` , d.`SM002`,d.SM001,
+        e.`SN002`, e.`SN001`  from  ( select
         sg.SG001, SG002, SG003, SG004, SG005, SG006, SG007, SG008, SG009, SD001, SG011, CA001,
         CB001, SG013, SG014, SG015, SG016, SG017, SG018, SG019
         from st4_sys_sg sg
@@ -477,7 +473,7 @@
         left join st4_scs_cs b on a.SG001 = b.SG001
         LEFT JOIN st4_sys_sn e ON e.`SN001` = a.CB001
         left join st4_sys_sm d ON a.SM001 = d.`CA001`
-        LEFT JOIN st4_sys_sd c ON a.SD001 = c.SD001
+        LEFT JOIN sys_company c ON a.SD001 = c.PK_ID
         where a.SG007 = 1
         GROUP BY SG001 ORDER BY CONVERT(SG008 USING gbk) COLLATE gbk_chinese_ci ASC
         <!--GROUP BY rvd_reserve_data_id-->

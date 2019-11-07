@@ -175,22 +175,6 @@
             <result column="geometry" property="geometry" />
             <result column="group_id" property="groupId" />
         </association>
-<!--        <association property="cd" javaType="com.gistone.entity.cd">-->
-<!--            <id column="id" property="id" />-->
-<!--            <result column="image_id" property="imageId" />-->
-<!--            <result column="active_name" property="activeName" />-->
-<!--            <result column="active_type" property="activeType" />-->
-<!--            <result column="area" property="area" />-->
-<!--            <result column="descri" property="descri" />-->
-<!--            <result column="create_by" property="createBy" />-->
-<!--            <result column="create_date" property="createDate" />-->
-<!--            <result column="update_by" property="updateBy" />-->
-<!--            <result column="update_date" property="updateDate" />-->
-<!--            <result column="remark" property="remark" />-->
-<!--            <result column="del_flag" property="delFlag" />-->
-<!--            <result column="geometry" property="geometry" />-->
-<!--            <result column="group_id" property="groupId" />-->
-<!--        </association>-->
         <association property="rlhdGroup" javaType="com.gistone.entity.RlhdGroup">
             <id column="id" property="id" />
             <result column="name" property="name" />
@@ -236,9 +220,15 @@
             <id column="SG001" property="sg001" />
             <result column="SG008" property="sg008" />
         </association>
-        <association property="st4SysSd" javaType="com.gistone.entity.St4SysSd">
-            <id column="SD001" property="sd001" />
-            <result column="SD008" property="sd008" />
+        <association property="sysCompany" javaType="com.gistone.entity.SysCompany">
+            <id column="PK_ID" property="pkId" />
+            <result column="COM_NAME" property="comName" />
+            <result column="COM_CODE" property="comCode" />
+            <result column="COM_LEVEL" property="comLevel" />
+            <result column="COM_F_CODE" property="comFCode" />
+            <result column="COM_F_PKID" property="comFPkid" />
+            <result column="LAT" property="lat" />
+            <result column="LON" property="lon" />
         </association>
         <association property="st4ScsCn" javaType="com.gistone.entity.St4ScsCn">
             <id column="CN001" property="cn001" />
@@ -879,8 +869,8 @@
 
         )
         ck left join st4_scs_cd cd on cd.CD001 = ck.CD004
-        left join st4_scs_co co on co.co001 = cd.group_id
-        left join st4_po_cl_co clco on clco.co001=co.CO001
+        left join rlhd_group co on co.id = cd.group_id
+        left join st4_po_cl_co clco on clco.co001=co.id
         left join st4_scs_cl cl on cl.CL001=clco.cl001
 
 <!--
@@ -892,9 +882,9 @@
 
         left join  st4_sys_sa sa on sa.SA001= ck.CK049
         where CK085 = 1
-        <if test="ck.st4ScsCo!=null">
-            <if test="ck.st4ScsCo.name!=null and ck.st4ScsCo.name!='' ">
-              and   co.name like '%${ck.st4ScsCo.name}%'
+        <if test="ck.rlhdGroup!=null">
+            <if test="ck.rlhdGroup.name!=null and ck.rlhdGroup.name!='' ">
+              and   co.name like '%${ck.rlhdGroup.name}%'
             </if>
         </if>
 
@@ -2060,8 +2050,8 @@
             )d
             on x.CK002=d.xzq
             )y
-            LEFT JOIN st4_sys_sd sd
-            ON y.CK002=sd.SD001
+            LEFT JOIN sys_company sd
+            ON y.CK002=sd.PK_ID
         </if>-->
 	</select>
 
@@ -2340,7 +2330,7 @@
             ON ck.CK001 = cm.CK001
             left  join st4_scs_cd cd on cd.CD004 = ck.CD004
             left join st4_sys_sg sg on cd.SG001 = sg.SG001
-            LEFT JOIN st4_sys_sd sd on sd.SD001 = cd.SD001
+            LEFT JOIN sys_company sd on sd.PK_ID = cd.SD001
             left join  st4_scs_cl cl on cd.CL001 = cl.CL001
             left join st4_scs_cb cb on sg.CB001 = cb.CB001
             WHERE ck.CK085=1 AND cd.CD009=1 and ck.CK001=#{ck001}

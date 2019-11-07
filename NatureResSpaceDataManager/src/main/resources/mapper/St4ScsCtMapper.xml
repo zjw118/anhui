@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.com.gistone.mapper.St4ScsCtMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.com.gistone.entity.St4ScsCt">
+        <id column="CT001" property="ct001" />
+        <result column="CT002" property="ct002" />
+        <result column="CT003" property="ct003" />
+        <result column="CT004" property="ct004" />
+        <result column="CT005" property="ct005" />
+        <result column="CT006" property="ct006" />
+        <result column="CT007" property="ct007" />
+        <result column="CT008" property="ct008" />
+        <result column="CT009" property="ct009" />
+        <result column="CT010" property="ct010" />
+        <result column="CT011" property="ct011" />
+        <result column="CT012" property="ct012" />
+        <result column="CT013" property="ct013" />
+        <result column="CT014" property="ct014" />
+        <result column="CT015" property="ct015" />
+        <result column="CT016" property="ct016" />
+        <result column="CT017" property="ct017" />
+        <result column="CT018" property="ct018" />
+        <result column="CT019" property="ct019" />
+        <result column="CT020" property="ct020" />
+        <result column="SG001" property="sg001" />
+        <result column="SD001" property="sd001" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CT001, CT002, CT003, CT004, CT005, CT006, CT007, CT008, CT009, CT010, CT011, CT012, CT013, CT014, CT015, CT016, CT017, CT018, CT019, CT020, SG001, SD001
+    </sql>
+    <select id="listSpaceData" resultMap="BaseResultMap">
+                SELECT
+        <include refid="Base_Column_List" />
+          IF(st4_scs_ct.SG001=0,'',(SELECT SG008 FROM st4_sys_sg WHERE st4_sys_sg.SG001=st4_scs_ct.SG001)) AS sg008,
+          IF(st4_scs_ct.SD001=0,'',(SELECT SD008 FROM st4_sys_sd WHERE st4_sys_sd.SD001=st4_scs_ct.SD001)) AS sd008,
+          IF(st4_scs_ct.CT002=0,'',(SELECT CT003 FROM st4_scs_ct s1 WHERE s1.CT001=st4_scs_ct.CT002)) AS ct003Fname
+        FROM st4_scs_ct ct
+        left join st4_sys_sa sa on sa.SA001 = ct.CT016
+        left join st4_po_sa_sj sasj on sasj.SA001 = sa.SA001
+        left join  st4_sys_sj on sj.SJ001 = sasj.SJ001
+        WHERE CT020 = 1
+        <if test="ct.unitId!=null">
+            AND sj.SJ001=#{ct.unitId}
+        </if>
+
+        ORDER BY CT019 DESC
+        LIMIT 0,10
+
+    </select>
+</mapper>

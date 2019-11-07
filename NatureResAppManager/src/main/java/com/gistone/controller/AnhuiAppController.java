@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api/app")
-@Api(value="安徽红线app接口",tags = "安徽红线app接口的的根目录")
+@Api(value="安徽红线app问题反馈接口",tags = "安徽红线app问题反馈接口")
 public class AnhuiAppController {
     @Autowired
     private ISysUserService userService;
@@ -31,47 +31,27 @@ public class AnhuiAppController {
     @Autowired
     private ISt4ScsCkService st4ScsCkService;
 
-    @ApiOperation(value="app提交核查信息接口",notes = "app提交核查信息接口",response = St4ScsCd.class)
-    @RequestMapping(value = "/insertSpotDataFromApp",method = RequestMethod.POST)
-    public ResultVO insertSpotDataFromApp(@ApiParam(name="app提交核查信息接口", value="json格式", required=true)@RequestBody Swagger<St4ScsCd> data,
+    /**
+     * app上传反馈问题接口
+     * @param data
+     * @param request
+     * @param response
+     * @return
+     */
+    @ApiOperation(value="app上传反馈问题接口",notes = "app上传反馈问题接口",response = St4ScsCd.class)
+    @RequestMapping(value = "/insertBackProblem",method = RequestMethod.POST)
+    public ResultVO insertBackProblem(@ApiParam(name="app上传反馈问题接口", value="json格式", required=true)@RequestBody Swagger<St4ScsCd> data,
                             HttpServletRequest request, HttpServletResponse response) {
         St4ScsCd cd = data.getData();
         String token = request.getHeader("token");
-        String userId= JWT.decode(token).getAudience().get(0);
-        return  st4ScsCkService.insertLedgerLd(cd,userId);
+        try{
+            String userId= JWT.decode(token).getAudience().get(0);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;//  st4ScsCkService.insertLedgerLd(cd,userId);
 
     }
-    /**
-     * todo  （安徽暂用使用）台账表提交接口
-     * @param
-     * @return
-     */
-    @ApiOperation(value = "（绿盾使用）台账表提交接口", notes = "（绿盾使用）台账表提交接口", response = St4ScsCd.class)
-    @PostMapping("/insertLedgerLd")
-    public ResultVO insertLedgerLd( @RequestBody @ApiParam(name = "（绿盾使用）台账表提交接口", value = "json格式", required = true)  Swagger<St4ScsCd>
-                                            data,HttpServletRequest request
-    ) {
 
-        St4ScsCd param = data.getData();
-        //问题点类型
-        if(!ObjectUtils.isNotNullAndEmpty(param.getCd007())){
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "问题点类型cd007不能为空！");
-        }
-        //问题点编号
-        if(!ObjectUtils.isNotNullAndEmpty(param.getCd004())){
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "问题点编号cd004不能为空！");
-        }
-        if(!ObjectUtils.isNotNullAndEmpty(param.getCd002())){
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "经度cd002不能为空！");
-        }
-        if(!ObjectUtils.isNotNullAndEmpty(param.getCd003())){
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "纬度cd003不能为空！");
-        }
-        String token = request.getHeader("token");// 从 http 请求头中取出 token
-        String userId = JWT.decode(token).getAudience().get(0);
-        ResultVO res = st4ScsCkService.insertLedgerLd(param,userId);
-
-        return res;
-
-    }
 }

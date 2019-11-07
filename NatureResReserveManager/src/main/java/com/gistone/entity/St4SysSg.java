@@ -31,12 +31,12 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="St4SysSg对象", description="")
+@ApiModel(value="红线对象", description="")
 public class St4SysSg extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "保护地数据唯一主键")
+    @ApiModelProperty(value = "红线数据唯一主键")
     @TableId(value = "SG001", type = IdType.AUTO)
     private Integer sg001;
 
@@ -66,11 +66,11 @@ public class St4SysSg extends BaseEntity implements Serializable {
     @TableField("SG007")
     private Integer sg007;
 
-    @ApiModelProperty(value = "保护地名称(添加必填、列表查询条件，表格展示)")
+    @ApiModelProperty(value = "红线名称(添加必填、列表查询条件，表格展示)")
     @TableField("SG008")
     private String sg008;
 
-    @ApiModelProperty(value = "保护地代码（添加必填、表格展示）")
+    @ApiModelProperty(value = "红线代码（添加必填、表格展示）")
     @TableField("SG009")
     private String sg009;
 
@@ -78,19 +78,19 @@ public class St4SysSg extends BaseEntity implements Serializable {
     @TableField("SD001")
     private Integer sd001;
 
-    @ApiModelProperty(value = "保护地面积（表格展示）")
+    @ApiModelProperty(value = "红线面积（表格展示）")
     @TableField("SG011")
     private String sg011;
 
-    @ApiModelProperty(value = "保护地类型ID(添加必填、列表查询条件)")
+    @ApiModelProperty(value = "红线类型ID(添加必填、列表查询条件)")
     @TableField("CA001")
     private Integer ca001;
 
-    @ApiModelProperty(value = "保护地级别ID(添加必填、列表查询条件)")
+    @ApiModelProperty(value = "红线级别ID(添加必填、列表查询条件)")
     @TableField("CB001")
     private Integer cb001;
 
-    @ApiModelProperty(value = "主要保护地对象（表格展示）")
+    @ApiModelProperty(value = "主要红线对象（表格展示）")
     @TableField("SG013")
     private String sg013;
 
@@ -110,7 +110,7 @@ public class St4SysSg extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private String borderData;
 
-    @ApiModelProperty(value = "保护地始建时间（表格展示）")
+    @ApiModelProperty(value = "红线始建时间（表格展示）")
     @TableField("SG017")
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     @DateTimeFormat(pattern="yyyy-MM-dd")
@@ -120,25 +120,25 @@ public class St4SysSg extends BaseEntity implements Serializable {
     @TableField("SG018")
     private String sg018;
 
-    @ApiModelProperty(value = "保护地地址")
+    @ApiModelProperty(value = "红线地址")
     @TableField("SG019")
     private String sg019;
 
-    @ApiModelProperty(value = "保护地类型（表格展示）")
+    @ApiModelProperty(value = "红线类型（表格展示）")
     @TableField(exist = false)
     private St4ScsCa reserveType;
 
-    @ApiModelProperty(value = "保护地级别（表格展示）")
+    @ApiModelProperty(value = "红线级别（表格展示）")
     @TableField(exist = false)
     private St4ScsCb reserveRank;
 
-    @ApiModelProperty(value = "保护地边界数据")
+    @ApiModelProperty(value = "红线边界数据")
     @TableField(exist = false)
     private St4ScsCs reserveUrl;
 
-    @ApiModelProperty(value = "保护地所属行政区划（表格展示）")
+    @ApiModelProperty(value = "红线所属行政区划（表格展示）")
     @TableField(exist = false)
-    private St4SysSd adminRegion;
+    private SysCompany adminRegion;
 
     @ApiModelProperty(value = "点位信息")
     @TableField(exist = false)
@@ -150,7 +150,7 @@ public class St4SysSg extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private Integer unitId;
 
-    @ApiModelProperty(value = "保护地ID集合,实时位置地图接口的多个保护区详情用",example = "[1,2,3]")
+    @ApiModelProperty(value = "红线ID集合,实时位置地图接口的多个保护区详情用",example = "[1,2,3]")
     @TableField(exist = false)
     private List<Integer> sgList;
 

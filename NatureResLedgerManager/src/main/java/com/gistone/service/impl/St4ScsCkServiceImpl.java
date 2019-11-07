@@ -1151,7 +1151,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                         cd.setTaskSign(cl==null?"":cl.getCl003());
                         cd.setYear(cl==null?"":cl.getCl010());
                         cd.setReserveName(ck.getSt4SysSg()==null?"":ck.getSt4SysSg().getSg008());
-                        cd.setAdminRegionName(ck.getSt4SysSd()==null?"":ck.getSt4SysSd().getSd008());
+                        cd.setAdminRegionName(ck.getSysCompany()==null?"":ck.getSysCompany().getComName());
                         newDataJson.put("point",BeanUtils.describe(cd));
                         jarr.add(newDataJson);
                     }
