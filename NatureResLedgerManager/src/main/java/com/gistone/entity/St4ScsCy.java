@@ -128,7 +128,9 @@ public class St4ScsCy extends BaseEntity  implements Serializable {
     @ApiModelProperty(value = "包裹路段信息")
     @TableField(exist = false)
     private List<St4ScsCg> st4ScsCg;
-
+    @ApiModelProperty(value = "包裹航点信息")
+    @TableField(exist = false)
+    private List<St4ScsCc> st4ScsCc;
     //条件
 
     @ApiModelProperty(value = "巡查任务ID")
