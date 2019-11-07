@@ -97,9 +97,6 @@ public class ImageController {
 
         String remark = (String) params.get("remark");
 
-       /* if(StringUtils.isBlank(remark)){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"");
-        }*/
         //判断添加人是否为空
         Integer createBy = (Integer) params.get("createBy");
         if (createBy == null || createBy <= 0) {

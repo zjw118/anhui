@@ -10,9 +10,6 @@ import com.gistone.service.ImageService;
 import com.gistone.util.PageBean;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultVOUtil;
-import com.gistone.util.ShpUtil;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -39,7 +35,7 @@ public class ImageContrastController {
 
 
     /**
-     * 添加对比
+     * 添加影像对比
      * @param request
      * @param paramsMap
      * @return

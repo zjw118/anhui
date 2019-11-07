@@ -41,7 +41,7 @@ public class FTPUtil {
                 log.info("未连接到FTP，用户名或密码错误。");
                 ftpClient.disconnect();
             } else {
-                log.info("FTP连接成功。");
+//                log.info("FTP连接成功。");
             }
         } catch (SocketException e) {
             e.printStackTrace();
@@ -175,7 +175,7 @@ public class FTPUtil {
             }
             e.printStackTrace();
         }
-        log.info("success");
+//        log.info("success");
         return isItDone;
     }
 
@@ -305,7 +305,7 @@ public class FTPUtil {
         //System.out.println(a);
 //		filePath = "d:/log";
 //		fileName = "aaa.zip";
-//       FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, filePath, fileName);
+       FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, filePath, fileName);
 
 //		filePath = "D:\\dsmFile\\emergency\\month";
 //		fileName = "月运维汇总2018.07.30-11.55.docx";

@@ -69,7 +69,7 @@ public class IterpretationController {
 
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResultVO add(@RequestBody Map<String, Object> paramsMap, HttpServletRequest request) {
+    public ResultVO add(@RequestBody Map<String, Object> paramsMap, HttpServletRequest request) throws Exception {
         //请求参数格式校验
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
         if (params == null) {
