@@ -771,8 +771,10 @@ public class ShpUtil {
         builder.setName("Location");
         builder.setCRS(DefaultGeographicCRS.WGS84); // 坐标参考系
 
+
         // 按顺序添加属性
         builder.length(100).add("area", String.class);
+        builder.add("the_geom", MultiPolygon.class);
         builder.add("ObjectID", Integer.class);
         builder.length(100).add("center", String.class);
         builder.length(100).add("name", String.class);// 字段的宽度为100个字符
