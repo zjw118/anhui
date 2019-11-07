@@ -40,9 +40,15 @@
             <id column="SG001" property="sg001" />
             <result column="SG008" property="sg008" />
         </association>
-        <association property="st4SysSd" javaType="com.gistone.entity.St4SysSd">
-            <id column="SD001" property="sd001" />
-            <result column="SD008" property="sd008" />
+        <association property="sysCompany" javaType="com.gistone.entity.SysCompany">
+            <id column="PK_ID" property="pkId" />
+            <result column="COM_NAME" property="comName" />
+            <result column="COM_CODE" property="comCode" />
+            <result column="COM_LEVEL" property="comLevel" />
+            <result column="COM_F_CODE" property="comFCode" />
+            <result column="COM_F_PKID" property="comFPkid" />
+            <result column="LAT" property="lat" />
+            <result column="LON" property="lon" />
         </association>
         <collection property="st4ScsCc" ofType="com.gistone.entity.St4ScsCc">
             <id column="CC001" property="cc001" />
@@ -290,8 +296,8 @@
         cy.*,cc.*,ck.*,cf.*,
         sg.SG001,
         sg.SG008,
-        sd.SD001,
-        sd.SD008,
+        sd.PK_ID,
+        sd.COM_NAME,
         IFNULL(SUM(CY011=0),0) AS monitorNum,
         IFNULL(SUM(CY011=1),0) AS dailyNum,
         IFNULL(SUM(CY011=2),0) AS inspectNum,
@@ -306,8 +312,8 @@
 
         LEFT JOIN st4_sys_sg sg
         on cy.CY010=sg.SG001
-        LEFT JOIN st4_sys_sd sd
-        on sg.SD001=sd.SD001
+        LEFT JOIN sys_company sd
+        on sg.SD001=sd.PK_ID
         LEFT JOIN st4_sys_sa sa
         on cy.SA001=sa.SA001
         left join st4_scs_cl cl
@@ -318,9 +324,9 @@
                 and sg.SG001 =#{st4SysSg.sg001}
             </if>
         </if>
-        <if test="st4SysSd != null">
-            <if test="st4SysSd.sd001!=null and st4SysSd.sd001 !=''">
-                and sd.SD001 =#{st4SysSd.sd001}
+        <if test="sysCompany != null">
+            <if test="sysCompany.PK_ID!=null and sysCompany.PK_ID !=''">
+                and sd.PK_ID =#{sysCompany.PK_ID}
             </if>
         </if>
         <if test="st4SysSa != null">
@@ -340,13 +346,13 @@
             and cy.CY003 <![CDATA[ >= ]]> #{strTime}
         </if>
         <if test="groupByName==null or groupByName=='' ">
-            GROUP BY sd.SD001
+            GROUP BY sd.PK_ID
         </if>
         <if test="groupByName=='sg001' ">
             GROUP BY sg.SG001
         </if>
         <if test="groupByName=='sd001' ">
-            GROUP BY sd.SD001
+            GROUP BY sd.PK_ID
         </if>
         <if test="groupByName=='sa001'">
             GROUP BY  sa.SA001
