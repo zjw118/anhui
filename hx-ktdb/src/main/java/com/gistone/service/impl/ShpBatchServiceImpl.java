@@ -57,7 +57,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
 
     private final static String URL = "/0/query?returnGeometry=true&f=json&where=0%3D0&outFields=*";
     @Value("${PATH}")
-    private String PATH ;
+    private String PATH;
 
     @Override
     public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName) {
@@ -100,10 +100,31 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
     public void importPreRedlineDate(String url, String remark) {
         //获取服务数据
         try {
-            String s = httpRequest(url+URL, "GET", null);
+            //获取主键url
+            String primaryKey = "/0/query?where=0%3D0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=true&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=json";
 
-            JSONObject parse = JSON.parseObject(s);
-            JSONArray jsonArray = (JSONArray) parse.get("features");
+            String key = httpRequest(url + primaryKey, "GET", null);
+            JSONObject jsonObject = JSON.parseObject(key);
+
+            String pk = (String) jsonObject.get("objectIdFieldName");
+
+            String queryParam = "/0/query?where=0%3D0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=true&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=json";
+            String count = httpRequest(url + queryParam, "GET", null);
+            JSONObject parse = JSON.parseObject(count);
+            int counint = (int) parse.get("count");
+            int num = counint / 1000;
+            JSONArray jsonArray = new JSONArray();
+            //将数据写入shp文件
+
+            for (int i = 0; i < num + 1; i++) {
+                String param = "/0/query?where="+pk+"<%3D" + (1 + i) * 1000 + "+and+"+pk+">" + i * 1000 + "&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=json";
+                String sum = httpRequest(url + param, "GET", null);
+                JSONObject parse1 = JSON.parseObject(sum);
+                JSONArray jsonArray1 = (JSONArray) parse1.get("features");
+                jsonArray.addAll(jsonArray1);
+                System.out.println(i);
+            }
+
             //将数据写入shp文件
             String fileUrl = PathUtile.getRandomPath(PATH+"/epr/shp/", "x.shp");
             System.out.println(fileUrl);
@@ -139,14 +160,35 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
     public void importPreMarkerData(String url, String remark) {
         //从服务获取数据
         try {
-            String s = httpRequest(url+URL, "GET", null);
+//            String s = httpRequest(url+URL, "GET", null);
+            //获取主键url
+            String primaryKey = "/0/query?where=0%3D0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=true&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=json";
 
-            JSONObject parse = JSON.parseObject(s);
-            JSONArray jsonArray = (JSONArray) parse.get("features");
+            String key = httpRequest(url + primaryKey, "GET", null);
+            JSONObject jsonObject = JSON.parseObject(key);
+
+            String pk = (String) jsonObject.get("objectIdFieldName");
+            //获取总数url
+            String queryParam = "/0/query?where=0%3D0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=true&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=json";
+            String count = httpRequest(url + queryParam, "GET", null);
+            JSONObject parse = JSON.parseObject(count);
+            int counint = (int) parse.get("count");
+            int num = counint / 1000;
+            JSONArray jsonArray = new JSONArray();
             //将数据写入shp文件
-            String fileUrl = PathUtile.getRandomPath(PATH+"/epr/shp/", "x.shp");
-            System.out.println(fileUrl);
 
+            for (int i = 0; i < num + 1; i++) {
+                String param = "/0/query?where="+pk+"<%3D" + (1 + i) * 1000 + "+and+"+pk+">" + i * 1000 + "&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=json";
+                String sum = httpRequest(url + param, "GET", null);
+                JSONObject parse1 = JSON.parseObject(sum);
+                JSONArray jsonArray1 = (JSONArray) parse1.get("features");
+                jsonArray.addAll(jsonArray1);
+                System.out.println(i);
+            }
+//
+            String fileUrl = PathUtile.getRandomPath(PATH + "/epr/shp/", "x.shp");
+            System.out.println(fileUrl);
+//            JSONArray objects = JSON.parseArray(sb.toString().substring(0,sb.toString().length()-1));
             ShpUtil.importPreMarkerdata(jsonArray, fileUrl);
             //批次表中录数据
             ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(2);
@@ -157,6 +199,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             //读shp录数据
             ReadShapeFile readShapeFile = new ReadShapeFile();
             ArrayList<LmMarkerMobile> lmMarkerMobiles = readShapeFile.readShapeFile(fileUrl);
+            System.out.println(lmMarkerMobiles.size());
 
             if (lmMarkerMobiles != null && lmMarkerMobiles.size() > 0) {
 
@@ -195,12 +238,32 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
     @Override
     public void importPreBoardData(String url, String remark) {
         try {
-            String s = httpRequest(url+URL, "GET", null);
+            //获取主键url
+            String primaryKey = "/0/query?where=0%3D0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=true&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=json";
 
-            JSONObject parse = JSON.parseObject(s);
-            JSONArray jsonArray = (JSONArray) parse.get("features");
+            String key = httpRequest(url + primaryKey, "GET", null);
+            JSONObject jsonObject = JSON.parseObject(key);
+
+            String pk = (String) jsonObject.get("objectIdFieldName");
+
+            String queryParam = "/0/query?where=0%3D0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=true&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=json";
+            String count = httpRequest(url + queryParam, "GET", null);
+            JSONObject parse = JSON.parseObject(count);
+            int counint = (int) parse.get("count");
+            int num1 = counint / 1000;
+            JSONArray jsonArray = new JSONArray();
             //将数据写入shp文件
-            String fileUrl = PathUtile.getRandomPath(PATH +"/epr/shp/", "x.shp");
+
+            for (int i = 0; i < num1 + 1; i++) {
+                String param = "/0/query?where="+pk+"<%3D" + (1 + i) * 1000 + "+and+"+pk+">" + i * 1000 + "&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=json";
+                String sum = httpRequest(url + param, "GET", null);
+                JSONObject parse1 = JSON.parseObject(sum);
+                JSONArray jsonArray1 = (JSONArray) parse1.get("features");
+                jsonArray.addAll(jsonArray1);
+                System.out.println(i);
+            }
+            //将数据写入shp文件
+            String fileUrl = PathUtile.getRandomPath(PATH + "/epr/shp/", "x.shp");
             System.out.println(fileUrl);
 
             ShpUtil.importPreBoarddata(jsonArray, fileUrl);
@@ -237,8 +300,8 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
 
     @Override
     public List<ShpBatch> getNewList() {
-       List<ShpBatch> shpBatches =  mapper.getNewList();
-       return shpBatches;
+        List<ShpBatch> shpBatches = mapper.getNewList();
+        return shpBatches;
     }
 
     @Override

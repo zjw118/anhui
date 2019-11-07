@@ -416,13 +416,15 @@ public class ShpUtil {
                     featureBuilder.add(polygon);
                 }
 
-                //这里按顺序添加属性
 
-                featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("ObjectID"));
+                //这里按顺序添加属性
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("area"));
-                //featureBuilder.add(jobj.getJSONObject("attributes").getString("center"));
-                featureBuilder.set("center", jobj.getJSONObject("attributes").getString("center"));
-//				featureBuilder.add(jobj.getJSONObject("attributes").getString("peopleNum"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("ObjectID"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("center"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("name"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("position"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("type"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("region"));
                 SimpleFeature feature = featureBuilder.buildFeature(null);
                 features.add(feature);
             }
@@ -756,6 +758,9 @@ public class ShpUtil {
         return "0";
     }
 
+
+
+
     /**
      * 定义空间数据模板
      *
@@ -765,15 +770,20 @@ public class ShpUtil {
         SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
         builder.setName("Location");
         builder.setCRS(DefaultGeographicCRS.WGS84); // 坐标参考系
+
+
         // 按顺序添加属性
-        builder.add("the_geom", MultiPolygon.class);
-        builder.add("ObjectID", Integer.class);
-        //  builder.length(100).add("puct", String.class);// 字段的宽度为100个字符
-        // builder.length(100).add("type", String.class);
-        // builder.length(100).add("region", String.class);
-        // builder.length(100).add("position", String.class);
+        builder.add("the_geom", MultiPolygon.class);//必须放最上面
+
         builder.length(100).add("area", String.class);
+        builder.add("ObjectID", Integer.class);
         builder.length(100).add("center", String.class);
+        builder.length(100).add("name", String.class);// 字段的宽度为100个字符
+        builder.length(100).add("position", String.class);
+        builder.length(100).add("type", String.class);
+        builder.length(100).add("region", String.class);
+
+
 
         // 生成类型
         final SimpleFeatureType LOCATION = builder.buildFeatureType();

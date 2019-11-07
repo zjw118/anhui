@@ -46,13 +46,7 @@ public class Image extends Model<Image> {
     private String remark;
     @TableId(value = "del_flag")
     private Integer delFlag;
-    @TableId(value = "data")
-    private String data;
-
-
-
-
-    @TableField(exist = false)
+    @TableId(value = "shp")
     private String shp;
     @TableField(exist = false)
     private List list;
