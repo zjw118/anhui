@@ -226,12 +226,6 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     @TableField("group_id")
     private Integer groupId;
 
-    @TableField("region")
-    private String region;
-
-    @TableField("position")
-    private String position;
-
 
 
 

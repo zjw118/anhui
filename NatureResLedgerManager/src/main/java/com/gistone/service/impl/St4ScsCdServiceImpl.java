@@ -246,12 +246,12 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             if(null!=attributes.get("descri")){
                 iterpretation.setDescri(attributes.get("descri")+"");
             }
-            if(null!=attributes.get("region")){
+            /*if(null!=attributes.get("region")){
                 iterpretation.setRegion(attributes.get("region")+"");
             }
             if(null!=attributes.get("position")){
                 iterpretation.setPosition(attributes.get("position")+"");
-            }
+            }*/
             if(null!=attributes.get("remark")){
                 iterpretation.setCd012(attributes.get("remark")+"");
             }
