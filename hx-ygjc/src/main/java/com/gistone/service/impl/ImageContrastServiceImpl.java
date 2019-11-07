@@ -1,5 +1,6 @@
 package com.gistone.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
 import com.gistone.entity.ImageContrast;
@@ -8,24 +9,21 @@ import com.gistone.mapper.ImageMapper;
 import com.gistone.service.ImageContrastService;
 import com.gistone.util.*;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.io.File;
-import java.util.Date;
+import java.util.Collection;
 import java.util.Map;
-import java.util.UUID;
 
 
 @Service
 @Transactional
 @Slf4j
 @Component
-public class ImageContrastServiceImpl implements ImageContrastService {
+public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,ImageContrast> implements ImageContrastService {
     @Autowired
     private ImageMapper imageMapper;
     @Autowired
@@ -102,12 +100,6 @@ public class ImageContrastServiceImpl implements ImageContrastService {
         return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"删除失败");
     }
 
-    @Override
-    public ResultVO get(Integer id) {
-        Map res = imageContrastMapper.getImageContrast(id);
-        if(0<res.size()){
-            return ResultVOUtil.success(res);
-        }
-        return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"获取失败");
-    }
+
+
 }
