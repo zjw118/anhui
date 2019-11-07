@@ -75,6 +75,8 @@ public class CheckNrledgerController {
     @Autowired
     private ISt4ScsCadService st4ScsCadService;
 
+
+
     /**
      * 台账表的插入2产品化
      * @param checkLedger
@@ -89,55 +91,7 @@ public class CheckNrledgerController {
         return null;
 
     }
-    /**
-     * 台账表的插入2产品化
-     * @param checkLedger
-     * @param request
-     * @return
-     */
-    @ApiOperation(value="环科院台账插入",notes = "环科院台账插入",response = St4ScsCk.class)
-    @RequestMapping(value="/insertHkyStage",method = RequestMethod.POST)
-    public Result insertStage( @RequestBody @ApiParam(name="环科院台账插入", value="json格式", required=true) Swagger<St4ScsCk> checkLedger,
-                              HttpServletRequest request) {
 
-        /**
-         * 这里的台账文本信息及图片上传的接口是这样的
-         * 1 当点击提交的时候先走上传图片的接口，把存储地址给前台返回回去之后，
-         * 2 前台带着这个地址再去请求存储文本信息的接口进行存储台账信息，
-         *   存储完台账信息之后拿到了台账的ID，然后
-         * 3 再往图片表里插入外键及其他信息
-         */
-        String token = request.getHeader("token");// 从 http 请求头中取出 token
-        String userId = JWT.decode(token).getAudience().get(0);
-        St4SysSa seUser = new St4SysSa();
-        seUser.setSa001(Integer.valueOf(userId));
-        return icheckLedgerService.saveLedger(checkLedger.getData(),request,seUser);
-
-    }
-
-    /**
-     * 环科院台账表的更改
-     * @param checkLedger
-     * @param request
-     * @param response
-     * @return
-     */
-    @ApiOperation(value="环科院台账更改",notes = "台账更改",response = St4ScsCk.class)
-    @RequestMapping(value="/updateHkyStage",method = RequestMethod.POST)
-    public Result updateHkyStage(@RequestBody @ApiParam(name="台账更改", value="json格式", required=true) Swagger<St4ScsCk> checkLedger,
-                                HttpServletRequest request,
-                                HttpServletResponse response) {
-        St4ScsCk  checkLedger1=checkLedger.getData();
-        if(checkLedger1.getCk001()==null){
-            return  Result.build(1001,"台账主键ck001"+ ResultMsg.MSG_1001);
-        }
-        String token = request.getHeader("token");// 从 http 请求头中取出 token
-        String userId ="1";// JWT.decode(token).getAudience().get(0);
-        St4SysSa seUser = new St4SysSa();
-        seUser.setSa001(Integer.valueOf(userId));
-        return icheckLedgerService.updateLedger(checkLedger1,request,seUser);
-
-    }
 
 
 

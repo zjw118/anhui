@@ -175,22 +175,6 @@
             <result column="geometry" property="geometry" />
             <result column="group_id" property="groupId" />
         </association>
-<!--        <association property="cd" javaType="com.gistone.entity.cd">-->
-<!--            <id column="id" property="id" />-->
-<!--            <result column="image_id" property="imageId" />-->
-<!--            <result column="active_name" property="activeName" />-->
-<!--            <result column="active_type" property="activeType" />-->
-<!--            <result column="area" property="area" />-->
-<!--            <result column="descri" property="descri" />-->
-<!--            <result column="create_by" property="createBy" />-->
-<!--            <result column="create_date" property="createDate" />-->
-<!--            <result column="update_by" property="updateBy" />-->
-<!--            <result column="update_date" property="updateDate" />-->
-<!--            <result column="remark" property="remark" />-->
-<!--            <result column="del_flag" property="delFlag" />-->
-<!--            <result column="geometry" property="geometry" />-->
-<!--            <result column="group_id" property="groupId" />-->
-<!--        </association>-->
         <association property="rlhdGroup" javaType="com.gistone.entity.RlhdGroup">
             <id column="id" property="id" />
             <result column="name" property="name" />
@@ -885,8 +869,8 @@
 
         )
         ck left join st4_scs_cd cd on cd.CD001 = ck.CD004
-        left join st4_scs_co co on co.co001 = cd.group_id
-        left join st4_po_cl_co clco on clco.co001=co.CO001
+        left join rlhd_group co on co.id = cd.group_id
+        left join st4_po_cl_co clco on clco.co001=co.id
         left join st4_scs_cl cl on cl.CL001=clco.cl001
 
 <!--
@@ -898,9 +882,9 @@
 
         left join  st4_sys_sa sa on sa.SA001= ck.CK049
         where CK085 = 1
-        <if test="ck.st4ScsCo!=null">
-            <if test="ck.st4ScsCo.name!=null and ck.st4ScsCo.name!='' ">
-              and   co.name like '%${ck.st4ScsCo.name}%'
+        <if test="ck.rlhdGroup!=null">
+            <if test="ck.rlhdGroup.name!=null and ck.rlhdGroup.name!='' ">
+              and   co.name like '%${ck.rlhdGroup.name}%'
             </if>
         </if>
 
