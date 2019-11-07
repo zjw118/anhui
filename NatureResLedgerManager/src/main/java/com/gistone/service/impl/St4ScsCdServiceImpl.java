@@ -271,7 +271,6 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             st4ScsCdMapper.insert(iterpretation);
         }
 
-
         //写入shp文件
         String url = PathUtile.getRandomPath(PATH+"/epr/image/","x.shp");
         String res = ShpUtil.handleWebData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+""),url);
@@ -309,8 +308,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 Image image = new Image();
                 image.setId(imageId);
                 image.setShpurl("E:"+ftpPath+fileName1);
-                //务必从SHP文件中解析出数据
-                image.setShp(ShpUtil.readShapeFileToStr(url,1)+"");
+                image.setShp(net.sf.json.JSONArray.fromObject(data)+"");
                 imageMapper.updateById(image);
             }
         }

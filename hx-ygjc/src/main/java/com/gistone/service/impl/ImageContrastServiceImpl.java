@@ -9,6 +9,7 @@ import com.gistone.mapper.ImageMapper;
 import com.gistone.service.ImageContrastService;
 import com.gistone.util.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,11 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
     @Autowired
     private ImageContrastMapper imageContrastMapper;
 
+    private String ftpHost = "10.34.100.135"; // ftp服务器地址
+    private int ftpPort = 21;// ftp服务员器端口号
+    private String ftpUserName = "135";// anonymous匿名用户登录，不需要密码。administrator指定用户登录
+    private String ftpPassword = "123456";// 指定用户密码
+
 
     @Value("${PATH}")
     private String PATH;
@@ -42,23 +48,21 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
     public ResultVO add(ImageContrast imageContrast) throws Exception {
         //创建影像对比文件夹-FTP
         SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
-        String outUrl = "E:/FTP/影像对比/"+ymd.format(new Date())+"/"+ UUID.randomUUID()+"/";
+        String outUrl = "/yxdb/"+UUID.randomUUID()+"/";
+        boolean bo = FTPUtil.createDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl);
 
 
         Image image1 = imageMapper.getImageById(imageContrast.getImage1Id());
         Image image2 = imageMapper.getImageById(imageContrast.getImage2Id());
-        String p1 = "?file1="+PATH+image1.getShpurl();
-        String p2 = "&file2="+PATH+image2.getShpurl();
-        String p3 = "&outfile="+outUrl;
+        String p1 = "?file1="+image1.getShpurl();
+        String p2 = "&file2="+image2.getShpurl();
+        String p3 = "&outfile=E:/FTP"+outUrl;
         String p4 = "&f=pjson";
 
-        File file1 = new File(outUrl+"add.shp");
-        File file2 = new File(outUrl+"sub.shp");
-
         boolean b = true;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4,null);
-            if(file1.exists()&&file2.exists()){
+            if(FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.shp")&&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"sub.shp")){
                 b = false;
                 break;
             }
@@ -67,27 +71,47 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         if(b){
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"SHP文件生成失败");
         }
+
+        String url = UUID.randomUUID()+"";
         //FTP读取SHP数据
-        String ftpHost = "10.34.100.135"; // ftp服务器地址
-        int ftpPort = 21;// ftp服务员器端口号
-        String ftpUserName = "135";// anonymous匿名用户登录，不需要密码。administrator指定用户登录
-        String ftpPassword = "123456";// 指定用户密码
+        String ftpPath = outUrl; // 原ftp文件路径
+        String filePath = PATH+"/epr/image/影像对比/"+url+"/"; // 本地路径
+        String fileName1 = "add.shp";// 原ftp文件名称
+        String fileName2 = "add.dbf";// 原ftp文件名称
+        String fileName3 = "add.cpg";// 原ftp文件名称
+        String fileName4 = "add.prj";// 原ftp文件名称
+        String fileName5 = "add.shx";// 原ftp文件名称
+        String fileName6 = "add.shp.xml";// 原ftp文件名称
+        String res1 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, filePath, fileName1);
+        String res2 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, filePath, fileName2);
+        String res3 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, filePath, fileName3);
+        String res4 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, filePath, fileName4);
+        String res5 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, filePath, fileName5);
+        String res6 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, filePath, fileName6);
 
-        String ftpPath = outUrl+"add.shp"; // ftp文件存放物理路径
-        String filePath = PATH+"/epr/image/影像对比"+UUID.randomUUID()+"/"; // 文件路径
-        String fileName = UUID.randomUUID()+".shp";// 文件名称
-        String res = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, filePath, fileName);
 
-        String ftpPath2 = outUrl+"sub.shp"; // ftp文件存放物理路径
-        String filePath2 = PATH+"/epr/image/影像对比"+UUID.randomUUID()+"/"; // 文件路径
-        String fileName2 = UUID.randomUUID()+".shp";// 文件名称
-        String res2 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath2, filePath2, fileName2);
+        String ftpPath2 = outUrl; // ftp文件存放物理路径
+        String filePath2 = PATH+"/epr/image/影像对比/"+url+"/"; // 文件路径
+        String fileName11 = "add.shp";// 原ftp文件名称
+        String fileName22 = "add.dbf";// 原ftp文件名称
+        String fileName33 = "add.cpg";// 原ftp文件名称
+        String fileName44 = "add.prj";// 原ftp文件名称
+        String fileName55 = "add.shx";// 原ftp文件名称
+        String fileName66 = "add.shp.xml";// 原ftp文件名称
+        String res11 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath2, filePath2, fileName11);
+        String res22 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath2, filePath2, fileName22);
+        String res33 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath2, filePath2, fileName33);
+        String res44 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath2, filePath2, fileName44);
+        String res55 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath2, filePath2, fileName55);
+        String res66 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath2, filePath2, fileName66);
 
-        if("00".equals(res+res2)){
-            String str1 = ShpUtil.readShapeFileToStr(filePath+fileName,1)+"";
-            String str2 = ShpUtil.readShapeFileToStr(filePath2+fileName2,1)+"";
+
+        if("000000000000".equals(res1+res2+res3+res4+res5+res6+res11+res22+res33+res44+res55+res66)){
+            String str1 = ShpUtil.readShapeFileToStr(filePath+fileName1,1)+"";
+            String str2 = ShpUtil.readShapeFileToStr(filePath2+fileName11,1)+"";
             imageContrast.setData1(str1);
             imageContrast.setData2(str2);
+            System.out.println(imageContrast.toString());
             int addres = imageContrastMapper.insertImageContrast(imageContrast);
             if(addres>0){
                 return ResultVOUtil.success();

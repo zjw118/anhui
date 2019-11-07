@@ -8,7 +8,7 @@ import java.util.Date;
 public class ImageContrast implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Integer id;
+//    private Integer id;
     private Integer image1Id;
     private Integer image2Id;
     private String name;

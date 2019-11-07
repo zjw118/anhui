@@ -128,6 +128,8 @@ public class ImageContrastController {
         queryWrapper2.eq("id",imageContrast.getImage2Id());
         Image entity2 = imageService.getOne(queryWrapper2);
 
+        String shp1 = entity1.getShp();
+        String shp2 = entity2.getShp();
 
 
 
