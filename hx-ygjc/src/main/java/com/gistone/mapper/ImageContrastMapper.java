@@ -19,4 +19,5 @@ public interface ImageContrastMapper extends BaseMapper<ImageContrast> {
     //	分页查询-获取数据
     List<Object> selectPoList(PageBean pageBean);
 
+    ImageContrast getImageContrast(ImageContrast imageContrast);
 }
