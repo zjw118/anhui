@@ -378,6 +378,9 @@ public class ShpUtil {
     public static String handleWebData(JSONArray array, String filePath) {
         try {
             final SimpleFeatureType TYPE = createFeatureType();
+
+
+
             //在我们创建功能时收集功能的列表
             List<SimpleFeature> features = new ArrayList<>();
             //geometryFactory将用于创建每个要素的几何体属性，使用多边形对象作为位置。
@@ -416,14 +419,15 @@ public class ShpUtil {
                     featureBuilder.add(polygon);
                 }
 
+
                 //这里按顺序添加属性
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("area"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("ObjectID"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("center"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("name"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("position"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("type"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("region"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getString("position"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getString("area"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getString("center"));
                 SimpleFeature feature = featureBuilder.buildFeature(null);
                 features.add(feature);
             }
@@ -757,6 +761,9 @@ public class ShpUtil {
         return "0";
     }
 
+
+
+
     /**
      * 定义空间数据模板
      *
@@ -769,12 +776,13 @@ public class ShpUtil {
         // 按顺序添加属性
         builder.add("the_geom", MultiPolygon.class);
         builder.add("ObjectID", Integer.class);
-        //  builder.length(100).add("puct", String.class);// 字段的宽度为100个字符
-        // builder.length(100).add("type", String.class);
-        // builder.length(100).add("region", String.class);
-        // builder.length(100).add("position", String.class);
+          builder.length(100).add("name", String.class);// 字段的宽度为100个字符
+         builder.length(100).add("type", String.class);
+         builder.length(100).add("region", String.class);
+         builder.length(100).add("position", String.class);
         builder.length(100).add("area", String.class);
         builder.length(100).add("center", String.class);
+
 
         // 生成类型
         final SimpleFeatureType LOCATION = builder.buildFeatureType();
