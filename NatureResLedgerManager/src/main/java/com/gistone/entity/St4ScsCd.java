@@ -109,6 +109,14 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     private LocalDateTime cd011;
 
     /**
+     * 问题点备注
+     */
+
+    @ApiModelProperty(name="cd012",value="问题点备注",dataType = "String",required = false,example="")
+    @TableField("CD012")
+    private String cd012;
+
+    /**
      * 经度(度分秒格式)
      */
     @NotNull
@@ -127,16 +135,54 @@ public class St4ScsCd extends BaseEntity implements Serializable {
      * 原始坐标格式（0经纬度，1度分秒）
      */
     @NotNull
-    @TableField("CD015")
     @ApiModelProperty(name="cd015",value="原始坐标格式（0经纬度，1度分秒）",dataType = "Integer",required = false,example="")
+    @TableField("CD015")
     private Integer cd015;
 
-    /**
-     * 问题点备注
-     */
-    @TableField("CD012")
-    @ApiModelProperty(name="cd012",value="问题点备注",dataType = "String",required = false,example="")
-    private String cd012;
+    @ApiModelProperty(name="cd016",value="存储图斑json数据",dataType = "Integer",required = false,example="")
+    @TableField("CD016")
+    private String cd016;
+
+    @ApiModelProperty(name="cd017",value="0问题清单（未人工审核），1问题点（人工审核确定为问题图斑）",dataType = "Integer",required = false,example="")
+    @TableField("CD017")
+    private Integer cd017;
+
+
+    @ApiModelProperty(name="imageId",value="影像表外键",dataType = "{}",required = false,example="")
+    @TableField("image_id")
+    private Integer imageId;
+    @ApiModelProperty(name="activityName",value="活动名称",dataType = "{}",required = false,example="")
+    @TableField("active_name")
+    private String activeName;
+    @ApiModelProperty(name="activeType",value="活动类型",dataType = "{}",required = false,example="")
+    @TableField("active_type")
+    private String activeType;
+    @ApiModelProperty(name="area",value="活动面积",dataType = "{}",required = false,example="")
+    @TableField("area")
+    private String area;
+    @ApiModelProperty(name="descri",value="活动说明",dataType = "{}",required = false,example="")
+    @TableField("descri")
+    private String descri;
+    @ApiModelProperty(name="geometry",value="影像点",dataType = "{}",required = false,example="")
+    @TableField("geometry")
+    private String geometry;
+    @ApiModelProperty(name="groupId",value="关联台账表外键",dataType = "{}",required = false,example="")
+    @TableField("group_id")
+    private Integer groupId;
+
+    @ApiModelProperty(name="cd020",value="问题点的类型 0数据类型，1动态点位，3边界点4灾害点",dataType = "{}",required = false,example="")
+    @TableField("CD020")
+    private Integer cd020;
+    @ApiModelProperty(name="center",value="中点坐标",dataType = "{}",required = false,example="")
+    @TableField("center")
+    private String center;
+    @ApiModelProperty(name="position",value="中心位置",dataType = "{}",required = false,example="")
+    @TableField("position")
+    private String position;
+    @ApiModelProperty(name="region",value="中心位置所属地区",dataType = "{}",required = false,example="")
+    @TableField("region")
+    private String region;
+
 
     @ApiModelProperty(name="st4ScsCl",value="批次任务实体",dataType = "{}",required = false,example="")
     @TableField(exist = false)
@@ -209,29 +255,6 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     @ApiModelProperty(name="type",value="权限用不必管",dataType = "{}",required = false,example="")
     @TableField(exist = false)
     private Integer type;
-
-
-    @TableField("image_id")
-    private Integer imageId;
-    @TableField("active_name")
-    private String activeName;
-    @TableField("active_type")
-    private String activeType;
-    @TableField("area")
-    private String area;
-    @TableField("descri")
-    private String descri;
-    @TableField("geometry")
-    private String geometry;
-    @TableField("group_id")
-    private Integer groupId;
-
-    @TableField("center")
-    private String center;
-    @TableField("position")
-    private String position;
-    @TableField("region")
-    private String region;
 
 
 

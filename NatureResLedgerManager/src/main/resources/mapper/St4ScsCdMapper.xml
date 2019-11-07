@@ -19,7 +19,9 @@
         <result column="CD013" property="cd013" />
         <result column="CD014" property="cd014" />
         <result column="CD015" property="cd015" />
-
+        <result column="CD016" property="cd016" />
+        <result column="CD017" property="cd017" />
+        <result column="CD020" property="cd020" />
         <result column="image_id" property="imageId" />
         <result column="active_name" property="activeName" />
         <result column="active_type" property="activeType" />

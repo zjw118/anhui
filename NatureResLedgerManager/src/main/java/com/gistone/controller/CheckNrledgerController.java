@@ -2,6 +2,7 @@ package com.gistone.controller;
 
 
 import com.auth0.jwt.JWT;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gistone.VO.ResultVO;
 import com.gistone.annotation.PassToken;
 import com.gistone.entity.*;
@@ -13,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +46,9 @@ public class CheckNrledgerController {
 
     @Autowired
     private ISt4ScsCkService icheckLedgerService;
+
+    @Autowired
+    private ISt4ScsCkrlService iSt4ScsCkrlService;
     @Autowired
     private ISt4ScsCiService st4ScsCiService;
     @Autowired
@@ -111,24 +116,24 @@ public class CheckNrledgerController {
         return  icheckLedgerService.deleteLedger(checkLedger.getClId());*//*
     }
 */
-    @ApiOperation(value="环科院台账列表(保护区名称传递参数:bhqmc,批次传递ck091,整改状态放在st4ScsCn传递，参数名叫cn010，添加时间传递strTime,endTime) 干扰点重点台账管理列表也是访问这个接口只需要保证每次传递ck084为1即可" +
-            "已销号数据管理列表接口也是访问这个接口保证每次访问接口时候每次传递ck046:'是'就可以了",notes = "台账列表",response = St4ScsCk.class)
-    @RequestMapping(value="/listHkyStage",method = RequestMethod.POST)
-    public Result listHkyStage(@RequestBody @ApiParam(name="台账列表pageSize和pageNumber必传其余的查询项是非必传", value="json格式", required=true)
-                                     Swagger<St4ScsCk> swagger,
+    @ApiOperation(value="(安徽用)人类活动台账管理列表",notes = "人类活动台账管理列表人类活动台账管理列表",response = St4ScsCkrl.class)
+    @RequestMapping(value="/listHumanStage",method = RequestMethod.POST)
+    public Result listHkyStage(@Validated@RequestBody @ApiParam(name="人类活动台账管理列表pageSize和pageNumber必传其余的查询项是非必传", value="json格式", required=true)
+                                     Swagger<St4ScsCkrl> swagger,BindingResult blindResult,
                              HttpServletRequest request) {
-
-        St4ScsCk checkLedger = swagger.getData();
-        String token = request.getHeader("token");// 从 http 请求头中取出 token
-        String userId = "1";//JWT.decode(token).getAudience().get(0);
-        St4SysSa seUser = new St4SysSa();
-        seUser.setSa001(Integer.valueOf(userId));
-        Object pageNumber=checkLedger.getPageNumber();
-        Object pageSize=checkLedger.getPageSize();
-        if(!ObjectUtils.isNotNullAndEmpty(pageNumber)||!ObjectUtils.isNotNullAndEmpty(pageSize)){
-            return  Result.build(1001,"pageNumber，pageSize"+ ResultMsg.MSG_1001);
+        if(blindResult.getErrorCount()>0){
+            List<FieldError> errorFields = blindResult.getFieldErrors();
+            for (FieldError fieldError:errorFields) {
+                return Result.build(1001,fieldError.getDefaultMessage());
+            }
         }
-        return icheckLedgerService.listHkyLedger(checkLedger,seUser);
+        St4ScsCkrl checkLedger = swagger.getData();
+
+
+        /*if(!ObjectUtils.isNotNullAndEmpty(pageNumber)||!ObjectUtils.isNotNullAndEmpty(pageSize)){
+            return  Result.build(1001,"pageNumber，pageSize"+ ResultMsg.MSG_1001);
+        }*/
+        return iSt4ScsCkrlService.listHumanStage(checkLedger);
 
     }
 

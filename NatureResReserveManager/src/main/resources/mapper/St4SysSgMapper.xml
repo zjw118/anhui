@@ -402,8 +402,8 @@
 
     <select id="appList" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4SysSg" >
         select a.*,Max(b.CS003) as CS003,b.CS004,CS005,
-        b.CS006,c.`SD008`,c.`SD001`,c.`SD012` , d.`SM002`,d.SM001,
-        e.`CB002`, e.`CB001`  from  ( select
+        b.CS006,c.`COM_NAME`,c.`PK_ID`,c.`COM_F_PKID` , d.`SM002`,d.SM001,
+        e.`SN002`, e.`SN001`  from  ( select
         sg.SG001, SG002, SG003, SG004, SG005, SG006, SG007, SG008, SG009, SD001, SG011, CA001,
         CB001, SG013, SG014, SG015, SG016, SG017, SG018, SG019
         from st4_sys_sg sg
