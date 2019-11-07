@@ -773,14 +773,16 @@ public class ShpUtil {
 
 
         // 按顺序添加属性
+        builder.add("the_geom", MultiPolygon.class);//必须放最上面
+
         builder.length(100).add("area", String.class);
-        builder.add("the_geom", MultiPolygon.class);
         builder.add("ObjectID", Integer.class);
         builder.length(100).add("center", String.class);
         builder.length(100).add("name", String.class);// 字段的宽度为100个字符
         builder.length(100).add("position", String.class);
         builder.length(100).add("type", String.class);
         builder.length(100).add("region", String.class);
+
 
 
         // 生成类型
