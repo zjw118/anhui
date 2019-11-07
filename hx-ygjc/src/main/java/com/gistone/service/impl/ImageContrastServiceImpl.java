@@ -15,8 +15,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 
 @Service
@@ -37,9 +40,9 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
 
     @Override
     public ResultVO add(ImageContrast imageContrast) throws Exception {
-        //创建影像对比文件夹
-        String outUrl = PATH+"/epr/image/影像对比结果/";
-//        String outUrl = FileUtil.getPath(PATH+"/epr/image/影像对比结果/");  //随机文件夹
+        //创建影像对比文件夹-FTP
+        SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
+        String outUrl = "E:/FTP/影像对比/"+ymd.format(new Date())+"/"+ UUID.randomUUID()+"/";
 
 
         Image image1 = imageMapper.getImageById(imageContrast.getImage1Id());
@@ -64,15 +67,31 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         if(b){
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"SHP文件生成失败");
         }
-        //读取SHP数据
-        String str1 = ShpUtil.readShapeFileToStr(outUrl+"add.shp",1)+"";
-        String str2 = ShpUtil.readShapeFileToStr(outUrl+"sub.shp",1)+"";
+        //FTP读取SHP数据
+        String ftpHost = "10.34.100.135"; // ftp服务器地址
+        int ftpPort = 21;// ftp服务员器端口号
+        String ftpUserName = "135";// anonymous匿名用户登录，不需要密码。administrator指定用户登录
+        String ftpPassword = "123456";// 指定用户密码
 
-        imageContrast.setData1(str1);
-        imageContrast.setData2(str2);
-        int addres = imageContrastMapper.insertImageContrast(imageContrast);
-        if(addres>0){
-            return ResultVOUtil.success();
+        String ftpPath = outUrl+"add.shp"; // ftp文件存放物理路径
+        String filePath = PATH+"/epr/image/影像对比"+UUID.randomUUID()+"/"; // 文件路径
+        String fileName = UUID.randomUUID()+".shp";// 文件名称
+        String res = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, filePath, fileName);
+
+        String ftpPath2 = outUrl+"sub.shp"; // ftp文件存放物理路径
+        String filePath2 = PATH+"/epr/image/影像对比"+UUID.randomUUID()+"/"; // 文件路径
+        String fileName2 = UUID.randomUUID()+".shp";// 文件名称
+        String res2 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath2, filePath2, fileName2);
+
+        if("00".equals(res+res2)){
+            String str1 = ShpUtil.readShapeFileToStr(filePath+fileName,1)+"";
+            String str2 = ShpUtil.readShapeFileToStr(filePath2+fileName2,1)+"";
+            imageContrast.setData1(str1);
+            imageContrast.setData2(str2);
+            int addres = imageContrastMapper.insertImageContrast(imageContrast);
+            if(addres>0){
+                return ResultVOUtil.success();
+            }
         }
         return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"对比失败");
     }

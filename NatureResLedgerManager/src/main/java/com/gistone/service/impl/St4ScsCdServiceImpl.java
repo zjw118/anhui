@@ -16,6 +16,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -226,7 +230,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     }
 
     @Override
-    public void insert(List<Map<String, Object>> data,Integer imageId,Integer createBy) {
+    public void insert(List<Map<String, Object>> data,Integer imageId,Integer createBy) throws FileNotFoundException {
         //通过影像id先删除记录然后再插入,然后再写入shp文件，将地址更新到影像表中！
         st4ScsCdMapper.delete(new QueryWrapper<St4ScsCd>().eq("image_id",imageId));
         //从data中构造属性
@@ -272,14 +276,47 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
         String url = PathUtile.getRandomPath(PATH+"/epr/image/","x.shp");
         String res = ShpUtil.handleWebData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+""),url);
 
-        //插入影像表
-        if("0".equals(res)){
-            Image image = new Image();
-            image.setId(imageId);
-            image.setShpurl(url.split(":")[1]);
-            image.setShp(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+"")+"");
-            imageMapper.updateById(image);
+
+        SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
+        //SHP上传到GIS服务器
+        String ftpHost = "10.34.100.135"; // ftp服务器地址
+        int ftpPort = 21;// ftp服务员器端口号
+        String ftpUserName = "135";// anonymous匿名用户登录，不需要密码。administrator指定用户登录
+        String ftpPassword = "123456";// 指定用户密码
+        String ftpPath = "/shp/"+ymd.format(new Date())+"/"; // ftp文件存放物理路径
+
+        String name = UUID.randomUUID()+"";
+        String fileName1 = name+".shp";
+        FileInputStream input1 = new FileInputStream(new File(url));
+        String fileName2 = name+".dbf";
+        FileInputStream input2 = new FileInputStream(new File(url.split("\\.")[0]+".dbf"));
+        String fileName3 = name+".fix";
+        FileInputStream input3 = new FileInputStream(new File(url.split("\\.")[0]+".fix"));
+        String fileName4 = name+".prj";
+        FileInputStream input4 = new FileInputStream(new File(url.split("\\.")[0]+".prj"));
+        String fileName5 = name+".shx";
+        FileInputStream input5 = new FileInputStream(new File(url.split("\\.")[0]+".shx"));
+
+        String res1 = FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName1, input1);
+        String res2 = FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName2, input2);
+        String res3 = FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName3, input3);
+        String res4 = FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName4, input4);
+        String res5 = FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName5, input5);
+
+        if("00000".equals(res1+res2+res3+res4+res5)){
+            //插入影像表
+            if("0".equals(res)){
+                Image image = new Image();
+                image.setId(imageId);
+                image.setShpurl("E:"+ftpPath+fileName1);
+                //务必从SHP文件中解析出数据
+                image.setShp(ShpUtil.readShapeFileToStr(url,1)+"");
+                imageMapper.updateById(image);
+            }
         }
+
+
+
     }
 
 
