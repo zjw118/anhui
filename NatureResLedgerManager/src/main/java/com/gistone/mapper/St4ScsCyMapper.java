@@ -43,5 +43,5 @@ public interface St4ScsCyMapper extends BaseMapper<St4ScsCy> {
      * @param cy
      * @return
      */
-    IPage<St4ScsCy> listSailRecord(Page<St4ScsCy>page, @Param("cy") St4ScsCy cy);
+    List<St4ScsCy> listSailRecord(@Param("cy") St4ScsCy cy);
 }

@@ -29,12 +29,7 @@ public interface ISt4ScsCyService extends IService<St4ScsCy> {
      */
     Result getSailRecordDetail(St4ScsCy sy);
 
-    /**
-     * 条件分页查询
-     * @param st4ScsCy
-     * @return
-     */
-    Result listPatrol(St4ScsCy st4ScsCy)throws Exception;
+
     /**
      * 人员外键-条件分页查询
      * @param st4ScsCy

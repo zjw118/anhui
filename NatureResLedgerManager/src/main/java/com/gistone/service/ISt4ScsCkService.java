@@ -55,7 +55,6 @@ public interface ISt4ScsCkService extends IService<St4ScsCk> {
 
     /**
      * 同步问题点数据带有台账
-     * @param taskSign
      * @param uid
      * @return
      */

@@ -22,6 +22,16 @@
         <result column="CY016" property="cy016" />
         <result column="CY017" property="cy017" />
         <result column="CL003" property="cl003" />
+        <result column="rwcs" property="rwcs" />
+        <result column="gjlc" property="gjlc" />
+        <result column="rwcs" property="rwcs" />
+        <result column="rwsc" property="rwsc" />
+        <result column="sc002" property="sc002" />
+
+        <result column="monitorNum" property="monitorNum" />
+        <result column="dailyNum" property="dailyNum" />
+        <result column="inspectNum" property="inspectNum" />
+        <result column="surveyNum" property="surveyNum" />
         <association property="st4SysSa" javaType="com.gistone.entity.St4SysSa">
             <id column="SA001" property="sa001" />
             <result column="SA019" property="sa019" />
@@ -34,6 +44,154 @@
             <id column="SD001" property="sd001" />
             <result column="SD008" property="sd008" />
         </association>
+        <collection property="st4ScsCc" ofType="com.gistone.entity.St4ScsCc">
+            <id column="CC001" property="cc001" />
+            <result column="CC002" property="cc002" />
+            <result column="CC003" property="cc003" />
+            <result column="CC004" property="cc004" />
+            <result column="CC005" property="cc005" />
+            <result column="CY017" property="cy017" />
+            <result column="CC007" property="cc007" />
+            <result column="CC008" property="cc008" />
+            <result column="CC009" property="cc009" />
+            <result column="CC010" property="cc010" />
+            <result column="CC011" property="cc011" />
+            <result column="CC012" property="cc012" />
+            <result column="CD004" property="cd004" />
+            <association property="st4SysSa" javaType="com.gistone.entity.St4SysSa">
+                <id column="SA001" property="sa001" />
+                <result column="SA019" property="sa019" />
+            </association>
+            <association property="st4Scscf" javaType="com.gistone.entity.St4ScsCf">
+                <id column="CF001" property="cf001" />
+                <result column="CC002" property="cc002" />
+                <result column="CF003" property="cf003" />
+                <result column="CF004" property="cf004" />
+                <result column="CF005" property="cf005" />
+                <result column="CF006" property="cf006" />
+                <result column="CF007" property="cf007" />
+                <result column="CF008" property="cf008" />
+                <result column="CF009" property="cf009" />
+                <result column="CF010" property="cf010" />
+                <result column="CF011" property="cf011" />
+                <result column="CF012" property="cf012" />
+                <result column="CF013" property="cf013" />
+                <result column="CF014" property="cf014" />
+                <result column="CF015" property="cf015" />
+                <result column="CF016" property="cf016" />
+                <result column="CF017" property="cf017" />
+                <result column="CF018" property="cf018" />
+                <result column="CF019" property="cf019" />
+                <result column="CF020" property="cf020" />
+                <result column="CF021" property="cf021" />
+                <result column="CF022" property="cf022" />
+                <result column="CF023" property="cf023" />
+                <result column="CF024" property="cf024" />
+                <result column="CF025" property="cf025" />
+                <result column="CF026" property="cf026" />
+            </association>
+            <association property="st4ScsCk" javaType="com.gistone.entity.St4ScsCk">
+                <id column="CK001" property="ck001" />
+                <result column="CK002" property="ck002" />
+                <result column="CD004" property="cd004" />
+                <result column="SG001" property="sg001" />
+                <result column="CK005" property="ck005" />
+                <result column="CK006" property="ck006" />
+                <result column="CK007" property="ck007" />
+                <result column="CK008" property="ck008" />
+                <result column="CK009" property="ck009" />
+                <result column="CK010" property="ck010" />
+                <result column="CK011" property="ck011" />
+                <result column="CK012" property="ck012" />
+                <result column="CK013" property="ck013" />
+                <result column="CK014" property="ck014" />
+                <result column="CK015" property="ck015" />
+                <result column="CK016" property="ck016" />
+                <result column="CK017" property="ck017" />
+                <result column="CK018" property="ck018" />
+                <result column="CK019" property="ck019" />
+                <result column="CK020" property="ck020" />
+                <result column="CK021" property="ck021" />
+                <result column="CK022" property="ck022" />
+                <result column="CK023" property="ck023" />
+                <result column="CK024" property="ck024" />
+                <result column="CK025" property="ck025" />
+                <result column="CK026" property="ck026" />
+                <result column="CK027" property="ck027" />
+                <result column="CK028" property="ck028" />
+                <result column="CK029" property="ck029" />
+                <result column="CK030" property="ck030" />
+                <result column="CK031" property="ck031" />
+                <result column="CK032" property="ck032" />
+                <result column="CK033" property="ck033" />
+                <result column="CK034" property="ck034" />
+                <result column="CK035" property="ck035" />
+                <result column="CK036" property="ck036" />
+                <result column="CK037" property="ck037" />
+                <result column="CK038" property="ck038" />
+                <result column="CK039" property="ck039" />
+                <result column="CK040" property="ck040" />
+                <result column="CK041" property="ck041" />
+                <result column="CK042" property="ck042" />
+                <result column="CK043" property="ck043" />
+                <result column="CK044" property="ck044" />
+                <result column="CK045" property="ck045" />
+                <result column="CK046" property="ck046" />
+                <result column="CK047" property="ck047" />
+                <result column="CK048" property="ck048" />
+                <result column="CK049" property="ck049" />
+                <result column="CK050" property="ck050" />
+                <result column="CK051" property="ck051" />
+                <result column="CK052" property="ck052" />
+                <result column="CK053" property="ck053" />
+                <result column="CK054" property="ck054" />
+                <result column="CK055" property="ck055" />
+                <result column="CK056" property="ck056" />
+                <result column="CK057" property="ck057" />
+                <result column="CK058" property="ck058" />
+                <result column="CK059" property="ck059" />
+                <result column="CK060" property="ck060" />
+                <result column="CK061" property="ck061" />
+                <result column="CK062" property="ck062" />
+                <result column="CK063" property="ck063" />
+                <result column="CK064" property="ck064" />
+                <result column="CK065" property="ck065" />
+                <result column="CK066" property="ck066" />
+                <result column="CK067" property="ck067" />
+                <result column="CK068" property="ck068" />
+                <result column="CK069" property="ck069" />
+                <result column="CK070" property="ck070" />
+                <result column="CK071" property="ck071" />
+                <result column="CK072" property="ck072" />
+                <result column="CC002" property="cc002" />
+                <result column="CK074" property="ck074" />
+                <result column="CK075" property="ck075" />
+                <result column="CK076" property="ck076" />
+                <result column="CK077" property="ck077" />
+                <result column="CK078" property="ck078" />
+                <result column="CK079" property="ck079" />
+                <result column="CK080" property="ck080" />
+                <result column="CK081" property="ck081" />
+                <result column="CK082" property="ck082" />
+                <result column="CK083" property="ck083" />
+                <result column="CK084" property="ck084" />
+                <result column="CK085" property="ck085" />
+                <result column="CK086" property="ck086" />
+                <result column="CK087" property="ck087" />
+                <result column="CK088" property="ck088" />
+                <result column="CK089" property="ck089" />
+                <result column="CK090" property="ck090" />
+                <result column="CK091" property="ck091" />
+                <result column="CK092" property="ck092" />
+                <result column="CK093" property="ck093" />
+            </association>
+            <collection property="st4ScsCe" ofType="com.gistone.entity.St4ScsCe">
+                <id column="CE001" property="ce001" />
+                <result column="CE002" property="ce002" />
+                <result column="CE003" property="ce003" />
+                <result column="CE004" property="ce004" />
+            </collection>
+        </collection>
         <collection property="st4ScsCg" ofType="com.gistone.entity.St4ScsCg" >
             <id column="CG001" property="cg001" />
             <result column="CY017" property="cy017" />
@@ -49,29 +207,43 @@
     <sql id="Base_Column_List">
         CY001, CY002, CY003, CY004, CY005, CY006, CY007, SA001, CY009, CY010, CY011, CY012, CY013, CY014, CY015, CY016, CY017
     </sql>
+    <sql id="Base_Column_List1">
+        cy.CY001, cy.CY002, cy.CY003, cy.CY004, cy.CY005, cy.CY006, cy.SA001, cy.CY009, cy.CY010, cy.CY011, cy.CY012, cy.CY013,
+        cy.CY014, cy.CY015, cy.CY016, cy.CY017
+    </sql>
     <select id="getSailRecordDetail" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCy" >
-        select cy.*,sa.SA019,sg.SG008,sg.SG001,cg.*
-        from st4_scs_cy cy left join st4_sys_sa sa on cy.CY012 = sa.SA001
-        left join st4_sys_sg sg on sg.SG001 = sa.SG001
+        select cy.*,sa.SA019,sg.SG008,sg.SG001,cg.*,cc.*,ce.*,cf.*
+        from st4_scs_cy cy left join st4_sys_sa sa on cy.SA001 = sa.SA001
+        left join st4_sys_sg sg on sg.SG001 = cy.CY010
         LEFT JOIN st4_scs_cg cg ON cg.CY017 = CY.CY017
-        where sa.SA007=1 AND cy.CY016=1 and sg.SG007 = 1
+        LEFT JOIN st4_scs_cc cc ON cc.`CY017` = cy.CY017
+        left join st4_scs_ce ce on ce.CE002 = cc.CC002
+        left join st4_scs_cf cf on cf.CC002 = cc.CC002
+        <!-- where sa.SA007=1 AND cy.CY016=1 and sg.SG007 = 1-->
+        where cy.CY016=1
         <if test="cy001!=null ">
             and cy.CY001 = #{cy001}
         </if>
-
-
-
     </select>
     <select id="listSailRecord" resultMap="BaseResultMap"  >
-      select cy.*,sa.SA019,sg.SG008
-      from st4_scs_cy cy
-      left join st4_sys_sa sa on cy.SA001 = sa.SA001
-      left join st4_sys_sg sg on sg.SG001 = cy.CY010
-      left join st4_scs_cg cg on cy.CY017=cg.CY017
+        select * from (
+        select
+        sc.sc002,
+        <include refid="Base_Column_List1"/>,
+        TIMESTAMPDIFF(HOUR,CY003,CY004) cy007,
+        sa.SA019,sg.SG008
+        from st4_scs_cy cy
+
+        left join st4_sys_sa sa on cy.SA001 = sa.SA001
+        left join st4_sys_sg sg on sg.SG001 = cy.CY010
+
         left join st4_scs_cl cl on cy.CL003=cl.CL003
-      where cy.CY016=1
+        left join st4_sys_sc sc on cy.cy011=sc.sc001
+        where cy.CY016=1
+        and (sc.sc018 is null or (sc.sc018 = 2  ) )
+        <!--and sc.sc018 = 2!-->
         <if test="cy.type==0 ">
-          and cy.SA001 = #{cy.sa001} OR sa.SA002=#{cy.sa001}
+            and cy.SA001 = #{cy.sa001} OR sa.SA002=#{cy.sa001}
         </if>
         <if test="cy.type==1 ">
             and cy.SA001 = #{cy.sa001}
@@ -92,7 +264,13 @@
             and CY004 <![CDATA[ <= ]]> #{cy.endTime}
         </if>
         order by cy.CY013 desc
+        <if test="cy.pageNumber != null and cy.pageNumber != '' and cy.pageSize != null and cy.pageSize != '' " >
+            limit #{cy.pageNumber},#{cy.pageSize}
+        </if>
 
+        ) cy
+        left join st4_scs_cg cg on cy.CY017=cg.CY017
+        order by cy.CY013 desc
     </select>
 
     <select id="getSailRouteDataByReserveId" resultType="com.gistone.entity.St4ScsCy" parameterType="Integer">
@@ -106,46 +284,76 @@
 
     </select>
 
-    <select id="selectPoList" resultType="com.gistone.entity.St4ScsCy" parameterType="com.gistone.entity.St4ScsCy">
-        SELECT sa.SA001,sa.SA019 xcry,count(*)rwcs,sum(cy.CY006)gjlc,cy.CY013,
-        sg.SG001,sg.SG008,
-        sD.SD001,sd.SD008,SUM(TIMESTAMPDIFF(HOUR,CY003,CY004)) rwsc
+    <select id="selectPoList" resultMap="BaseResultMap"   parameterType="com.gistone.entity.St4ScsCy">
+        SELECT
+        sa.SA019 ,
+        cy.*,cc.*,ck.*,cf.*,
+        sg.SG001,
+        sg.SG008,
+        sd.SD001,
+        sd.SD008,
+        IFNULL(SUM(CY011=0),0) AS monitorNum,
+        IFNULL(SUM(CY011=1),0) AS dailyNum,
+        IFNULL(SUM(CY011=2),0) AS inspectNum,
+        IFNULL(SUM(CY011=3),0) AS surveyNum,
+        IFNULL(COUNT(*),0)    rwcs,
+        IFNULL(SUM(cy.CY006),0)    gjlc,
+        IFNULL(SUM(TIMESTAMPDIFF(HOUR,CY003,CY004)),0)    rwsc
         from st4_scs_cy cy
+        LEFT JOIN st4_scs_cc cc ON cy.CY017=cc.CY017
+        LEFT JOIN st4_scs_ck ck ON cc.CC002=ck.CC002
+        LEFT JOIN st4_scs_cf cf ON cc.CC002=cf.CC002
+
         LEFT JOIN st4_sys_sg sg
         on cy.CY010=sg.SG001
-        left join sys_company sd
-        on sg.SD001= sd.PK_ID
+        LEFT JOIN st4_sys_sd sd
+        on sg.SD001=sd.SD001
         LEFT JOIN st4_sys_sa sa
         on cy.SA001=sa.SA001
+        left join st4_scs_cl cl
+        on cl.CL003=cy.CL003
         where cy.CY016 =1
-        and sg.SG007 =1
-        and sa.SA007 =1
-        <if test="bhdmc!=null and bhdmc!=''">
-            and sg.SG008 = #{bhdmc}
+        <if test="st4SysSg != null">
+            <if test="st4SysSg.sg001!=null and st4SysSg.sg001 !=''">
+                and sg.SG001 =#{st4SysSg.sg001}
+            </if>
         </if>
-        <if test="xcry!=null and xcry!=''">
-            and sa.SA019 = #{xcry}
+        <if test="st4SysSd != null">
+            <if test="st4SysSd.sd001!=null and st4SysSd.sd001 !=''">
+                and sd.SD001 =#{st4SysSd.sd001}
+            </if>
         </if>
-        <if test="sf!=null and sf!=''">
-            and sg.SG019 = #{sf}
+        <if test="st4SysSa != null">
+            <if test="st4SysSa.sa001!=null and st4SysSa.sa001  !=''">
+                and sa.SA001 =#{st4SysSa.sa001}
+            </if>
         </if>
-        <if test="jssj!=null and jssj!=''">
-            and cy.CY004 &lt;= #{jssj}
+        <if test="st4ScsCl != null">
+            <if test="st4ScsCl.cl001!=null and st4ScsCl.cl001 !=''">
+                and cl.CL001 =#{st4ScsCl.cl001}
+            </if>
         </if>
-        <if test="kssj!=null and kssj!=''">
-            and cy.CY003 >= #{kssj}
+        <if test="endTime!=null and endTime!=''">
+            and cy.CY004 <![CDATA[ <= ]]> #{endTime}
         </if>
-        <if test="groupByName==SG001">
-            GROUP BY  sg.SG001
+        <if test="strTime!=null and strTime!=''">
+            and cy.CY003 <![CDATA[ >= ]]> #{strTime}
         </if>
-        <if test="groupByName==SD001">
-            GROUP BY  sd.SD001
+        <if test="groupByName==null or groupByName=='' ">
+            GROUP BY sd.SD001
         </if>
-        <if test="groupByName==SA001">
+        <if test="groupByName=='sg001' ">
+            GROUP BY sg.SG001
+        </if>
+        <if test="groupByName=='sd001' ">
+            GROUP BY sd.SD001
+        </if>
+        <if test="groupByName=='sa001'">
             GROUP BY  sa.SA001
         </if>
+
         <if test="sortName==null">
-            ORDER BY cy.CY013 desc
+            ORDER BY cy.CY013
         </if>
         <if test="sortName=='xcry'">
             ORDER BY CONVERT(sa.SA019 USING GBK) ${sortOrder}

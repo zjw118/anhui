@@ -11,12 +11,12 @@
     <packaging>jar</packaging>
     <artifactId>NatureResLedgerManager</artifactId>
     <dependencies>
-    <!--    <dependency>
+        <dependency>
             <groupId>com</groupId>
             <artifactId>NatureResUtilManager</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>com</groupId>
             <artifactId>NatureResUserManager</artifactId>
