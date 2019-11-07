@@ -378,9 +378,6 @@ public class ShpUtil {
     public static String handleWebData(JSONArray array, String filePath) {
         try {
             final SimpleFeatureType TYPE = createFeatureType();
-
-
-
             //在我们创建功能时收集功能的列表
             List<SimpleFeature> features = new ArrayList<>();
             //geometryFactory将用于创建每个要素的几何体属性，使用多边形对象作为位置。
@@ -773,15 +770,15 @@ public class ShpUtil {
         SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
         builder.setName("Location");
         builder.setCRS(DefaultGeographicCRS.WGS84); // 坐标参考系
+
         // 按顺序添加属性
-        builder.add("the_geom", MultiPolygon.class);
-        builder.add("ObjectID", Integer.class);
-          builder.length(100).add("name", String.class);// 字段的宽度为100个字符
-         builder.length(100).add("type", String.class);
-         builder.length(100).add("region", String.class);
-         builder.length(100).add("position", String.class);
         builder.length(100).add("area", String.class);
+        builder.add("ObjectID", Integer.class);
         builder.length(100).add("center", String.class);
+        builder.length(100).add("name", String.class);// 字段的宽度为100个字符
+        builder.length(100).add("position", String.class);
+        builder.length(100).add("type", String.class);
+        builder.length(100).add("region", String.class);
 
 
         // 生成类型
