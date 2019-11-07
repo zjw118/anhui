@@ -277,7 +277,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             Image image = new Image();
             image.setId(imageId);
             image.setShpurl(url.split(":")[1]);
-            image.setData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+"")+"");
+            image.setShp(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+"")+"");
             imageMapper.updateById(image);
         }
     }
