@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.St4PoSaSj;
 import com.gistone.entity.St4SysSa;
+import com.gistone.entity.St4SysSj;
 import com.gistone.mapper.St4PoSaSjMapper;
 import com.gistone.mapper.St4SysSaMapper;
 import com.gistone.mapper.St4SysSjMapper;
@@ -165,45 +166,29 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
         }
         return result;
     }
-//    @Override
-//    public Result getUserDetail(St4SysSa sa){
-//        sa = st4SysSaMapper.selectById(sa);
-//        sa.setSa009("");//此处密码不能返回
-//        QueryWrapper<St4PoSaSb> wrapper = new QueryWrapper<>();
-//        wrapper.eq("SA001",sa.getSa001());
-//        List<St4PoSaSb> sasbList = st4PoSaSbMapper.selectList(wrapper);
-//        List<Integer> roleList = new ArrayList<>();
-//        if(sasbList.size()>0){
-//            for (St4PoSaSb saSb :sasbList) {
-//                roleList.add(saSb.getSb001());
-//            }
-//            QueryWrapper<St4SysSb> sbWrapper = new QueryWrapper<>();
-//            sbWrapper.in("SB001",roleList);
-//            List<St4SysSb> sbList = st4SysSbMapper.selectList(sbWrapper);
-//            sa.setSbList(sbList);
-//        }
-//
-//        QueryWrapper<St4PoSaSj> wrapper1 = new QueryWrapper<>();
-//        wrapper1.eq("SA001",sa.getSa001());
-//        List<St4PoSaSj> sasjList = st4PoSaSjMapper.selectList(wrapper1);
-//        List<Integer> unitList = new ArrayList<>();
-//        if(sasjList.size()>0){
-//            for (St4PoSaSj saSj :sasjList) {
-//                unitList.add(saSj.getSj001());
-//            }
-//            QueryWrapper<St4SysSj> sjWrapper = new QueryWrapper<>();
-//            sjWrapper.in("SJ001",unitList);
-//            List<St4SysSj> sjList = st4SysSjMapper.selectList(sjWrapper);
-//            sa.setSjList(sjList);
-//        }
-//        Result result = new Result();
-//        result.setStatus(1000);
-//        result.setData(sa);
-//        return result;
-//    }
+    @Override
+    public ResultVO getUserDetail(St4SysSa sa){
+        sa = st4SysSaMapper.selectById(sa);
+        sa.setSa009("");//此处密码不能返回
+
+        QueryWrapper<St4PoSaSj> wrapper1 = new QueryWrapper<>();
+        wrapper1.eq("SA001",sa.getSa001());
+        List<St4PoSaSj> sasjList = st4PoSaSjMapper.selectList(wrapper1);
+        List<Integer> unitList = new ArrayList<>();
+        if(sasjList.size()>0){
+            for (St4PoSaSj saSj :sasjList) {
+                unitList.add(saSj.getSj001());
+            }
+            QueryWrapper<St4SysSj> sjWrapper = new QueryWrapper<>();
+            sjWrapper.in("SJ001",unitList);
+            List<St4SysSj> sjList = st4SysSjMapper.selectList(sjWrapper);
+            sa.setSjList(sjList);
+        }
+        return ResultVOUtil.success(sa);
+    }
     //修改用户
     @Override
-    public  Result updateUser(St4SysSa user,St4SysSa seUser,List<Integer> roleList, List<Integer> unitList)  {
+    public  ResultVO updateUser(St4SysSa user,St4SysSa seUser,List<Integer> roleList, List<Integer> unitList)  {
 
         //1.数据处理
         if(user.getSa009()!=null&&!"".equals(user.getSa009().trim())){
@@ -263,33 +248,31 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
                 }
                 boolean uFlag = st4PoSaSjService.saveBatch(surrList);
                 if(!uFlag){
-                    return Result.build(1003,ResultMsg.MSG_1003);
+                    return ResultVOUtil.error("1222","处理结果失败");
                 }
             }
             //重新给当前人赋予新的角色
             if(number>0){
-
-                return Result.build(1000, "修改成功");
+                return ResultVOUtil.success();
             };
-
-            return Result.build(1000, "修改成功");
         }else{
-            return Result.build(1003, "服务器异常，修改失败");
+            return ResultVOUtil.error("1222","处理结果失败");
         }
-
+        return ResultVOUtil.error("1222","处理结果失败");
 
     }
 
 //    //添加用户
     @Override
-    public Result add(St4SysSa user,St4SysSa seUser,List<Integer> roleList,List<Integer> unitList) {
+    public ResultVO add(St4SysSa user,St4SysSa seUser,List<Integer> roleList,List<Integer> unitList) {
 
         //1.判断用户是否存在
         QueryWrapper<St4SysSa> wrapper = new QueryWrapper<>();
         wrapper.eq("SA008",user.getSa008());
         List<St4SysSa> userList = st4SysSaMapper.selectList(wrapper);
         if (userList.size() > 0) {
-            return Result.build(1008, "用户名重复");
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "用户名重复！");
+
         }else{
             //2.添加用户
             //时间处理
@@ -339,27 +322,25 @@ public class St4SysSaServiceImpl extends ServiceImpl<St4SysSaMapper, St4SysSa> i
                     }
                     boolean batchUnitFlag = st4PoSaSjService.saveBatch(suurList);
                     if(!batchUnitFlag){
-                        return Result.build(1003,ResultMsg.MSG_1003);
+                        return ResultVOUtil.error("1222","处理结果失败");
                     }
                 }
                 if(flag>0){
-
-                    return Result.build(1000, "添加成功");
+                    return ResultVOUtil.success();
                 }
             }else{
-                return Result.build(1001, "添加失败");
+                return ResultVOUtil.error("1222","处理结果失败");
             }
         }
-        return Result.build(1001, "添加失败");
+        return ResultVOUtil.error("1222","处理结果失败");
     }
     @Override
-    public Result deleteUser(St4SysSa sa,St4SysSa seUser){
+    public ResultVO deleteUser(St4SysSa sa,St4SysSa seUser){
         sa.setSa007(0);
         if(st4SysSaMapper.updateById(sa)>0){
-
-            return  Result.build(1000,"删除"+ResultMsg.MSG_1000);
+            return  ResultVOUtil.success();
         }
 
-        return Result.build(1005,ResultMsg.MSG_1005);
+        return ResultVOUtil.error("1222","处理结果失败");
     }
 }

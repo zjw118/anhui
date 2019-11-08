@@ -25,7 +25,7 @@ public class FileUploadController {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileUploadController.class);
     @ApiOperation(value="上传通用接口 文件的参数名是'file','dirId'参数是上传后后台存的文件夹的标识" +
             "存在以下值分别对应不同模块：nr_system(系统) nr_ledger(核查) nr_object(航点) nr_line(航迹) " +
-            "nr_reserve(保护地边界) nr_point(物种) nr_decode(解译)\",tags = \"上传接口",notes = "上传通用接口")
+            "nr_reserve(保护地边界) \",tags = \"上传接口",notes = "上传通用接口")
     @RequestMapping(value = "/fileUpload" ,method = RequestMethod.POST)
     @ResponseBody
     public Result FileUpload(@RequestParam("file") MultipartFile[] files, @RequestParam("dirId") String dirId) {

@@ -109,6 +109,7 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                             //Thumbnails.of(oldFile).scale(config.getScaleRatio()).toFile(path);
                             // 显示路径
                             json.put("path", "/ld/" +  dirId + "/" + baseDateDir +"/" + newUUID  + sufName);
+
                         } else {
                             path = config.getUpPath() + "/" +  dirId + "/" + baseDateDir + "/" + uuid   + sufName;
                             // 如果目录不存在则创建目录
@@ -121,6 +122,10 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                             file.transferTo(uploadFile);
                             // 显示路径
                             json.put("path", "/ld/" +  dirId + "/" + baseDateDir + "/" + uuid  + sufName);
+                        }
+                        if("nr_object".equals(dirId)){
+                            int num = oldFileName.lastIndexOf(".");
+                            json.put("type", oldFileName.substring(num-1,num));
                         }
                         //如果上传的文件是解译数据，则解压到动态工作空间
                         String shpName = null;

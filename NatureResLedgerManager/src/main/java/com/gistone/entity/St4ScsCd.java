@@ -171,10 +171,9 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     private Integer groupId;
 
 
-//      表里没有！
-//    @ApiModelProperty(name="cd020",value=" 1数据类型，2动态点位，3边界点 4灾害点",dataType = "{}",required = false,example="")
-//    @TableField("CD020")
-//    private Integer cd020;
+    @ApiModelProperty(name="cd020",value=" 1数据类型，2动态点位，3边界点 4灾害点",dataType = "{}",required = false,example="")
+    @TableField("CD020")
+    private Integer cd020;
 
 
 

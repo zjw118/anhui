@@ -31,7 +31,7 @@ public interface ISt4SysSaService extends IService<St4SysSa> {
     ResultVO listPhoneUserToView(St4SysSa data);
 
     ResultCp updateAppUser(St4SysSa data) throws Exception;
-    Result add(St4SysSa user, St4SysSa seUser, List<Integer> roleList, List<Integer> unitList);
+    ResultVO add(St4SysSa user, St4SysSa seUser, List<Integer> roleList, List<Integer> unitList);
 
     /**
      * 用户列表无分页
@@ -52,7 +52,7 @@ public interface ISt4SysSaService extends IService<St4SysSa> {
      * @param sa
      * @return
      */
-    //Result getUserDetail(St4SysSa sa);
+    ResultVO getUserDetail(St4SysSa sa);
 
     /**
      * 修改用户
@@ -61,14 +61,14 @@ public interface ISt4SysSaService extends IService<St4SysSa> {
      * @param roleList
      * @return
      */
-    Result updateUser(St4SysSa user, St4SysSa seUser, List<Integer> roleList, List<Integer> unitList);
+    ResultVO updateUser(St4SysSa user, St4SysSa seUser, List<Integer> roleList, List<Integer> unitList);
 
     /**
      * 删除用户
      * @param sa
      * @return
      */
-     Result deleteUser(St4SysSa sa, St4SysSa seUser);
+    ResultVO deleteUser(St4SysSa sa, St4SysSa seUser);
 
 
 
