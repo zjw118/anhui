@@ -306,7 +306,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 Image image = new Image();
                 image.setId(imageId);
                 image.setShpurl("E:/FTP"+ftpPath+fileName1);
-                image.setShp(data+"");
+                image.setShp(ShpUtil.readShapeFileToStr(url,1)+"");
                 imageMapper.updateById(image);
             }
         }
