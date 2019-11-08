@@ -275,13 +275,13 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             iterpretation.setCd011(LocalDateTime.now());
             st4ScsCdMapper.insert(iterpretation);
         }
+
         //写入shp文件
         String url = PathUtile.getRandomPath(PATH+"/epr/image/","x.shp");
         String res = ShpUtil.handleWebData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+""),url);
         SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
         //SHP上传到GIS服务器
         String ftpPath = "/shp/"+ymd.format(new Date())+"/"; // ftp文件存放物理路径
-
         String name = UUID.randomUUID()+"";
         String fileName1 = name+".shp";
         FileInputStream input1 = new FileInputStream(new File(url));
@@ -306,7 +306,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 Image image = new Image();
                 image.setId(imageId);
                 image.setShpurl("E:/FTP"+ftpPath+fileName1);
-                image.setShp(net.sf.json.JSONArray.fromObject(data)+"");
+                image.setShp(data+"");
                 imageMapper.updateById(image);
             }
         }
