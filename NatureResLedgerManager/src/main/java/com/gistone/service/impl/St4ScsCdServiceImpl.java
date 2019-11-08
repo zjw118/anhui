@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.HEAD;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -53,9 +54,22 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     private String PATH;
 
 
-//    public ResultCp insertSpotDataFromApp (St4ScsCd id){
-//        return null;
-//    }
+
+    @Value("${ftp_host}")
+    private String ftpHost;
+    @Value("${ftp_port}")
+    private Integer ftpPort;
+    @Value("${ftp_username}")
+    private String ftpUserName;
+    @Value("${ftp_password}")
+    private String ftpPassword;
+    @Value("${ftp_pt}")
+    private String ftpPt;
+    @Value("${ftp_url}")
+    private String ftpUrl;
+
+
+
 
     @Override
     public Result listCheckPointToView(St4ScsCd data) {
@@ -275,21 +289,15 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
         }
 
 
-        //写入shp文件
-        String url = PathUtile.getRandomPath(PATH + "/epr/image/", "x.shp");
-        String res = ShpUtil.handleWebData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data) + ""), url);
-
-
+        //写入本地shp文件
+        String url = PathUtile.getRandomPath(PATH+"/epr/image/","x.shp");
+        String res = ShpUtil.handleWebData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+""),url);
         SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
         //SHP上传到GIS服务器
-        String ftpHost = "10.34.100.135"; // ftp服务器地址
-        int ftpPort = 21;// ftp服务员器端口号
-        String ftpUserName = "135";// anonymous匿名用户登录，不需要密码。administrator指定用户登录
-        String ftpPassword = "123456";// 指定用户密码
-        String ftpPath = "/shp/" + ymd.format(new Date()) + "/"; // ftp文件存放物理路径
+        String ftpPath = "/shp/"+ymd.format(new Date())+"/"; // ftp文件存放物理路径
+        String name = UUID.randomUUID()+"";
+        String fileName1 = name+".shp";
 
-        String name = UUID.randomUUID() + "";
-        String fileName1 = name + ".shp";
         FileInputStream input1 = new FileInputStream(new File(url));
         String fileName2 = name + ".dbf";
         FileInputStream input2 = new FileInputStream(new File(url.split("\\.")[0] + ".dbf"));
@@ -311,9 +319,10 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             if ("0".equals(res)) {
                 Image image = new Image();
                 image.setId(imageId);
-                image.setShpurl("E:" + ftpPath + fileName1);
-                //务必从SHP文件中解析出数据
-                image.setShp(ShpUtil.readShapeFileToStr(url, 1) + "");
+
+                image.setShpurl(ftpPt+ftpUrl+ftpPath+fileName1);
+                image.setShp(ShpUtil.readShapeFileToStr(url,1)+"");
+                image.setUpdateDate(new Date());
                 imageMapper.updateById(image);
             }
         }

@@ -90,7 +90,9 @@ public class IterpretationController {
         if (params == null) {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
         }
-        List<Map<String, Object>> data = (List<Map<String, Object>>) params.get("jsondata");
+        List<Map<String,Object>> data = (List<Map<String, Object>>) params.get("jsondata");
+
+
         if (data == null || data.size() <= 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "解译数据不能为空");
         }
@@ -107,7 +109,6 @@ public class IterpretationController {
             }
 
         }
-        //判断添加人是否为空
         service.insert(data,imageId,createBy);
         return ResultVOUtil.success();
     }

@@ -119,7 +119,7 @@ public class St4ScsCy extends BaseEntity  implements Serializable {
 
     @ApiModelProperty(value = "行政区(包裹行政区信息)")
     @TableField(exist = false)
-    private St4SysSd st4SysSd;
+    private SysCompany sysCompany;
 
     @ApiModelProperty(value = "添加人实体(包裹添加人信息)")
     @TableField(exist = false)

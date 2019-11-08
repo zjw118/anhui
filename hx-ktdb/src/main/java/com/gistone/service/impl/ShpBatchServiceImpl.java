@@ -61,13 +61,13 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
     @Value("${PATH}")
     private String PATH;
 
-    @Value("${ftp.host}")
+    @Value("${ftp_host}")
     private String ftpHost;
-    @Value("${ftp.port}")
+    @Value("${ftp_port}")
     private int ftpPort;
-    @Value("${ftp.username}")
+    @Value("${ftp_username}")
     private String ftpUserName;
-    @Value("${ftp.password}")
+    @Value("${ftp_password}")
     private String ftpPassword;
     @Value("${ftp.path}")
     private String ftpPath;

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +80,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     public void edit(Integer id,String name,String url,Integer  updateBy,String remark) {
         //具体逻辑
         Image image = mapper.selectById(id);
-        image.setName(name).setUrl(url).setUpdateDate(LocalDateTime.now()).setUpdateBy(updateBy);
+        image.setName(name).setUrl(url).setUpdateDate(new Date()).setUpdateBy(updateBy);
         if(StringUtils.isNotBlank(remark)){
             image.setRemark(remark);
         }

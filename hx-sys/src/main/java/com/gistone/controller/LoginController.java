@@ -101,10 +101,8 @@ public class LoginController {
             privateKey = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAIM2EIOIvLQIbmNg38eAJOPX0OmUVsv4yHl13yr2WZxLNWpAYri9DPO8RPXNL7MpRM0+rMii8+WpMptkDUTlIMlJzS7ey5Bcgc8nlXYRd81/t3dq2Xo3KfADCIW0+Hrls1MdbLR2QziPmP2+j2vHgb1tvapNe7zWdKHp7lmbrdZNAgMBAAECgYASc4fe91uR9Z2QXA8b/ukxISg/sJyEEngenHTFld8EG49nYaaAVBV+MPuBlVkf2K3ULvwdOs0RfrmfIHK9PXten2IH/wn5ZfCgaWY4pslVyqthZhNt7+0FnYGQm7gyNu77yS+CD9gCl1posneaacPtSym6PLMQqi92Zbvz0xpwAQJBAMG8kwCfazdO51mSxHcx0JX0MgCkUHWOqDtOKRMwo34s9ITk00bI3X0Qzp0LMSBZVz3Wq3IS0r24OnZSHaPUuzsCQQCtYUrzAbBCQPOGtxTL/vjNSSh8S7fioq6ZTmoKbMmmmktB/q2l3WYzgRJULMKdbReLtRFYX6eBnw35UqKpOswXAkEArXUeFN+nCgT+RAeRGbsjKy9RGZwEYcyROU/4nLLenti3MMkDlQvAqvpCUv8zQ+hZoQczx1WtE6n/xfItkYKlAwJAXlOLWi/1++WoWAdtChr6s3z0yMLNFUEaqo9tw6QyBTD2dr4fLRkJzEWRejgr3UgHwltNR34q/KtTB+z8UAOMGwJBAIsSaRO1Erve1cofrKAw3LehpiqrytrbpqbnyUC9JzZ1wrgO5tVA+XEz55pcGB2ISgFxjf88vgJ7DrlcX3zTCSA=";
         }
         // Object privateKey="111";
-        /*String username = RSAEncrypt.decrypt(loginUser.getData().getUsername(), privateKey.toString());//用户名解密
+        String username = RSAEncrypt.decrypt(loginUser.getData().getUsername(), privateKey.toString());//用户名解密
         String password = RSAEncrypt.decrypt(loginUser.getData().getPassword(), privateKey.toString());//密码解密*/
-        String username="admin";
-        String password="123456";
         ResultCp ret = st4SysSaService.searchSysUserByLogin(username, password);
         //登录失败
         if (ret.getStatus() != 1000) {
@@ -228,6 +226,7 @@ public class LoginController {
         mainMap.put("航迹管理","main_002");
         mainMap.put("航点管理","main_003");
         mainMap.put("斑块管理","main_004");
+        mainMap.put("红线边界管理","main_005");
         mainMap.put("消息中心","main_007");
         St4SysSc sc = new St4SysSc();
         for (String main:mainMap.keySet()) {

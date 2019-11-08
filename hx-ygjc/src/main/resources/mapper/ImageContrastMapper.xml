@@ -60,6 +60,13 @@
         FROM image
         WHERE del_flag = 1
         and name like '%${name}%'
+        ORDER BY create_date desc
+    </select>
+    
+    <select id="getImageContrast"  resultType ="com.gistone.entity.ImageContrast" parameterType="com.gistone.entity.ImageContrast">
+        SELECT *
+        FROM image_contrast
+        WHERE id = #{id}
     </select>
 
 </mapper>

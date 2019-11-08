@@ -71,15 +71,14 @@ public class UserController {
     @PassToken
     @ApiOperation(value = "用户详情(包含用户所属的角色和角色)", notes = "用户详情", response = St4SysSa.class)
     @PostMapping("/getUserDetail")
-    public Result getUserDetail(@RequestBody @ApiParam(name = "用户详情", value = "json格式", required = true) Swagger<St4SysSa> data){
+    public ResultVO getUserDetail(@RequestBody @ApiParam(name = "用户详情", value = "json格式", required = true) Swagger<St4SysSa> data){
 
-//        St4SysSa sa = data.getData();
-//
-//        if(sa.getSa001()==null){
-//            return Result.build(1001,"用户名主键sa001"+ ResultMsg.MSG_1001);
-//        }
-//        return  userService.getUserDetail(sa);
-        return null;
+        St4SysSa sa = data.getData();
+
+        if(sa.getSa001()==null){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "用户名主键sa001不能为空！");
+        }
+        return  userService.getUserDetail(sa);
     }
     /**
      * 人员分组列表（无分页）
@@ -139,21 +138,21 @@ public class UserController {
      * @return
      * @throws Exception
      */
-    @ApiOperation(value="添加用户",notes = "添加用户",response = St4SysSa.class)
+    @ApiOperation(value="(安徽用)添加用户(用户名手机号密码必填)",notes = "添加用户",response = St4SysSa.class)
     @PostMapping(value="/insertUser")
-    public Result insertUser(@RequestBody  @ApiParam(name="添加用户", value="json格式", required=true)Swagger<St4SysSa> data,
+    public ResultVO insertUser(@RequestBody  @ApiParam(name="添加用户", value="json格式", required=true)Swagger<St4SysSa> data,
                              HttpServletRequest request, HttpServletResponse response) throws Exception{
 
         St4SysSa addUser = data.getData();
 
         if(addUser.getSa008()==null){
-            return Result.build(1001,"用户名sa008"+ResultMsg.MSG_1001);
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "用户名sa008不能为空！");
         }
         if(addUser.getSa012()==null){
-            return Result.build(1001,"手机号sa012"+ResultMsg.MSG_1001);
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "手机号sa012不能为空！");
         }
         if(addUser.getSa009()==null){
-            return Result.build(1001,"密码sa009"+ResultMsg.MSG_1001);
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "密码sa009不能为空！");
         }
         //绿盾暂且不加角色
        /* if(addUser.getRoleList()==null){
@@ -198,9 +197,8 @@ public class UserController {
             addUser.setSa002(Integer.valueOf(userId));
         }
 
-        Result result = userService.add(addUser,seUser,roleList,unitList);
+        return userService.add(addUser,seUser,roleList,unitList);
 
-        return result;
     }
 
     /**
@@ -209,9 +207,9 @@ public class UserController {
      * @return
      * @throws Exception
      */
-    @ApiOperation(value="修改用户",notes = "修改用户",response = St4SysSa.class)
+    @ApiOperation(value="(安徽用)修改用户",notes = "修改用户",response = St4SysSa.class)
     @PostMapping(value="/updateUser")
-    public Result updateUser(@RequestBody@ApiParam(name="修改用户", value="json格式", required=true)Swagger<St4SysSa> user,
+    public ResultVO updateUser(@RequestBody@ApiParam(name="修改用户", value="json格式", required=true)Swagger<St4SysSa> user,
                              HttpServletRequest request) {
 
         String token = request.getHeader("token");// 从 http 请求头中取出 token
@@ -222,7 +220,7 @@ public class UserController {
         St4SysSa addUser = user.getData();
         //Id
         if (!RegUtil.CheckParameter(addUser.getSa001(), "Integer", null, false)) {
-            return Result.build(1002, "用户ID不能为空");
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "用户ID不能为空不能为空！");
         }
 
 
@@ -241,18 +239,14 @@ public class UserController {
             unitList = addUser.getUnitList();
         }
 
-
-
-        Result result = userService.updateUser(addUser,seUser,roleList,unitList);
-
-        return result;
+        return userService.updateUser(addUser,seUser,roleList,unitList);
     }
-    @ApiOperation(value="删除用户",notes = "删除用户",response = St4SysSa.class)
+    @ApiOperation(value="(安徽用)删除用户",notes = "删除用户",response = St4SysSa.class)
     @PostMapping(value="/deleteUser")
-    public Result deleteUser(@RequestBody@ApiParam(name="删除用户", value="json格式", required=true)Swagger<St4SysSa> user) {
+    public ResultVO deleteUser(@RequestBody@ApiParam(name="删除用户", value="json格式", required=true)Swagger<St4SysSa> user) {
         St4SysSa sa = user.getData();
         if(sa.getSa001()==null){
-            return Result.build(1001,"用户ID"+ResultMsg.MSG_1001);
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请先选择需要删除的用户！");
         }
         sa.setSa007(0);
         St4SysSa seUser = user.getData();

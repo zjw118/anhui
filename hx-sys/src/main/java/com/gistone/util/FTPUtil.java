@@ -98,9 +98,9 @@ public class FTPUtil {
         FTPClient ftpClient = null;
         try {
             ftpClient = getFTPClient(ftpHost, ftpUserName, ftpPassword, ftpPort);
-            //ftpClient.setControlEncoding("UTF-8"); // 中文支持
-            //ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
-            //ftpClient.enterLocalPassiveMode();
+//            ftpClient.setControlEncoding("UTF-8"); // 中文支持
+//            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+            ftpClient.enterLocalPassiveMode();
             //应对中文目录
             ftpPath = new String(ftpPath.getBytes("GBK"),"iso-8859-1");
             ftpClient.changeWorkingDirectory(ftpPath);// 转移到FTP服务器目录
@@ -134,6 +134,11 @@ public class FTPUtil {
         }
         return isItDone;
     }
+
+
+
+
+
 
     /**
      * 上传文件
@@ -179,19 +184,32 @@ public class FTPUtil {
         return isItDone;
     }
 
-    public static void createDri(String ftpHost, String ftpUserName, String ftpPassword, int ftpPort,
-                                    String ftpPath) {
-
-        FTPClient ftp = null;
+    public static boolean createDri(String ftpHost, String ftpUserName, String ftpPassword, int ftpPort, String ftpPath) {
+        FTPClient ftp;
         try {
-            String ftpPaths = new String(ftpPath.getBytes("GBK"), "iso-8859-1");
+            String ftpPaths = new String(ftpPath.getBytes("UTF-8"), "UTF-8");
             ftp = getFTPClient(ftpHost, ftpUserName, ftpPassword, ftpPort);
             if (!ftp.changeWorkingDirectory(ftpPath)) {// 判断目录是否存在，不存在，则创建
-                ftp.makeDirectory(ftpPaths);
+                return ftp.makeDirectory(ftpPaths);
             }
         }catch (Exception e){
-            log.error("");
+            System.out.println(e.toString());
         }
+        return false;
+    }
+
+    public static boolean isDri(String ftpHost, String ftpUserName, String ftpPassword, int ftpPort, String ftpPath) {
+        FTPClient ftp;
+        try {
+            String ftpPaths = new String(ftpPath.getBytes("UTF-8"), "UTF-8");
+            ftp = getFTPClient(ftpHost, ftpUserName, ftpPassword, ftpPort);
+            if (ftp.changeWorkingDirectory(ftpPath)) {// 判断目录是否存在，不存在，则创建
+                return true;
+            }
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+        return false;
     }
 
 

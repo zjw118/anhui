@@ -52,7 +52,7 @@
             AND   cl.CL010 like '%${cl.cl010}%'
         </if>
         order by cl.CL014 desc
-        <if test="cl.pageNumber!=null and cl.pageSize!=null and cl.pageNumber!='' and cl.pageSize!='' ">
+        <if test="cl.pageNumber != null and cl.pageSize!=null " >
             limit #{cl.pageNumber},#{cl.pageSize}
         </if>
         )  cl
