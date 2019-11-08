@@ -47,10 +47,12 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
     @Override
     public ResultVO add(ImageContrast imageContrast) throws Exception {
         //创建影像对比文件夹-FTP
-        SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
+//        SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
         String outUrl = "/yxdb/"+UUID.randomUUID()+"/";
         boolean bo = FTPUtil.createDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl);
-
+        if(!bo){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"FTP创建文件夹失败");
+        }
 
         Image image1 = imageMapper.getImageById(imageContrast.getImage1Id());
         Image image2 = imageMapper.getImageById(imageContrast.getImage2Id());
@@ -60,13 +62,14 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         String p4 = "&f=pjson";
 
         boolean b = true;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4,null);
             if(FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.shp")&&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"sub.shp")){
                 b = false;
                 break;
             }
-            Thread.sleep(1500);
+//            System.out.println("+1");
+            Thread.sleep(2000);
         }
         if(b){
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"SHP文件生成失败");
@@ -111,7 +114,6 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
             String str2 = ShpUtil.readShapeFileToStr(filePath2+fileName11,1)+"";
             imageContrast.setData1(str1);
             imageContrast.setData2(str2);
-            System.out.println(imageContrast.toString());
             int addres = imageContrastMapper.insertImageContrast(imageContrast);
             if(addres>0){
                 return ResultVOUtil.success();

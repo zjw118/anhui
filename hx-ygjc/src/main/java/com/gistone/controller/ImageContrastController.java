@@ -56,6 +56,7 @@ public class ImageContrastController {
 
         HttpSession session = request.getSession();
         SysUser user = (SysUser) session.getAttribute("user");
+
         ImageContrast imageContrast = new ImageContrast();
         imageContrast.setImage1Id(id1);
         imageContrast.setImage2Id(id2);
