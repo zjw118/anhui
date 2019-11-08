@@ -94,7 +94,6 @@ public class IterpretationController {
             }
 
         }
-        //判断添加人是否为空
         service.insert(data,imageId,createBy);
         return ResultVOUtil.success();
     }

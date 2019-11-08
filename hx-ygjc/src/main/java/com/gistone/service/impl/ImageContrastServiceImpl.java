@@ -33,10 +33,20 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
     @Autowired
     private ImageContrastMapper imageContrastMapper;
 
-    private String ftpHost = "10.34.100.135"; // ftp服务器地址
-    private int ftpPort = 21;// ftp服务员器端口号
-    private String ftpUserName = "135";// anonymous匿名用户登录，不需要密码。administrator指定用户登录
-    private String ftpPassword = "123456";// 指定用户密码
+
+    @Value("${ftp_host}")
+    private String ftpHost;
+    @Value("${ftp_port}")
+    private Integer ftpPort;
+    @Value("${ftp_username}")
+    private String ftpUserName;
+    @Value("${ftp_password}")
+    private String ftpPassword;
+    @Value("${ftp_pt}")
+    private String ftpPt;
+    @Value("${ftp_url}")
+    private String ftpUrl;
+
 
 
     @Value("${PATH}")
@@ -47,7 +57,6 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
     @Override
     public ResultVO add(ImageContrast imageContrast) throws Exception {
         //创建影像对比文件夹-FTP
-//        SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
         String outUrl = "/yxdb/"+UUID.randomUUID()+"/";
         boolean bo = FTPUtil.createDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl);
         if(!bo){
@@ -58,7 +67,7 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         Image image2 = imageMapper.getImageById(imageContrast.getImage2Id());
         String p1 = "?file1="+image1.getShpurl();
         String p2 = "&file2="+image2.getShpurl();
-        String p3 = "&outfile=E:/FTP"+outUrl;
+        String p3 = "&outfile="+ftpPt+ftpUrl+outUrl;
         String p4 = "&f=pjson";
 
         boolean b = true;
@@ -68,11 +77,10 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
                 b = false;
                 break;
             }
-//            System.out.println("+1");
             Thread.sleep(2000);
         }
         if(b){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"SHP文件生成失败");
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4+"<===SHP文件生成失败");
         }
 
         String url = UUID.randomUUID()+"";
