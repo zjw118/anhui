@@ -12,7 +12,7 @@ import com.gistone.entity.ProjectAdmission;
 import com.gistone.exception.ProjectException;
 import com.gistone.service.IAnalysisReportService;
 import com.gistone.service.IProjectAdmissionService;
-import com.gistone.util.FileUtil;
+import com.gistone.util.ExcelUtil;
 import com.gistone.util.KeyUtil;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultVOUtil;
@@ -375,7 +375,7 @@ public class ProjectAdmissionController {
         MultipartFile file = multipartRequest.getFile("file");
 
 
-        List<CoordinateVO> list = FileUtil.importExcel(file, 1, 1, CoordinateVO.class);
+        List<CoordinateVO> list = ExcelUtil.importExcel(file, 1, 1, CoordinateVO.class);
         System.out.println(list);
         List<Object> result = new ArrayList<>();
         if (list != null && list.size() > 0) {
@@ -405,7 +405,7 @@ public class ProjectAdmissionController {
         response.setHeader("filename", "坐标模板.xls");
         response.setHeader("Content-Type", "application/msexcel");
         //导出操作
-        FileUtil.exportExcel(list, "坐标", "坐标", CoordinateVO.class, "坐标模板.xls", response);
+        ExcelUtil.exportExcel(list, "坐标", "坐标", CoordinateVO.class, "坐标模板.xls", response);
     }
 
 

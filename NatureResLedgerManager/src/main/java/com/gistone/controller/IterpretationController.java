@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +57,21 @@ public class IterpretationController {
         return ResultVOUtil.success(result);
     }
 
+    @PostMapping("exporExcel")
+    public ResultVO exporExcel(@RequestBody Map<String, Object> paramsMap, HttpServletResponse response){
+        //请求参数格式校验
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        Integer id = (Integer) params.get("id");
+        if (id == null || id < 0) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+        }
 
+        Map<String, Object> map = service.exporExcel(id, response);
+        return ResultVOUtil.success(map);
+    }
     @PostMapping("/detail")
     public ResultVO getById(@RequestBody Map<String, Object> params) {
         Integer id = (Integer) params.get("id");

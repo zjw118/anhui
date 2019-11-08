@@ -110,16 +110,16 @@ public class LmMarkerMobileDeviceIDServiceImpl extends ServiceImpl<LmMarkerMobil
             //缩略图上传
             if (StringUtils.isNotBlank(stringList.get(13))) {
                 String mbwj = configUtils.getPICTURE_PATH() + "ktdb/" + DateUtils.format(new Date()) + "/ZipThumbnail/";
-                FileUtil.mkdirsmy(mbwj, "数据库关联文件,且勿删除");
+                ExcelUtil.mkdirsmy(mbwj, "数据库关联文件,且勿删除");
                 System.out.println(stringList.get(13).substring(stringList.get(13).lastIndexOf("/") + 1));
-                FileUtil.copyFile(configUtils.getZIP_DECOM_PATH() + fileNameNoIndex + "\\thumbnail\\" + stringList.get(13).substring(stringList.get(13).lastIndexOf("/") + 1), mbwj);
+                ExcelUtil.copyFile(configUtils.getZIP_DECOM_PATH() + fileNameNoIndex + "\\thumbnail\\" + stringList.get(13).substring(stringList.get(13).lastIndexOf("/") + 1), mbwj);
                 Integer type = 6;
                 prePhotoInfo(lmMarkerMobile, mbwj.substring(2) + stringList.get(13).substring(stringList.get(13).lastIndexOf("/") + 1), type);
             }
             //现场图上传
             if (StringUtils.isNotBlank(stringList.get(14))) {
                 String mbwj = configUtils.getPICTURE_PATH() + "ktdb/" + DateUtils.format(new Date()) + "\\ZiplocalPicture\\";
-                FileUtil.mkdirsmy(mbwj, "数据库关联文件,且勿删除");
+                ExcelUtil.mkdirsmy(mbwj, "数据库关联文件,且勿删除");
 
               /*  System.out.println("------"+stringList.get(14)+"---------");
                 String str = new String(stringList.get(14).getBytes("ISO-8859-1"),"ISO-8859-1");
@@ -131,7 +131,7 @@ public class LmMarkerMobileDeviceIDServiceImpl extends ServiceImpl<LmMarkerMobil
 
                     if (jsonObject.get("path") != null) {
                         String paths = jsonObject.get("path").toString();
-                        FileUtil.copyFile(configUtils.getZIP_DECOM_PATH() + fileNameNoIndex + "\\localPicture\\" + paths.substring(paths.lastIndexOf("/") + 1), mbwj);
+                        ExcelUtil.copyFile(configUtils.getZIP_DECOM_PATH() + fileNameNoIndex + "\\localPicture\\" + paths.substring(paths.lastIndexOf("/") + 1), mbwj);
                         prePhotoInfo(lmMarkerMobile, mbwj.substring(2) + paths.substring(paths.lastIndexOf("/") + 1), Integer.valueOf(jsonObject.get("type").toString()));
                     }
                 }

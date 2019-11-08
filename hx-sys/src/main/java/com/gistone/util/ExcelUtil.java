@@ -1,17 +1,14 @@
 package com.gistone.util;
 
+
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.ExcelImportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
-
 import cn.afterturn.easypoi.word.WordExportUtil;
-
 import org.apache.commons.io.FileUtils;
-
 import org.apache.commons.lang3.StringUtils;
-//import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.util.Assert;
@@ -19,24 +16,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-
 import java.io.*;
-
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+//import org.apache.poi.ss.formula.functions.T;
 
 /**
  * @author zf1017@foxmail.com
  * @date 2019/5/6 0006 15:44
  * @description
  */
-public class FileUtil {
+public class ExcelUtil {
     public static void exportExcel(List<?> list, String title, String sheetName, Class<?> pojoClass, String fileName, boolean isCreateHeader, HttpServletResponse response) {
         ExportParams exportParams = new ExportParams(title, sheetName);
         exportParams.setCreateHeadRows(isCreateHeader);
@@ -263,6 +255,8 @@ public class FileUtil {
         }
         return filepath;
     }
+
+
 
 
 }

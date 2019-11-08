@@ -25,6 +25,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.FileInputStream;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -58,6 +60,18 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
     private final static String URL = "/0/query?returnGeometry=true&f=json&where=0%3D0&outFields=*";
     @Value("${PATH}")
     private String PATH;
+
+    @Value("${ftp.host}")
+    private String ftpHost;
+    @Value("${ftp.port}")
+    private int ftpPort;
+    @Value("${ftp.username}")
+    private String ftpUserName;
+    @Value("${ftp.password}")
+    private String ftpPassword;
+    @Value("${ftp.path}")
+    private String ftpPath;
+
 
     @Override
     public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName) {
@@ -117,7 +131,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             //将数据写入shp文件
 
             for (int i = 0; i < num + 1; i++) {
-                String param = "/0/query?where="+pk+"<%3D" + (1 + i) * 1000 + "+and+"+pk+">" + i * 1000 + "&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=json";
+                String param = "/0/query?where=" + pk + "<%3D" + (1 + i) * 1000 + "+and+" + pk + ">" + i * 1000 + "&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=json";
                 String sum = httpRequest(url + param, "GET", null);
                 JSONObject parse1 = JSON.parseObject(sum);
                 JSONArray jsonArray1 = (JSONArray) parse1.get("features");
@@ -126,15 +140,11 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             }
 
             //将数据写入shp文件
-            String fileUrl = PathUtile.getRandomPath(PATH+"/epr/shp/", "x.shp");
+            String fileUrl = PathUtile.getRandomPath(PATH + "/epr/shp/", "x.shp");
             System.out.println(fileUrl);
+
             ShpUtil.importPreRedlinedata(jsonArray, fileUrl);
-            //批次表中录入数据
-            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(1);
-            if (StringUtils.isNotBlank(remark)) {
-                shpBatch.setRemark(remark);
-            }
-            mapper.insert(shpBatch);
+
             //读取shp文件的数据
             ImportRedlineData importRedlineData = new ImportRedlineData();
             ArrayList<DataRedlineRegister> lmMarkerMobiles = importRedlineData.readShapeFile(fileUrl);
@@ -147,6 +157,45 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
                     dataRedlineRegisterMapper.insert(lmMarkerMobile);
                 }
             }
+
+            //批次表中录入数据
+            // 把生成的文件上传到ftp服务器的文件夹下面，并返回地址
+            //1.获取文件夹下所有文件
+            String path = fileUrl.substring(0, fileUrl.lastIndexOf("/")); // 路径
+            File f = new File(path);
+            if (!f.exists()) {
+                System.out.println(path + " not exists");
+                return;
+            }
+            File fa[] = f.listFiles();
+
+            //加日期和UUId 创建文件夹
+
+            String nowTime = DateUtils.format(new Date(), "yyyyMMdd");
+            String token = UUID.randomUUID().toString().replaceAll("-", "");
+            String  ftpPathUrl = "/redlineshp/" + nowTime + "-" + token + "-redline/";
+            FTPUtil.createDri(ftpHost, ftpUserName, ftpPassword, ftpPort,ftpPathUrl);
+
+            String shpName = "";
+            for (int i = 0; i < fa.length; i++) {
+                File fs = fa[i];
+                if (fs.isDirectory()) {
+                    System.out.println(fs.getName() + " [目录]");
+                } else {
+                    System.out.println(fs.getName());
+                    FileInputStream input = new FileInputStream(new File(path + File.separatorChar + fs.getName()));
+                    FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPathUrl, fs.getName(), input);
+                }
+                if (fs.getName().contains("shp")) {
+                    shpName = fs.getName();
+                }
+            }
+
+            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setFtpShpUrl(ftpPath + ftpPathUrl + shpName).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(1);
+            if (StringUtils.isNotBlank(remark)) {
+                shpBatch.setRemark(remark);
+            }
+            mapper.insert(shpBatch);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("导入预置红线数据失败，异常信息为:", e.getMessage());
@@ -178,7 +227,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             //将数据写入shp文件
 
             for (int i = 0; i < num + 1; i++) {
-                String param = "/0/query?where="+pk+"<%3D" + (1 + i) * 1000 + "+and+"+pk+">" + i * 1000 + "&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=json";
+                String param = "/0/query?where=" + pk + "<%3D" + (1 + i) * 1000 + "+and+" + pk + ">" + i * 1000 + "&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=json";
                 String sum = httpRequest(url + param, "GET", null);
                 JSONObject parse1 = JSON.parseObject(sum);
                 JSONArray jsonArray1 = (JSONArray) parse1.get("features");
@@ -190,12 +239,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             System.out.println(fileUrl);
 //            JSONArray objects = JSON.parseArray(sb.toString().substring(0,sb.toString().length()-1));
             ShpUtil.importPreMarkerdata(jsonArray, fileUrl);
-            //批次表中录数据
-            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(2);
-            if (StringUtils.isNotBlank(remark)) {
-                shpBatch.setRemark(remark);
-            }
-            mapper.insert(shpBatch);
+
             //读shp录数据
             ReadShapeFile readShapeFile = new ReadShapeFile();
             ArrayList<LmMarkerMobile> lmMarkerMobiles = readShapeFile.readShapeFile(fileUrl);
@@ -228,6 +272,46 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
                     lmMarkerMobileMapper.insert(lmMarkerMobile);
                 }
             }
+            //创建文件夹并且长传生成的shp文件
+            //把生成的文件上传到ftp服务器的文件夹下面，并返回地址
+            //1.获取文件夹下所有文件
+            String path = fileUrl.substring(0, fileUrl.lastIndexOf("/")); // 路径
+            File f = new File(path);
+            if (!f.exists()) {
+                System.out.println(path + " not exists");
+                return;
+            }
+            File fa[] = f.listFiles();
+
+            //加日期和UUId 创建文件夹
+
+            String nowTime = DateUtils.format(new Date(), "yyyyMMdd");
+            String token = UUID.randomUUID().toString().replaceAll("-", "");
+            String ftpPathUrl = "/redlineshp/" + nowTime + "-" + token + "-jz/";
+            FTPUtil.createDri(ftpHost, ftpUserName, ftpPassword, ftpPort,ftpPathUrl );
+
+            String shpName = "";
+            for (int i = 0; i < fa.length; i++) {
+                File fs = fa[i];
+                if (fs.isDirectory()) {
+                    System.out.println(fs.getName() + " [目录]");
+                } else {
+                    System.out.println(fs.getName());
+                    FileInputStream input = new FileInputStream(new File(path + File.separatorChar + fs.getName()));
+                    FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPathUrl, fs.getName(), input);
+                }
+                if (fs.getName().contains("shp")) {
+                    shpName = fs.getName();
+                }
+            }
+
+            //批次表中录数据
+            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setShpUrl(ftpPath + ftpPathUrl + shpName).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(2);
+            if (StringUtils.isNotBlank(remark)) {
+                shpBatch.setRemark(remark);
+            }
+            mapper.insert(shpBatch);
+
         } catch (Exception e) {
             e.printStackTrace();
             log.error("导入预置界桩数据失败，异常信息为:", e.getMessage());
@@ -255,7 +339,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             //将数据写入shp文件
 
             for (int i = 0; i < num1 + 1; i++) {
-                String param = "/0/query?where="+pk+"<%3D" + (1 + i) * 1000 + "+and+"+pk+">" + i * 1000 + "&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=json";
+                String param = "/0/query?where=" + pk + "<%3D" + (1 + i) * 1000 + "+and+" + pk + ">" + i * 1000 + "&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=json";
                 String sum = httpRequest(url + param, "GET", null);
                 JSONObject parse1 = JSON.parseObject(sum);
                 JSONArray jsonArray1 = (JSONArray) parse1.get("features");
@@ -267,12 +351,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             System.out.println(fileUrl);
 
             ShpUtil.importPreBoarddata(jsonArray, fileUrl);
-            //批次表中录数据
-            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(3);
-            if (StringUtils.isNotBlank(remark)) {
-                shpBatch.setRemark(remark);
-            }
-            mapper.insert(shpBatch);
+
 
             //读shp并且导入数据
 
@@ -291,6 +370,46 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
                     lmBoardMapper.insert(lmMarkerMobile);
                 }
             }
+            //创建文件夹并且长传生成的shp文件
+            //把生成的文件上传到ftp服务器的文件夹下面，并返回地址
+            //1.获取文件夹下所有文件
+            String path = fileUrl.substring(0, fileUrl.lastIndexOf("/")); // 路径
+            File f = new File(path);
+            if (!f.exists()) {
+                System.out.println(path + " not exists");
+                return;
+            }
+            File fa[] = f.listFiles();
+
+            //加日期和UUId 创建文件夹
+
+            String nowTime = DateUtils.format(new Date(), "yyyyMMdd");
+            String token = UUID.randomUUID().toString().replaceAll("-", "");
+            String ftpPathUrl = "/redlineshp/" + nowTime + "-" + token + "-bsp/";
+            FTPUtil.createDri(ftpHost, ftpUserName, ftpPassword, ftpPort,ftpPathUrl );
+
+            String shpName = "";
+            for (int i = 0; i < fa.length; i++) {
+                File fs = fa[i];
+                if (fs.isDirectory()) {
+                    System.out.println(fs.getName() + " [目录]");
+                } else {
+                    System.out.println(fs.getName());
+                    FileInputStream input = new FileInputStream(new File(path + File.separatorChar + fs.getName()));
+                    FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPathUrl, fs.getName(), input);
+                }
+                if (fs.getName().contains("shp")) {
+                    shpName = fs.getName();
+                }
+            }
+
+
+            //批次表中录数据
+            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setFtpShpUrl(ftpPath + ftpPathUrl + shpName).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(3);
+            if (StringUtils.isNotBlank(remark)) {
+                shpBatch.setRemark(remark);
+            }
+            mapper.insert(shpBatch);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("导入预置标识牌数据失败，异常信息为:", e.getMessage());

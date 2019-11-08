@@ -1297,7 +1297,7 @@ public class LmMarkerMobileController {
             SysUser map = sysUserService.getOne(new QueryWrapper<SysUser>().eq("username", phone).eq("enable", 1).eq("type", 1));/*sysUserFeign.getByPhone(phone);*/
 
             String fileNameNoIndex = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf("."));
-            String fileName = FileUtil.fileUp(file, configUtils.getZIP_PATH(), fileNameNoIndex);
+            String fileName = ExcelUtil.fileUp(file, configUtils.getZIP_PATH(), fileNameNoIndex);
             String s = ZipUtils.unZip(configUtils.getZIP_PATH() + fileName, configUtils.getZIP_DECOM_PATH());
 //            FileReader fReader = new FileReader(configUtils.getZIP_DECOM_PATH() + fileNameNoIndex + "\\" + fileNameNoIndex + ".csv");
 //            CSVReader csvReader = new CSVReader(fReader);
@@ -1396,7 +1396,7 @@ public class LmMarkerMobileController {
             }
         }
         List<LmMarkerMobileVO> lmMarkerMobileList = lmMarkerMobileService.selectPreMarkerListForAll(codes, param);
-        String filepath = FileUtil.toXls("预设界桩", lmMarkerMobileList, configUtils.getExcel_PATH(), LmMarkerMobileVO.class, response);
+        String filepath = ExcelUtil.toXls("预设界桩", lmMarkerMobileList, configUtils.getExcel_PATH(), LmMarkerMobileVO.class, response);
         Map map1 = new HashMap();
         map1.put("filepath", filepath.substring(2));
         return ResultVOUtil.success(map1);
@@ -1424,7 +1424,7 @@ public class LmMarkerMobileController {
             }
         }
         List<LmMarkerMobileVO> lmMarkerMobileList = lmMarkerMobileService.selectMarkerListForAll(codes, param);
-        String filepath = FileUtil.toXls("实际界桩", lmMarkerMobileList, configUtils.getExcel_PATH(), LmMarkerMobileVO.class, response);
+        String filepath = ExcelUtil.toXls("实际界桩", lmMarkerMobileList, configUtils.getExcel_PATH(), LmMarkerMobileVO.class, response);
         Map map1 = new HashMap();
         map1.put("filepath", filepath.substring(2));
         return ResultVOUtil.success(map1);

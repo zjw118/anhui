@@ -916,7 +916,7 @@ public class LmBoardController {
             }
         }
         List<LmBoardVO> lmBoardVOList = lmBoardService.selectPreBoardListForAll(boardNum, codes);
-        String filepath = FileUtil.toXls("预设标识牌", lmBoardVOList, configUtils.getExcel_PATH(), LmBoardVO.class, response);
+        String filepath = ExcelUtil.toXls("预设标识牌", lmBoardVOList, configUtils.getExcel_PATH(), LmBoardVO.class, response);
         Map map1 = new HashMap();
         map1.put("filepath", filepath.substring(2));
         return ResultVOUtil.success(map1);
@@ -945,7 +945,7 @@ public class LmBoardController {
             }
         }
         List<LmBoardVO> lmBoardVOList = lmBoardService.selectBoardListForAll(boardNum, codes);
-        String filepath = FileUtil.toXls("实际标识牌", lmBoardVOList, configUtils.getExcel_PATH(), LmBoardVO.class, response);
+        String filepath = ExcelUtil.toXls("实际标识牌", lmBoardVOList, configUtils.getExcel_PATH(), LmBoardVO.class, response);
         Map map1 = new HashMap();
         map1.put("filepath", filepath.substring(2));
         return ResultVOUtil.success(map1);

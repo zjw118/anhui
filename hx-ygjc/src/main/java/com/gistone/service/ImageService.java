@@ -3,7 +3,6 @@ package com.gistone.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gistone.entity.Image;
-import com.gistone.util.ResultVOUtil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -32,6 +31,7 @@ public interface ImageService extends IService<Image> {
     int getBeforeCount(String code,LocalDate beforeTime);
 
     List<Map<String, Object>> getRlhdTotal();
+
 
 
 

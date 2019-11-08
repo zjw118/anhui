@@ -32,8 +32,11 @@ import java.util.Map;
 @Slf4j
 public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements ImageService {
 
+
     @Autowired
     private ImageMapper mapper;
+
+
 
     @Override
     public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName) {
@@ -104,6 +107,8 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         List<Map<String,Object>> result = mapper.getAreaGroupByType(id);
         return result;
     }
+
+
 
 }
 

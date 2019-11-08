@@ -14,7 +14,7 @@ import com.gistone.service.ILmBoardDiagramService;
 import com.gistone.service.LmBoardDiagramDeviceIDService;
 import com.gistone.util.ConfigUtils;
 import com.gistone.util.DateUtils;
-import com.gistone.util.FileUtil;
+import com.gistone.util.ExcelUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -184,23 +184,23 @@ public class LmBoardDiagramServiceImpl extends ServiceImpl<LmBoardDiagramMapper,
                 //缩略图上传
                 if (StringUtils.isNotBlank(stringList.get(10))) {
                     String mbwj = configUtils.getPICTURE_PATH() + "ktdb/" + DateUtils.format(new Date()) + "/ZipThumbnail/";
-                    FileUtil.mkdirsmy(mbwj, "数据库关联文件,且勿删除");
+                    ExcelUtil.mkdirsmy(mbwj, "数据库关联文件,且勿删除");
                     System.out.println(stringList.get(10).substring(stringList.get(10).lastIndexOf("/") + 1));
-                    FileUtil.copyFile(configUtils.getZIP_DECOM_PATH() + fileNameNoIndex + "\\thumbnail\\" + stringList.get(10).substring(stringList.get(10).lastIndexOf("/") + 1), mbwj);
+                    ExcelUtil.copyFile(configUtils.getZIP_DECOM_PATH() + fileNameNoIndex + "\\thumbnail\\" + stringList.get(10).substring(stringList.get(10).lastIndexOf("/") + 1), mbwj);
                     Integer type = 6;
                     prePhotoInfo(lmBoard, mbwj.substring(2) + stringList.get(10).substring(stringList.get(10).lastIndexOf("/") + 1), type);
                 }
                 //现场图上传
                 if (StringUtils.isNotBlank(stringList.get(11))) {
                     String mbwj = configUtils.getPICTURE_PATH() + "ktdb/" + DateUtils.format(new Date()) + "/ZiplocalPicture/";
-                    FileUtil.mkdirsmy(mbwj, "数据库关联文件,且勿删除");
+                    ExcelUtil.mkdirsmy(mbwj, "数据库关联文件,且勿删除");
                     JSONArray jsonArray = JSONArray.fromObject(stringList.get(11).replaceAll("，", ","));
                     for (int j = 0; j < jsonArray.size(); j++) {
                         JSONObject jsonObject = JSONObject.fromObject(jsonArray.get(j));
                         if (jsonObject.get("path") != null) {
                             String paths = jsonObject.get("path").toString();
                             String srcPath = configUtils.getZIP_DECOM_PATH() + fileNameNoIndex + "\\localPicture\\" + paths.substring(paths.lastIndexOf("/") + 1);
-                            FileUtil.copyFile(srcPath, mbwj);
+                            ExcelUtil.copyFile(srcPath, mbwj);
                             prePhotoInfo(lmBoard, mbwj.substring(2) + paths.substring(paths.lastIndexOf("/") + 1), Integer.valueOf(jsonObject.get("type").toString()));
                         }
                     }

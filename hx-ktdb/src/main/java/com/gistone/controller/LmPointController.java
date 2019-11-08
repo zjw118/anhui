@@ -441,7 +441,7 @@ public class LmPointController {
             }
         }
         List<LmPointVO> lmPointVOList = iLmPointService.selectPointListForAll(codes,param,redlineId);
-        String filepath = FileUtil.toXls("拐点坐标", lmPointVOList, configUtils.getExcel_PATH(),LmPointVO.class ,response);
+        String filepath = ExcelUtil.toXls("拐点坐标", lmPointVOList, configUtils.getExcel_PATH(),LmPointVO.class ,response);
         Map map1 = new HashMap();
         map1.put("filepath", filepath.substring(2));
         return ResultVOUtil.success(map1);

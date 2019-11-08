@@ -833,7 +833,7 @@ public class LmBoardDiagramController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "手机用户不存在,请核对");
         }
         String fileNameNoIndex = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf("."));
-        String fileName = FileUtil.fileUp(file, configUtils.getZIP_PATH(), fileNameNoIndex);
+        String fileName = ExcelUtil.fileUp(file, configUtils.getZIP_PATH(), fileNameNoIndex);
         Map<String, Object> map1 = null;
         try {
             ZipUtils.unZip(configUtils.getZIP_PATH() + fileName, configUtils.getZIP_DECOM_PATH());
@@ -876,7 +876,7 @@ public class LmBoardDiagramController {
             }
         }
         List<LmBoardDiagramVO> lmBoardVOList = lmBoardDiagramService.selectBoardDiagramListForAll(boardNum, codes);
-        String filepath = FileUtil.toXls("实际分布图", lmBoardVOList, configUtils.getExcel_PATH(), LmBoardDiagramVO.class, response);
+        String filepath = ExcelUtil.toXls("实际分布图", lmBoardVOList, configUtils.getExcel_PATH(), LmBoardDiagramVO.class, response);
         Map map1 = new HashMap();
         map1.put("filepath", filepath.substring(2));
         return ResultVOUtil.success(map1);

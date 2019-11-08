@@ -1,11 +1,11 @@
 package com.gistone.entity;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.Data;
@@ -150,18 +150,23 @@ public class St4ScsCd extends BaseEntity implements Serializable {
 
     @ApiModelProperty(name="imageId",value="影像表外键",dataType = "{}",required = false,example="")
     @TableField("image_id")
+//    @Excel(name = "id",height = 11, width = 15)
     private Integer imageId;
     @ApiModelProperty(name="activityName",value="活动名称",dataType = "{}",required = false,example="")
     @TableField("active_name")
+    @Excel(name = "活动名称",height = 11, width = 15)
     private String activeName;
     @ApiModelProperty(name="activeType",value="活动类型",dataType = "{}",required = false,example="")
     @TableField("active_type")
+    @Excel(name = "活动类型",height = 11, width = 15)
     private String activeType;
     @ApiModelProperty(name="area",value="活动面积",dataType = "{}",required = false,example="")
     @TableField("area")
+    @Excel(name = "面积",height = 11, width = 15)
     private String area;
     @ApiModelProperty(name="descri",value="活动说明",dataType = "{}",required = false,example="")
     @TableField("descri")
+    @Excel(name = "说明",height = 11, width = 15)
     private String descri;
     @ApiModelProperty(name="geometry",value="影像点",dataType = "{}",required = false,example="")
     @TableField("geometry")

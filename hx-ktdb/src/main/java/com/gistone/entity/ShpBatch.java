@@ -33,6 +33,8 @@ public class ShpBatch extends Model<ShpBatch> {
      */
     private String shpUrl;
 
+    private String ftpShpUrl;
+
     /**
      * gp服务地址
      */

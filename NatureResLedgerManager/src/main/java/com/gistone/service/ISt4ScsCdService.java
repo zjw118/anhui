@@ -1,14 +1,11 @@
 package com.gistone.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.gistone.VO.ResultVO;
 import com.gistone.entity.St4ScsCd;
 import com.gistone.entity.St4SysSa;
 import com.gistone.util.Result;
-import net.sf.json.JSONObject;
 
-import java.io.FileNotFoundException;
-import java.util.HashMap;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -34,5 +31,8 @@ public interface ISt4ScsCdService extends IService<St4ScsCd> {
     void delete(List<Integer> id);
     void insert(List<Map<String, Object>> data,Integer imageId,Integer createBy) throws Exception;
     void edit(St4ScsCd entity);
+
+
+    Map<String,Object> exporExcel(Integer id, HttpServletResponse response);
 
 }

@@ -1,6 +1,8 @@
 package com.gistone.entity;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import lombok.Data;
+
 import java.util.Date;
 
 
@@ -21,10 +23,15 @@ public class St4ScsCdVo{
     private String CD013;
     private String CD014;
     private Integer CD015;
+    @Excel(name = "id", orderNum = "0")
     private Integer imageId;
+    @Excel(name = "活动名称", orderNum = "1")
     private String activeName;
+    @Excel(name = "活动类型", orderNum = "2")
     private String activeType;
+    @Excel(name = "活动面积", orderNum = "2")
     private String area;
+    @Excel(name = "说明", orderNum = "2")
     private String descri;
     private String geometry;
     private Integer groupId;
