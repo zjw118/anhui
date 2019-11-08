@@ -10,6 +10,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,7 +42,7 @@ public class Image extends Model<Image> {
     @TableId(value = "update_by")
     private Integer updateBy;
     @TableId(value = "update_date")
-    private LocalDateTime updateDate;
+    private Date updateDate;
     @TableId(value = "remark")
     private String remark;
     @TableId(value = "del_flag")
