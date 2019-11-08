@@ -51,6 +51,11 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     private String PATH;
 
 
+    String ftpHost = "10.34.100.135"; // ftp服务器地址
+    int ftpPort = 21;// ftp服务员器端口号
+    String ftpUserName = "135";// anonymous匿名用户登录，不需要密码。administrator指定用户登录
+    String ftpPassword = "123456";// 指定用户密码
+
 //    public ResultCp insertSpotDataFromApp (St4ScsCd id){
 //        return null;
 //    }
@@ -270,18 +275,11 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             iterpretation.setCd011(LocalDateTime.now());
             st4ScsCdMapper.insert(iterpretation);
         }
-
         //写入shp文件
         String url = PathUtile.getRandomPath(PATH+"/epr/image/","x.shp");
         String res = ShpUtil.handleWebData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+""),url);
-
-
         SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
         //SHP上传到GIS服务器
-        String ftpHost = "10.34.100.135"; // ftp服务器地址
-        int ftpPort = 21;// ftp服务员器端口号
-        String ftpUserName = "135";// anonymous匿名用户登录，不需要密码。administrator指定用户登录
-        String ftpPassword = "123456";// 指定用户密码
         String ftpPath = "/shp/"+ymd.format(new Date())+"/"; // ftp文件存放物理路径
 
         String name = UUID.randomUUID()+"";
@@ -307,7 +305,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             if("0".equals(res)){
                 Image image = new Image();
                 image.setId(imageId);
-                image.setShpurl("E:"+ftpPath+fileName1);
+                image.setShpurl("E:/FTP"+ftpPath+fileName1);
                 image.setShp(net.sf.json.JSONArray.fromObject(data)+"");
                 imageMapper.updateById(image);
             }
