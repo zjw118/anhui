@@ -61,6 +61,7 @@ public class AppManagerController {
                 return ResultCp.build(1001, "caa003版本号不能为空");
             }
             ResultCp result = iSt4ScsCaaService.getNewVersion(param);
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
         }

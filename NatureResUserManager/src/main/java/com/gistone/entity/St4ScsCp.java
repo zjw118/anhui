@@ -13,7 +13,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author xxh
@@ -43,9 +43,9 @@ public class St4ScsCp implements Serializable {
     @TableField("CP004")
     private String cp004;
 
-    @ApiModelProperty(value = "是否是必填项 1是 0 否 默认否")
+    @ApiModelProperty(value = "存储的候选字段的id的集合(详情的时候好返回)")
     @TableField("CP005")
-    private Integer cp005;
+    private String cp005;
 
     @ApiModelProperty(value = "表单类型 0台账表  1 巡护表")
     @TableField("CP006")
