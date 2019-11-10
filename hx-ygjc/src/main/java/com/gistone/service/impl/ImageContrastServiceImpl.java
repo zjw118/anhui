@@ -46,9 +46,6 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
     private String ftpPt;
     @Value("${ftp_url}")
     private String ftpUrl;
-
-
-
     @Value("${PATH}")
     private String PATH;
     @Value("${IMAGE_SERVICE}")
@@ -83,8 +80,8 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4+"<===SHP文件生成失败");
         }
 
+        //FTP将SHP复制到本地
         String url = UUID.randomUUID()+"";
-        //FTP读取SHP数据
         String ftpPath = outUrl; // 原ftp文件路径
         String filePath = PATH+"/epr/image/影像对比/"+url+"/"; // 本地路径
         String fileName1 = "add.shp";// 原ftp文件名称
@@ -116,10 +113,12 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         String res55 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath2, filePath2, fileName55);
         String res66 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath2, filePath2, fileName66);
 
-
+        //读取本地SHP数据
         if("000000000000".equals(res1+res2+res3+res4+res5+res6+res11+res22+res33+res44+res55+res66)){
             String str1 = ShpUtil.readShapeFileToStr(filePath+fileName1,1)+"";
             String str2 = ShpUtil.readShapeFileToStr(filePath2+fileName11,1)+"";
+
+            //存表
             imageContrast.setData1(str1);
             imageContrast.setData2(str2);
             int addres = imageContrastMapper.insertImageContrast(imageContrast);
@@ -152,6 +151,7 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         }
         return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"删除失败");
     }
+
 
 
 
