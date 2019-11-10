@@ -41,13 +41,17 @@ import java.util.*;
  */
 @Slf4j
 public class ShpUtil {
+
+    public static void main(String[] args) {
+        System.out.println(readShapeFileToStr("E:\\epr\\image\\2019-11-08\\13\\f0d073c42d7e4c5f9df82cd0d63b02a6.shp",1));
+    }
+
     /**
      * @param filePath
      * @return
      * @description 读取shp文件返回json数据, type 1面 2点
      */
     public static List<String> readShapeFileToStr(String filePath, Integer type) {
-        String result = "";
         List<String> list = new ArrayList<>();
         try {
             FeatureJSON fjson = new FeatureJSON();
@@ -64,7 +68,7 @@ public class ShpUtil {
             //获取图层名称
             String typeName = shpDataStore.getTypeNames()[0];
             //数据读取
-            SimpleFeatureSource featureSource = null;
+            SimpleFeatureSource featureSource;
             featureSource = shpDataStore.getFeatureSource(typeName);
             SimpleFeatureCollection sfc = featureSource.getFeatures();
             SimpleFeatureIterator itertor = sfc.features();
@@ -981,22 +985,9 @@ public class ShpUtil {
         return result;
     }
 
-    public static void main(String[] args) {
-        try {
-            String path = "D:/Work/gistone/文档/生态工程/3857/ld.shp";
-//            ReadShapeFile readShapeFile = new ReadShapeFile();
-//            Object s = readShapeFile.readShapeFileToStr(path);
 
-            List<Map<String, Object>> list = new ArrayList<>();
-//            readShapeFile.write(list);
-//            Map maps = (Map) JSON.parse(s);
-            /*ArrayList<LmMarkerMobile> lmMarkerMobiles = readShapeFile.readShapeFile(path);
-            lmMarkerMobiles.forEach(System.out::println);*/
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-    }
+
 
 
 }

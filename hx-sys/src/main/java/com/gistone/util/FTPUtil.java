@@ -136,10 +136,6 @@ public class FTPUtil {
     }
 
 
-
-
-
-
     /**
      * 上传文件
      *
@@ -198,10 +194,10 @@ public class FTPUtil {
         return false;
     }
 
+
     public static boolean isDri(String ftpHost, String ftpUserName, String ftpPassword, int ftpPort, String ftpPath) {
         FTPClient ftp;
         try {
-            String ftpPaths = new String(ftpPath.getBytes("UTF-8"), "UTF-8");
             ftp = getFTPClient(ftpHost, ftpUserName, ftpPassword, ftpPort);
             if (ftp.changeWorkingDirectory(ftpPath)) {// 判断目录是否存在，不存在，则创建
                 return true;
