@@ -9,17 +9,11 @@ import com.gistone.mapper.ImageMapper;
 import com.gistone.service.ImageContrastService;
 import com.gistone.util.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Map;
 import java.util.UUID;
 
 
@@ -81,9 +75,8 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         }
 
         //FTP将SHP复制到本地
-        String url = UUID.randomUUID()+"";
         String ftpPath = outUrl; // 原ftp文件路径
-        String filePath = PATH+"/epr/image/影像对比/"+url+"/"; // 本地路径
+        String filePath = PATH+"/epr/FTP/"+outUrl+"/"; // 本地路径
         String fileName1 = "add.shp";// 原ftp文件名称
         String fileName2 = "add.dbf";// 原ftp文件名称
         String fileName3 = "add.cpg";// 原ftp文件名称
@@ -97,15 +90,14 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         String res5 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, filePath, fileName5);
         String res6 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, filePath, fileName6);
 
-
         String ftpPath2 = outUrl; // ftp文件存放物理路径
-        String filePath2 = PATH+"/epr/image/影像对比/"+url+"/"; // 文件路径
-        String fileName11 = "add.shp";// 原ftp文件名称
-        String fileName22 = "add.dbf";// 原ftp文件名称
-        String fileName33 = "add.cpg";// 原ftp文件名称
-        String fileName44 = "add.prj";// 原ftp文件名称
-        String fileName55 = "add.shx";// 原ftp文件名称
-        String fileName66 = "add.shp.xml";// 原ftp文件名称
+        String filePath2 = PATH+"/epr/FTP/"+outUrl+"/"; // 文件路径
+        String fileName11 = "sub.shp";// 原ftp文件名称
+        String fileName22 = "sub.dbf";// 原ftp文件名称
+        String fileName33 = "sub.cpg";// 原ftp文件名称
+        String fileName44 = "sub.prj";// 原ftp文件名称
+        String fileName55 = "sub.shx";// 原ftp文件名称
+        String fileName66 = "sub.shp.xml";// 原ftp文件名称
         String res11 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath2, filePath2, fileName11);
         String res22 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath2, filePath2, fileName22);
         String res33 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath2, filePath2, fileName33);
