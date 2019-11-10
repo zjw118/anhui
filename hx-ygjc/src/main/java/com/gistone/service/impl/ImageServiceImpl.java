@@ -46,7 +46,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             wrapper.like("name",userName);
         }
         wrapper.eq("del_flag",1);
-        wrapper.orderByDesc("create_date");
+        wrapper.orderByDesc("update_date");
         IPage<Image> imageIPage = mapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
         Map<String, Object> result = new HashMap<>();
         result.put("rows", imageIPage.getRecords());
@@ -62,8 +62,8 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             image.setDelFlag(0);
             mapper.updateById(image);
         }
-
     }
+
 
     @Override
     public void insert(String name, String url, Integer createBy,String remark) {

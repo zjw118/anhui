@@ -288,7 +288,6 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             st4ScsCdMapper.insert(iterpretation);
         }
 
-
         //写入本地shp文件
         String url = PathUtile.getRandomPath(PATH+"/epr/image/","x.shp");
         String res = ShpUtil.handleWebData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+""),url);
@@ -334,10 +333,6 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
 
 
     }
-
-
-
-
 
     @Override
     public void edit(St4ScsCd entity) {
