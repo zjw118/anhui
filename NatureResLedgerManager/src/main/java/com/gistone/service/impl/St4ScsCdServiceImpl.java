@@ -294,10 +294,15 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
         String res = ShpUtil.handleWebData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+""),url);
         SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
         //SHP上传到GIS服务器
-        String ftpPath = "/shp/"+ymd.format(new Date())+"/"; // ftp文件存放物理路径
-        String name = UUID.randomUUID()+"";
-        String fileName1 = name+".shp";
+//        String ftpPath = "/shp/"+ymd.format(new Date())+"/"; // ftp文件存放物理路径
+//        String name = UUID.randomUUID()+"";
+        String u = url.split("\\:")[1];
+        String ftpPath = u.split("\\.")[0];
+        ftpPath = ftpPath.substring(0,u.lastIndexOf("/"))+"/";
+        String name = u.substring(u.lastIndexOf("/")+1);
+        name = name.split("\\.")[0];
 
+        String fileName1 = name+".shp";
         FileInputStream input1 = new FileInputStream(new File(url));
         String fileName2 = name + ".dbf";
         FileInputStream input2 = new FileInputStream(new File(url.split("\\.")[0] + ".dbf"));
@@ -329,6 +334,9 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
 
 
     }
+
+
+
 
 
     @Override
