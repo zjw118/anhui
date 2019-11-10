@@ -74,10 +74,11 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         String p4 = "&f=pjson";
 
 
-
+        HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4,null);
+        Thread.sleep(8000);
         boolean b = true;
-        for (int i = 0; i < 20; i++) {
-            HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4,null);
+        for (int i = 1; i < 20; i++) {
+            System.out.println(i);
             if(
                     FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.shp")
                     &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.dbf")
@@ -95,6 +96,7 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
                 b = false;
                 break;
             }
+            HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4,null);
             Thread.sleep(2000);
         }
         if(b){
@@ -102,7 +104,7 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         }
 
         //FTP将SHP复制到本地
-//        String ftpPath = outUrl; // 原ftp文件路径
+        String ftpPath = outUrl; // 原ftp文件路径
         String filePath = PATH+"/epr/FTP"+outUrl; // 本地路径
         String fileName1 = "add.shp";// 原ftp文件名称
         String fileName2 = "add.dbf";// 原ftp文件名称
@@ -131,8 +133,6 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         String res44 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, outUrl, filePath, fileName44);
         String res55 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, outUrl, filePath, fileName55);
         String res66 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, outUrl, filePath, fileName66);
-        Thread.sleep(1000);
-
 
         //读取本地SHP数据
         if("000000000000".equals(res1+res2+res3+res4+res5+res6+res11+res22+res33+res44+res55+res66)){
@@ -157,6 +157,21 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
                     break;
                 }
             }
+//            System.out.println("---------");
+//            System.out.println(file1);
+//            System.out.println(file2);
+//            System.out.println(file3);
+//            System.out.println(file4);
+//            System.out.println(file5);
+//            System.out.println(file6);
+//            System.out.println(file7);
+//            System.out.println(file8);
+//            System.out.println(file9);
+//            System.out.println(file10);
+//            System.out.println(file11);
+//            System.out.println(file12);
+//            System.out.println("---------");
+
             if(!file1||!file2||!file3||!file4||!file5||!file6||!file7||!file8||!file9||!file10||!file11||!file12){
                 System.out.println(filePath+"<=FTP转存本地丢失文件");
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"丢失FTP转存文件");

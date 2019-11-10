@@ -43,12 +43,9 @@ public class FTPUtil {
             } else {
 //                log.info("FTP连接成功。");
             }
-        } catch (SocketException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
-            log.info("FTP的IP地址可能错误，请正确配置。");
-        } catch (IOException e) {
-            e.printStackTrace();
-            log.info("FTP的端口错误,请正确配置。");
         }
         return ftpClient;
     }
@@ -100,7 +97,7 @@ public class FTPUtil {
             ftpClient = getFTPClient(ftpHost, ftpUserName, ftpPassword, ftpPort);
 //            ftpClient.setControlEncoding("UTF-8"); // 中文支持
 //            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
-            ftpClient.enterLocalPassiveMode();
+            ftpClient.enterLocalPassiveMode();  //被动模式
             //应对中文目录
             ftpPath = new String(ftpPath.getBytes("GBK"),"iso-8859-1");
             ftpClient.changeWorkingDirectory(ftpPath);// 转移到FTP服务器目录
