@@ -9,6 +9,7 @@ import com.gistone.mapper.ImageMapper;
 import com.gistone.service.ImageContrastService;
 import com.gistone.util.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -56,10 +57,22 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
 
         Image image1 = imageMapper.getImageById(imageContrast.getImage1Id());
         Image image2 = imageMapper.getImageById(imageContrast.getImage2Id());
+        String res = "";
+        if(StringUtils.isBlank(image1.getShpurl())){
+            res = image1.getName()+"<=未知比对数据";
+        }
+        if(StringUtils.isBlank(image2.getShpurl())){
+            res = image2.getName()+"<=未知比对数据";
+        }
+        if(!"".equals(res)){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),res);
+        }
         String p1 = "?file1="+image1.getShpurl();
         String p2 = "&file2="+image2.getShpurl();
         String p3 = "&outfile="+ftpPt+ftpUrl+outUrl;
         String p4 = "&f=pjson";
+
+
 
         boolean b = true;
         for (int i = 0; i < 20; i++) {
