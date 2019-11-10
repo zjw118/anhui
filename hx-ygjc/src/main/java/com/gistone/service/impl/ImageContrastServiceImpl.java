@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.io.File;
 import java.util.UUID;
 
 
@@ -89,7 +90,7 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
 
         //FTP将SHP复制到本地
         String ftpPath = outUrl; // 原ftp文件路径
-        String filePath = PATH+"/epr/FTP/"+outUrl+"/"; // 本地路径
+        String filePath = PATH+"/epr/FTP"+outUrl; // 本地路径
         String fileName1 = "add.shp";// 原ftp文件名称
         String fileName2 = "add.dbf";// 原ftp文件名称
         String fileName3 = "add.cpg";// 原ftp文件名称
@@ -120,6 +121,28 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
 
         //读取本地SHP数据
         if("000000000000".equals(res1+res2+res3+res4+res5+res6+res11+res22+res33+res44+res55+res66)){
+            boolean file1 = new File(filePath+fileName1).exists();
+            boolean file2 = new File(filePath+fileName2).exists();
+            boolean file3 = new File(filePath+fileName3).exists();
+            boolean file4 = new File(filePath+fileName4).exists();
+            boolean file5 = new File(filePath+fileName5).exists();
+            boolean file6 = new File(filePath+fileName6).exists();
+            boolean file7 = new File(filePath+fileName11).exists();
+            boolean file8 = new File(filePath+fileName22).exists();
+            boolean file9 = new File(filePath+fileName33).exists();
+            boolean file10 = new File(filePath+fileName44).exists();
+            boolean file11 = new File(filePath+fileName55).exists();
+            boolean file12 = new File(filePath+fileName66).exists();
+
+            for (int i = 0; i < 5; i++) {
+                if(!file1||!file2||!file3||!file4||!file5||!file6||!file7||!file8||!file9||!file10||!file11||!file12){
+                    Thread.sleep(1000);
+                }
+            }
+            if(!file1||!file2||!file3||!file4||!file5||!file6||!file7||!file8||!file9||!file10||!file11||!file12){
+                System.out.println("丢失FTP转存文件");
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"丢失FTP转存文件");
+            }
             String str1 = ShpUtil.readShapeFileToStr(filePath+fileName1,1)+"";
             String str2 = ShpUtil.readShapeFileToStr(filePath2+fileName11,1)+"";
 
