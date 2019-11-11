@@ -283,6 +283,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             iterpretation.setImageId(imageId);
             iterpretation.setCd010(createBy);
             iterpretation.setCd011(LocalDateTime.now());
+            iterpretation.setCd004(UUID.randomUUID().toString().replace("-", ""));
             st4ScsCdMapper.insert(iterpretation);
         }
 
