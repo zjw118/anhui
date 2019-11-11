@@ -49,6 +49,9 @@ public class Image extends Model<Image> {
     private Integer delFlag;
     @TableId(value = "shp")
     private String shp;
+    @TableId(value = "contrast_red")
+    private String contrastRed;
+
     @TableField(exist = false)
     private List list;
     protected Serializable pkVal() {
