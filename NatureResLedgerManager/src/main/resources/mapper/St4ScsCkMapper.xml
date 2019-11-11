@@ -1844,14 +1844,18 @@
         ) cnn
         ) cn ON ck.CK001 = cn.CK001
         LEFT JOIN st4_sys_sa sa ON sa.SA001 = ck.CK049
-        left join st4_scs_cd cd on cd.CD001 = ck.CD004
-        left join st4_scs_co co on co.co001 = cd.group_id
-        left join st4_po_cl_co clco on clco.co001=co.CO001
-        left join st4_scs_cl cl on cl.CL001=clco.cl001
+
+        LEFT JOIN st4_scs_cd cd
+        ON cd.CD001 = ck.CD004
+
+        LEFT JOIN rlhd_group co ON cd.group_id = co.id
+
+        LEFT JOIN st4_po_cl_co clco ON clco.co001=co.id
+
+        LEFT JOIN st4_scs_cl cl
+        ON cl.CL001 = clco.cl001
         WHERE ck.CK085 = 1
         <!--年份、核查任务、时间区间、省份、保护地、巡查人员；!-->
-
-
         <if test="st4SysSa != null">
             <if test="st4SysSa.sa001!=null and st4SysSa.sa001  !=''">
                 and sa.SA001 =#{st4SysSa.sa001}
@@ -1878,7 +1882,7 @@
         </if>
 
         <if test="groupByName=='ck010' ">
-            GROUP BY ck.CK010
+          and cn.cn001 is not null  GROUP BY ck.CK010
         </if>
         <if test="groupByName=='cn010'">
             GROUP BY cn.CN010

@@ -1037,6 +1037,9 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
          */
         List<St4ScsCd> cdList =new ArrayList<>();
         cdList = checkPointMapper.getPointBySa001(uid);
+        if(cdList==null||cdList.size()<1){
+            return Result.build(1003, "暂无斑块信息");
+        }
         //这里准备打算得到存放任务和台账字段信息的map
         List<String> taskSigns = new ArrayList<>();
         //这个首先是要获取到点的任务的的标识供下面使用 对于安徽红线来说任务id必须得依靠groupid才能取到
@@ -1273,23 +1276,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
         return null;
     }
 
-    @Override
-    public Result pointStatistics() {
-        Result result = new Result();
-        List<Map> map1 = checkLedgerMapper.pointStatistics();
-        QueryWrapper<St4ScsCd> wrapper = new QueryWrapper<>();
-        wrapper.eq("CD009",1);
-        //List<St4ScsCd>
-        List<St4ScsCd> list2 = checkPointMapper.selectList(wrapper);
-        Integer pNum = list2.size();
-        Map<String,Object> map = new HashMap<>();
-        map.put("pointNum",pNum);
-        map.put("checkNum",map1);
-        result.setStatus(1000);
-        result.setData(map);
 
-        return result;
-    }
 
     @Override
     public Result pointStatisticsToday(St4ScsCd cd) {

@@ -6,6 +6,7 @@ import com.gistone.entity.St4ScsCc;
 import com.gistone.entity.St4ScsCd;
 import com.gistone.entity.St4ScsCk;
 import com.gistone.entity.St4ScsCy;
+import com.gistone.swagger.StaticSwagger;
 import com.gistone.util.Result;
 
 /**
@@ -82,4 +83,6 @@ public interface StatisService extends IService<St4ScsCy> {
      * @return
      */
     Result statisZw(St4ScsCc data);
+
+    ResultVO pointStatistics(StaticSwagger ss);
 }

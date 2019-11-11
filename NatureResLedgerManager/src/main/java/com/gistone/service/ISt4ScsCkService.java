@@ -68,11 +68,7 @@ public interface ISt4ScsCkService extends IService<St4ScsCk> {
     Result selectReserveNumTiew(St4SysSd data);
 
 
-    /**
-     * 统计出已核查和未核查的点位数量
-     * @return
-     */
-    Result pointStatistics();
+
 
     /**
      * 统计当日核查问题点数量；

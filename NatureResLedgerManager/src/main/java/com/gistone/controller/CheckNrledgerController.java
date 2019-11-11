@@ -678,19 +678,7 @@ public class CheckNrledgerController {
 
         return  icheckLedgerService.pointStageExamine(ck);
     }
-    /**
-     *
-     * @param
-     * @param
-     * @return
-     */
-    @PassToken
-    @ApiOperation(value="问题点位统计（已核查和未核查,不必传参）",notes = "问题点位统计（已核查和未核查）",response = St4ScsCd.class)
-    @RequestMapping(value="/pointStatistics",method = RequestMethod.POST)
-    public Result pointStatistics(@RequestBody  @ApiParam(name="航点记录列表管理列表查看详情", value="json格式", required=true)
-                                              Swagger<St4ScsCd> checkTaskSwagger,HttpServletRequest request,HttpServletResponse response) {
-        return icheckLedgerService.pointStatistics();
-    }
+
     /**
      *
      * @param

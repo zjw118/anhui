@@ -2,14 +2,13 @@ package com.gistone.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.St4ScsCc;
-import com.gistone.entity.St4ScsCd;
-import com.gistone.entity.St4ScsCk;
-import com.gistone.entity.St4ScsCy;
+import com.gistone.entity.*;
 import com.gistone.mapper.St4ScsCcMapper;
+import com.gistone.mapper.St4ScsCdMapper;
 import com.gistone.mapper.St4ScsCkMapper;
 import com.gistone.mapper.St4ScsCyMapper;
 import com.gistone.service.StatisService;
+import com.gistone.swagger.StaticSwagger;
 import com.gistone.util.Result;
 import com.gistone.util.ResultVOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +30,8 @@ public class StatisServiceImpl extends ServiceImpl<St4ScsCyMapper, St4ScsCy> imp
 
     @Autowired
     private St4ScsCyMapper st4ScsCyMapper;
+    @Autowired
+    private St4ScsCdMapper st4ScsCdMapper;
     @Autowired
     private St4ScsCkMapper st4ScsCkMapper;
     @Autowired
@@ -163,5 +164,21 @@ public class StatisServiceImpl extends ServiceImpl<St4ScsCyMapper, St4ScsCy> imp
         List<Map> resList = st4ScsCcMapper.statisZw(cc);
         return Result.build(1000,"查询成功",resList);
     }
+    @Override
+    public ResultVO pointStatistics(StaticSwagger ss) {
 
+        St4ScsCd cd = new St4ScsCd();
+        cd.setCl001(ss.cl001);
+        cd.setSg001(ss.sg001);
+        cd.setSd001(ss.sd001);
+        cd.setGroupByName(ss.getGroupByName());
+        St4SysSa sa = new St4SysSa();
+        sa.setSa001(ss.sa001);
+
+        cd.setSt4SysSa(sa);
+
+        List<St4ScsCd> list2 = st4ScsCdMapper.getStaticPoint(cd);
+
+        return ResultVOUtil.success(list2);
+    }
 }

@@ -143,10 +143,10 @@ public class StatisController {
 	 */
 	@ApiOperation(value="问题点位统计（问题点总数、已核查数、未核查数、当日核查数、新增问题点数量；默认按行政区分组groupByName和之前的巡查数据分析统计传递的规则一样）",notes = "",response = St4ScsCd.class)
 	@RequestMapping(value="/pointStatistics",method = RequestMethod.POST)
-	public Result pointStatistics(@RequestBody  @ApiParam(name="航点记录列表管理列表查看详情", value="json格式", required=true)
+	public ResultVO pointStatistics(@RequestBody  @ApiParam(name="航点记录列表管理列表查看详情", value="json格式", required=true)
 										  Swagger<StaticSwagger> ssSwagger, HttpServletRequest request, HttpServletResponse response) {
 		StaticSwagger ss = ssSwagger.getData();
-		return null;//statisService.pointStatistics(ss);
+		return statisService.pointStatistics(ss);
 	}
 	//-------------------------------台账整改统计-------------------------------
 
