@@ -96,7 +96,7 @@ public class FTPUtil {
         try {
             ftpClient = getFTPClient(ftpHost, ftpUserName, ftpPassword, ftpPort);
 //            ftpClient.setControlEncoding("UTF-8"); // 中文支持
-//            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
             ftpClient.enterLocalPassiveMode();  //被动模式
             //应对中文目录
             ftpPath = new String(ftpPath.getBytes("GBK"),"iso-8859-1");
@@ -117,6 +117,7 @@ public class FTPUtil {
                 }
             }
             ftpClient.logout();
+            ftpClient.disconnect();// 断开连接
             isItDone = "0";
         } catch (FileNotFoundException e) {
             isItDone = "没有找到" + ftpPath + "文件。";
@@ -160,7 +161,8 @@ public class FTPUtil {
             fileName = new String(fileName.getBytes("GBK"), "iso-8859-1");
             ftp.storeFile(fileName, input);
             input.close();
-            ftp.logout();
+            ftp.logout();// 退出登陆
+            ftp.disconnect();// 断开连接
             isItDone = "0";
         } catch (UnsupportedEncodingException e) {
             isItDone = "ftp连接错误。";

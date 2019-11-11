@@ -9,7 +9,6 @@ public class DataBaseBackUp {
 	 *  
 	 * @author  
 	 */  
-	
 	    public static boolean exportDatabase(String hostIP,String port, String userName, String password,
 											 String savePath, String fileName, String databaseName) throws InterruptedException {
 	        /** 

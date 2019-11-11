@@ -22,7 +22,6 @@ import java.util.Date;
  * @version 1.0
  */
 public class DateUtil {
-
 	private final static Logger logger = LoggerFactory.getLogger(DateUtil.class);
 
 	/**

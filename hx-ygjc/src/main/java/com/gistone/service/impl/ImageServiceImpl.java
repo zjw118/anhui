@@ -68,8 +68,8 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     @Override
     public void insert(String name, String url, Integer createBy,String remark) {
         //具体逻辑
-        Image image = new Image().setName(name).setUrl(url).setCreateDate(LocalDateTime.now()).setCreateBy(createBy);
-       if(StringUtils.isNotBlank(remark)){
+        Image image = new Image().setName(name).setUrl(url).setCreateDate(LocalDateTime.now()).setCreateBy(createBy).setUpdateDate(new Date());
+        if(StringUtils.isNotBlank(remark)){
            image.setRemark(remark);
        }
         mapper.insert(image);

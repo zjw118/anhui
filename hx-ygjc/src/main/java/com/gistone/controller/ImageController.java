@@ -219,10 +219,7 @@ public class ImageController {
         //获取
         //获取界桩统计
         List<Map<String, Object>> markerList = service.getCount(codes, currentTime, beforeTime);
-
-
         int count = service.getBeforeCount(codes, beforeTime);
-
 
         //获取调查表统计
 //        List<Map<String, Object>> surveyList = totalService.getSurveyCount(codes, currentTime, beforeTime);

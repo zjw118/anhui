@@ -42,6 +42,9 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
     private String ftpPt;
     @Value("${ftp_url}")
     private String ftpUrl;
+
+
+
     @Value("${PATH}")
     private String PATH;
     @Value("${IMAGE_SERVICE}")
@@ -73,12 +76,10 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         String p3 = "&outfile="+ftpPt+ftpUrl+outUrl;
         String p4 = "&f=pjson";
 
-
         HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4,null);
         Thread.sleep(6000);
         boolean b = true;
         for (int i = 1; i < 20; i++) {
-//            System.out.println(i);
             if(
                     FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.shp")
                     &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.dbf")
@@ -149,7 +150,6 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
             boolean file11 = new File(filePath+fileName55).exists();
             boolean file12 = new File(filePath+fileName66).exists();
 
-//            System.out.println(filePath);
             for (int i = 0; i < 5; i++) {
                 if(!file1||!file2||!file3||!file4||!file5||!file6||!file7||!file8||!file9||!file10||!file11||!file12){
                     Thread.sleep(1000);
@@ -157,20 +157,6 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
                     break;
                 }
             }
-//            System.out.println("---------");
-//            System.out.println(file1);
-//            System.out.println(file2);
-//            System.out.println(file3);
-//            System.out.println(file4);
-//            System.out.println(file5);
-//            System.out.println(file6);
-//            System.out.println(file7);
-//            System.out.println(file8);
-//            System.out.println(file9);
-//            System.out.println(file10);
-//            System.out.println(file11);
-//            System.out.println(file12);
-//            System.out.println("---------");
 
             if(!file1||!file2||!file3||!file4||!file5||!file6||!file7||!file8||!file9||!file10||!file11||!file12){
                 System.out.println(filePath+"<=FTP转存本地丢失文件");

@@ -243,7 +243,6 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     @Override
     public void delete(List<Integer> ids) {
         //具体逻辑
-
     }
 
     @Override
@@ -255,7 +254,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             Map<String, Object> attributes = (Map<String, Object>) datum.get("attributes");
             //通过属性构造参数
             St4ScsCd iterpretation = new St4ScsCd();
-            if (null != attributes.get("name")) {
+            if (null != attributes.get("name")){
                 iterpretation.setActiveName(attributes.get("name") + "");
             }
             if (null != attributes.get("center")) {
@@ -273,7 +272,6 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             if (null != attributes.get("type")) {
                 iterpretation.setActiveType(attributes.get("type") + "");
             }
-
             if (null != attributes.get("descri")) {
                 iterpretation.setDescri(attributes.get("descri") + "");
             }
@@ -291,10 +289,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
         //写入本地shp文件
         String url = PathUtile.getRandomPath(PATH+"/epr/image/","x.shp");
         String res = ShpUtil.handleWebData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+""),url);
-        SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
         //SHP上传到GIS服务器
-//        String ftpPath = "/shp/"+ymd.format(new Date())+"/"; // ftp文件存放物理路径
-//        String name = UUID.randomUUID()+"";
         String u = url.split("\\:")[1];
         String ftpPath = u.split("\\.")[0];
         ftpPath = ftpPath.substring(0,u.lastIndexOf("/"))+"/";
@@ -323,15 +318,12 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             if ("0".equals(res)) {
                 Image image = new Image();
                 image.setId(imageId);
-
                 image.setShpurl(ftpPt+ftpUrl+ftpPath+fileName1);
                 image.setShp(ShpUtil.readShapeFileToStr(url,1)+"");
                 image.setUpdateDate(new Date());
                 imageMapper.updateById(image);
             }
         }
-
-
     }
 
     @Override

@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
  * @author WangShanxi
  */
 public class ConfigUtil{
-
-
 	@Value("${RunningStatus}")
 	private String RunningStatus;
 
