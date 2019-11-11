@@ -75,10 +75,10 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
 
 
         HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4,null);
-        Thread.sleep(8000);
+        Thread.sleep(6000);
         boolean b = true;
         for (int i = 1; i < 20; i++) {
-            System.out.println(i);
+//            System.out.println(i);
             if(
                     FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.shp")
                     &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.dbf")
