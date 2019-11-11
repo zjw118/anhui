@@ -85,6 +85,8 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
     St4ScsCzMapper st4ScsCzMapper;
     @Autowired
     St4ScsClMapper st4ScsClMapper;
+    @Autowired
+    St4PoClCoMapper st4PoClCoMapper;
 
     DateTimeFormatter dfMd = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     @Override
@@ -1037,13 +1039,19 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
         cdList = checkPointMapper.getPointBySa001(uid);
         //这里准备打算得到存放任务和台账字段信息的map
         List<String> taskSigns = new ArrayList<>();
-        //这个首先是要获取到点的任务的的标识供下面使用
+        //这个首先是要获取到点的任务的的标识供下面使用 对于安徽红线来说任务id必须得依靠groupid才能取到
         List<St4ScsCl> clList = new ArrayList<>();
         List<Integer> pointIds = cdList.stream().map(St4ScsCd::getCd001).collect(Collectors.toList());
-        if(cdList!=null&&cdList.size()>0){
-            clList=st4ScsClMapper.getTaskSign(pointIds);
-            taskSigns=clList.stream().map(St4ScsCl::getCl003).collect(Collectors.toList());
-        }
+        List<Integer> groupIds = cdList.stream().map(St4ScsCd::getGroupId).collect(Collectors.toList());
+
+        QueryWrapper<St4PoClCo> clcoWrapper = new QueryWrapper<>();
+        clcoWrapper.in("CO001",groupIds);
+        List<St4PoClCo> clcoList = st4PoClCoMapper.selectList(clcoWrapper);
+        List<Integer> clIds = clcoList.stream().map(St4PoClCo::getCl001).collect(Collectors.toList());
+        QueryWrapper<St4ScsCl> clWrapper = new QueryWrapper<>();
+        clWrapper.in("CL001",clIds);
+        List<St4ScsCl> clsList = st4ScsClMapper.selectList(clWrapper);
+        taskSigns = clsList.stream().map(St4ScsCl::getCl003).collect(Collectors.toList());
 
 
         QueryWrapper<St4ScsCp> wrapper = new QueryWrapper<>();
