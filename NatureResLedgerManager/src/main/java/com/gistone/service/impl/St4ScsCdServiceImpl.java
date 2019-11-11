@@ -9,6 +9,7 @@ import com.gistone.entity.*;
 import com.gistone.mapper.*;
 import com.gistone.service.ISt4ScsCdService;
 import com.gistone.util.*;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -259,6 +260,8 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             }
             if (null != attributes.get("center")) {
                 iterpretation.setCenter(attributes.get("center") + "");
+                iterpretation.setCd002(attributes.get("center").toString().split(",")[0]);
+                iterpretation.setCd003(attributes.get("center").toString().split(",")[1]);
             }
             if (null != attributes.get("area")) {
                 iterpretation.setArea(attributes.get("area") + "");
@@ -279,7 +282,8 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 iterpretation.setCd012(attributes.get("remark") + "");
             }
             Map<String, Object> rings = (Map<String, Object>) datum.get("geometry");
-            iterpretation.setGeometry(rings.get("rings") + "");
+            String geometry = rings.get("rings").toString();
+            iterpretation.setGeometry(geometry);
             iterpretation.setImageId(imageId);
             iterpretation.setCd010(createBy);
             iterpretation.setCd011(LocalDateTime.now());
