@@ -163,4 +163,5 @@ public class StatisServiceImpl extends ServiceImpl<St4ScsCyMapper, St4ScsCy> imp
         List<Map> resList = st4ScsCcMapper.statisZw(cc);
         return Result.build(1000,"查询成功",resList);
     }
+
 }

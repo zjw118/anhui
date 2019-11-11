@@ -199,10 +199,10 @@ public class CheckPointController {
         Integer taskID = sp.getTaskId();
         List<Integer> uids = sp.getUidList();
         if(!ObjectUtils.isNotNullAndEmpty(taskID)){
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "任务不能为空不能为空！");
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "任务不能为空！");
         }
         if(uids==null||uids.size()<1){
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "下发人员不能为空不能为空！");
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "下发人员不能为空！");
         }
 
         return checkUserRelavantService.givePoint(uids,taskID);

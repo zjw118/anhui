@@ -78,6 +78,7 @@ public class TaskController {
         seUser.setId(Integer.valueOf(userId));
         param.setCl013(seUser.getId());
         param.setCl014(date);
+        param.setCl003("1");
         List<Integer> ledgerIdList = param.getLedgerIdList();
         if(ledgerIdList==null||ledgerIdList.size()<1){
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "绑定台账不能为空！");
