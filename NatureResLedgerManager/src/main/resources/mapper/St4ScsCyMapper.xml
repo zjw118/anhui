@@ -106,11 +106,11 @@
         LEFT JOIN st4_po_cl_co clco ON clco.CL001 = cl.CL001
         LEFT JOIN rlhd_group co ON co.id = clco.CO001
         WHERE cy.cy016=1
-        <if test="taskName!=null ">
-            and cl.CL002 = #{taskName}
+        <if test="taskName!=null and taskName!='' ">
+            and cl.CL002 LIKE '%${taskName}%'
         </if>
-        <if test="ledgerName!=null ">
-            and co.name = #{ledgerName}
+        <if test="ledgerId!=null and ledgerId!=''  ">
+            and co.id = #{ledgerId}
         </if>
     </select>
 
@@ -189,85 +189,23 @@
 
     <select id="selectPoList" resultMap="BaseResultMap"   parameterType="com.gistone.entity.St4ScsCy">
         SELECT
-        sa.SA019 ,
-        cy.*,cc.*,ck.*,cf.*,
-        sg.SG001,
-        sg.SG008,
-        sd.PK_ID,
-        sd.COM_NAME,
-        IFNULL(SUM(CY011=0),0) AS monitorNum,
-        IFNULL(SUM(CY011=1),0) AS dailyNum,
-        IFNULL(SUM(CY011=2),0) AS inspectNum,
-        IFNULL(SUM(CY011=3),0) AS surveyNum,
+        cl.*,
+        sa.SA019 uname,
+        cy.*,
         IFNULL(COUNT(*),0)    rwcs,
         IFNULL(SUM(cy.CY006),0)    gjlc,
         IFNULL(SUM(TIMESTAMPDIFF(HOUR,CY003,CY004)),0)    rwsc
-        from st4_scs_cy cy
-        LEFT JOIN st4_scs_cc cc ON cy.CY017=cc.CY017
-        LEFT JOIN st4_scs_ck ck ON cc.CC002=ck.CC002
-        LEFT JOIN st4_scs_cf cf ON cc.CC002=cf.CC002
-
-        LEFT JOIN st4_sys_sg sg
-        on cy.CY010=sg.SG001
-        LEFT JOIN sys_company sd
-        on sg.SD001=sd.PK_ID
+        FROM st4_scs_cy cy
         LEFT JOIN st4_sys_sa sa
-        on cy.SA001=sa.SA001
-        left join st4_scs_cl cl
-        on cl.CL003=cy.CL003
-        where cy.CY016 =1
-        <if test="st4SysSg != null">
-            <if test="st4SysSg.sg001!=null and st4SysSg.sg001 !=''">
-                and sg.SG001 =#{st4SysSg.sg001}
-            </if>
+        ON cy.SA001=sa.SA001
+        LEFT JOIN st4_scs_cl cl
+        ON cl.CL003=cy.CL003
+        WHERE cy.CY016 =1
+        <if test="uname!=null and uname  !=''">
+            and sa.SA019 like '%${uname}%'
         </if>
-        <if test="sysCompany != null">
-            <if test="sysCompany.PK_ID!=null and sysCompany.PK_ID !=''">
-                and sd.PK_ID =#{sysCompany.PK_ID}
-            </if>
-        </if>
-        <if test="st4SysSa != null">
-            <if test="st4SysSa.sa001!=null and st4SysSa.sa001  !=''">
-                and sa.SA001 =#{st4SysSa.sa001}
-            </if>
-        </if>
-        <if test="st4ScsCl != null">
-            <if test="st4ScsCl.cl001!=null and st4ScsCl.cl001 !=''">
-                and cl.CL001 =#{st4ScsCl.cl001}
-            </if>
-        </if>
-        <if test="endTime!=null and endTime!=''">
-            and cy.CY004 <![CDATA[ <= ]]> #{endTime}
-        </if>
-        <if test="strTime!=null and strTime!=''">
-            and cy.CY003 <![CDATA[ >= ]]> #{strTime}
-        </if>
-        <if test="groupByName==null or groupByName=='' ">
-            GROUP BY sd.PK_ID
-        </if>
-        <if test="groupByName=='sg001' ">
-            GROUP BY sg.SG001
-        </if>
-        <if test="groupByName=='sd001' ">
-            GROUP BY sd.PK_ID
-        </if>
-        <if test="groupByName=='sa001'">
-            GROUP BY  sa.SA001
-        </if>
-
-        <if test="sortName==null">
-            ORDER BY cy.CY013
-        </if>
-        <if test="sortName=='xcry'">
-            ORDER BY CONVERT(sa.SA019 USING GBK) ${sortOrder}
-        </if>
-        <if test="sortName=='rwcs'">
-            ORDER BY rwcs ${sortOrder}
-        </if>
-        <if test="sortName=='gjlc'">
-            ORDER BY gjlc ${sortOrder}
-        </if>
-
+        GROUP BY  sa.SA001
+        ORDER BY CONVERT(sa.SA019 USING GBK)
     </select>
 
 

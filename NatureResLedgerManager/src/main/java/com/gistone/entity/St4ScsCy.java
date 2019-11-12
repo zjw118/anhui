@@ -165,9 +165,9 @@ public class St4ScsCy extends BaseEntity  implements Serializable {
     private int rwcs;
     @ApiModelProperty(value = "轨迹里程")
     @TableField(exist = false)
-    private float gjlc;
+    private String gjlc;
 
-@Ignore
+    @Ignore
     @ApiModelProperty(value = "权限用，不用管")
     @TableField(exist = false)
     private Integer type;

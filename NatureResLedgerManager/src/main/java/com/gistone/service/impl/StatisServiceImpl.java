@@ -1,5 +1,6 @@
 package com.gistone.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.*;
@@ -9,11 +10,17 @@ import com.gistone.mapper.St4ScsCkMapper;
 import com.gistone.mapper.St4ScsCyMapper;
 import com.gistone.service.StatisService;
 import com.gistone.swagger.StaticSwagger;
+import com.gistone.util.ObjectUtils;
 import com.gistone.util.Result;
 import com.gistone.util.ResultVOUtil;
+import org.apache.poi.hssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +43,178 @@ public class StatisServiceImpl extends ServiceImpl<St4ScsCyMapper, St4ScsCy> imp
     private St4ScsCkMapper st4ScsCkMapper;
     @Autowired
     private St4ScsCcMapper st4ScsCcMapper;
+    @Override
+    public ResultVO exportRecordStatic(St4ScsCy cy){
+
+        List<St4ScsCy> list = st4ScsCyMapper.selectPoList(cy);
+        JSONObject json = new JSONObject();
+        String path = ExportExcel(list);
+        if(ObjectUtils.isNotNullAndEmpty(path)){
+            json.put("excelPath", path);
+            return ResultVOUtil.success(json);
+        }else{
+            return ResultVOUtil.error("1222","处理结果失败");
+        }
+
+    }
+    public String ExportExcel(List<St4ScsCy> clsData){
+        LocalDateTime time = LocalDateTime.now();
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String fileName = df.format(time)+"人员航迹汇总信息.xls";
+        String dir = "D:\\recordStatic\\";
+        String fileFinalPath=dir+fileName;
+        File file = new File(fileFinalPath);
+        if(!file.exists()){
+            File parent = file.getParentFile();
+            if(!parent.exists()) {
+                parent.mkdirs();
+            }
+        }
+        // 新建文件
+        try {
+            file.createNewFile();
+            FileOutputStream os = new FileOutputStream(file);
+            // 创建工作薄
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            // 创建新的一页
+            HSSFSheet sheet = workbook.createSheet("人员航迹汇总表");
+            /**
+             * zjw自己写的代码开始
+             *
+             */
+            // 这里是要导出7列
+            sheet.setColumnWidth(0, (int) ((20.5 + 0.72) * 256));
+            sheet.setColumnWidth(1, (int) ((20.5 + 0.72) * 256));
+            sheet.setColumnWidth(2, (int) ((25.5 + 0.72) * 256));
+            sheet.setColumnWidth(3, (int) ((20.5 + 0.72) * 256));
+            sheet.setColumnWidth(4, (int) ((20.5 + 0.72) * 256));
+            sheet.setColumnWidth(5, (int) ((20.5 + 0.72) * 256));
+            sheet.setColumnWidth(6, (int) ((20.5 + 0.72) * 256));
+
+            // 设置单元格宽度
+            sheet.setDefaultColumnWidth(30);
+
+            // 设置标题样式
+//            HSSFFontExcelStyleTools  headfont = workbook.createFont();
+//            headfont.setFontName("宋体");
+//            headfont.setFontHeightInPoints((short) 12);// 字体大小
+            //headfont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);// 加粗
+
+            HSSFCellStyle headstyle = workbook.createCellStyle();
+            //headstyle.setFont(headfont);
+            //headstyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);// 左右居中
+            //headstyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 上下居中
+            headstyle.setLocked(true);
+            headstyle.setWrapText(true);// 自动换行
+
+            // 设置数据内容样式
+            HSSFFont headfont1 = workbook.createFont();
+            headfont1.setFontName("宋体");
+            headfont1.setFontHeightInPoints((short) 12);// 字体大小
+
+            HSSFCellStyle headstyle1 = workbook.createCellStyle();
+            headstyle1.setFont(headfont1);
+            //headstyle1.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 上下居中
+            headstyle1.setLocked(true);
+            headstyle1.setWrapText(true);// 自动换行
+            // 填写表格内容
+            loadTaskDataMsg(clsData, sheet, workbook);
+            // 把创建的内容写入到输出流中，并关闭输出流
+            workbook.write(os);
+            os.close();
+            return fileFinalPath;
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("创建excel文件失败");
+        }
+        return "";
+    }
+    public  void loadTaskDataMsg(List<St4ScsCy> clsData,HSSFSheet sheet,HSSFWorkbook workbook){
+//        HSSFFont font = tools.getFont(workbook, "宋体", (short) 12, (short) 0);
+//
+//        HSSFCellStyle style = tools.getCellStyle(workbook, font,
+//                HSSFCellStyle.BORDER_THIN, HSSFCellStyle.BORDER_THIN,
+//                HSSFCellStyle.BORDER_THIN, HSSFCellStyle.BORDER_THIN);
+//        HSSFCellStyle rstyle = tools.getCellStyle(workbook, font,
+//                HSSFCellStyle.BORDER_THIN, HSSFCellStyle.BORDER_THIN,
+//                (short) 2, HSSFCellStyle.BORDER_THIN);
+//        HSSFCellStyle bstyle = tools.getCellStyle(workbook, font,
+//                HSSFCellStyle.BORDER_THIN, HSSFCellStyle.BORDER_THIN,
+//                HSSFCellStyle.BORDER_THIN, (short) 2);
+//        HSSFCellStyle brstyle = tools.getCellStyle(workbook, font,
+//                HSSFCellStyle.BORDER_THIN, HSSFCellStyle.BORDER_THIN,
+//                (short) 2, (short) 2);
+//
+//        HSSFCellStyle ustyle = style;
+//        HSSFCellStyle urstyle = rstyle;
+
+        HSSFRow row = sheet.createRow(0);
+
+        HSSFCell cell = null;
+
+        cell = row.createCell(0);
+        cell.setCellValue("任务名称");
+
+        cell = row.createCell(1);
+        cell.setCellValue("巡查人");
+        //cell.setCellStyle(style);
+
+        cell = row.createCell(2);
+        cell.setCellValue("航迹名称");
+        // cell.setCellStyle(style);
+
+        cell = row.createCell(3);
+        cell.setCellValue("开始时间");
+        //  cell.setCellStyle(style);
+
+        cell = row.createCell(4);
+        cell.setCellValue("结束时间");
+
+        cell = row.createCell(5);
+        cell.setCellValue("巡查时长");
+
+        cell = row.createCell(6);
+        cell.setCellValue("轨迹里程");
+
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        int i = 1;
+
+        for (St4ScsCy cl : clsData) {
+
+            row = sheet.createRow(i);
+
+            row.setHeightInPoints(30);
+            cell = row.createCell(0);
+            if(cl.getSt4ScsCl()!=null){
+                cell.setCellValue(cl.getSt4ScsCl().getCl002() == null ? "" : cl.getSt4ScsCl().getCl002() .toString());// 任务名称
+            }else {
+                cell.setCellValue("");
+            }
+
+            cell = row.createCell(1);
+            cell.setCellValue(cl.getUname() == null ? "" : cl.getUname().toString());// 巡查人
+
+            cell = row.createCell(2);
+            cell.setCellValue(cl.getCy002() == null ? "" : cl.getCy002().toString());// 航迹名称
+
+            cell = row.createCell(3);
+            cell.setCellValue(cl.getCy003() == null ? "" : df.format(cl.getCy003())); // 开始时间
+
+            cell = row.createCell(4);
+            cell.setCellValue(cl.getCy004()==null?"":df.format(cl.getCy004()));// 结束时间
+
+            cell = row.createCell(5);
+            cell.setCellValue(cl.getRwcs()==0?0:cl.getRwcs());// 巡查时长
+
+            cell = row.createCell(6);
+            cell.setCellValue(cl.getGjlc()==null?"":cl.getGjlc());// 轨迹里程
+
+            i++;
+
+        }
+
+
+    }
 
 
    /* @Override
@@ -74,19 +253,13 @@ public class StatisServiceImpl extends ServiceImpl<St4ScsCyMapper, St4ScsCy> imp
         return Result.build(1000,"查询成功",st4ScsCcMapper.selectSt4ScsCc(st4ScsCc));
     }*/
 
-   /* @Override
-    public Result listPatrol(St4ScsCy st4ScsCy)throws Exception{
+    @Override
+    public ResultVO listPatrol(St4ScsCy st4ScsCy){
 
-        if(st4ScsCy.getStrTime()!=null && st4ScsCy.getStrTime() != ""){
-            st4ScsCy.setStrTime(st4ScsCy.getStrTime()+" 00:00:00");
-        }
-        if(st4ScsCy.getEndTime()!=null && st4ScsCy.getEndTime() != ""){
-            st4ScsCy.setEndTime(st4ScsCy.getEndTime()+" 23:59:59");
-        }
         List<St4ScsCy> list = st4ScsCyMapper.selectPoList(st4ScsCy);
-        return Result.build(1000,"查询成功",list);
+        return ResultVOUtil.success(list);
     }
-*/
+
     /*@Override
     public Result listPatrolBySA001(St4ScsCy st4ScsCy) throws Exception {
         int pageNumber = st4ScsCy.getPageNumber();  		//当前页

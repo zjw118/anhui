@@ -42,8 +42,8 @@ public class St4ScsCyServiceImpl extends ServiceImpl<St4ScsCyMapper, St4ScsCy> i
 
         try{
             String taskName = td.getTaskName();
-            String ledgerName = td.getLedgerName();
-            List<St4ScsCy> list =st4ScsCyMapper.trackDistribution(taskName, ledgerName);
+            Integer ledgerId = td.getLedgerId();
+            List<St4ScsCy> list =st4ScsCyMapper.trackDistribution(taskName, ledgerId);
             return ResultVOUtil.success(list);
         }catch (Exception e){
             e.printStackTrace();

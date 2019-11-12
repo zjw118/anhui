@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface St4ScsCyMapper extends BaseMapper<St4ScsCy> {
     //查询列表
-    List<Object> selectPoList(St4ScsCy st4ScsCy);
+    List<St4ScsCy> selectPoList(St4ScsCy st4ScsCy);
 
     //分页查询-获取总数量
     int getPoSum2(St4ScsCy st4ScsCy);
@@ -49,5 +49,5 @@ public interface St4ScsCyMapper extends BaseMapper<St4ScsCy> {
      * 轨迹分布
      * @return
      */
-    List<St4ScsCy> trackDistribution(@Param("taskName") String taskName,@Param("ledgerName") String ledgerName);
+    List<St4ScsCy> trackDistribution(@Param("taskName") String taskName,@Param("ledgerId") Integer ledgerId);
 }

@@ -675,8 +675,11 @@ public class CheckNrledgerController {
         if(ck.getCk067()==null){
             return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "审核状态不能为空！");
         }
-
-
+        if(ck.getCk067()==2){
+            if(!ObjectUtils.isNotNullAndEmpty(ck.getCk070())){
+                return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "审核意见不能为空！");
+            }
+        }
         return  icheckLedgerService.pointStageExamine(ck);
     }
 

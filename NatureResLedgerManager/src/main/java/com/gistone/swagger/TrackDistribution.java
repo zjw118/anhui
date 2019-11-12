@@ -10,6 +10,6 @@ public class TrackDistribution {
     @ApiModelProperty(value = "任务名称", required = true,example="1")
     public String taskName;
 
-    @ApiModelProperty(value = "台账名称", required = true,example="1")
-    public String ledgerName;
+    @ApiModelProperty(value = "台账ID", required = true,example="1")
+    public Integer ledgerId;
 }
