@@ -751,7 +751,7 @@ public class CheckNrledgerController {
     }
     @PassToken
     @ApiOperation(value="轨迹分布(查询条件任务名称任务台账)",notes = "轨迹分布",response = St4ScsCk.class)
-    @RequestMapping(value="/trackDistribution",method = RequestMethod.GET)
+    @RequestMapping(value="/trackDistribution",method = RequestMethod.POST)
     public ResultVO trackDistribution(@RequestBody  @ApiParam(name="轨迹分布", value="json格式", required=true)
                                                   Swagger<TrackDistribution> td) {
 

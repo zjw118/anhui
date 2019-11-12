@@ -44,4 +44,10 @@ public interface St4ScsCyMapper extends BaseMapper<St4ScsCy> {
      * @return
      */
     List<St4ScsCy> listSailRecord(@Param("cy") St4ScsCy cy);
+
+    /**
+     * 轨迹分布
+     * @return
+     */
+    List<St4ScsCy> trackDistribution(@Param("taskName") String taskName,@Param("ledgerName") String ledgerName);
 }

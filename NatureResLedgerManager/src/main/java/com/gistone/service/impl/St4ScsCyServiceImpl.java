@@ -40,9 +40,16 @@ public class St4ScsCyServiceImpl extends ServiceImpl<St4ScsCyMapper, St4ScsCy> i
     @Override
     public ResultVO trackDistribution(TrackDistribution td){
 
+        try{
+            String taskName = td.getTaskName();
+            String ledgerName = td.getLedgerName();
+            List<St4ScsCy> list =st4ScsCyMapper.trackDistribution(taskName, ledgerName);
+            return ResultVOUtil.success(list);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultVOUtil.error("1222","处理结果失败");
+        }
 
-
-        return ResultVOUtil.success();
     }
     @Override
     public Result getSailRecordDetail(St4ScsCy sy){

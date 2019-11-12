@@ -25,11 +25,38 @@
         <result column="rwcs" property="rwcs" />
         <result column="gjlc" property="gjlc" />
         <result column="rwcs" property="rwcs" />
-
-
+        <result column="uname" property="uname" />
+        <association property="rlhdGroup" javaType="com.gistone.entity.RlhdGroup">
+            <id column="id" property="id" />
+            <result column="name" property="name" />
+            <result column="create_by" property="createBy" />
+            <result column="create_date" property="createDate" />
+            <result column="update_by" property="updateBy" />
+            <result column="update_date" property="updateDate" />
+            <result column="remark" property="remark" />
+            <result column="del_flag" property="delFlag" />
+            <result column="son_count" property="sonCount" />
+        </association>
         <association property="st4SysSa" javaType="com.gistone.entity.St4SysSa">
             <id column="SA001" property="sa001" />
             <result column="SA019" property="sa019" />
+        </association>
+        <association property="st4ScsCl" javaType="com.gistone.entity.St4ScsCl">
+            <id column="CL001" property="cl001" />
+            <result column="CL002" property="cl002" />
+            <result column="CL003" property="cl003" />
+            <result column="CL004" property="cl004" />
+            <result column="CL005" property="cl005" />
+            <result column="CL006" property="cl006" />
+            <result column="CL007" property="cl007" />
+            <result column="CL008" property="cl008" />
+            <result column="CL009" property="cl009" />
+            <result column="CL010" property="cl010" />
+            <result column="CL011" property="cl011" />
+            <result column="CL012" property="cl012" />
+            <result column="CL013" property="cl013" />
+            <result column="CL014" property="cl014" />
+            <result column="CL015" property="cl015" />
         </association>
         <association property="st4SysSg" javaType="com.gistone.entity.St4SysSg">
             <id column="SG001" property="sg001" />
@@ -66,15 +93,25 @@
         cy.CY014, cy.CY015, cy.CY016, cy.CY017
     </sql>
 
-    <select id="trackDistribution" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCy" >
-        SELECT * FROM st4_scs_cy cy
+    <select id="trackDistribution" resultMap="BaseResultMap"  >
+        SELECT cy.*,
+        cl.CL001,cl.CL002,co.name,cg.CG003,sa.SA019 uname
+        FROM
+        st4_scs_cy cy
+        LEFT JOIN st4_sys_sa sa ON cy.sa001=sa.sa001
         LEFT JOIN st4_scs_cg cg ON cg.CY017 = cy.CY017
-        LEFT JOIN st4_scs_cc cc ON cc.`CY017` = cy.CY017
-        left join st4_scs_ck on ck.CC002 = cc.CC002
-        LEFT JOIN  st4_scs_cd on cd.cd001 = ck.cd004
-        left join rlhd_group co on co.id = cd.group_id
-
-
+        LEFT JOIN st4_scs_cl cl ON cy.CL003  = cl.CL003
+        LEFT JOIN st4_scs_cc cc ON cc.CY017 = cy.CY017
+        LEFT JOIN st4_scs_ck ck ON ck.CC002 = cc.CC002
+        LEFT JOIN st4_po_cl_co clco ON clco.CL001 = cl.CL001
+        LEFT JOIN rlhd_group co ON co.id = clco.CO001
+        WHERE cy.cy016=1
+        <if test="taskName!=null ">
+            and cl.CL002 = #{taskName}
+        </if>
+        <if test="ledgerName!=null ">
+            and co.name = #{ledgerName}
+        </if>
     </select>
 
     <select id="getSailRecordDetail" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCy" >
