@@ -3,14 +3,17 @@ package com.gistone.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.St4ScsCy;
 import com.gistone.entity.St4SysSa;
 import com.gistone.mapper.St4ScsCyMapper;
 import com.gistone.mapper.St4SysSaMapper;
 import com.gistone.service.ISt4ScsCyService;
+import com.gistone.swagger.TrackDistribution;
 import com.gistone.util.ObjectUtils;
 import com.gistone.util.Result;
 import com.gistone.util.ResultMsg;
+import com.gistone.util.ResultVOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +28,22 @@ import java.util.List;
  */
 @Service
 public class St4ScsCyServiceImpl extends ServiceImpl<St4ScsCyMapper, St4ScsCy> implements ISt4ScsCyService {
+
+
     @Autowired
     private St4ScsCyMapper st4ScsCyMapper;
     @Autowired
     private St4SysSaMapper st4SysSaMapper;
+
+
+
+    @Override
+    public ResultVO trackDistribution(TrackDistribution td){
+
+
+
+        return ResultVOUtil.success();
+    }
     @Override
     public Result getSailRecordDetail(St4ScsCy sy){
 

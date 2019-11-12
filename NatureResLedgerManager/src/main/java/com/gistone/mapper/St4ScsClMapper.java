@@ -24,4 +24,7 @@ public interface St4ScsClMapper extends BaseMapper<St4ScsCl> {
 
     List<St4ScsCl> getTaskSign(@Param("list") List<Integer> list);
 
+
+    List<St4ScsCl> getExportData(List<Integer> ids);
+
 }

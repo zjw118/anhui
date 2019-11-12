@@ -90,17 +90,15 @@ public class UserController {
     @PassToken
     @ApiOperation(value = "人员分组列表（无分页）******", notes = "人员分组列表（无分页）", response = St4SysSa.class)
     @PostMapping("/list")
-    public Result list(@RequestBody @ApiParam(name = "人员分组列表（无分页）", value = "json格式", required = true) Swagger<St4SysSa> data,
+    public ResultVO list(@RequestBody @ApiParam(name = "人员分组列表（无分页）", value = "json格式", required = true) Swagger<St4SysSa> data,
                        HttpServletRequest request){
-//            St4SysSa seUser = new St4SysSa();
-////            String token = request.getHeader("token");// 从 http 请求头中取出 token
-////            //String UserId = JWT.decode(token).getAudience().get(0);
-////            seUser.setSa001(Integer.parseInt("1"));
-////            St4SysSa sa = data.getData();
-////
-////            Result result = userService.list(sa,seUser);
-////            return result;
-        return null;
+            St4SysSa seUser = new St4SysSa();
+            String token = request.getHeader("token");// 从 http 请求头中取出 token
+            //String UserId = JWT.decode(token).getAudience().get(0);
+            seUser.setSa001(Integer.parseInt("1"));
+            St4SysSa sa = data.getData();
+
+            return ResultVOUtil.success(userService.list());
     }
 
     /**

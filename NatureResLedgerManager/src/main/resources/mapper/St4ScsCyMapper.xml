@@ -65,6 +65,18 @@
         cy.CY001, cy.CY002, cy.CY003, cy.CY004, cy.CY005, cy.CY006, cy.SA001, cy.CY009, cy.CY010, cy.CY011, cy.CY012, cy.CY013,
         cy.CY014, cy.CY015, cy.CY016, cy.CY017
     </sql>
+
+    <select id="trackDistribution" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCy" >
+        SELECT * FROM st4_scs_cy cy
+        LEFT JOIN st4_scs_cg cg ON cg.CY017 = cy.CY017
+        LEFT JOIN st4_scs_cc cc ON cc.`CY017` = cy.CY017
+        left join st4_scs_ck on ck.CC002 = cc.CC002
+        LEFT JOIN  st4_scs_cd on cd.cd001 = ck.cd004
+        left join rlhd_group co on co.id = cd.group_id
+
+
+    </select>
+
     <select id="getSailRecordDetail" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCy" >
         select cy.*,sa.SA019,sg.SG008,sg.SG001,cg.*,cc.*,ce.*,cf.*
         from st4_scs_cy cy left join st4_sys_sa sa on cy.SA001 = sa.SA001

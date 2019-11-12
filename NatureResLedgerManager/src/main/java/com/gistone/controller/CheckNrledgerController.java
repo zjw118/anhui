@@ -8,6 +8,7 @@ import com.gistone.annotation.PassToken;
 import com.gistone.entity.*;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.*;
+import com.gistone.swagger.TrackDistribution;
 import com.gistone.util.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -749,9 +750,14 @@ public class CheckNrledgerController {
 
     }
     @PassToken
-    @ApiOperation(value="环科院导出EXCEL(此接口只传ck001即可)",notes = "导出EXCEL(此接口只传ck001即可)",response = St4ScsCk.class)
-    @RequestMapping(value="/exportHkyExcel",method = RequestMethod.GET)
-    public void exportHkyExcel(HttpServletRequest request,HttpServletResponse response) {
+    @ApiOperation(value="轨迹分布(查询条件任务名称任务台账)",notes = "轨迹分布",response = St4ScsCk.class)
+    @RequestMapping(value="/trackDistribution",method = RequestMethod.GET)
+    public ResultVO trackDistribution(@RequestBody  @ApiParam(name="轨迹分布", value="json格式", required=true)
+                                                  Swagger<TrackDistribution> td) {
+
+        TrackDistribution tdData = td.getData();
+
+        return st4ScsCyService.trackDistribution(tdData);
 
     }
 

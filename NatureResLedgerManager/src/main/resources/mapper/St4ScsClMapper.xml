@@ -19,6 +19,17 @@
         <result column="CL013" property="cl013" />
         <result column="CL014" property="cl014" />
         <result column="CL015" property="cl015" />
+        <!--<association property="rlhdGroup" javaType="com.gistone.entity.RlhdGroup">-->
+            <!--<id column="id" property="id" />-->
+            <!--<result column="name" property="name" />-->
+            <!--<result column="create_by" property="createBy" />-->
+            <!--<result column="create_date" property="createDate" />-->
+            <!--<result column="update_by" property="updateBy" />-->
+            <!--<result column="update_date" property="updateDate" />-->
+            <!--<result column="remark" property="remark" />-->
+            <!--<result column="del_flag" property="delFlag" />-->
+            <!--<result column="son_count" property="sonCount" />-->
+        <!--</association>-->
         <collection property="rlhdGroupList" ofType="com.gistone.entity.RlhdGroup">
             <id column="id" property="id" />
             <result column="name" property="name" />
@@ -82,6 +93,15 @@
             #{item}
         </foreach>
     </select>
+    <select id="getExportData" resultMap="BaseResultMap" parameterType="java.util.List">
+      select cl.*,co.name from st4_scs_cl cl
+        left join  st4_po_cl_co clco on cl.cl001 = clco.cl001
+        left join rlhd_group co on co.id=clco.co001
+        where cl.cl001 in
+        <foreach item="item" index="index"  collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
 
+    </select>
 
 </mapper>
