@@ -1,15 +1,25 @@
 package com.gistone.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
+import com.gistone.entity.ShpBatch;
 import com.gistone.mapper.ImageMapper;
+import com.gistone.mapper.ShpBatchMapper;
 import com.gistone.service.ImageService;
+import com.gistone.util.HttpUtil;
+import com.gistone.util.ResultEnum;
+import com.gistone.util.ResultVOUtil;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,10 +43,12 @@ import java.util.Map;
 @Slf4j
 public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements ImageService {
 
-
     @Autowired
     private ImageMapper mapper;
-
+    @Autowired
+    private com.gistone.mapper.ShpBatchMapper shpBatchMapper;
+    @Value("${IMAGE_EVA}")
+    private String IMAGE_EVA;
 
 
     @Override
@@ -109,6 +121,63 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         return result;
     }
 
+    @Override
+    public ResultVO getAudit(Integer id) {
+        JSONObject jSONObject = null;
+        try {
+            //获取影像SHP数据的FTP地址
+            Image image = mapper.getImageById(id);
+            String shpUrl = image.getShpurl();
+            if(StringUtils.isBlank(shpUrl)){
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "未知影像数据");
+            }
+            //获取最新红线SHP数据的FTP地址
+            ShpBatch newShpBatch = shpBatchMapper.getNewShpBatch();
+            String ftpShpUrl = newShpBatch.getFtpShpUrl();
+            if(StringUtils.isBlank(ftpShpUrl)){
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "未知红线数据");
+            }
+            //发送请求
+            String p1 = "?humanActivity="+shpUrl;
+            String p2 = "&redline="+ftpShpUrl;
+            String p3 = "&f=pjson";
+            JSONObject jsonObject = JSONObject.fromObject(HttpUtil.GET(IMAGE_EVA+"/submitJob"+p1+p2+p3,null));
+            String jobId = "/"+jsonObject.get("jobId");
+            String res = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId,null);
+            System.out.println(res);
+            //判断是否成功
+
+
+
+
+            //更新数据
+            image.setContrastRed(res);
+            int res2 = mapper.updateImage(image);
+            if(0<res2){
+                //返回数据
+                jSONObject = new JSONObject();
+                jSONObject.put("image",JSON.toJSONString(image, SerializerFeature.DisableCircularReferenceDetect,SerializerFeature.WriteDateUseDateFormat));
+
+
+
+
+            }else{
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "更新失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResultVOUtil.success(jSONObject);
+    }
+
+    @Override
+    public ResultVO audit(Image image) {
+        int res = mapper.updateImage(image);
+        if(0<res){
+            return ResultVOUtil.success();
+        }
+        return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "审核失败");
+    }
 
 
 }

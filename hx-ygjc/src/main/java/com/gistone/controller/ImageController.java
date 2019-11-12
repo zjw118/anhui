@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,12 +37,8 @@ public class ImageController {
     private ImageService service;
     @Autowired
     private ImageMapper mapper;
-
-
     @Value("${PATH}")
     private String PATH;
-
-
     @Autowired
     private ILmPointService iLmPointService;
 
@@ -78,8 +75,6 @@ public class ImageController {
 
 
 
-
-
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResultVO add(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
@@ -108,6 +103,7 @@ public class ImageController {
         service.insert(name, url, createBy, remark);
         return ResultVOUtil.success();
     }
+
 
 
     @RequestMapping(value = "/delete")
@@ -228,6 +224,68 @@ public class ImageController {
 
         return ResultVOUtil.success(result);
     }
+    /**
+     * 审核详情页
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/getAudit", method = RequestMethod.POST)
+    public ResultVO getAudit(@RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        String id = (String) params.get("id");
+        if (StringUtils.isBlank(id)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "影像主键id不能为空");
+        }
+        return service.getAudit(Integer.valueOf(id));
+    }
+    /**
+     * 开始审核
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/audit", method = RequestMethod.POST)
+    public ResultVO audit(@RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        Image image = new Image();
+        String id = (String) params.get("id");
+        if (StringUtils.isBlank(id)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "影像主键id不能为空");
+        }
+        if(null!=params.get("evaluation")){
+            image.setEvaluation(params.get("evaluation")+"");
+        }
+        if(null!=params.get("sign")){
+            image.setSign(Integer.valueOf(params.get("sign")+""));
+        }
+        image.setId(Integer.valueOf(id));
+        image.setAuditDate(new Date());
+        return service.audit(image);
+    }
+
+
+    /**
+     * 导入影像
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public ResultVO upload(@RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+
+
+
+
+        return null;
+    }
+
+
+
 
 
 }

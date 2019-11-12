@@ -52,9 +52,11 @@ public class Image extends Model<Image> {
     @TableId(value = "contrast_red")
     private String contrastRed;
     @TableId(value = "sign")
-    private String sign;
+    private Integer sign;
     @TableId(value = "evaluation")
     private String evaluation;
+    @TableId(value = "audit_date")
+    private Date auditDate;
 
     @TableField(exist = false)
     private List list;
