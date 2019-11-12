@@ -75,6 +75,12 @@
         <if test="ch005 != null">
             and a.CH005 = #{ch005}
         </if>
+        <if test="sa019 != null">
+            and SA019 = #{sa019}
+        </if>
+        <if test="sa012 != null">
+            and SA012 = #{sa012}
+        </if>
         ORDER BY a.CH005
     </select>
     <select id="login" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4SysSa" >
