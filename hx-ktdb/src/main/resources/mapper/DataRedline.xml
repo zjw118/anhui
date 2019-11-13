@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.DataRedlineMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.DataRedline">
+        <id column="srld_id" property="srldId" />
+        <result column="srld_number" property="srldNumber" />
+        <result column="srld_code" property="srldCode" />
+        <result column="srld_name" property="srldName" />
+        <result column="srld_population" property="srldPopulation" />
+        <result column="srld_type" property="srldType" />
+        <result column="target" property="target" />
+        <result column="srld_target" property="srldTarget" />
+        <result column="srld_position" property="srldPosition" />
+        <result column="srld_area" property="srldArea" />
+        <result column="srld_plant_type" property="srldPlantType" />
+        <result column="srld_active" property="srldActive" />
+        <result column="srld_problem" property="srldProblem" />
+        <result column="srld_control" property="srldControl" />
+        <result column="srld_add_time" property="srldAddTime" />
+        <result column="srld_add_uid" property="srldAddUid" />
+        <result column="srld_is_del" property="srldIsDel" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        srld_id, srld_number, srld_code, srld_name, srld_population, srld_type, target, srld_target, srld_position, srld_area, srld_plant_type, srld_active, srld_problem, srld_control, srld_add_time, srld_add_uid, srld_is_del
+    </sql>
+
+</mapper>

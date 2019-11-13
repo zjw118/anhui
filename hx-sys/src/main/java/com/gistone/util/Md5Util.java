@@ -49,7 +49,7 @@ public class Md5Util {
     }
 
     public static void main(String[] args) {
-        String qilianshan2019 = md5("qilianshan2019");
+        String qilianshan2019 = md5("anhui2019");
         System.out.println(qilianshan2019);
     }
     /***
