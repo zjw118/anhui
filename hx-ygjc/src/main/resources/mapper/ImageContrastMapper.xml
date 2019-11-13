@@ -51,6 +51,7 @@
         <if test="str1!=null and str1!=''">
             and a.name like '%${str1}%'
         </if>
+        ORDER BY a.date desc
         LIMIT #{firstLimit},#{pageSize}
     </select>
 

@@ -5,18 +5,20 @@ import com.gistone.annotation.PassToken;
 import com.gistone.entity.St4ScsCc;
 import com.gistone.entity.St4ScsCd;
 import com.gistone.entity.St4ScsCk;
+import com.gistone.entity.St4ScsCy;
 import com.gistone.pkname.Swagger;
+import com.gistone.service.ISt4ScsCkService;
+import com.gistone.service.ISt4ScsClService;
 import com.gistone.service.StatisService;
+import com.gistone.swagger.StaticSwagger;
 import com.gistone.util.Result;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultVOUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +30,8 @@ import javax.servlet.http.HttpServletResponse;
 public class StatisController {
 	@Autowired
 	private StatisService statisService;
+	@Autowired
+	private ISt4ScsCkService st4ScsCkservice;
 
 	/**
 	 * 分页
@@ -36,23 +40,27 @@ public class StatisController {
 	 * @param response
 	 * @return
 	 */
-	/*@ApiOperation(value = "巡查-分页", notes = "条件参数(人员外键)", response = Result.class)
-	@PostMapping("/listPatrolBySA001")
-	public Result listPatrolBySA001(@RequestBody Swagger<St4ScsCy> requestData, HttpServletRequest request, HttpServletResponse response){
+	@ApiOperation(value = "(安徽用)航迹数据统计接口只能传递uname)", notes = "巡查-统计列表", response = Result.class)
+	@PostMapping("/listPatrol")
+	public ResultVO listPatrol(@RequestBody Swagger<St4ScsCy> requestData, HttpServletRequest request, HttpServletResponse response){
 		try {
-			if(null==requestData.getData().getSa001())
-				return Result.build(1001, "sa001参数不能为空");
-			if(null==requestData.getData().getPageNumber())
-				return	Result.build(1001, "PageNumber当前页异常");
-			if(null==requestData.getData().getPageSize())
-				return	Result.build(1001,"pageSize显示条数异常");
-			return statisService.listPatrolBySA001(requestData.getData());
+			return statisService.listPatrol(requestData.getData());
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Result.build(1006, "查询异常");
+			return ResultVOUtil.error("1222","处理结果失败");
 		}
 	}
-*/
+	@ApiOperation(value = "(安徽用)航迹数据按人员统计导出接口)", notes = "巡查-统计列表", response = Result.class)
+	@PostMapping("/exportRecordStatic")
+	public ResultVO exportRecordStatic(@RequestBody Swagger<St4ScsCy> requestData,  HttpServletResponse response){
+		try {
+			return statisService.exportRecordStatic(requestData.getData());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResultVOUtil.error("1222","处理结果失败");
+		}
+	}
+
 
 
 	//-------------------------------航点数据统计-------------------------------
@@ -132,7 +140,19 @@ public class StatisController {
 			return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "服务器处理失败！");
 		}
 	}
-
+	/**
+	 *
+	 * @param
+	 * @param
+	 * @return
+	 */
+	@ApiOperation(value="问题点位统计（问题点总数、已核查数、未核查数、当日核查数、新增问题点数量；默认按行政区分组groupByName和之前的巡查数据分析统计传递的规则一样）",notes = "",response = St4ScsCd.class)
+	@RequestMapping(value="/pointStatistics",method = RequestMethod.POST)
+	public ResultVO pointStatistics(@RequestBody  @ApiParam(name="航点记录列表管理列表查看详情", value="json格式", required=true)
+										  Swagger<StaticSwagger> ssSwagger, HttpServletRequest request, HttpServletResponse response) {
+		StaticSwagger ss = ssSwagger.getData();
+		return statisService.pointStatistics(ss);
+	}
 	//-------------------------------台账整改统计-------------------------------
 
 	/**

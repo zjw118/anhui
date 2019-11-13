@@ -6,6 +6,7 @@ import com.gistone.entity.St4ScsCc;
 import com.gistone.entity.St4ScsCd;
 import com.gistone.entity.St4ScsCk;
 import com.gistone.entity.St4ScsCy;
+import com.gistone.swagger.StaticSwagger;
 import com.gistone.util.Result;
 
 /**
@@ -34,11 +35,18 @@ public interface StatisService extends IService<St4ScsCy> {
    // Result listWaypoint(St4ScsCc St4ScsCc)throws Exception;
 
     /**
-     * 巡查-查询分页
+     * 航迹数据统计接口
      * @param st4ScsCy
      * @return
      */
-    //Result listPatrol(St4ScsCy st4ScsCy)throws Exception;
+    ResultVO listPatrol(St4ScsCy st4ScsCy);
+
+    /**
+     * 按人员导出航迹数据接口
+     * @param cy
+     * @return
+     */
+    ResultVO exportRecordStatic(St4ScsCy cy);
     /**
      * 巡查-人员外键条件分页
      * @param st4ScsCy
@@ -82,4 +90,6 @@ public interface StatisService extends IService<St4ScsCy> {
      * @return
      */
     Result statisZw(St4ScsCc data);
+
+    ResultVO pointStatistics(StaticSwagger ss);
 }

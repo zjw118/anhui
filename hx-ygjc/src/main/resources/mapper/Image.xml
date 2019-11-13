@@ -70,6 +70,63 @@
             active_type
     </select>
 
+    <update id="updateImage" parameterType="Object" >
+		update image
+		<set>
+            <if test="null!=contrastRed and ''!=contrastRed">
+                contrast_red=#{contrastRed},
+            </if>
+            <if test="null!=evaluation and ''!=evaluation">
+                evaluation=#{evaluation},
+            </if>
+            <if test="null!=sign">
+                sign=#{sign},
+            </if>
+            <if test="null!=auditDate">
+                audit_date=#{auditDate},
+            </if>
+        </set>
+		where id=#{id}
+	</update>
+
+
+
+    <insert id="insertImage" parameterType="com.gistone.entity.Image">
+        INSERT INTO image
+        (
+            name,
+            url,
+            shpurl,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+            remark,
+            del_flag,
+            shp,
+            contrast_red,
+            sign,
+            evaluation,
+            audit_date
+        )
+        VALUES(
+            #{name},
+            #{url},
+            #{shpurl},
+            #{createBy},
+            #{createDate},
+            #{updateBy},
+            #{updateDate},
+            #{remark},
+            #{delFlag},
+            #{shp},
+            #{contrastRed},
+            #{sign},
+            #{evaluation},
+            #{auditDate}
+        )
+    </insert>
+
 
 
 

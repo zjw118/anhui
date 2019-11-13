@@ -85,6 +85,8 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
     St4ScsCzMapper st4ScsCzMapper;
     @Autowired
     St4ScsClMapper st4ScsClMapper;
+    @Autowired
+    St4PoClCoMapper st4PoClCoMapper;
 
     DateTimeFormatter dfMd = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     @Override
@@ -1035,15 +1037,24 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
          */
         List<St4ScsCd> cdList =new ArrayList<>();
         cdList = checkPointMapper.getPointBySa001(uid);
+        if(cdList==null||cdList.size()<1){
+            return Result.build(1003, "暂无斑块信息");
+        }
         //这里准备打算得到存放任务和台账字段信息的map
         List<String> taskSigns = new ArrayList<>();
-        //这个首先是要获取到点的任务的的标识供下面使用
+        //这个首先是要获取到点的任务的的标识供下面使用 对于安徽红线来说任务id必须得依靠groupid才能取到
         List<St4ScsCl> clList = new ArrayList<>();
         List<Integer> pointIds = cdList.stream().map(St4ScsCd::getCd001).collect(Collectors.toList());
-        if(cdList!=null&&cdList.size()>0){
-            clList=st4ScsClMapper.getTaskSign(pointIds);
-            taskSigns=clList.stream().map(St4ScsCl::getCl003).collect(Collectors.toList());
-        }
+        List<Integer> groupIds = cdList.stream().map(St4ScsCd::getGroupId).collect(Collectors.toList());
+
+        QueryWrapper<St4PoClCo> clcoWrapper = new QueryWrapper<>();
+        clcoWrapper.in("CO001",groupIds);
+        List<St4PoClCo> clcoList = st4PoClCoMapper.selectList(clcoWrapper);
+        List<Integer> clIds = clcoList.stream().map(St4PoClCo::getCl001).collect(Collectors.toList());
+        QueryWrapper<St4ScsCl> clWrapper = new QueryWrapper<>();
+        clWrapper.in("CL001",clIds);
+        List<St4ScsCl> clsList = st4ScsClMapper.selectList(clWrapper);
+        taskSigns = clsList.stream().map(St4ScsCl::getCl003).collect(Collectors.toList());
 
 
         QueryWrapper<St4ScsCp> wrapper = new QueryWrapper<>();
@@ -1265,23 +1276,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
         return null;
     }
 
-    @Override
-    public Result pointStatistics() {
-        Result result = new Result();
-        List<Map> map1 = checkLedgerMapper.pointStatistics();
-        QueryWrapper<St4ScsCd> wrapper = new QueryWrapper<>();
-        wrapper.eq("CD009",1);
-        //List<St4ScsCd>
-        List<St4ScsCd> list2 = checkPointMapper.selectList(wrapper);
-        Integer pNum = list2.size();
-        Map<String,Object> map = new HashMap<>();
-        map.put("pointNum",pNum);
-        map.put("checkNum",map1);
-        result.setStatus(1000);
-        result.setData(map);
 
-        return result;
-    }
 
     @Override
     public Result pointStatisticsToday(St4ScsCd cd) {
@@ -1340,29 +1335,20 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
     public ResultVO pointStageExamine(St4ScsCk ck){
 
         if(checkLedgerMapper.updateById(ck)>0){
-           /* boolean flag= false;
-            boolean flagPush= false;*/
-            /*if(ck.getCk067()==2){
-                List<Map> list = checkLedgerMapper.getTaskMemberUnpass(ck);
-                if(list!=null&&list.size()>0){
-                    for (Map map:list) {
-                        flagPush= JPushUtil.jiGuangPush(map.get("name")==null?"":map.get("name").toString(),"您负责的"+map.get("value")+"任务下的核查信息审核未通过，请重新提交","4");
-                        if(!flagPush){
-                            break;
-                        }
-                    }
-
-                }
-
-            }*/
-           // if(flag){
-
-                return ResultVOUtil.success();
-           // }else {
-               // return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "审核失败！");
-           // }
+            St4ScsCk ckk = checkLedgerMapper.getSendMsgByCk001(ck);
+            String pushMsg1 = "您提交的在“"+ckk.getSt4ScsCl().getCl002()+"”任务的下“"+ckk.getSt4ScsCd().getActiveName()+"”斑块的“"+ckk.getRlhdGroup().getName()+"”台账信息已通过审核，请知晓";
+            String pushMsg2 ="您提交的在“"+ckk.getSt4ScsCl().getCl002()+"”任务的下“"
+                    +ckk.getSt4ScsCd().getActiveName()+"”斑块的“"+ckk.getRlhdGroup().getName()+"”台账信息由于“"+ck.getCk070()+"”被拒绝，请确认";
+            System.out.println("pushMsg1--------"+pushMsg1);
+            System.out.println("pushMsg2-----------"+pushMsg2);
+            if(ck.getCk067()==2){
+                JPushUtil.jiGuangPush(ckk.getSt4SysSa().getSa012(), pushMsg1,"1");
+            }else if(ck.getCk067()==1){
+                JPushUtil.jiGuangPush(ckk.getSt4SysSa().getSa012(), pushMsg2,"1");
+            }
+            return ResultVOUtil.success();
         }
-        return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "审核失败！");
+        return ResultVOUtil.error("1222","处理结果失败");
     }
 
     @Override

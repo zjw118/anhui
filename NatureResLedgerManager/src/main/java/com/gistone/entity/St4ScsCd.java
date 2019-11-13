@@ -152,9 +152,9 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     @TableField("image_id")
 //    @Excel(name = "id",height = 11, width = 15)
     private Integer imageId;
-    @ApiModelProperty(name="activityName",value="活动名称",dataType = "{}",required = false,example="")
+    @ApiModelProperty(name="activityName",value="斑块名称",dataType = "{}",required = false,example="")
     @TableField("active_name")
-    @Excel(name = "活动名称",height = 11, width = 15)
+    @Excel(name = "斑块名称",height = 11, width = 15)
     private String activeName;
     @ApiModelProperty(name="activeType",value="活动类型",dataType = "{}",required = false,example="")
     @TableField("active_type")
@@ -210,6 +210,10 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     @ApiModelProperty(name="st4SysSg",value="保护地实体",dataType = "{}",required = false,example="")
     @TableField(exist = false)
     private St4SysSg st4SysSg;
+    //人员实体
+    @ApiModelProperty(name="st4SysSa",value="人员实体",dataType = "{}",required = false,example="")
+    @TableField(exist = false)
+    private St4SysSa st4SysSa;
 
 
     //行政区
@@ -266,6 +270,24 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     private Integer type;
 
 
+    /**
+     * 统计分析返回1)问题点总数、已核查数、未核查数、当日核查数、新增问题点数量；用
+     */
+    @ApiModelProperty(name="checkNum",value="问题点总数",dataType = "{}",required = false,example="")
+    @TableField(exist = false)
+    private Integer checkNum;
+
+    @ApiModelProperty(name="uncheckNum",value="未核查数",dataType = "{}",required = false,example="")
+    @TableField(exist = false)
+    private Integer uncheckNum;
+
+    @ApiModelProperty(name="checkedNum",value="已核查数",dataType = "{}",required = false,example="")
+    @TableField(exist = false)
+    private Integer checkedNum;
+
+    @ApiModelProperty(name="todayNum",value="当日核查数",dataType = "{}",required = false,example="")
+    @TableField(exist = false)
+    private Integer todayNum;
 
 
 

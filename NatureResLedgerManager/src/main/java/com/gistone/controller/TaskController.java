@@ -4,10 +4,7 @@ package com.gistone.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.VO.ResultVO;
 import com.gistone.annotation.PassToken;
-import com.gistone.entity.RlhdGroup;
-import com.gistone.entity.St4ScsCl;
-import com.gistone.entity.St4ScsCo;
-import com.gistone.entity.SysUser;
+import com.gistone.entity.*;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.*;
 import com.gistone.swagger.SharePoint;
@@ -15,13 +12,22 @@ import com.gistone.util.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -78,6 +84,19 @@ public class TaskController {
         seUser.setId(Integer.valueOf(userId));
         param.setCl013(seUser.getId());
         param.setCl014(date);
+        param.setCl003("1");
+        String taskName = param.getCl002();
+        if(!ObjectUtils.isNotNullAndEmpty(taskName)){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "任务名称不能为空！");
+        }
+        QueryWrapper<St4ScsCl> clQueryWrapper = new QueryWrapper<>();
+        clQueryWrapper.eq("CL002", taskName);
+        clQueryWrapper.eq("CL012",1);
+
+        St4ScsCl cl = iSt4ScsClService.getOne(clQueryWrapper);
+        if(cl!=null){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "任务名称重复！");
+        }
         List<Integer> ledgerIdList = param.getLedgerIdList();
         if(ledgerIdList==null||ledgerIdList.size()<1){
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "绑定台账不能为空！");
@@ -132,7 +151,7 @@ public class TaskController {
      * @param data
      * @return
      */
-      
+
     @ApiOperation(value = "任务批次删除接口", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/deleteTask")
     public ResultVO deleteTask(@RequestBody @ApiParam(name = "任务批次修改接口", value = "json格式", required = true) Swagger<St4ScsCl> data, HttpServletRequest request) {
@@ -198,12 +217,73 @@ public class TaskController {
         }
        return  iSt4ScsClService.getTaskDetail(param);
     }
-
     /**
-     * 新建巡护小组
+     * 任务斑块查询接口接口
      * @param data
      * @return
-     *//*
+     */
+    @PassToken
+    @ApiOperation(value = "任务斑块查询接口接口", notes = "野外监测任务地图", response = Result.class)
+    @PostMapping("/listCdByTask")
+    public ResultVO listCdByTask(@RequestBody @ApiParam(name = "任务批次单个详情接口", value = "json格式", required = true) Swagger<St4ScsCl> data) {
+        St4ScsCl param = data.getData();
+       return  iSt4ScsClService.listCdByTask(param);
+    }
+    /**
+    * (安徽用)任务导入
+     * @return
+     */
+    @PassToken
+    @ApiOperation(value = "(安徽用)任务导入", notes = "(安徽用)任务导入", response = Result.class)
+    @PostMapping("/importTask")
+    public ResultVO importTask(@RequestParam MultipartFile file, HttpServletRequest request, HttpServletResponse response) {
+        // 在定义一个文件上传后的临时存储路径
+        String temp_savepath = request.getServletContext().getRealPath("/")+ "//temp//importTemp";
+        //检查临时目录是否存在，不存在则创建
+
+            if(!file.isEmpty()) {
+                //file.g
+                String filePath = file.getOriginalFilename();
+                String aaa =PictureUtils.getPicturePath("D:\\checkTasa\\", file);
+                //windows
+                String savePath = request.getServletContext().getRealPath("/");
+                //String aaaa = PictureUtils.getResourceBasePath();
+                try{
+                    return iSt4ScsClService.readExcel(aaa);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    return ResultVOUtil.error("1222","处理结果失败");
+                }
+            }
+        return ResultVOUtil.error("1444","服务器未读取到数据，请确认所上传excel是否有信息");
+//            St4SysSa seUser = new St4SysSa();
+//            seUser.setSa001(1);
+//            MultipartHttpServletRequest req = (MultipartHttpServletRequest) request;
+//            Map<String, MultipartFile> items = req.getFileMap();
+//            List<Integer> uidList = new ArrayList<>();
+//            return iSt4ScsClService.importTask(items,seUser);
+
+    }
+    /**
+     * (安徽用)任务导出
+     * @return
+     */
+    @PassToken
+    @ApiOperation(value = "(安徽用)任务导出", notes = "(安徽用)任务导出", response = Result.class)
+    @PostMapping("/exportTask")
+    public ResultVO exportTask(@RequestBody @ApiParam(name = "任务批次单个详情接口", value = "json格式", required = true) Swagger<St4ScsCl> data,
+                               HttpServletResponse response) {
+            St4ScsCl cl = data.getData();
+            if(cl.getClIds()==null||cl.getClIds().size()<1){
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请至少选择一条要导出的任务数据！");
+            }
+            return iSt4ScsClService.exportTask(cl.getClIds());
+    }
+        /**
+         * 新建巡护小组
+         * @param data
+         * @return
+         *//*
     @PassToken
     @ApiOperation(value = "新建巡护小组*****", notes = "新建巡护小组", response = St4ScsCz.class)
     @PostMapping("/insertGroup")

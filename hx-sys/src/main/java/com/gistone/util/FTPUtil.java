@@ -5,7 +5,6 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
-
 import java.io.*;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -43,12 +42,9 @@ public class FTPUtil {
             } else {
 //                log.info("FTP连接成功。");
             }
-        } catch (SocketException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
-            log.info("FTP的IP地址可能错误，请正确配置。");
-        } catch (IOException e) {
-            e.printStackTrace();
-            log.info("FTP的端口错误,请正确配置。");
         }
         return ftpClient;
     }
@@ -99,8 +95,8 @@ public class FTPUtil {
         try {
             ftpClient = getFTPClient(ftpHost, ftpUserName, ftpPassword, ftpPort);
 //            ftpClient.setControlEncoding("UTF-8"); // 中文支持
-//            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
-            ftpClient.enterLocalPassiveMode();
+            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+            ftpClient.enterLocalPassiveMode();  //被动模式
             //应对中文目录
             ftpPath = new String(ftpPath.getBytes("GBK"),"iso-8859-1");
             ftpClient.changeWorkingDirectory(ftpPath);// 转移到FTP服务器目录
@@ -120,6 +116,7 @@ public class FTPUtil {
                 }
             }
             ftpClient.logout();
+            ftpClient.disconnect();// 断开连接
             isItDone = "0";
         } catch (FileNotFoundException e) {
             isItDone = "没有找到" + ftpPath + "文件。";
@@ -137,22 +134,21 @@ public class FTPUtil {
 
 
     /**
-     * 上传文件
-     *
-     * @param ftpHost     ftp服务器地址
-     * @param ftpUserName anonymous匿名用户登录，不需要密码。administrator指定用户登录
-     * @param ftpPassword 指定用户密码
-     * @param ftpPort     ftp服务员器端口号
-     * @param ftpPath     ftp文件存放物理路径
-     * @param fileName    文件路径
-     * @param input       文件输入流，即从本地服务器读取文件的IO输入流
+     * 上传FTP
+     * @param ftpHost 		地址
+     * @param ftpUserName 	账号    anonymous匿名用户登录，不需要密码。
+     * @param ftpPassword 	密码
+     * @param ftpPort 		端口
+     * @param ftpPath 		上传ftp存放路径,不包含计算机盘符与ftp设定盘符   /xx/xx/
+     * @param fileName 		上传ftp后附件名称
+     * @param input 		文件输入流   FileInputStream input = new FileInputStream(new File(url));
+     * @return   			正常返回 0
      */
-    public static String uploadFile(String ftpHost, String ftpUserName, String ftpPassword, int ftpPort,
-                                    String ftpPath, String fileName, InputStream input) {
-        String isItDone = "";
+    public static String uploadFile(String ftpHost, String ftpUserName, String ftpPassword, int ftpPort,String ftpPath, String fileName, InputStream input) {
+        String isItDone = null;
         FTPClient ftp = null;
         try {
-            String ftpPaths = new String(ftpPath.getBytes("GBK"), "iso-8859-1");
+            String ftpPaths=new String(ftpPath.getBytes("GBK"),"iso-8859-1");
             ftp = getFTPClient(ftpHost, ftpUserName, ftpPassword, ftpPort);
             if (!ftp.changeWorkingDirectory(ftpPath)) {// 判断目录是否存在，不存在，则创建
                 ftp.makeDirectory(ftpPaths);
@@ -162,37 +158,66 @@ public class FTPUtil {
             ftp.setFileType(FTP.BINARY_FILE_TYPE);
             fileName = new String(fileName.getBytes("GBK"), "iso-8859-1");
             ftp.storeFile(fileName, input);
-            input.close();
-            ftp.logout();
-            isItDone = "0";
-        } catch (UnsupportedEncodingException e) {
-            isItDone = "ftp连接错误。";
+            isItDone="0";
+        } catch (Exception e) {
+            isItDone="ftp错误";
             e.printStackTrace();
-        } catch (IOException e) {
-            if (e.getMessage().equals("Connection is not open")) {
-                isItDone = "ftp打开连接失败。";
-            } else {
-                isItDone = "ftp上传错误。";
+        }finally{
+            try {
+                input.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            e.printStackTrace();
+            try {
+                ftp.logout(); // 退出登录
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                ftp.disconnect();// 断开连接
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return isItDone;
         }
-//        log.info("success");
-        return isItDone;
     }
 
+
+
+    /**
+     * 创建文件夹
+     * @param ftpHost 		地址
+     * @param ftpUserName 	账号    anonymous匿名用户登录，不需要密码。
+     * @param ftpPassword 	密码
+     * @param ftpPort 		端口
+     * @param ftpPath		创建ftp路径,不包含计算机盘符与ftp设定盘符   /xx/xx/
+     * @return
+     */
     public static boolean createDri(String ftpHost, String ftpUserName, String ftpPassword, int ftpPort, String ftpPath) {
-        FTPClient ftp;
+        FTPClient ftp = null;
         try {
             String ftpPaths = new String(ftpPath.getBytes("UTF-8"), "UTF-8");
             ftp = getFTPClient(ftpHost, ftpUserName, ftpPassword, ftpPort);
-            if (!ftp.changeWorkingDirectory(ftpPath)) {// 判断目录是否存在，不存在，则创建
+            if (!ftp.changeWorkingDirectory(ftpPath)) {
                 return ftp.makeDirectory(ftpPaths);
             }
         }catch (Exception e){
-            System.out.println(e.toString());
+            e.printStackTrace();
+        }finally{
+            try {
+                ftp.logout(); // 退出登录
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                ftp.disconnect();// 断开连接
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return false;
         }
-        return false;
     }
+
 
 
     public static boolean isDri(String ftpHost, String ftpUserName, String ftpPassword, int ftpPort, String ftpPath) {
@@ -301,62 +326,7 @@ public class FTPUtil {
         return fileNames;
     }
 
-    public static void main(String[] args) throws IOException {
-        String ftpHost = "120.24.69.160"; // ftp服务器地址
-        int ftpPort = 22;// ftp服务员器端口号
-        String ftpUserName = "ceshi";// anonymous匿名用户登录，不需要密码。administrator指定用户登录
-        String ftpPassword = "123456";// 指定用户密码
-		String ftpPath = "/xxx/"; // ftp文件存放物理路径
-		String filePath = "D:/risk/123-测试/"; // 文件路径
-		String fileName = "123.zip";// 文件名称
 
-//        List<String> fileNameListFromFTP = FTPUtil.getFileNameListFromFTP(ftpHost, ftpUserName, ftpPassword, ftpPort, "/ftp/risk/input/测试2-97/20190723/");
-//        fileNameListFromFTP.forEach(System.out::println);
-//		
-//		System.out.println(StringUtils.substringAfter("/dsmFile/triggerZip/20180920111722", "/"+".zip"));
-//		
-        //int a=judgeFtpConnect(ftpHost, ftpUserName, ftpPassword, ftpPort);
-        //System.out.println(a);
-//		filePath = "d:/log";
-//		fileName = "aaa.zip";
-       FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, filePath, fileName);
-
-//		filePath = "D:\\dsmFile\\emergency\\month";
-//		fileName = "月运维汇总2018.07.30-11.55.docx";
-		FileInputStream input = new FileInputStream(new File(filePath + File.separatorChar + fileName));
-		FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName, input);
-
-        //System.out.println(FtpUtils.deleteFtpFile(ftpHost, ftpPort, ftpUserName, ftpPassword, "2018年/2018年1月/周运维/大厅使用日志", "aaa.txt"));
-//		BigDecimal decimal=new BigDecimal(140);
-//		if(new BigDecimal(decimal.intValue()).compareTo(decimal)==0){
-//			System.out.println(decimal.toString());
-//		}else {
-//		System.out.println(decimal.setScale(2,BigDecimal.ROUND_HALF_UP).stripTrailingZeros());}
-
-
-//		//得到图片缓冲区 
-//		BufferedImage bi = new BufferedImage
-//
-//		(150,70,BufferedImage.TYPE_INT_RGB);//INT精确度达到一定,RGB三原色，高度70,宽度150
-//
-//		//得到它的绘制环境(这张图片的笔) 
-//		Graphics2D g2 = (Graphics2D) bi.getGraphics();
-//
-//		g2.fillRect(0,0,150,70);//填充一个矩形 左上角坐标(0,0),宽70,高150;填充整张图片 
-//		//设置颜色 
-//		g2.setColor(Color.WHITE); 
-//		g2.fillRect(0,0,150,70);//填充整张图片(其实就是设置背景颜色)
-//
-//		g2.setColor(Color.RED); 
-//		g2.drawRect(0,0,150-1,70-1); //画边框
-//
-//		g2.setFont(new Font("宋体",Font.BOLD,18)); //设置字体:字体、字号、大小 
-//		g2.setColor(Color.BLACK);//设置背景颜色
-//		g2.drawString("Ⅳ",3,50); //向图片上写字符串 
-//		
-//
-//		ImageIO.write(bi,"JPEG",new FileOutputStream("F:/a.jpg"));//保存图片 JPEG表示保存格式
-    }
 
 
 }

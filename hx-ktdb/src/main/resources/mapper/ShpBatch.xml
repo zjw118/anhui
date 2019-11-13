@@ -40,4 +40,17 @@
             create_date DESC
     </select>
 
+    <select id="getNewShpBatch" resultType="com.gistone.entity.ShpBatch">
+        SELECT * FROM shp_batch
+        WHERE type = 1
+        and del_flag = 1
+        ORDER BY create_date desc
+        limit 1
+    </select>
+
+
+
+
+
+
 </mapper>

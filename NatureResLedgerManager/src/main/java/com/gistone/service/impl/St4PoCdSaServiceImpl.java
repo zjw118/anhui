@@ -43,6 +43,11 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
          * 2.在拿每一个台账的id去拿斑点的的id
          * 3.最终是把斑点下发到人员
          */
+        /**
+         * 这里逻辑改变因为cd表中有groupId做关联所以之前的关联表cd_co没有用了
+         *
+         */
+
         List<St4ScsCd> cds= iterpretationMapper.getSpotByTaskId(taskId);
         if(cds==null||cds.size()<1){
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "由于此任务下的台账无绑定的斑点信息,下发失败！");

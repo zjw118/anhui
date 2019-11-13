@@ -3,20 +3,29 @@ package com.gistone.controller;
 
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
+import com.gistone.entity.SysUser;
 import com.gistone.mapper.ImageMapper;
 import com.gistone.service.ILmPointService;
 import com.gistone.service.ImageService;
-import com.gistone.util.ResultEnum;
-import com.gistone.util.ResultVOUtil;
+import com.gistone.util.*;
+import org.apache.commons.collections.bag.SynchronizedSortedBag;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadBase;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.*;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * <p>
@@ -36,14 +45,25 @@ public class ImageController {
     private ImageService service;
     @Autowired
     private ImageMapper mapper;
-
-
-    @Value("${PATH}")
-    private String PATH;
-
-
     @Autowired
     private ILmPointService iLmPointService;
+    @Value("${ftp_host}")
+    private String ftpHost;
+    @Value("${ftp_port}")
+    private Integer ftpPort;
+    @Value("${ftp_username}")
+    private String ftpUserName;
+    @Value("${ftp_password}")
+    private String ftpPassword;
+    @Value("${ftp_pt}")
+    private String ftpPt;
+    @Value("${ftp_url}")
+    private String ftpUrl;
+
+
+
+
+
 
     @PostMapping("/list")
     public ResultVO getList(@RequestBody Map<String, Object> paramsMap) {
@@ -78,8 +98,6 @@ public class ImageController {
 
 
 
-
-
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResultVO add(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
@@ -108,6 +126,7 @@ public class ImageController {
         service.insert(name, url, createBy, remark);
         return ResultVOUtil.success();
     }
+
 
 
     @RequestMapping(value = "/delete")
@@ -219,10 +238,7 @@ public class ImageController {
         //获取
         //获取界桩统计
         List<Map<String, Object>> markerList = service.getCount(codes, currentTime, beforeTime);
-
-
         int count = service.getBeforeCount(codes, beforeTime);
-
 
         //获取调查表统计
 //        List<Map<String, Object>> surveyList = totalService.getSurveyCount(codes, currentTime, beforeTime);
@@ -231,6 +247,78 @@ public class ImageController {
 
         return ResultVOUtil.success(result);
     }
+    /**
+     * 审核详情页
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/getAudit", method = RequestMethod.POST)
+    public ResultVO getAudit(@RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        String id = (String) params.get("id");
+        if (StringUtils.isBlank(id)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "影像主键id不能为空");
+        }
+        return service.getAudit(Integer.valueOf(id));
+    }
+    /**
+     * 开始审核
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/audit", method = RequestMethod.POST)
+    public ResultVO audit(@RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        Image image = new Image();
+        String id = (String) params.get("id");
+        if (StringUtils.isBlank(id)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "影像主键id不能为空");
+        }
+        if(null!=params.get("evaluation")){
+            image.setEvaluation(params.get("evaluation")+"");
+        }
+        if(null!=params.get("sign")){
+            image.setSign(Integer.valueOf(params.get("sign")+""));
+        }
+        image.setId(Integer.valueOf(id));
+        image.setAuditDate(new Date());
+        return service.audit(image);
+    }
+
+
+
+    /**
+     * 导入影像
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/upload")
+    public ResultVO upload(HttpServletRequest request,Image image) {
+        return service.upload(request,image);
+    }
+
+
+
+
+
+    @PostMapping(value = "/processfiles")
+    public Map ProcessFiles(HttpServletRequest request) {
+        String path = "E:\\epr";
+        String[] arr = {"zip","qwe"};
+        Map map = FileUtil.uploadFiles(request, path, arr, 5);
+
+        return map;
+    }
+
+
+
+
 
 
 }

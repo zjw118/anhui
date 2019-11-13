@@ -68,7 +68,7 @@ public class DestinationsManagerController {
         Integer userId = 0;
         try {
             String token = request.getHeader("token");// 从 http 请求头中取出 token
-            String UserId = "1";//JWT.decode(token).getAudience().get(0);
+            String UserId = JWT.decode(token).getAudience().get(0);
             userId = Integer.parseInt(UserId);
         } catch (Exception e) {
             request.setAttribute("attrname", "token无效，请重新登录");
@@ -173,8 +173,8 @@ public class DestinationsManagerController {
                     scsCk.setCc002(ck.getCc002());//航点信息唯一标识 这里特别注意一下 动态配置的时候考虑到移动端如果把cc002同步回去的话就会显示这里避免移动端做修改所以这里将cc002取出来
                     scsCk.setCd004(ck.getCd004());
                     scsCk.setCn010(ck.getCn010());
-                    ck.setCk086(date);
-                    ck.setCk087(userId);
+                    scsCk.setCk086(date);
+                    scsCk.setCk087(userId);
                     scsCkList.add(scsCk);
                 }else {
                     return ResultCp.build(1001,"核查任务taskId"+ResultMsg.MSG_1001);
@@ -356,8 +356,8 @@ public class DestinationsManagerController {
                         scsCk.setCc002(ck.getCc002());//航点信息唯一标识 这里特别注意一下 动态配置的时候考虑到移动端如果把cc002同步回去的话就会显示这里避免移动端做修改所以这里将cc002取出来
                         scsCk.setCd004(ck.getCd004());
                         scsCk.setCn010(ck.getCn010());
-                        ck.setCk086(date);
-                        ck.setCk087(userId);
+                        scsCk.setCk086(date);
+                        scsCk.setCk087(userId);
                         scsCkList.add(scsCk);
                     }else {
                         ResultCp.build(1001,"核查任务taskId"+ResultMsg.MSG_1001);

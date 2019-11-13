@@ -1,20 +1,37 @@
 package com.gistone.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.St4PoClCo;
-import com.gistone.entity.St4ScsCl;
-import com.gistone.entity.SysUser;
-import com.gistone.mapper.*;
+import com.gistone.entity.*;
+import com.gistone.mapper.St4PoClCoMapper;
+import com.gistone.mapper.St4ScsClMapper;
+import com.gistone.mapper.SysUserMapper;
 import com.gistone.service.ISt4PoClCoService;
 import com.gistone.service.ISt4ScsClService;
+import com.gistone.service.RlhdGroupService;
 import com.gistone.util.*;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 /**
  * <p>
@@ -32,7 +49,8 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
 
     @Autowired
     private ISt4ScsClService st4ScsClService;
-
+    @Autowired
+    private RlhdGroupService rlhdGroupService;
     @Autowired
     private SysUserMapper st4SysSaMapper;
     @Autowired
@@ -41,7 +59,7 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
     private ISt4PoClCoService st4PoClCoService;
     @Autowired
     private St4PoClCoMapper st4PoClCoMapper;
-
+    private ExcelStyleTools tools;
     @Override
     public ResultVO getTaskDetail(St4ScsCl data) {
 
@@ -50,6 +68,319 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
         res.setData(list);
         return ResultVOUtil.success(res);
     }
+    @Override
+    public ResultVO listCdByTask(St4ScsCl data) {
+
+        List<Map> list = st4ScsClMapper.listCdByTask(data);
+        ResultCp res = new ResultCp();
+        res.setData(list);
+        return ResultVOUtil.success(res);
+    }
+
+    @Override
+    public ResultVO importTask(Map<String, MultipartFile> items, St4SysSa seUser) {
+        try{
+            Iterator<MultipartFile> itr = items.values().iterator();
+            while (itr.hasNext()) {
+                Map<String,String> map=new HashMap<String, String>();
+                MultipartFile item = itr.next ();
+                InputStream in=item.getInputStream();
+                boolean flag=true;//这个开关控制能不能执行插入操作
+                List<Map> list = ExcUtil.readExcelContent(in);
+
+                St4ScsCl  cl=null;
+                List<St4ScsCl> cllist = new ArrayList<>();
+                Integer i=2;
+                for(Map data:list){
+                    cl = new St4ScsCl();
+                    cl.setCl012(1);
+                    cl.setCl003("1");//todo 这里写死成1原因是目前没有没有对任务进行核查字段不同情况的处理
+                    cl.setCl015(0);//因为是导入所以默认是系统创建
+                    if(ObjectUtils.isNotNullAndEmpty(data.get("任务批次名称"))){
+                        cl.setCl002(data.get("任务批次名称").toString());
+                    }
+
+                    if(ObjectUtils.isNotNullAndEmpty(data.get("任务类型"))){
+                        String ttype=data.get("任务类型").toString().trim();
+                        if("0".equals(ttype)){
+                            cl.setCl004(0);
+                        }else if("1".equals(ttype)){
+                            cl.setCl004(1);
+                        }
+                    }
+                    if(ObjectUtils.isNotNullAndEmpty(data.get("批次年份"))){
+                        cl.setCl010(data.get("批次年份").toString());
+                    }
+                    if(ObjectUtils.isNotNullAndEmpty(data.get("任务描述"))){
+                        cl.setCl009(data.get("任务描述").toString());
+                    }
+
+                    LocalDateTime date = LocalDateTime.now();
+                    cl.setCl013(seUser.getSa001());
+                    cl.setCl014(date);
+                    cllist.add(cl);
+                    i++;
+                }
+                if(cllist!=null&&cllist.size()>0){
+                    if(st4ScsClService.saveBatch(cllist))
+                        return ResultVOUtil.success();
+                     return ResultVOUtil.error("1222","处理结果失败");
+                }
+                return ResultVOUtil.error("1444","服务器未读取到数据，请确认所上传excel是否有信息");
+
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * poi3.9导入excel
+     * @throws Exception
+     */
+    public  ResultVO readExcel(String fileName) throws Exception{
+
+        //这里得对台账进行map的处理因为任务导入的时候是有可能填的台账是系统里存在了的
+        QueryWrapper<RlhdGroup> rlhdGroupQueryWrapper = new QueryWrapper<>();
+        rlhdGroupQueryWrapper.eq("del_flag", 1);
+        List<RlhdGroup> rlhdGroups = rlhdGroupService.list(rlhdGroupQueryWrapper);
+        Map<String,Integer> map =new HashMap<>();
+        if(rlhdGroups!=null&&rlhdGroups.size()>0){
+            for (RlhdGroup rg:rlhdGroups) {
+                //得到台账的id和name对应的map集合
+                map.put(rg.getName(),rg.getId());
+            }
+        }
+        InputStream is = new FileInputStream(new File(fileName));
+        Workbook hssfWorkbook = null;
+        if (fileName.endsWith("xlsx")){
+            hssfWorkbook = new XSSFWorkbook(is);//Excel 2007
+        }else if (fileName.endsWith("xls")){
+            hssfWorkbook = new HSSFWorkbook(is);//Excel 2003
+
+        }
+        // HSSFWorkbook hssfWorkbook = new HSSFWorkbook(is);
+        // XSSFWorkbook hssfWorkbook = new XSSFWorkbook(is);
+        St4ScsCl cl = null;
+        St4PoClCo clCo = null;
+        List<St4ScsCl> list = new ArrayList<St4ScsCl>();
+        List<St4PoClCo> clColist = new ArrayList<St4PoClCo>();
+        // 循环工作表Sheet
+        for (int numSheet = 0; numSheet <hssfWorkbook.getNumberOfSheets(); numSheet++) {
+            //HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
+            Sheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
+            if (hssfSheet == null) {
+                continue;
+            }
+            // 循环行Row
+            for (int rowNum = 1; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
+                //HSSFRow hssfRow = hssfSheet.getRow(rowNum);
+                Row hssfRow = hssfSheet.getRow(rowNum);
+                if (hssfRow != null) {
+                    cl = new St4ScsCl();
+                    cl.setCl012(1);
+                    cl.setCl003("1");//todo 这里写死成1原因是目前没有没有对任务进行核查字段不同情况的处理
+                    cl.setCl015(0);//因为是导入所以默认是系统创建
+                    //HSSFCell name = hssfRow.getCell(0);
+                    //HSSFCell pwd = hssfRow.getCell(1);
+                    Cell taskName = hssfRow.getCell(0);  //任务批次名称
+                    Cell taskDescri = hssfRow.getCell(1);//任务描述
+                    Cell taskYear = hssfRow.getCell(2);//任务年份
+                    Cell taskLedger = hssfRow.getCell(3);//任务台账
+
+                    //这里是自己的逻辑
+                    cl.setCl002(taskName==null?"":taskName.toString());
+                    cl.setCl009(taskDescri==null?"":taskDescri.toString());
+                    cl.setCl010(taskYear==null?"":taskYear.toString());
+                    if(ObjectUtils.isNotNullAndEmpty(taskLedger)){
+                        if(ObjectUtils.isNotNullAndEmpty(map.get(taskLedger.toString().trim()))){
+                            cl.setLedgerId(map.get(taskLedger.toString()).toString());
+                        }
+                    }
+                    list.add(cl);
+                }
+            }
+        }
+        if(list!=null&&list.size()>0){
+            if(st4ScsClService.saveBatch(list)){
+                for (St4ScsCl cll:list) {
+                    if(ObjectUtils.isNotNullAndEmpty(cl.getLedgerId())){
+                        clCo= new St4PoClCo();
+                        clCo.setCo001(Integer.valueOf(cll.getLedgerId()));
+                        clCo.setCl001(cll.getCl001());
+                        clColist.add(clCo);
+                    }
+                }
+                if(clColist!=null&&clColist.size()>0){
+                    if(!st4PoClCoService.saveBatch(clColist)){
+                        return ResultVOUtil.error("1222","处理结果失败");
+                    }
+                }
+                return ResultVOUtil.success();
+            }
+            return ResultVOUtil.error("1222","处理结果失败");
+        }
+        return ResultVOUtil.error("1444","服务器未读取到数据，请确认所上传excel是否有信息");
+    }
+    @Override
+    public ResultVO exportTask(List<Integer> ids) {
+
+        List<St4ScsCl> clsData = st4ScsClMapper.getExportData(ids);
+
+
+        JSONObject json = new JSONObject();
+        String path = ExportExcel(clsData);
+        if(ObjectUtils.isNotNullAndEmpty(path)){
+            json.put("excelPath", path);
+            return ResultVOUtil.success(json);
+        }else{
+            return ResultVOUtil.error("1222","处理结果失败");
+        }
+
+    }
+    public String ExportExcel(List<St4ScsCl> clsData){
+        LocalDateTime time = LocalDateTime.now();
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String fileName = df.format(time)+"任务信息.xls";
+        String dir = "D:\\checkTask\\";
+        String fileFinalPath=dir+fileName;
+        File file = new File(fileFinalPath);
+        if(!file.exists()){
+            File parent = file.getParentFile();
+            if(!parent.exists()) {
+                parent.mkdirs();
+            }
+        }
+        // 新建文件
+        try {
+            file.createNewFile();
+            FileOutputStream os = new FileOutputStream(file);
+            // 创建工作薄
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            // 创建新的一页
+            HSSFSheet sheet = workbook.createSheet("任务信息");
+            /**
+             * zjw自己写的代码开始
+             *
+             */
+            // 这里是要导出7列
+            sheet.setColumnWidth(0, (int) ((20.5 + 0.72) * 256));
+            sheet.setColumnWidth(1, (int) ((20.5 + 0.72) * 256));
+            sheet.setColumnWidth(2, (int) ((20.5 + 0.72) * 256));
+            sheet.setColumnWidth(3, (int) ((12 + 0.72) * 256));
+
+
+            // 设置单元格宽度
+            sheet.setDefaultColumnWidth(30);
+
+            // 设置标题样式
+//            HSSFFontExcelStyleTools  headfont = workbook.createFont();
+//            headfont.setFontName("宋体");
+//            headfont.setFontHeightInPoints((short) 12);// 字体大小
+            //headfont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);// 加粗
+
+            HSSFCellStyle headstyle = workbook.createCellStyle();
+            //headstyle.setFont(headfont);
+            //headstyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);// 左右居中
+            //headstyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 上下居中
+            headstyle.setLocked(true);
+            headstyle.setWrapText(true);// 自动换行
+
+            // 设置数据内容样式
+            HSSFFont headfont1 = workbook.createFont();
+            headfont1.setFontName("宋体");
+            headfont1.setFontHeightInPoints((short) 12);// 字体大小
+
+            HSSFCellStyle headstyle1 = workbook.createCellStyle();
+            headstyle1.setFont(headfont1);
+            //headstyle1.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 上下居中
+            headstyle1.setLocked(true);
+            headstyle1.setWrapText(true);// 自动换行
+            tools = new ExcelStyleTools();
+            // 填写表格内容
+            loadTaskDataMsg(clsData, sheet, tools, workbook);
+            // 把创建的内容写入到输出流中，并关闭输出流
+            workbook.write(os);
+            os.close();
+            return fileFinalPath;
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("创建excel文件失败");
+        }
+            return "";
+    }
+    public  void loadTaskDataMsg(List<St4ScsCl> clsData,HSSFSheet sheet,ExcelStyleTools tools,HSSFWorkbook workbook){
+//        HSSFFont font = tools.getFont(workbook, "宋体", (short) 12, (short) 0);
+//
+//        HSSFCellStyle style = tools.getCellStyle(workbook, font,
+//                HSSFCellStyle.BORDER_THIN, HSSFCellStyle.BORDER_THIN,
+//                HSSFCellStyle.BORDER_THIN, HSSFCellStyle.BORDER_THIN);
+//        HSSFCellStyle rstyle = tools.getCellStyle(workbook, font,
+//                HSSFCellStyle.BORDER_THIN, HSSFCellStyle.BORDER_THIN,
+//                (short) 2, HSSFCellStyle.BORDER_THIN);
+//        HSSFCellStyle bstyle = tools.getCellStyle(workbook, font,
+//                HSSFCellStyle.BORDER_THIN, HSSFCellStyle.BORDER_THIN,
+//                HSSFCellStyle.BORDER_THIN, (short) 2);
+//        HSSFCellStyle brstyle = tools.getCellStyle(workbook, font,
+//                HSSFCellStyle.BORDER_THIN, HSSFCellStyle.BORDER_THIN,
+//                (short) 2, (short) 2);
+//
+//        HSSFCellStyle ustyle = style;
+//        HSSFCellStyle urstyle = rstyle;
+
+        HSSFRow row = sheet.createRow(0);
+
+        HSSFCell cell = null;
+        cell = row.createCell(0);
+        cell.setCellValue("任务名称");
+         //cell.setCellStyle(style);
+
+        cell = row.createCell(1);
+        cell.setCellValue("任务描述");
+        // cell.setCellStyle(style);
+
+        cell = row.createCell(2);
+        cell.setCellValue("任务年份");
+        //  cell.setCellStyle(style);
+
+        cell = row.createCell(3);
+        cell.setCellValue("任务台账");
+        // cell.setCellStyle(style);
+
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        int i = 1;
+        for (St4ScsCl cl : clsData) {
+
+            row = sheet.createRow(i);
+
+            row.setHeightInPoints(30);
+
+            cell = row.createCell(0);
+            cell.setCellValue(cl.getCl002() == null ? "" : cl.getCl002().toString());// 任务名称
+            // cell.setCellStyle(ustyle);
+
+            cell = row.createCell(1);
+            cell.setCellValue(cl.getCl009() == null ? "" : cl.getCl009().toString());// 任务描述
+            // cell.setCellStyle(ustyle);
+
+            cell = row.createCell(2);
+            cell.setCellValue(cl.getCl010() == null ? "" : cl.getCl010().toString()); // 任务年份
+            // cell.setCellStyle(ustyle);
+
+            cell = row.createCell(3);
+            cell.setCellValue(cl.getRlhdGroupList()==null?"":cl.getRlhdGroupList().get(0).getName());// 任务台账
+            //cell.setCellStyle(ustyle);
+
+            i++;
+
+        }
+
+
+    }
+
 
 //    @Override
 //    public Result listForView(St4ScsCl data) {

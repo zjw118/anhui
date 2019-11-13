@@ -95,8 +95,6 @@ public class ImageContrastController {
     }
 
 
-
-
     /**
      * 删除
      * @param request
@@ -139,7 +137,6 @@ public class ImageContrastController {
         String shp1 = entity1.getShp();
         String shp2 = entity2.getShp();
 
-
         int nyyd = 0;
         int jmd = 0;
         int gkyd = 0;
@@ -179,8 +176,7 @@ public class ImageContrastController {
                     qt+= Double.valueOf(jsonObject1.get("area")+"");
             }
         }
-        
-        
+
         int nyyd2 = 0;
         int jmd2 = 0;
         int gkyd2 = 0;

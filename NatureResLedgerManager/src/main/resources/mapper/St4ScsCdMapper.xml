@@ -29,6 +29,11 @@
         <result column="descri" property="descri" />
         <result column="geometry" property="geometry" />
         <result column="group_id" property="groupId" />
+        <result column="activityName" property="activityName" />
+        <result column="checkNum" property="checkNum" />
+        <result column="uncheckNum" property="uncheckNum" />
+        <result column="checkedNum" property="checkedNum" />
+        <result column="todayNum" property="todayNum" />
         <association property="st4ScsCl" javaType="com.gistone.entity.St4ScsCl">
             <result column="CL001" property="cl001" />
             <result column="CL002" property="cl002" />
@@ -303,37 +308,36 @@
     </insert>
     <select id="getStaticPoint" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCd">
         select
-        cd.cd001,ck.cd004,
         IF(COUNT(*) IS NULL, 0, COUNT(*)) AS checkNum,
-        IFNULL(SUM(ck088=0),0) AS uncheckNum,
+        IFNULL(SUM(ck088=0 OR ck088 IS NULL ),0) AS uncheckNum,
         IFNULL(SUM(ck088=1),0) AS checkedNum,
-        IFNULL(SUM(DATE_FORMAT(CK048,'%Y-%m-%d')=DATE_FORMAT(NOW(),'%Y-%m-%d')),0) AS todayNum,
-        IFNULL(SUM(cd010!=0),0) AS addNum
-        from st4_scs_cd cd
-        LEFT JOIN st4_scs_ck ck on ck.CD004=cd.CD004
-        left join st4_sys_sa sa on sa.SA001=cd.CD010
-        LEFT JOIN st4_scs_cl cl ON cd.CL001 = cl.CL001
-        WHERE  cd.CD009 =1 and sa.SA020=1
+        IFNULL(SUM(DATE_FORMAT(CK048,'%Y-%m-%d')=DATE_FORMAT(NOW(),'%Y-%m-%d')),0) AS todayNum
+        FROM st4_scs_cd cd
+        LEFT JOIN st4_scs_ck ck
+        ON ck.CD004 = cd.CD001
+        LEFT JOIN st4_sys_sa sa
+        ON sa.SA001 = cd.CD010
+        LEFT JOIN rlhd_group co ON co.id = cd.group_id
+        LEFT JOIN st4_po_cl_co clco ON clco.co001=co.id
+        LEFT JOIN st4_scs_cl cl
+        ON clco.CL001 = cl.CL001
+        WHERE  cd.CD009 =1
+        AND cl.cl001 IS NOT NULL
+        <if test="cl001!=null and cl001!='' ">
+            and   cl.CL001=#{cl001} group by cl.cl001
+        </if>
+        <!--<if test="sa001!=null and st4SysSa.sa001!='' ">
+            and   sa.SA001=#{st4SysSa.sa001}
+        </if>-->
+       <!-- <if test="groupByName==null or groupByName=='' ">
 
-        <if test="st4ScsCl!=null">
-            <if test="st4ScsCl.cl001!=null and st4ScsCl.cl001!='' ">
-                and   cd.CL001=#{st4ScsCl.cl001}
-            </if>
-        </if>
-        <if test="st4SysSa!=null">
-            <if test="st4SysSa.sa001!=null and st4SysSa.sa001!='' ">
-                and   sa.SA001=#{st4SysSa.sa001}
-            </if>
-        </if>
-        <if test="groupByName==null or groupByName=='' ">
-            GROUP BY cl.CL001
         </if>
         <if test="groupByName=='cl001' ">
             GROUP BY cl.CL001
         </if>
         <if test="groupByName=='sa001' ">
             GROUP BY sa.SA001
-        </if>
+        </if>-->
     </select>
     <select id="listCheckPoint"  resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCd">
         select *,sa.SA019 uname
@@ -482,10 +486,9 @@
     <select id="getSpotByTaskId"  resultMap="BaseResultMap" parameterType="Integer">
         select cd.CD001 from
         st4_scs_cd cd
-        left join st4_po_cd_co cdco on cd.CD001 =cdco.cd001
-        left join rlhd_group co on cdco.co001 = co.id
-        LEFT JOIN st4_po_cl_co clco on  clco.co001=co.id
-        left join st4_scs_cl cl on cl.CL001 = clco.cl001
+        inner join rlhd_group co on cd.group_id = co.id
+        inner JOIN st4_po_cl_co clco on  clco.co001=co.id
+        inner join st4_scs_cl cl on cl.CL001 = clco.cl001
         where
          cd.CD009=1 and cl.CL001=#{cl001}
     </select>

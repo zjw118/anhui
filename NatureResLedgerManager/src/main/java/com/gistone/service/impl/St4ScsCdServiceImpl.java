@@ -9,6 +9,7 @@ import com.gistone.entity.*;
 import com.gistone.mapper.*;
 import com.gistone.service.ISt4ScsCdService;
 import com.gistone.util.*;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -243,7 +244,6 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     @Override
     public void delete(List<Integer> ids) {
         //具体逻辑
-
     }
 
     @Override
@@ -255,11 +255,14 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             Map<String, Object> attributes = (Map<String, Object>) datum.get("attributes");
             //通过属性构造参数
             St4ScsCd iterpretation = new St4ScsCd();
-            if (null != attributes.get("name")) {
+            if (null != attributes.get("name")){
                 iterpretation.setActiveName(attributes.get("name") + "");
             }
             if (null != attributes.get("center")) {
-                iterpretation.setCenter(attributes.get("center") + "");
+                String center = attributes.get("center") + "";
+                iterpretation.setCenter(center);
+                iterpretation.setCd002(center.split(",")[0]);
+                iterpretation.setCd003(center.split(",")[1]);
             }
             if (null != attributes.get("area")) {
                 iterpretation.setArea(attributes.get("area") + "");
@@ -273,7 +276,6 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             if (null != attributes.get("type")) {
                 iterpretation.setActiveType(attributes.get("type") + "");
             }
-
             if (null != attributes.get("descri")) {
                 iterpretation.setDescri(attributes.get("descri") + "");
             }
@@ -281,23 +283,27 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 iterpretation.setCd012(attributes.get("remark") + "");
             }
             Map<String, Object> rings = (Map<String, Object>) datum.get("geometry");
-            iterpretation.setGeometry(rings.get("rings") + "");
+            String geometry = rings.get("rings").toString();
+            iterpretation.setGeometry(geometry);
             iterpretation.setImageId(imageId);
             iterpretation.setCd010(createBy);
             iterpretation.setCd011(LocalDateTime.now());
+            iterpretation.setCd004(UUID.randomUUID().toString().replace("-", ""));
             st4ScsCdMapper.insert(iterpretation);
         }
 
-
         //写入本地shp文件
         String url = PathUtile.getRandomPath(PATH+"/epr/image/","x.shp");
-        String res = ShpUtil.handleWebData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+""),url);
-        SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
-        //SHP上传到GIS服务器
-        String ftpPath = "/shp/"+ymd.format(new Date())+"/"; // ftp文件存放物理路径
-        String name = UUID.randomUUID()+"";
-        String fileName1 = name+".shp";
 
+        String res = ShpUtil.handleWebData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+""),url);
+        //SHP上传到GIS服务器
+        String u = url.split("\\:")[1];
+        String ftpPath = u.split("\\.")[0];
+        ftpPath = ftpPath.substring(0,u.lastIndexOf("/"))+"/";
+        String name = u.substring(u.lastIndexOf("/")+1);
+        name = name.split("\\.")[0];
+
+        String fileName1 = name+".shp";
         FileInputStream input1 = new FileInputStream(new File(url));
         String fileName2 = name + ".dbf";
         FileInputStream input2 = new FileInputStream(new File(url.split("\\.")[0] + ".dbf"));
@@ -319,17 +325,13 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             if ("0".equals(res)) {
                 Image image = new Image();
                 image.setId(imageId);
-
                 image.setShpurl(ftpPt+ftpUrl+ftpPath+fileName1);
                 image.setShp(ShpUtil.readShapeFileToStr(url,1)+"");
                 image.setUpdateDate(new Date());
                 imageMapper.updateById(image);
             }
         }
-
-
     }
-
 
     @Override
     public void edit(St4ScsCd entity) {

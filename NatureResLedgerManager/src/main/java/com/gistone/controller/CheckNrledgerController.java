@@ -8,6 +8,7 @@ import com.gistone.annotation.PassToken;
 import com.gistone.entity.*;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.*;
+import com.gistone.swagger.TrackDistribution;
 import com.gistone.util.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -674,23 +675,14 @@ public class CheckNrledgerController {
         if(ck.getCk067()==null){
             return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "审核状态不能为空！");
         }
-
-
+        if(ck.getCk067()==2){
+            if(!ObjectUtils.isNotNullAndEmpty(ck.getCk070())){
+                return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "审核意见不能为空！");
+            }
+        }
         return  icheckLedgerService.pointStageExamine(ck);
     }
-    /**
-     *
-     * @param
-     * @param
-     * @return
-     */
-    @PassToken
-    @ApiOperation(value="问题点位统计（已核查和未核查,不必传参）",notes = "问题点位统计（已核查和未核查）",response = St4ScsCd.class)
-    @RequestMapping(value="/pointStatistics",method = RequestMethod.POST)
-    public Result pointStatistics(@RequestBody  @ApiParam(name="航点记录列表管理列表查看详情", value="json格式", required=true)
-                                              Swagger<St4ScsCd> checkTaskSwagger,HttpServletRequest request,HttpServletResponse response) {
-        return icheckLedgerService.pointStatistics();
-    }
+
     /**
      *
      * @param
@@ -761,9 +753,14 @@ public class CheckNrledgerController {
 
     }
     @PassToken
-    @ApiOperation(value="环科院导出EXCEL(此接口只传ck001即可)",notes = "导出EXCEL(此接口只传ck001即可)",response = St4ScsCk.class)
-    @RequestMapping(value="/exportHkyExcel",method = RequestMethod.GET)
-    public void exportHkyExcel(HttpServletRequest request,HttpServletResponse response) {
+    @ApiOperation(value="轨迹分布(查询条件任务名称任务台账)",notes = "轨迹分布",response = St4ScsCk.class)
+    @RequestMapping(value="/trackDistribution",method = RequestMethod.POST)
+    public ResultVO trackDistribution(@RequestBody  @ApiParam(name="轨迹分布", value="json格式", required=true)
+                                                  Swagger<TrackDistribution> td) {
+
+        TrackDistribution tdData = td.getData();
+
+        return st4ScsCyService.trackDistribution(tdData);
 
     }
 

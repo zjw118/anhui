@@ -9,17 +9,13 @@ import com.gistone.mapper.ImageMapper;
 import com.gistone.service.ImageContrastService;
 import com.gistone.util.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Map;
 import java.util.UUID;
 
 
@@ -46,6 +42,9 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
     private String ftpPt;
     @Value("${ftp_url}")
     private String ftpUrl;
+
+
+
     @Value("${PATH}")
     private String PATH;
     @Value("${IMAGE_SERVICE}")
@@ -62,18 +61,43 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
 
         Image image1 = imageMapper.getImageById(imageContrast.getImage1Id());
         Image image2 = imageMapper.getImageById(imageContrast.getImage2Id());
+        String res = "";
+        if(StringUtils.isBlank(image1.getShpurl())){
+            res = image1.getName()+"<=未知比对数据";
+        }
+        if(StringUtils.isBlank(image2.getShpurl())){
+            res = image2.getName()+"<=未知比对数据";
+        }
+        if(!"".equals(res)){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),res);
+        }
         String p1 = "?file1="+image1.getShpurl();
         String p2 = "&file2="+image2.getShpurl();
         String p3 = "&outfile="+ftpPt+ftpUrl+outUrl;
         String p4 = "&f=pjson";
 
+        HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4,null);
+        Thread.sleep(6000);
         boolean b = true;
-        for (int i = 0; i < 20; i++) {
-            HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4,null);
-            if(FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.shp")&&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"sub.shp")){
+        for (int i = 1; i < 20; i++) {
+            if(
+                    FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.shp")
+                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.dbf")
+                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.cpg")
+                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.prj")
+                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.shx")
+                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.shp.xml")
+                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"sub.shp")
+                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"sub.dbf")
+                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"sub.cpg")
+                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"sub.prj")
+                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"sub.shx")
+                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"sub.shp.xml")
+            ){
                 b = false;
                 break;
             }
+            HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4,null);
             Thread.sleep(2000);
         }
         if(b){
@@ -81,49 +105,72 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         }
 
         //FTP将SHP复制到本地
-        String url = UUID.randomUUID()+"";
         String ftpPath = outUrl; // 原ftp文件路径
-        String filePath = PATH+"/epr/image/影像对比/"+url+"/"; // 本地路径
+        String filePath = PATH+"/epr/FTP"+outUrl; // 本地路径
         String fileName1 = "add.shp";// 原ftp文件名称
         String fileName2 = "add.dbf";// 原ftp文件名称
         String fileName3 = "add.cpg";// 原ftp文件名称
         String fileName4 = "add.prj";// 原ftp文件名称
         String fileName5 = "add.shx";// 原ftp文件名称
         String fileName6 = "add.shp.xml";// 原ftp文件名称
-        String res1 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, filePath, fileName1);
-        String res2 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, filePath, fileName2);
-        String res3 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, filePath, fileName3);
-        String res4 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, filePath, fileName4);
-        String res5 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, filePath, fileName5);
-        String res6 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, filePath, fileName6);
+        String res1 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, outUrl, filePath, fileName1);
+        String res2 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, outUrl, filePath, fileName2);
+        String res3 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, outUrl, filePath, fileName3);
+        String res4 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, outUrl, filePath, fileName4);
+        String res5 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, outUrl, filePath, fileName5);
+        String res6 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, outUrl, filePath, fileName6);
 
-
-        String ftpPath2 = outUrl; // ftp文件存放物理路径
-        String filePath2 = PATH+"/epr/image/影像对比/"+url+"/"; // 文件路径
-        String fileName11 = "add.shp";// 原ftp文件名称
-        String fileName22 = "add.dbf";// 原ftp文件名称
-        String fileName33 = "add.cpg";// 原ftp文件名称
-        String fileName44 = "add.prj";// 原ftp文件名称
-        String fileName55 = "add.shx";// 原ftp文件名称
-        String fileName66 = "add.shp.xml";// 原ftp文件名称
-        String res11 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath2, filePath2, fileName11);
-        String res22 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath2, filePath2, fileName22);
-        String res33 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath2, filePath2, fileName33);
-        String res44 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath2, filePath2, fileName44);
-        String res55 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath2, filePath2, fileName55);
-        String res66 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath2, filePath2, fileName66);
+//        String ftpPath2 = outUrl; // ftp文件存放物理路径
+//        String filePath2 = PATH+"/epr/FTP/"+outUrl+"/"; // 文件路径
+        String fileName11 = "sub.shp";// 原ftp文件名称
+        String fileName22 = "sub.dbf";// 原ftp文件名称
+        String fileName33 = "sub.cpg";// 原ftp文件名称
+        String fileName44 = "sub.prj";// 原ftp文件名称
+        String fileName55 = "sub.shx";// 原ftp文件名称
+        String fileName66 = "sub.shp.xml";// 原ftp文件名称
+        String res11 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, outUrl, filePath, fileName11);
+        String res22 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, outUrl, filePath, fileName22);
+        String res33 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, outUrl, filePath, fileName33);
+        String res44 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, outUrl, filePath, fileName44);
+        String res55 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, outUrl, filePath, fileName55);
+        String res66 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, outUrl, filePath, fileName66);
 
         //读取本地SHP数据
         if("000000000000".equals(res1+res2+res3+res4+res5+res6+res11+res22+res33+res44+res55+res66)){
+            boolean file1 = new File(filePath+fileName1).exists();
+            boolean file2 = new File(filePath+fileName2).exists();
+            boolean file3 = new File(filePath+fileName3).exists();
+            boolean file4 = new File(filePath+fileName4).exists();
+            boolean file5 = new File(filePath+fileName5).exists();
+            boolean file6 = new File(filePath+fileName6).exists();
+            boolean file7 = new File(filePath+fileName11).exists();
+            boolean file8 = new File(filePath+fileName22).exists();
+            boolean file9 = new File(filePath+fileName33).exists();
+            boolean file10 = new File(filePath+fileName44).exists();
+            boolean file11 = new File(filePath+fileName55).exists();
+            boolean file12 = new File(filePath+fileName66).exists();
+
+            for (int i = 0; i < 5; i++) {
+                if(!file1||!file2||!file3||!file4||!file5||!file6||!file7||!file8||!file9||!file10||!file11||!file12){
+                    Thread.sleep(1000);
+                }else{
+                    break;
+                }
+            }
+
+            if(!file1||!file2||!file3||!file4||!file5||!file6||!file7||!file8||!file9||!file10||!file11||!file12){
+                System.out.println(filePath+"<=FTP转存本地丢失文件");
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"丢失FTP转存文件");
+            }
             String str1 = ShpUtil.readShapeFileToStr(filePath+fileName1,1)+"";
-            String str2 = ShpUtil.readShapeFileToStr(filePath2+fileName11,1)+"";
+            String str2 = ShpUtil.readShapeFileToStr(filePath+fileName11,1)+"";
 
             //存表
             imageContrast.setData1(str1);
             imageContrast.setData2(str2);
             int addres = imageContrastMapper.insertImageContrast(imageContrast);
             if(addres>0){
-                return ResultVOUtil.success();
+                return ResultVOUtil.success(filePath);
             }
         }
         return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"对比失败");

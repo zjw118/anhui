@@ -24,6 +24,7 @@ import java.util.List;
  */
 public interface ImageMapper extends BaseMapper<Image> {
     Image getImageById(Integer id);
+
     List<St4ScsCdVo> selectISt4ScsCd(Integer id);
 
     List<Map<String,Object>> selectCount(@Param("code") String code, @Param("currentTime") LocalDate currentTime, @Param("beforeTime") LocalDate beforeTime);
@@ -33,4 +34,9 @@ public interface ImageMapper extends BaseMapper<Image> {
     int getLastDataId();
 
     List<Map<String,Object>> getAreaGroupByType(int id);
+
+    int updateImage(Image image);
+
+    int insertImage(Image image);
+
 }
