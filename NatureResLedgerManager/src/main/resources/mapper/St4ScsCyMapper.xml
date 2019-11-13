@@ -22,9 +22,9 @@
         <result column="CY016" property="cy016" />
         <result column="CY017" property="cy017" />
         <result column="CL003" property="cl003" />
-        <result column="rwcs" property="rwcs" />
         <result column="gjlc" property="gjlc" />
         <result column="rwcs" property="rwcs" />
+        <result column="rwsc" property="rwsc" />
         <result column="uname" property="uname" />
         <association property="rlhdGroup" javaType="com.gistone.entity.RlhdGroup">
             <id column="id" property="id" />
@@ -191,7 +191,6 @@
         SELECT
         cl.*,
         sa.SA019 uname,
-        cy.*,
         IFNULL(COUNT(*),0)    rwcs,
         IFNULL(SUM(cy.CY006),0)    gjlc,
         IFNULL(SUM(TIMESTAMPDIFF(HOUR,CY003,CY004)),0)    rwsc
@@ -200,7 +199,7 @@
         ON cy.SA001=sa.SA001
         LEFT JOIN st4_scs_cl cl
         ON cl.CL003=cy.CL003
-        WHERE cy.CY016 =1
+        WHERE cy.CY016 =1 and   sa.SA019 is not null
         <if test="uname!=null and uname  !=''">
             and sa.SA019 like '%${uname}%'
         </if>

@@ -55,6 +55,8 @@ public class TaskController {
 
     @Autowired
     private ISt4ScsCoService iSt4ScsCoService;
+    @Autowired
+    private ConfigUtils configUtils;
 
     /*@ApiOperation(value = "问题点批次", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/listCheckPointToView")
@@ -225,17 +227,16 @@ public class TaskController {
     @ApiOperation(value = "(安徽用)任务导入", notes = "(安徽用)任务导入", response = Result.class)
     @PostMapping("/importTask")
     public ResultVO importTask(@RequestParam MultipartFile file, HttpServletRequest request, HttpServletResponse response) {
-        // 在定义一个文件上传后的临时存储路径
-        String temp_savepath = request.getServletContext().getRealPath("/")+ "//temp//importTemp";
-        //检查临时目录是否存在，不存在则创建
-
             if(!file.isEmpty()) {
-                //file.g
-                String filePath = file.getOriginalFilename();
-                String aaa =PictureUtils.getPicturePath("D:\\checkTasa\\", file);
-                //windows
-                String savePath = request.getServletContext().getRealPath("/");
-                //String aaaa = PictureUtils.getResourceBasePath();
+                // 在定义一个文件上传后的临时存储路径
+                request.getServletContext().getRealPath("/");
+                String temp_savepath = configUtils.getExcel_PATH()+"ledger/temp/importTask" ;
+                File dirFile = new File(temp_savepath);
+                if(!dirFile.exists()&&!dirFile.isDirectory()){
+                    //检查临时目录是否存在，不存在则创建
+                    dirFile.mkdirs();
+                }
+                String aaa =PictureUtils.getDiyTempFilePath(temp_savepath, file);
                 try{
                     return iSt4ScsClService.readExcel(aaa);
                 }catch (Exception e){
@@ -244,13 +245,6 @@ public class TaskController {
                 }
             }
         return ResultVOUtil.error("1444","服务器未读取到数据，请确认所上传excel是否有信息");
-//            St4SysSa seUser = new St4SysSa();
-//            seUser.setSa001(1);
-//            MultipartHttpServletRequest req = (MultipartHttpServletRequest) request;
-//            Map<String, MultipartFile> items = req.getFileMap();
-//            List<Integer> uidList = new ArrayList<>();
-//            return iSt4ScsClService.importTask(items,seUser);
-
     }
     /**
      * (安徽用)任务导出
