@@ -154,6 +154,7 @@ public class ExcUtil {
     private static String getStringCellValue(HSSFCell cell) {
         String strCell = "";
         switch (cell.getCellType()) {
+
             case HSSFCell.CELL_TYPE_STRING:
                 strCell = cell.getStringCellValue();
                 break;

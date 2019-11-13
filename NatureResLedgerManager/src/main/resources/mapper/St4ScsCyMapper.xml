@@ -95,7 +95,9 @@
 
     <select id="trackDistribution" resultMap="BaseResultMap"  >
         SELECT cy.*,
-        cl.CL001,cl.CL002,co.name,cg.CG003,sa.SA019 uname
+        cl.CL001,cl.CL002,co.name,cg.CG003,sa.SA019 uname, IFNULL(COUNT(*),0)    rwcs,
+        IFNULL(SUM(cy.CY006),0)    gjlc,
+        IFNULL(SUM(TIMESTAMPDIFF(HOUR,CY003,CY004)),0)    rwsc
         FROM
         st4_scs_cy cy
         LEFT JOIN st4_sys_sa sa ON cy.sa001=sa.sa001
@@ -202,6 +204,9 @@
         WHERE cy.CY016 =1 and   sa.SA019 is not null
         <if test="uname!=null and uname  !=''">
             and sa.SA019 like '%${uname}%'
+        </if>
+        <if test="cl001!=null and cl001 !=''">
+            and cl.CL001 = #{cl001}
         </if>
         GROUP BY  sa.SA001
         ORDER BY CONVERT(sa.SA019 USING GBK)
