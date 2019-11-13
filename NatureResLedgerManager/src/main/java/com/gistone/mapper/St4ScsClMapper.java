@@ -27,4 +27,6 @@ public interface St4ScsClMapper extends BaseMapper<St4ScsCl> {
 
     List<Map> listCdByTask(St4ScsCl cl);
 
+    List<St4ScsCl> getExportData(List<Integer> ids);
+
 }

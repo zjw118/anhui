@@ -25,11 +25,38 @@
         <result column="rwcs" property="rwcs" />
         <result column="gjlc" property="gjlc" />
         <result column="rwcs" property="rwcs" />
-
-
+        <result column="uname" property="uname" />
+        <association property="rlhdGroup" javaType="com.gistone.entity.RlhdGroup">
+            <id column="id" property="id" />
+            <result column="name" property="name" />
+            <result column="create_by" property="createBy" />
+            <result column="create_date" property="createDate" />
+            <result column="update_by" property="updateBy" />
+            <result column="update_date" property="updateDate" />
+            <result column="remark" property="remark" />
+            <result column="del_flag" property="delFlag" />
+            <result column="son_count" property="sonCount" />
+        </association>
         <association property="st4SysSa" javaType="com.gistone.entity.St4SysSa">
             <id column="SA001" property="sa001" />
             <result column="SA019" property="sa019" />
+        </association>
+        <association property="st4ScsCl" javaType="com.gistone.entity.St4ScsCl">
+            <id column="CL001" property="cl001" />
+            <result column="CL002" property="cl002" />
+            <result column="CL003" property="cl003" />
+            <result column="CL004" property="cl004" />
+            <result column="CL005" property="cl005" />
+            <result column="CL006" property="cl006" />
+            <result column="CL007" property="cl007" />
+            <result column="CL008" property="cl008" />
+            <result column="CL009" property="cl009" />
+            <result column="CL010" property="cl010" />
+            <result column="CL011" property="cl011" />
+            <result column="CL012" property="cl012" />
+            <result column="CL013" property="cl013" />
+            <result column="CL014" property="cl014" />
+            <result column="CL015" property="cl015" />
         </association>
         <association property="st4SysSg" javaType="com.gistone.entity.St4SysSg">
             <id column="SG001" property="sg001" />
@@ -65,6 +92,28 @@
         cy.CY001, cy.CY002, cy.CY003, cy.CY004, cy.CY005, cy.CY006, cy.SA001, cy.CY009, cy.CY010, cy.CY011, cy.CY012, cy.CY013,
         cy.CY014, cy.CY015, cy.CY016, cy.CY017
     </sql>
+
+    <select id="trackDistribution" resultMap="BaseResultMap"  >
+        SELECT cy.*,
+        cl.CL001,cl.CL002,co.name,cg.CG003,sa.SA019 uname
+        FROM
+        st4_scs_cy cy
+        LEFT JOIN st4_sys_sa sa ON cy.sa001=sa.sa001
+        LEFT JOIN st4_scs_cg cg ON cg.CY017 = cy.CY017
+        LEFT JOIN st4_scs_cl cl ON cy.CL003  = cl.CL003
+        LEFT JOIN st4_scs_cc cc ON cc.CY017 = cy.CY017
+        LEFT JOIN st4_scs_ck ck ON ck.CC002 = cc.CC002
+        LEFT JOIN st4_po_cl_co clco ON clco.CL001 = cl.CL001
+        LEFT JOIN rlhd_group co ON co.id = clco.CO001
+        WHERE cy.cy016=1
+        <if test="taskName!=null and taskName!='' ">
+            and cl.CL002 LIKE '%${taskName}%'
+        </if>
+        <if test="ledgerId!=null and ledgerId!=''  ">
+            and co.id = #{ledgerId}
+        </if>
+    </select>
+
     <select id="getSailRecordDetail" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCy" >
         select cy.*,sa.SA019,sg.SG008,sg.SG001,cg.*,cc.*,ce.*,cf.*
         from st4_scs_cy cy left join st4_sys_sa sa on cy.SA001 = sa.SA001
@@ -140,85 +189,23 @@
 
     <select id="selectPoList" resultMap="BaseResultMap"   parameterType="com.gistone.entity.St4ScsCy">
         SELECT
-        sa.SA019 ,
-        cy.*,cc.*,ck.*,cf.*,
-        sg.SG001,
-        sg.SG008,
-        sd.PK_ID,
-        sd.COM_NAME,
-        IFNULL(SUM(CY011=0),0) AS monitorNum,
-        IFNULL(SUM(CY011=1),0) AS dailyNum,
-        IFNULL(SUM(CY011=2),0) AS inspectNum,
-        IFNULL(SUM(CY011=3),0) AS surveyNum,
+        cl.*,
+        sa.SA019 uname,
+        cy.*,
         IFNULL(COUNT(*),0)    rwcs,
         IFNULL(SUM(cy.CY006),0)    gjlc,
         IFNULL(SUM(TIMESTAMPDIFF(HOUR,CY003,CY004)),0)    rwsc
-        from st4_scs_cy cy
-        LEFT JOIN st4_scs_cc cc ON cy.CY017=cc.CY017
-        LEFT JOIN st4_scs_ck ck ON cc.CC002=ck.CC002
-        LEFT JOIN st4_scs_cf cf ON cc.CC002=cf.CC002
-
-        LEFT JOIN st4_sys_sg sg
-        on cy.CY010=sg.SG001
-        LEFT JOIN sys_company sd
-        on sg.SD001=sd.PK_ID
+        FROM st4_scs_cy cy
         LEFT JOIN st4_sys_sa sa
-        on cy.SA001=sa.SA001
-        left join st4_scs_cl cl
-        on cl.CL003=cy.CL003
-        where cy.CY016 =1
-        <if test="st4SysSg != null">
-            <if test="st4SysSg.sg001!=null and st4SysSg.sg001 !=''">
-                and sg.SG001 =#{st4SysSg.sg001}
-            </if>
+        ON cy.SA001=sa.SA001
+        LEFT JOIN st4_scs_cl cl
+        ON cl.CL003=cy.CL003
+        WHERE cy.CY016 =1
+        <if test="uname!=null and uname  !=''">
+            and sa.SA019 like '%${uname}%'
         </if>
-        <if test="sysCompany != null">
-            <if test="sysCompany.PK_ID!=null and sysCompany.PK_ID !=''">
-                and sd.PK_ID =#{sysCompany.PK_ID}
-            </if>
-        </if>
-        <if test="st4SysSa != null">
-            <if test="st4SysSa.sa001!=null and st4SysSa.sa001  !=''">
-                and sa.SA001 =#{st4SysSa.sa001}
-            </if>
-        </if>
-        <if test="st4ScsCl != null">
-            <if test="st4ScsCl.cl001!=null and st4ScsCl.cl001 !=''">
-                and cl.CL001 =#{st4ScsCl.cl001}
-            </if>
-        </if>
-        <if test="endTime!=null and endTime!=''">
-            and cy.CY004 <![CDATA[ <= ]]> #{endTime}
-        </if>
-        <if test="strTime!=null and strTime!=''">
-            and cy.CY003 <![CDATA[ >= ]]> #{strTime}
-        </if>
-        <if test="groupByName==null or groupByName=='' ">
-            GROUP BY sd.PK_ID
-        </if>
-        <if test="groupByName=='sg001' ">
-            GROUP BY sg.SG001
-        </if>
-        <if test="groupByName=='sd001' ">
-            GROUP BY sd.PK_ID
-        </if>
-        <if test="groupByName=='sa001'">
-            GROUP BY  sa.SA001
-        </if>
-
-        <if test="sortName==null">
-            ORDER BY cy.CY013
-        </if>
-        <if test="sortName=='xcry'">
-            ORDER BY CONVERT(sa.SA019 USING GBK) ${sortOrder}
-        </if>
-        <if test="sortName=='rwcs'">
-            ORDER BY rwcs ${sortOrder}
-        </if>
-        <if test="sortName=='gjlc'">
-            ORDER BY gjlc ${sortOrder}
-        </if>
-
+        GROUP BY  sa.SA001
+        ORDER BY CONVERT(sa.SA019 USING GBK)
     </select>
 
 
