@@ -95,7 +95,7 @@
 
     <select id="trackDistribution" resultMap="BaseResultMap"  >
         SELECT cy.*,
-        cl.CL001,cl.CL002,co.name,cg.CG003,sa.SA019 uname, IFNULL(COUNT(*),0)    rwcs,
+        cl.CL001,cl.CL002,co.name,cg.cg001,cg.CG003,sa.SA019 uname, IFNULL(COUNT(*),0)    rwcs,
         IFNULL(SUM(cy.CY006),0)    gjlc,
         IFNULL(SUM(TIMESTAMPDIFF(HOUR,CY003,CY004)),0)    rwsc
         FROM

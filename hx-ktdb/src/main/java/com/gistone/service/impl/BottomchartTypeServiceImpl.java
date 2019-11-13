@@ -1,15 +1,23 @@
 package com.gistone.service.impl;
 
+    import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+    import com.baomidou.mybatisplus.core.metadata.IPage;
     import com.gistone.entity.BottomchartType;
     import com.gistone.mapper.BottomchartTypeMapper;
     import com.gistone.service.BottomchartTypeService;
     import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+    import lombok.extern.slf4j.Slf4j;
+    import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.stereotype.Service;
     import javax.transaction.Transactional;
     import org.apache.commons.lang3.StringUtils;
     import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
-    /**
+    import java.util.HashMap;
+    import java.util.List;
+    import java.util.Map;
+
+/**
     * <p>
     *  服务实现类
     * </p>
@@ -25,7 +33,7 @@ package com.gistone.service.impl;
     @Autowired
     private BottomchartTypeMapper mapper;
     @Override
-    public Map<String, Object> list(Integer pageNum, Integer pageSize,String userName) {
+    public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName) {
 
     QueryWrapper<BottomchartType> wrapper = new QueryWrapper<>();
     if(StringUtils.isNotBlank(userName)){
