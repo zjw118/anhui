@@ -1,8 +1,10 @@
 package com.gistone.service;
 
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.St4ScsCy;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gistone.entity.St4SysSa;
+import com.gistone.swagger.TrackDistribution;
 import com.gistone.util.Result;
 
 /**
@@ -44,5 +46,11 @@ public interface ISt4ScsCyService extends IService<St4ScsCy> {
      * @return
      */
     Result getSailRouteByReserveId(Integer rid);
+
+    /**
+     *轨迹分布地图接口
+     * @return
+     */
+    ResultVO trackDistribution(TrackDistribution td);
 
 }

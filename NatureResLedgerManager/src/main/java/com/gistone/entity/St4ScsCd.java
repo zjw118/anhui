@@ -152,9 +152,9 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     @TableField("image_id")
 //    @Excel(name = "id",height = 11, width = 15)
     private Integer imageId;
-    @ApiModelProperty(name="activityName",value="活动名称",dataType = "{}",required = false,example="")
+    @ApiModelProperty(name="activityName",value="斑块名称",dataType = "{}",required = false,example="")
     @TableField("active_name")
-    @Excel(name = "活动名称",height = 11, width = 15)
+    @Excel(name = "斑块名称",height = 11, width = 15)
     private String activeName;
     @ApiModelProperty(name="activeType",value="活动类型",dataType = "{}",required = false,example="")
     @TableField("active_type")

@@ -5,6 +5,7 @@ import com.gistone.annotation.PassToken;
 import com.gistone.entity.St4ScsCc;
 import com.gistone.entity.St4ScsCd;
 import com.gistone.entity.St4ScsCk;
+import com.gistone.entity.St4ScsCy;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.ISt4ScsCkService;
 import com.gistone.service.ISt4ScsClService;
@@ -39,23 +40,27 @@ public class StatisController {
 	 * @param response
 	 * @return
 	 */
-	/*@ApiOperation(value = "巡查-分页", notes = "条件参数(人员外键)", response = Result.class)
-	@PostMapping("/listPatrolBySA001")
-	public Result listPatrolBySA001(@RequestBody Swagger<St4ScsCy> requestData, HttpServletRequest request, HttpServletResponse response){
+	@ApiOperation(value = "(安徽用)航迹数据统计接口只能传递uname)", notes = "巡查-统计列表", response = Result.class)
+	@PostMapping("/listPatrol")
+	public ResultVO listPatrol(@RequestBody Swagger<St4ScsCy> requestData, HttpServletRequest request, HttpServletResponse response){
 		try {
-			if(null==requestData.getData().getSa001())
-				return Result.build(1001, "sa001参数不能为空");
-			if(null==requestData.getData().getPageNumber())
-				return	Result.build(1001, "PageNumber当前页异常");
-			if(null==requestData.getData().getPageSize())
-				return	Result.build(1001,"pageSize显示条数异常");
-			return statisService.listPatrolBySA001(requestData.getData());
+			return statisService.listPatrol(requestData.getData());
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Result.build(1006, "查询异常");
+			return ResultVOUtil.error("1222","处理结果失败");
 		}
 	}
-*/
+	@ApiOperation(value = "(安徽用)航迹数据按人员统计导出接口)", notes = "巡查-统计列表", response = Result.class)
+	@PostMapping("/exportRecordStatic")
+	public ResultVO exportRecordStatic(@RequestBody Swagger<St4ScsCy> requestData,  HttpServletResponse response){
+		try {
+			return statisService.exportRecordStatic(requestData.getData());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResultVOUtil.error("1222","处理结果失败");
+		}
+	}
+
 
 
 	//-------------------------------航点数据统计-------------------------------

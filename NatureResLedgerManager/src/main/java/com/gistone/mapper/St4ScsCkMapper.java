@@ -102,11 +102,10 @@ public interface St4ScsCkMapper extends BaseMapper<St4ScsCk> {
     List<Map> getTaskMemberUnpass(St4ScsCk ck );
 
     /**
-     * 根据分组id查询改分组下成员提交的台账
-     * @param data
+     * 获取极光推送的信息
      * @return
      */
-    List<St4ScsCk> getTaskByGroupId(Map data);
+    St4ScsCk getSendMsgByCk001(St4ScsCk ck);
 
 
     List<St4ScsCk> getExportData(St4ScsCk ck);

@@ -1,8 +1,8 @@
 package com.gistone.util;
 
-import net.lingala.zip4j.exception.ZipException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.util.WebUtils;
@@ -275,6 +275,19 @@ public class FileUtil {
         return fileList;
     }
 
+    public  static void  createFile(String dir){
+        File file = new File(dir);
+        if(!file.exists()){
+            file.mkdirs();
+        }
+    }
+    public static Object confirmWrited(String dir) {
+        File file = new File(dir);
+        if (file.canWrite()){
+            return null;
+        }
+        return true;
+    }
 
     /**
      * 上传单个附件（前端标识 file）允许附件为空
@@ -319,9 +332,6 @@ public class FileUtil {
     }
 
 
-    public static void main(String[] args) {
-        unPackZip("E:\\epr\\audit\\2019-11-12\\10\\20191112-152601-95be0ec0a420.zip","E:\\epr\\audit\\2019-11-12\\10\\20191112-152601-95be0ec0a420.zip",null);
-    }
 
     /**
      * 解压附件 zip
@@ -347,7 +357,17 @@ public class FileUtil {
     }
 
 
-
+    public static ServletFileUpload setExportDemail(DiskFileItemFactory factory , String tem_savePath){
+        //设置缓存文件的路径
+        factory.setRepository(new File(tem_savePath));
+        // 设置缓存的大小，当上传文件的容量超过该缓存时，直接放到 暂时存储室
+        factory.setSizeThreshold(1024 * 1024 * 10);
+        // 高水平的API文件上传处理
+        ServletFileUpload upload = new ServletFileUpload(factory);
+        // 解决上传文件名的中文乱码问题
+        upload.setHeaderEncoding("utf-8");
+        return upload;
+    }
 
 
 
