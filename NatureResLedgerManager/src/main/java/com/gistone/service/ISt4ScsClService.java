@@ -23,6 +23,8 @@ public interface ISt4ScsClService extends IService<St4ScsCl> {
     //Result listForView(St4ScsCl data);
     ResultVO listTask(St4ScsCl data, SysUser seUser);
 
+    ResultVO listCdByTask(St4ScsCl data);
+
     /**
      * 插入任务
      * @param data

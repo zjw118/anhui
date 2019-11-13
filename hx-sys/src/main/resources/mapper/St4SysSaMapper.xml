@@ -72,8 +72,14 @@
         where SA007 = 1
         ) a where 1=1
 
-        <if test="ch005 != null">
+        <if test="ch005 != null and ch005 != ''">
             and a.CH005 = #{ch005}
+        </if>
+        <if test="sa019 != null and sa019 != ''">
+            and SA019 like '%${sa019}%'
+        </if>
+        <if test="sa012 != null and sa012 != ''">
+            and SA012 like '%${sa012}%'
         </if>
         ORDER BY a.CH005
     </select>

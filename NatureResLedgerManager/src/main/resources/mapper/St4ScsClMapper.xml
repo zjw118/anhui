@@ -47,6 +47,21 @@
     <sql id="Base_Column_List">
         CL001, CL002, CL003, CL004, CL005, CL006, CL007, CL008, CL009, CL010, CL011, CL012, CL013, CL014, CL015
     </sql>
+    <select id="listCdByTask" resultType="Map" parameterType="com.gistone.entity.St4ScsCl">
+        SELECT cl.*,co.* FROM st4_scs_cl cl
+        LEFT JOIN  st4_po_cl_co clco ON cl.cl001 = clco.cl001
+        LEFT JOIN rlhd_group co ON co.id=clco.co001
+        LEFT JOIN sys_user sa ON cl.CL013 = sa.id
+        LEFT JOIN st4_scs_cd cd ON cd.group_id = co.id
+        WHERE cl.CL012 = 1
+        <if test="cl010!=null ">
+            AND   cl.CL010 = #{cl010}
+        </if>
+        <if test="cl002!=null ">
+            AND   cl.CL002 = #{cl002}
+        </if>
+
+    </select>
     <select id="listTask" resultMap="BaseResultMap" >
         select cl.*,co.*,sa.* from (select cl.* from st4_scs_cl cl
         WHERE cl.CL012=1
@@ -73,6 +88,7 @@
 
         order by cl.CL014 DESC
     </select>
+
     <select id="getTaskDetail" resultMap="BaseResultMap" >
         select cl.*,co.* from st4_scs_cl cl
         left join  st4_po_cl_co clco on cl.cl001 = clco.cl001

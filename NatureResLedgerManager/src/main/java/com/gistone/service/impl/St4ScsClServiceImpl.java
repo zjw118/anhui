@@ -22,6 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -61,6 +64,14 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
     public ResultVO getTaskDetail(St4ScsCl data) {
 
         St4ScsCl list = st4ScsClMapper.getTaskDetail(data);
+        ResultCp res = new ResultCp();
+        res.setData(list);
+        return ResultVOUtil.success(res);
+    }
+    @Override
+    public ResultVO listCdByTask(St4ScsCl data) {
+
+        List<Map> list = st4ScsClMapper.listCdByTask(data);
         ResultCp res = new ResultCp();
         res.setData(list);
         return ResultVOUtil.success(res);

@@ -153,7 +153,7 @@ public class TaskController {
      * @param data
      * @return
      */
-      
+
     @ApiOperation(value = "任务批次删除接口", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/deleteTask")
     public ResultVO deleteTask(@RequestBody @ApiParam(name = "任务批次修改接口", value = "json格式", required = true) Swagger<St4ScsCl> data, HttpServletRequest request) {
@@ -220,7 +220,19 @@ public class TaskController {
        return  iSt4ScsClService.getTaskDetail(param);
     }
     /**
-     * (安徽用)任务导入
+     * 任务斑块查询接口接口
+     * @param data
+     * @return
+     */
+    @PassToken
+    @ApiOperation(value = "任务斑块查询接口接口", notes = "野外监测任务地图", response = Result.class)
+    @PostMapping("/listCdByTask")
+    public ResultVO listCdByTask(@RequestBody @ApiParam(name = "任务批次单个详情接口", value = "json格式", required = true) Swagger<St4ScsCl> data) {
+        St4ScsCl param = data.getData();
+       return  iSt4ScsClService.listCdByTask(param);
+    }
+    /**
+    * (安徽用)任务导入
      * @return
      */
     @PassToken
