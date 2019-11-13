@@ -8,16 +8,21 @@ import com.gistone.mapper.ImageMapper;
 import com.gistone.service.ILmPointService;
 import com.gistone.service.ImageService;
 import com.gistone.util.*;
+import org.apache.commons.collections.bag.SynchronizedSortedBag;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadBase;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -297,6 +302,20 @@ public class ImageController {
     public ResultVO upload(HttpServletRequest request,Image image) {
         return service.upload(request,image);
     }
+
+
+
+
+
+    @PostMapping(value = "/processfiles")
+    public Map ProcessFiles(HttpServletRequest request) {
+        String path = "E:\\epr";
+        String[] arr = {"zip","qwe"};
+        Map map = FileUtil.uploadFiles(request, path, arr, 5);
+
+        return map;
+    }
+
 
 
 

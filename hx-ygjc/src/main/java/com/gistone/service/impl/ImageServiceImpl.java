@@ -202,22 +202,23 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     public ResultVO upload(HttpServletRequest request,Image image) {
         try {
             SimpleDateFormat ymdhms = new SimpleDateFormat("yyyy-MM-dd");
-//            String uuid = UUID.randomUUID().toString().replace("-", "");
             //上传
             String[] arr = {"zip","ZIP"};
             String path = FileUtil.getPath(PATH+"/epr/image/");
-            Map<String,String> resMap = FileUtil.uploadFile(request,path,arr,10000000l);//10MB
-            String error = resMap.get("error");
-            if(StringUtils.isNotBlank(error)){
+            Map resMap = FileUtil.uploadFiles(request, path, arr, 50);  //每个附件限制50MB
+//            Map<String,String> resMap = FileUtil.uploadFile(request,path,arr,10000000l);//10MB
+            String error = resMap.get("error")+"";
+            if(!"0".equals(error)){
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(),error);
             }
-//            String oldName = resMap.get("oldName"); //附件原名称
-            String newName = resMap.get("newName");
-            if(StringUtils.isBlank(newName)){
+            String newName; //附件名称
+            List<Map> fl = (List)resMap.get("fileList");
+            if(0<fl.size()){
+                newName = fl.get(0).get("newName")+"";
+            }else{
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"上传失败");
             }
             String uuid = newName.split("\\.")[0];
-
             //解压
             File f = new File(path+uuid);
             if(!f.isDirectory()) f.mkdirs();
@@ -243,7 +244,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             
             //替换字段名
             JSONArray jsonArray = JSONArray.fromObject(shpStr);
-            System.out.println(jsonArray);
+//            System.out.println(jsonArray);
             JSONArray jSONArray = new JSONArray();
             for (Object o : jsonArray){
                 JSONObject jo = JSONObject.fromObject(o);
@@ -308,6 +309,12 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             image.setShp(jSONArray+"");
             image.setDelFlag(1);
             image.setSign(1);
+            if(null!=resMap.get("name"))
+            image.setName(resMap.get("name")+"");
+            if(null!=resMap.get("url"))
+            image.setUrl(resMap.get("url")+"");
+            if(null!=resMap.get("remark"))
+            image.setRemark(resMap.get("remark")+"");
             int res = mapper.insertImage(image);
             if(0<res){
                 return ResultVOUtil.success();

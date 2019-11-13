@@ -22,6 +22,7 @@
             <version>4.1.19</version>
             <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>cn.afterturn</groupId>
             <artifactId>easypoi-base</artifactId>
