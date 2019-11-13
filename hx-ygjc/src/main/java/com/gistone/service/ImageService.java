@@ -6,6 +6,7 @@ import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
 import com.gistone.util.ResultVOUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,7 @@ public interface ImageService extends IService<Image> {
 
     ResultVO audit(Image image);
 
+    ResultVO upload(HttpServletRequest request,Image image);
 
 
 

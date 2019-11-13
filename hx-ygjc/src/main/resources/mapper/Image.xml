@@ -90,4 +90,45 @@
 	</update>
 
 
+
+    <insert id="insertImage" parameterType="com.gistone.entity.Image">
+        INSERT INTO image
+        (
+            name,
+            url,
+            shpurl,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+            remark,
+            del_flag,
+            shp,
+            contrast_red,
+            sign,
+            evaluation,
+            audit_date
+        )
+        VALUES(
+            #{name},
+            #{url},
+            #{shpurl},
+            #{createBy},
+            #{createDate},
+            #{updateBy},
+            #{updateDate},
+            #{remark},
+            #{delFlag},
+            #{shp},
+            #{contrastRed},
+            #{sign},
+            #{evaluation},
+            #{auditDate}
+        )
+    </insert>
+
+
+
+
+
 </mapper>

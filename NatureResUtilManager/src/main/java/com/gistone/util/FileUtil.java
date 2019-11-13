@@ -1,13 +1,17 @@
 package com.gistone.util;
 
+import net.lingala.zip4j.exception.ZipException;
 import org.apache.commons.lang3.StringUtils;
-
+import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.util.WebUtils;
+import net.lingala.zip4j.core.ZipFile;
+import javax.servlet.http.HttpServletRequest;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by qiang on 2017/8/1.
@@ -250,8 +254,99 @@ public class FileUtil {
             if(!ml.isDirectory()) ml.mkdirs();
             return path;
         }
-        return "";
+        return "1";
     }
+
+
+    /**
+     * 递归遍历目录下所有文件全路径
+     * @param file
+     * @return
+     */
+    public static List<File> listFiles(File file){
+        List<File> fileList = new ArrayList<>();
+        if (file.isDirectory()){
+            for (File listFile : file.listFiles()) {
+                fileList.addAll(listFiles(listFile));
+            }
+        }else {
+            fileList.add(file);
+        }
+        return fileList;
+    }
+
+
+    /**
+     * 上传单个附件（前端标识 file）允许附件为空
+     * @param request
+     * @param path  已经创建好的目录
+     * @param arr    扩展名  String[] arr = {"xxx",""};
+     * @param size    附件大小  1MB = 1000 000
+     * @return  Map    正常返回 oldName,newName  错误返回说明 error
+     */
+    public static Map<String,String> uploadFile(HttpServletRequest request, String path, String[] arr, Long size){
+        Map map = null;
+        try {
+            map = new HashMap();
+            if(!ServletFileUpload.isMultipartContent(request)) return null;
+            MultipartHttpServletRequest multipartRequest = WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class);
+            MultipartFile file = multipartRequest.getFile("file");
+            //判断附件格式
+            String oldName = file.getOriginalFilename();
+            String suffix = oldName.substring(oldName.lastIndexOf("."));
+            boolean b = Arrays.asList(arr).contains((suffix.split("\\."))[1]);
+            if(!b){
+                map.put("error","附件格式错误");
+                return map;
+            }
+            //判断附件大小
+            if(size<file.getSize()){
+                map.put("error","附件超出大小限制");
+                return map;
+            }
+            //生成附件名称
+            SimpleDateFormat ymdhms = new SimpleDateFormat("yyyyMMdd-HHmmss");
+            String newName = ymdhms.format(new Date())+UUID.randomUUID().toString().substring(23,36)+oldName.substring(oldName.lastIndexOf("."));
+            file.transferTo(new File(path,newName));
+            map.put("oldName",oldName);
+            map.put("newName",newName);
+            return map;
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("error","上传失败");
+            return map;
+        }
+    }
+
+
+    public static void main(String[] args) {
+        unPackZip("E:\\epr\\audit\\2019-11-12\\10\\20191112-152601-95be0ec0a420.zip","E:\\epr\\audit\\2019-11-12\\10\\20191112-152601-95be0ec0a420.zip",null);
+    }
+
+    /**
+     * 解压附件 zip
+     * @param zipPath 压缩包全路径  d:/xxx.zip
+     * @param path 放置目录
+     * @param password  解压密码
+     * @throws Exception
+     */
+    public static void unPackZip(String zipPath,String path,String password){
+        try {
+            ZipFile zip = new ZipFile(new File(zipPath));
+            //zip4j默认用GBK编码去解压,这里设置编码为GBK的
+            zip.setFileNameCharset("GBK");
+            zip.extractAll(path);
+            // 如果解压需要密码
+            if (zip.isEncrypted()) {
+                zip.setPassword(password);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 
 

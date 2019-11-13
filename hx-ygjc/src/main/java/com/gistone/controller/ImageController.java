@@ -3,21 +3,24 @@ package com.gistone.controller;
 
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
+import com.gistone.entity.SysUser;
 import com.gistone.mapper.ImageMapper;
 import com.gistone.service.ILmPointService;
 import com.gistone.service.ImageService;
-import com.gistone.util.ResultEnum;
-import com.gistone.util.ResultVOUtil;
+import com.gistone.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * <p>
@@ -37,10 +40,25 @@ public class ImageController {
     private ImageService service;
     @Autowired
     private ImageMapper mapper;
-    @Value("${PATH}")
-    private String PATH;
     @Autowired
     private ILmPointService iLmPointService;
+    @Value("${ftp_host}")
+    private String ftpHost;
+    @Value("${ftp_port}")
+    private Integer ftpPort;
+    @Value("${ftp_username}")
+    private String ftpUserName;
+    @Value("${ftp_password}")
+    private String ftpPassword;
+    @Value("${ftp_pt}")
+    private String ftpPt;
+    @Value("${ftp_url}")
+    private String ftpUrl;
+
+
+
+
+
 
     @PostMapping("/list")
     public ResultVO getList(@RequestBody Map<String, Object> paramsMap) {
@@ -269,19 +287,15 @@ public class ImageController {
     }
 
 
+
     /**
      * 导入影像
-     * @param paramsMap
+     * @param request
      * @return
      */
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public ResultVO upload(@RequestBody Map<String, Object> paramsMap) {
-        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-
-
-
-
-        return null;
+    @PostMapping(value = "/upload")
+    public ResultVO upload(HttpServletRequest request,Image image) {
+        return service.upload(request,image);
     }
 
 

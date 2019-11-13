@@ -294,6 +294,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
 
         //写入本地shp文件
         String url = PathUtile.getRandomPath(PATH+"/epr/image/","x.shp");
+
         String res = ShpUtil.handleWebData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+""),url);
         //SHP上传到GIS服务器
         String u = url.split("\\:")[1];
