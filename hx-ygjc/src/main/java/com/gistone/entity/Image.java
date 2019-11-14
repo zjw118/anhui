@@ -57,7 +57,8 @@ public class Image extends Model<Image> {
     private String evaluation;
     @TableId(value = "audit_date")
     private Date auditDate;
-
+    @TableId(value = "country_border")
+    private String countryBorder;
     @TableField(exist = false)
     private List list;
     protected Serializable pkVal() {

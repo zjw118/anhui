@@ -196,7 +196,12 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     @ApiModelProperty(name="st4ScsCl",value="批次任务实体",dataType = "{}",required = false,example="")
     @TableField(exist = false)
     private  St4ScsCl st4ScsCl;
-
+    @ApiModelProperty(name="image",value="影像表实体",dataType = "{}",required = false,example="")
+    @TableField(exist = false)
+    private  Image image;
+    @ApiModelProperty(name="videoMsg",value="影像地址(后台拼接移动端专用)",dataType = "{}",required = false,example="")
+    @TableField(exist = false)
+    private  String videoMsg;
     @ApiModelProperty(name="st4PoCdSa",value="问题点和人关联表",dataType = "{}",required = false,example="")
     @TableField(exist = false)
     private  List<St4PoCdSa> st4PoCdSaList;
