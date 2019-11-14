@@ -7,12 +7,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.Image;
-import com.gistone.entity.ImageConfig;
-import com.gistone.entity.ShpBatch;
-import com.gistone.entity.SysUser;
+import com.gistone.entity.*;
 import com.gistone.mapper.ImageConfigMapper;
 import com.gistone.mapper.ImageMapper;
+import com.gistone.mapper.ImageNumberMapper;
 import com.gistone.mapper.ShpBatchMapper;
 import com.gistone.service.ImageService;
 import com.gistone.util.*;
@@ -54,6 +52,8 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     private com.gistone.mapper.ShpBatchMapper shpBatchMapper;
     @Autowired
     private ImageConfigMapper imageConfigMapper;
+    @Autowired
+    private ImageNumberMapper imageNumberMapper;
 
 
     @Value("${ftp_host}")
@@ -147,16 +147,22 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     public ResultVO getAudit(Integer id) {
         Image image = mapper.getImageById(id);
         String json = FileUtil.readFromTextFile(image.getAuditPath());
-        JSONObject fSONObject = new JSONObject();
-        fSONObject.put("out",json);
-        fSONObject.put("image",image);
+        //评分系数
+        List<ImageConfig> imageConfig = imageNumberMapper.selectImageConfigByImageId(id);
 
-
-        return  ResultVOUtil.success(fSONObject);
+        Map map = new HashMap();
+        map.put("image",image);
+        map.put("xs",imageConfig);
+        map.put("out",json);
+        return  ResultVOUtil.success(map);
     }
 
+
+
+
+
     @Override
-    public ResultVO addAudit(Integer id) {
+    public ResultVO addAudit(Integer id,String json) {
         try {
             //获取影像SHP数据的FTP地址
             Image image = mapper.getImageById(id);
@@ -227,8 +233,9 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
                 JSONObject attributes = JSONObject.fromObject(job3.get("attributes"));
                 sum += Double.valueOf(attributes.get("hxarea")+"");
             }
-            //获取系数
-            List<ImageConfig> icList = imageConfigMapper.getImageConfig();
+
+            //获取类型列表
+            List<ImageConfig> icList = imageConfigMapper.getImageConfig3();
 
             JSONObject jobs = JSONObject.fromObject(stati);
             JSONObject job2s = JSONObject.fromObject(jobs.get("value"));
@@ -238,21 +245,43 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
                 JSONObject attributess = JSONObject.fromObject(job3s.get("attributes"));
                 for (ImageConfig imageConfig : icList) {
                     if(imageConfig.getId()==Integer.valueOf(attributess.get("type")+"")){
-                        imageConfig.setNum(imageConfig.getNumber()+Double.valueOf(attributess.get("SUM_insect")+""));
+                        imageConfig.setNum(imageConfig.getNum()+Double.valueOf(attributess.get("SUM_insect")+""));
                     }
                 }
             }
 
-            //结果
+            //删除原影像系数
+            imageNumberMapper.deleteImageNumberByImageId(image);
+            //保存当前影像系数
+            JSONObject numberJson = JSONObject.fromObject(json);
+            for (Object o : numberJson.keySet()) {
+                ImageNumber imageNumber = new ImageNumber();
+                imageNumber.setImage_id(id);
+                imageNumber.setImage_config_id(Integer.valueOf(o+""));
+                imageNumber.setNumber(Double.valueOf(numberJson.get(o)+""));
+                imageNumberMapper.insertImageNumber(imageNumber);
+            }
+
+
+            //获取当前影像系数
+            List<ImageNumber> imageNumbers = imageNumberMapper.selectImageNumberByImageId(id);
+            //评分
             JSONObject jb = new JSONObject();
-            double d = 0.0;
+            double d = 0;
             for (ImageConfig imageConfig : icList) {
-                double db = imageConfig.getNum()*imageConfig.getNumber();
-                jb.put(imageConfig.getId(),db);
-                d += db;
+                double db = 0;
+                if(0<imageNumbers.size()){
+                    //有配置
+                    for (ImageNumber imageNumber : imageNumbers) {
+                        if(imageNumber.getImage_config_id()==imageConfig.getId()){
+                            db = imageConfig.getNum()*imageNumber.getNumber();
+                        }
+                    }
+                    jb.put(imageConfig.getId(),db);
+                    d += db;
+                }
             }
             jb.put("avg",d/sum);
-
 
             //更新数据
             image.setContrastRed(jb+"");

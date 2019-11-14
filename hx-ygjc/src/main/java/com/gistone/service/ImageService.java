@@ -36,7 +36,7 @@ public interface ImageService extends IService<Image> {
 
     ResultVO getAudit(Integer id);
 
-    ResultVO addAudit(Integer id);
+    ResultVO addAudit(Integer id,String json);
 
     ResultVO audit(Image image);
 

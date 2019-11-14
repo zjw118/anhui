@@ -6,7 +6,9 @@ import com.gistone.entity.Image;
 import com.gistone.entity.ImageConfig;
 import com.gistone.mapper.ImageConfigMapper;
 import com.gistone.mapper.ImageMapper;
+import com.gistone.mapper.ImageNumberMapper;
 import com.gistone.service.ILmPointService;
+import com.gistone.service.ImageConfigService;
 import com.gistone.service.ImageService;
 import com.gistone.util.*;
 import org.apache.commons.lang.StringUtils;
@@ -39,6 +41,8 @@ public class ImageController {
     private ILmPointService iLmPointService;
     @Autowired
     private ImageConfigMapper imageConfigMapper;
+    @Autowired
+    private ImageConfigService imageConfigService;
 
 
     @Value("${ftp_host}")
@@ -256,15 +260,23 @@ public class ImageController {
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
         if (params == null)
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
-        Object type1 = params.get("type1");
-        Object type2 = params.get("type2");
-        Object type3 = params.get("type3");
-        Object number = params.get("number");
+
+        Object name = params.get("name");
+        Object parentid = params.get("parentid");
+        Object type = params.get("type");
+        Object orders = params.get("orders");
+        if(null==name)
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "name不能为空！");
+        if(null==parentid)
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "parentid不能为空！");
+        if(null==type)
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "type不能为空！");
+
         ImageConfig imageConfig = new ImageConfig();
-        imageConfig.setType1(type1+"");
-        imageConfig.setType2(type2+"");
-        imageConfig.setType3(type3+"");
-        imageConfig.setNumber(Double.valueOf(number+""));
+        imageConfig.setName(name+"");
+        imageConfig.setParentid(Integer.valueOf(parentid+""));
+        imageConfig.setType(Integer.valueOf(type+""));
+        imageConfig.setOrders(Integer.valueOf(orders+""));
         if(0<imageConfigMapper.insertImageConfig(imageConfig))
             return ResultVOUtil.success();
         return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "添加失败");
@@ -283,21 +295,32 @@ public class ImageController {
         Object id = params.get("id");
         if (null==id)
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+        //删除配置表
         ImageConfig imageConfig = new ImageConfig();
         imageConfig.setId(Integer.valueOf(id+""));
-        if(0<imageConfigMapper.deleteImageConfig(imageConfig))
+        int i = imageConfigMapper.deleteImageConfig(imageConfig);
+
+        //删除系数表-无需
+        if(0<i)
             return ResultVOUtil.success();
         return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "删除失败");
     }
+
     /**
-     * 配置列表
+     * 配置树形结构
      * @param paramsMap
      * @return
      */
     @RequestMapping(value = "/config", method = RequestMethod.POST)
     public ResultVO config(@RequestBody Map<String, Object> paramsMap) {
-        return ResultVOUtil.success(imageConfigMapper.getImageConfig());
+        try {
+            return ResultVOUtil.success(imageConfigService.selectImageConfig());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
+        }
     }
+
     /**
      * 配置修改
      * @param paramsMap
@@ -311,16 +334,18 @@ public class ImageController {
         Object id = params.get("id");
         if (null==id)
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
-        Object type1 = params.get("type1");
-        Object type2 = params.get("type2");
-        Object type3 = params.get("type3");
-        Object number = params.get("number");
+        Object name = params.get("name");
+        Object parentid = params.get("parentid");
+        Object type = params.get("type");
+        Object orders = params.get("orders");
+
         ImageConfig imageConfig = new ImageConfig();
         imageConfig.setId(Integer.valueOf(id+""));
-        imageConfig.setType1(type1+"");
-        imageConfig.setType2(type2+"");
-        imageConfig.setType3(type3+"");
-        imageConfig.setNumber(Double.valueOf(number+""));
+        imageConfig.setName(name+"");
+        imageConfig.setParentid(Integer.valueOf(parentid+""));
+        imageConfig.setType(Integer.valueOf(type+""));
+        imageConfig.setOrders(Integer.valueOf(orders+""));
+
         if(0<imageConfigMapper.updateImageConfig(imageConfig))
             return ResultVOUtil.success();
         return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
@@ -360,10 +385,15 @@ public class ImageController {
         }
         String id = (String) params.get("id");
         if (StringUtils.isBlank(id)) {
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "影像主键id不能为空");
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "主键id不能为空");
         }
-        return service.addAudit(Integer.valueOf(id));
+        String json = (String) params.get("json");
+        if (StringUtils.isBlank(json)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "系数json不能为空");
+        }
+        return service.addAudit(Integer.valueOf(id),json);
     }
+
     /**
      * 开始审核
      * @param paramsMap

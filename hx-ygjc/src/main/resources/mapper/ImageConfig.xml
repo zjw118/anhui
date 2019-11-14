@@ -7,24 +7,28 @@
         SELECT * from image_config where id = #{id}
 	</select>
 
-    <select id="getImageConfig"  parameterType="java.lang.Integer" resultType="com.gistone.entity.ImageConfig">
-        SELECT * from image_config
+    <select id="getImageConfig3"   resultType="com.gistone.entity.ImageConfig">
+        SELECT * from image_config where type = 3
+	</select>
+
+    <select id="getImageConfig"   resultType="com.gistone.entity.ImageConfig">
+        SELECT * from image_config ORDER BY parentid,orders
 	</select>
 
     <update id="updateImageConfig" parameterType="com.gistone.entity.ImageConfig" >
         update image_config
         <set>
-            <if test="null!=type1 and ''!=type1">
-                type1=#{type1},
+            <if test="null!=name and ''!=name">
+                name=#{name},
             </if>
-            <if test="null!=type2 and ''!=type2">
-                type2=#{type2},
+            <if test="null!=parentid">
+                parentid=#{parentid},
             </if>
-            <if test="null!=type3 and ''!=type3">
-                type3=#{type3},
+            <if test="null!=type">
+                type=#{type},
             </if>
-            <if test="null!=number">
-                number=#{number},
+            <if test="null!=orders">
+                orders=#{orders},
             </if>
         </set>
         where id=#{id}
@@ -34,22 +38,23 @@
     <insert id="insertImageConfig" parameterType="com.gistone.entity.ImageConfig">
         INSERT INTO image_config
         (
-            type1,
-            type2,
-            type3,
-            number
+            name,
+            parentid,
+            type,
+            orders
         )
         VALUES(
-            #{type1},
-            #{type2},
-            #{type3},
-            #{number}
+            #{name},
+            #{parentid},
+            #{type},
+            #{orders}
         )
     </insert>
 
-    <delete id="deleteImageConfig" parameterType="java.lang.Integer">
+    <delete id="deleteImageConfig" parameterType="com.gistone.entity.ImageConfig">
 		delete from image_config where id = #{id}
 	</delete>
+
 
 
 
