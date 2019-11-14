@@ -34,6 +34,24 @@
         <result column="uncheckNum" property="uncheckNum" />
         <result column="checkedNum" property="checkedNum" />
         <result column="todayNum" property="todayNum" />
+        <association property="image" javaType="com.gistone.entity.Image">
+            <id column="id" property="id" />
+            <result column="name" property="name" />
+            <result column="url" property="url" />
+            <result column="shpurl" property="shpurl" />
+            <result column="create_by" property="createBy" />
+            <result column="create_date" property="createDate" />
+            <result column="update_by" property="updateBy" />
+            <result column="update_date" property="updateDate" />
+            <result column="remark" property="remark" />
+            <result column="del_flag" property="delFlag" />
+            <result column="shp" property="shp" />
+            <result column="contrast_red" property="contrastRed" />
+            <result column="sign" property="sign" />
+            <result column="evaluation" property="evaluation" />
+            <result column="audit_date" property="auditDate" />
+            <result column="country_border" property="countryBorder" />
+        </association>
         <association property="st4ScsCl" javaType="com.gistone.entity.St4ScsCl">
             <result column="CL001" property="cl001" />
             <result column="CL002" property="cl002" />
