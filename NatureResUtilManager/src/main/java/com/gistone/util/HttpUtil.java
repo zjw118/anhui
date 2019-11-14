@@ -23,7 +23,7 @@ public class HttpUtil {
         try {
             URL realUrl = new URL(url);
             URLConnection connection = realUrl.openConnection();
-            connection.setConnectTimeout(5000);  //连接超时时间 5秒
+            connection.setConnectTimeout(10000);  //连接超时时间 5秒
             connection.setReadTimeout(180000);   //读取数据时间 180秒
             connection.setRequestProperty("accept", "*/*");
             connection.setRequestProperty("connection", "Keep-Alive");

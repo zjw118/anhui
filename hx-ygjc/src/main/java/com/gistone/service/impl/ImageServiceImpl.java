@@ -156,21 +156,44 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             if(StringUtils.isBlank(ftpShpUrl)){
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "未知红线数据");
             }
+//            System.out.println( "?humanActivity="+shpUrl);
+//            System.out.println("&redline="+ftpShpUrl);
             //发送请求
             String p1 = "?humanActivity="+shpUrl;
             String p2 = "&redline="+ftpShpUrl;
             String p3 = "&f=pjson";
             JSONObject jsonObject = JSONObject.fromObject(HttpUtil.GET(IMAGE_EVA+"/submitJob"+p1+p2+p3,null));
             String jobId = "/"+jsonObject.get("jobId");
-            String res = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId,null);
-            System.out.println(res);
+            String res = "";
+            for (int i = 0; i < 10; i++) {
+                Thread.sleep(2000);
+                res = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId+"/results/out?f=pjson&returnType=data",null);
+                if(-1==res.indexOf("error")) break;
+            }
             //判断是否成功
+            if(-1<res.indexOf("error")||"".equals(res)){
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "GIS请求失败");
+            }
+
+            //截取保留数据
+//            JSONObject job = JSONObject.fromObject(res);
+//            JSONObject job2 = JSONObject.fromObject(job.get("value"));
+//            JSONArray features = JSONArray.fromObject(job2.get("features"));
+//            for (Object feature : features) {
+//                JSONObject job3 = JSONObject.fromObject(feature);
+//                JSONObject attributes = JSONObject.fromObject(job3.get("attributes"));
+//
+//                attributes.get("ObjectID");
+//
+//
+//
+//            }
 
 
 
 
             //更新数据
-            image.setContrastRed(res);
+//            image.setContrastRed(features+"");
             int res2 = mapper.updateImage(image);
             if(0<res2){
                 //返回数据
@@ -269,7 +292,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
 
 
             //生成新SHP
-            String url = PathUtile.getRandomPath(PATH+"/epr/newImage/","x.shp");
+            String url = PathUtile.getRandomPath(PATH+"/epr/image/","x.shp");
             String res2 = ShpUtil.handleWebData(com.alibaba.fastjson.JSONArray.parseArray(jSONArray+""),url);
             if(!"0".equals(res2)){
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"生成新SHP失败");
@@ -306,7 +329,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             if(null!=user)
                 image.setUpdateBy(user.getId());
             image.setUpdateDate(new Date());
-            image.setShp(jSONArray+"");
+            image.setShp(url); //本地SHP路径
             image.setDelFlag(1);
             image.setSign(1);
             if(null!=resMap.get("name"))

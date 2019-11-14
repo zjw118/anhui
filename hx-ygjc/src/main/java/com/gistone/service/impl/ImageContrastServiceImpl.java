@@ -76,6 +76,7 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         String p3 = "&outfile="+ftpPt+ftpUrl+outUrl;
         String p4 = "&f=pjson";
 
+        System.out.println(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4);
         HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4,null);
         Thread.sleep(6000);
         boolean b = true;

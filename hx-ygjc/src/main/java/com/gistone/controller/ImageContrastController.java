@@ -11,6 +11,7 @@ import com.gistone.service.ImageService;
 import com.gistone.util.PageBean;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultVOUtil;
+import com.gistone.util.ShpUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,8 +135,12 @@ public class ImageContrastController {
         queryWrapper2.eq("id",imageContrast.getImage2Id());
         Image entity2 = imageService.getOne(queryWrapper2);
 
-        String shp1 = entity1.getShp();
-        String shp2 = entity2.getShp();
+
+        String shp1 = ShpUtil.readShapeFileToStr(entity1.getShp(),1)+"";
+        String shp2 = ShpUtil.readShapeFileToStr(entity2.getShp(),1)+"";
+
+//        String shp1 = entity1.getShp();
+//        String shp2 = entity2.getShp();
 
         int nyyd = 0;
         int jmd = 0;
