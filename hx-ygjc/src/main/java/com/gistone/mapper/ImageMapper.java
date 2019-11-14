@@ -3,6 +3,7 @@ package com.gistone.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import com.gistone.entity.Image;
+import com.gistone.entity.ImageConfig;
 import org.apache.ibatis.annotations.Param;
 
 import java.time.LocalDate;
@@ -38,5 +39,7 @@ public interface ImageMapper extends BaseMapper<Image> {
     int updateImage(Image image);
 
     int insertImage(Image image);
+
+    ImageConfig getImageConfig();
 
 }

@@ -93,6 +93,8 @@ public class ImageController {
         }
         Image entity = service.getById(id);
         entity.setList(mapper.selectISt4ScsCd(id));
+        String shpStr = ShpUtil.readShapeFileToStr(entity.getShp(),1)+"";
+        entity.setShp(shpStr);
         return ResultVOUtil.success(entity);
     }
 
@@ -304,17 +306,6 @@ public class ImageController {
     }
 
 
-
-
-
-    @PostMapping(value = "/processfiles")
-    public Map ProcessFiles(HttpServletRequest request) {
-        String path = "E:\\epr";
-        String[] arr = {"zip","qwe"};
-        Map map = FileUtil.uploadFiles(request, path, arr, 5);
-
-        return map;
-    }
 
 
 

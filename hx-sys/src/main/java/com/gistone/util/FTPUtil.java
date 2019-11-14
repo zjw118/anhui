@@ -195,11 +195,12 @@ public class FTPUtil {
      */
     public static boolean createDri(String ftpHost, String ftpUserName, String ftpPassword, int ftpPort, String ftpPath) {
         FTPClient ftp = null;
+        Boolean b = false;
         try {
             String ftpPaths = new String(ftpPath.getBytes("UTF-8"), "UTF-8");
             ftp = getFTPClient(ftpHost, ftpUserName, ftpPassword, ftpPort);
             if (!ftp.changeWorkingDirectory(ftpPath)) {
-                return ftp.makeDirectory(ftpPaths);
+                b = ftp.makeDirectory(ftpPaths);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -214,7 +215,7 @@ public class FTPUtil {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return false;
+            return b;
         }
     }
 
