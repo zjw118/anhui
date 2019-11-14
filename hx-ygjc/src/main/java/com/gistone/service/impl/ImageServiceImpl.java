@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
+import com.gistone.entity.ImageConfig;
 import com.gistone.entity.ShpBatch;
 import com.gistone.entity.SysUser;
 import com.gistone.mapper.ImageMapper;
@@ -142,7 +143,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
 
     @Override
     public ResultVO getAudit(Integer id) {
-        JSONObject jSONObject = null;
         try {
             //获取影像SHP数据的FTP地址
             Image image = mapper.getImageById(id);
@@ -164,52 +164,150 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             String p3 = "&f=pjson";
             JSONObject jsonObject = JSONObject.fromObject(HttpUtil.GET(IMAGE_EVA+"/submitJob"+p1+p2+p3,null));
             String jobId = "/"+jsonObject.get("jobId");
-            String res = "";
-            for (int i = 0; i < 10; i++) {
-                Thread.sleep(2000);
-                res = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId+"/results/out?f=pjson&returnType=data",null);
-                if(-1==res.indexOf("error")) break;
-            }
-            //判断是否成功
-            if(-1<res.indexOf("error")||"".equals(res)){
-                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "GIS请求失败");
-            }
 
-            //截取保留数据
-//            JSONObject job = JSONObject.fromObject(res);
-//            JSONObject job2 = JSONObject.fromObject(job.get("value"));
-//            JSONArray features = JSONArray.fromObject(job2.get("features"));
-//            for (Object feature : features) {
-//                JSONObject job3 = JSONObject.fromObject(feature);
-//                JSONObject attributes = JSONObject.fromObject(job3.get("attributes"));
-//
-//                attributes.get("ObjectID");
-//
-//
-//
+            String out = "";
+            String redline_area = "";
+            String stati = "";
+//            for (int i = 0; i < 5; i++) {
+//                Thread.sleep(2000);
+//                out = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId+"/results/out?f=pjson",null);
+//                if(-1==out.indexOf("error")) break;
 //            }
+//            System.out.println(out);
+            for (int i = 0; i < 5; i++) {
+                System.out.println("+1");
+                redline_area = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId+"/results/redline_area?f=pjson",null);
+                if(-1==redline_area.indexOf("error")) break;
+                Thread.sleep(2000);
+            }
+            System.out.println(redline_area);
+//            for (int i = 0; i < 5; i++) {
+//                stati = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId+"/results/stati?f=pjson",null);
+//                if(-1==stati.indexOf("error")) break;
+//                Thread.sleep(2000);
+//            }
+//            System.out.println(stati);
+
+            if(1==1){
+                return null;
+            }
+
+            //判断是否成功
+            if(-1<out.indexOf("error")||"".equals(out)){
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "out请求失败");
+            }
+            if(-1<redline_area.indexOf("error")||"".equals(redline_area)){
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "redline_area请求失败");
+            }
+            if(-1<stati.indexOf("error")||"".equals(stati)){
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "stati请求失败");
+            }
+
+            //保存文件
+            String path = FileUtil.getPath(PATH+"/epr/out/");
+            String name = UUID.randomUUID().toString()+".json";
+            boolean b = FileUtil.writeInFile(path,name,out);
+            if(!b) return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "文件保存失败");
 
 
+            //总面积
+            double sum = 0.0;
+            JSONObject job = JSONObject.fromObject(redline_area);
+            JSONObject job2 = JSONObject.fromObject(job.get("value"));
+            JSONArray features = JSONArray.fromObject(job2.get("features"));
+            for (Object feature : features) {
+                JSONObject job3 = JSONObject.fromObject(feature);
+                JSONObject attributes = JSONObject.fromObject(job3.get("attributes"));
+                sum += Double.valueOf(attributes.get("hxarea")+"");
+            }
+
+            //获取系数
+            ImageConfig imageConfig = mapper.getImageConfig();
+            double nyyd = imageConfig.getNyyd();
+            double jmd = imageConfig.getJmd();
+            double gkyd = imageConfig.getGkyd();
+            double csc = imageConfig.getCsc();
+            double nyss = imageConfig.getNyss();
+            double lyss = imageConfig.getLyss();
+            double jtss = imageConfig.getJtss();
+            double yzc = imageConfig.getYzc();
+            double dl = imageConfig.getDl();
+            double qt = imageConfig.getQt();
+
+
+            //1农业用地
+            double nyyds = 0.0;
+            //2居民点
+            double jmds = 0.0;
+            //3工矿用地
+            double gkyds = 0.0;
+            //4采石场
+            double cscs = 0.0;
+            //5能源设施
+            double nysss = 0.0;
+            //6旅游设施
+            double lysss = 0.0;
+            //7交通设施
+            double jtsss = 0.0;
+            //8养殖场
+            double yzcs = 0.0;
+            //9道路
+            double dls = 0.0;
+            //10其它
+            double qts = 0.0;
+            JSONObject jobs = JSONObject.fromObject(stati);
+            JSONObject job2s = JSONObject.fromObject(jobs.get("value"));
+            JSONArray featuress = JSONArray.fromObject(job2s.get("features"));
+            for (Object f : featuress) {
+                JSONObject job3s = JSONObject.fromObject(f);
+                JSONObject attributess = JSONObject.fromObject(job3s.get("attributes"));
+                if("农业用地".equals(attributess.get("type")))nyyds += Double.valueOf(attributess.get("SUM_insect")+"");
+                if("居民点".equals(attributess.get("type")))jmds += Double.valueOf(attributess.get("SUM_insect")+"");
+                if("工矿用地".equals(attributess.get("type")))gkyds += Double.valueOf(attributess.get("SUM_insect")+"");
+                if("采石场".equals(attributess.get("type")))cscs += Double.valueOf(attributess.get("SUM_insect")+"");
+                if("能源设施".equals(attributess.get("type")))nysss += Double.valueOf(attributess.get("SUM_insect")+"");
+                if("旅游设施".equals(attributess.get("type")))lysss += Double.valueOf(attributess.get("SUM_insect")+"");
+                if("交通设施".equals(attributess.get("type")))jtsss += Double.valueOf(attributess.get("SUM_insect")+"");
+                if("养殖场".equals(attributess.get("type")))yzcs += Double.valueOf(attributess.get("SUM_insect")+"");
+                if("道路".equals(attributess.get("type")))dls += Double.valueOf(attributess.get("SUM_insect")+"");
+                if("其他人工设施".equals(attributess.get("type")))qts += Double.valueOf(attributess.get("SUM_insect")+"");
+            }
+            Double num1 = (nyyds*nyyd+jmds*jmd+gkyds*gkyd+cscs*csc+nysss*nyss+lysss*lyss+jtsss*jtss+yzcs*yzc+dls*dl+qts*qt)/sum;
+
+
+            JSONObject jb = new JSONObject();
+            jb.put("num",num1);
+            jb.put("nyyd",nyyd*nyyds);
+            jb.put("jmd",jmd*jmds);
+            jb.put("gkyd",gkyd*gkyds);
+            jb.put("csc",csc*cscs);
+            jb.put("nyss",nyss*nysss);
+            jb.put("lyss",lyss*lysss);
+            jb.put("jtss",jtss*jtsss);
+            jb.put("yzc",yzc*yzcs);
+            jb.put("dl",dl*dls);
+            jb.put("qt",qt*qts);
 
 
             //更新数据
-//            image.setContrastRed(features+"");
+            image.setContrastRed(jb+"");
+            image.setAuditPath(path+name);
             int res2 = mapper.updateImage(image);
             if(0<res2){
-                //返回数据
-                jSONObject = new JSONObject();
-                jSONObject.put("image",JSON.toJSONString(image, SerializerFeature.DisableCircularReferenceDetect,SerializerFeature.WriteDateUseDateFormat));
-
-
-
-
+//                jSONObject = new JSONObject();
+//                jSONObject.put("image",JSON.toJSONString(image, SerializerFeature.DisableCircularReferenceDetect,SerializerFeature.WriteDateUseDateFormat));
+//                jSONObject.put("out",out);
+//                jSONObject.put("redline_area",redline_area);
+//                jSONObject.put("stati",stati);
+                return ResultVOUtil.success();
             }else{
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "更新失败");
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "审核失败");
         }
-        return ResultVOUtil.success(jSONObject);
+
     }
 
     @Override

@@ -70,6 +70,10 @@
             active_type
     </select>
 
+    <select id="getImageConfig" resultType="com.gistone.entity.ImageConfig">
+        SELECT * from image_config LIMIT 1
+    </select>
+
     <update id="updateImage" parameterType="Object" >
 		update image
 		<set>

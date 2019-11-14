@@ -243,7 +243,7 @@ public class FileUtil {
 
 
     /**
-     * 创建目录并打散
+     * 创建打散目录
      * @param path  前置路径
      * @return
      */
@@ -438,6 +438,66 @@ public class FileUtil {
         // 解决上传文件名的中文乱码问题
         upload.setHeaderEncoding("utf-8");
         return upload;
+    }
+
+
+
+    /**
+     * 写入附件
+     * @param path   路径
+     * @param name   文件名称
+     * @param content   数据
+     * @return
+     */
+    public static boolean writeInFile(String path,String name, String content) {
+        Writer writer = null;
+        Boolean b = false;
+        try {
+            //创建文件夹
+            File f1 = new File(path);
+            if(!f1.isDirectory()) f1.mkdirs();
+            //创建文件
+            if(!path.endsWith("/")) path += "/";
+            File f2 = new File(path+name);
+            if(!f2.exists()) f2.createNewFile();
+            StringBuilder outputString = new StringBuilder();
+            outputString.append(content + "\r\n");
+            writer = new FileWriter(f2, true);
+            writer.write(outputString.toString());
+            b = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(null!=writer)
+                    writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return b;
+        }
+    }
+
+
+    /**
+     * 附件读取-字符流
+     * @param path  路径
+     * @return
+     * @throws IOException
+     */
+    public static String readFromTextFile(String path) {
+        try {
+            StringBuffer stringBuffer = new StringBuffer();
+            BufferedReader breader = new BufferedReader(new FileReader(path));
+            String temp;
+            while (null!=(temp=breader.readLine())) {
+                stringBuffer.append(temp);
+            }
+            return stringBuffer+"";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
 
