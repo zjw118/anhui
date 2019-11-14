@@ -42,13 +42,13 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
     private String ftpPt;
     @Value("${ftp_url}")
     private String ftpUrl;
-
-
-
     @Value("${PATH}")
     private String PATH;
     @Value("${IMAGE_SERVICE}")
     private String IMAGE_SERVICE;
+
+
+
 
     @Override
     public ResultVO add(ImageContrast imageContrast) throws Exception {

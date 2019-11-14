@@ -5,14 +5,12 @@ import lombok.Data;
 
 @Data
 public class ImageConfig {
-        private Double nyyd;
-        private Double jmd;
-        private Double gkyd;
-        private Double csc;
-        private Double nyss;
-        private Double lyss;
-        private Double jtss;
-        private Double yzc;
-        private Double dl;
-        private Double qt;
+        private Integer id;
+        private String type1;
+        private String type2;
+        private String type3;
+        private Double number;//系数
+
+        //表外字段
+        private Double num; //面积
 }

@@ -36,6 +36,8 @@ public interface ImageService extends IService<Image> {
 
     ResultVO getAudit(Integer id);
 
+    ResultVO addAudit(Integer id);
+
     ResultVO audit(Image image);
 
     ResultVO upload(HttpServletRequest request,Image image);

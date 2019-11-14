@@ -3,28 +3,18 @@ package com.gistone.controller;
 
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
-import com.gistone.entity.SysUser;
+import com.gistone.entity.ImageConfig;
+import com.gistone.mapper.ImageConfigMapper;
 import com.gistone.mapper.ImageMapper;
 import com.gistone.service.ILmPointService;
 import com.gistone.service.ImageService;
 import com.gistone.util.*;
-import org.apache.commons.collections.bag.SynchronizedSortedBag;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -47,6 +37,10 @@ public class ImageController {
     private ImageMapper mapper;
     @Autowired
     private ILmPointService iLmPointService;
+    @Autowired
+    private ImageConfigMapper imageConfigMapper;
+
+
     @Value("${ftp_host}")
     private String ftpHost;
     @Value("${ftp_port}")
@@ -249,8 +243,93 @@ public class ImageController {
 
         return ResultVOUtil.success(result);
     }
+
+
+
     /**
-     * 审核详情页
+     * 添加配置
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/addConfig", method = RequestMethod.POST)
+    public ResultVO addConfig(@RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null)
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        Object type1 = params.get("type1");
+        Object type2 = params.get("type2");
+        Object type3 = params.get("type3");
+        Object number = params.get("number");
+        ImageConfig imageConfig = new ImageConfig();
+        imageConfig.setType1(type1+"");
+        imageConfig.setType2(type2+"");
+        imageConfig.setType3(type3+"");
+        imageConfig.setNumber(Double.valueOf(number+""));
+        if(0<imageConfigMapper.insertImageConfig(imageConfig))
+            return ResultVOUtil.success();
+        return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "添加失败");
+
+    }
+    /**
+     * 配置删除
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/deleteConfig", method = RequestMethod.POST)
+    public ResultVO deleteConfig(@RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null)
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        Object id = params.get("id");
+        if (null==id)
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+        ImageConfig imageConfig = new ImageConfig();
+        imageConfig.setId(Integer.valueOf(id+""));
+        if(0<imageConfigMapper.deleteImageConfig(imageConfig))
+            return ResultVOUtil.success();
+        return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "删除失败");
+    }
+    /**
+     * 配置列表
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/config", method = RequestMethod.POST)
+    public ResultVO config(@RequestBody Map<String, Object> paramsMap) {
+        return ResultVOUtil.success(imageConfigMapper.getImageConfig());
+    }
+    /**
+     * 配置修改
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/updateConfig", method = RequestMethod.POST)
+    public ResultVO updateConfig(@RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null)
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        Object id = params.get("id");
+        if (null==id)
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+        Object type1 = params.get("type1");
+        Object type2 = params.get("type2");
+        Object type3 = params.get("type3");
+        Object number = params.get("number");
+        ImageConfig imageConfig = new ImageConfig();
+        imageConfig.setId(Integer.valueOf(id+""));
+        imageConfig.setType1(type1+"");
+        imageConfig.setType2(type2+"");
+        imageConfig.setType3(type3+"");
+        imageConfig.setNumber(Double.valueOf(number+""));
+        if(0<imageConfigMapper.updateImageConfig(imageConfig))
+            return ResultVOUtil.success();
+        return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
+    }
+
+
+
+    /**
+     * 审核详情
      * @param paramsMap
      * @return
      */
@@ -265,6 +344,25 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "影像主键id不能为空");
         }
         return service.getAudit(Integer.valueOf(id));
+    }
+
+
+    /**
+     * 审核计算
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/addAudit", method = RequestMethod.POST)
+    public ResultVO addAudit(@RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        String id = (String) params.get("id");
+        if (StringUtils.isBlank(id)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "影像主键id不能为空");
+        }
+        return service.addAudit(Integer.valueOf(id));
     }
     /**
      * 开始审核

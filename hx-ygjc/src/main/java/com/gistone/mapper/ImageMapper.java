@@ -40,6 +40,5 @@ public interface ImageMapper extends BaseMapper<Image> {
 
     int insertImage(Image image);
 
-    ImageConfig getImageConfig();
 
 }

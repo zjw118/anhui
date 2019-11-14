@@ -89,6 +89,9 @@
             <if test="null!=auditDate">
                 audit_date=#{auditDate},
             </if>
+            <if test="null!=auditPath">
+                audit_path=#{auditPath},
+            </if>
         </set>
 		where id=#{id}
 	</update>
