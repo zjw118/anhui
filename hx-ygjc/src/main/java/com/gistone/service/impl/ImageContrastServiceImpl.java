@@ -76,11 +76,11 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         String p3 = "&outfile="+ftpPt+ftpUrl+outUrl;
         String p4 = "&f=pjson";
 
-        System.out.println(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4);
+//        System.out.println(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4);
         HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4,null);
         Thread.sleep(6000);
         boolean b = true;
-        for (int i = 1; i < 20; i++) {
+        for (int i = 1; i <= 20; i++) {
             if(
                     FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.shp")
                     &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.dbf")
@@ -102,6 +102,7 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
             Thread.sleep(2000);
         }
         if(b){
+            System.out.println("SHP文件生成失败");
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4+"<===SHP文件生成失败");
         }
 
