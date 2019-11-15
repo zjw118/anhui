@@ -88,6 +88,9 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
     @Autowired
     St4PoClCoMapper st4PoClCoMapper;
 
+    @Autowired
+            ImageConfigMapper imageConfigMapper;
+
     DateTimeFormatter dfMd = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     @Override
     public Result saveLedger(St4ScsCk checkLedger, HttpServletRequest request, St4SysSa seUser) {
@@ -1026,9 +1029,24 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                 .replaceAll("\\]\\]\\]","" ).replaceAll("\\]\\,\\ \\[", "##").replaceAll("\\]\\,\\[", "##");
         System.out.println(geometry);
     }
-
+    public static List<ImageConfig> buildTree(List<ImageConfig> list, Integer fid) {
+        List<ImageConfig> resultList = new ArrayList<ImageConfig>();
+        if (list == null || list.size() == 0) {
+            return null;
+        }
+        for (ImageConfig tree : list) {
+            if (tree.getParentid() == fid) {
+                resultList.add(tree);
+                tree.setChildren(buildTree(list, tree.getId()));
+            }
+        }
+        return resultList;
+    }
     @Override
     public Result sysPointData(Integer uid) {
+        List<ImageConfig> icList = imageConfigMapper.getImageConfig();
+        List<ImageConfig> icListtree = buildTree(icList,-1);
+
         Map<String,String> checkChangeTypeMap = new HashMap<>();
         QueryWrapper<St4ScsCm> checkChangeTypeWrapper = new QueryWrapper<>();
         List<St4ScsCm> CheckChangeTypeList = checkChangeTypeMapper.selectList(checkChangeTypeWrapper);
@@ -1185,6 +1203,8 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                         cd.setReserveName(ck.getSt4SysSg()==null?"":ck.getSt4SysSg().getSg008());
                         cd.setAdminRegionName(ck.getSysCompany()==null?"":ck.getSysCompany().getComName());
                         newDataJson.put("point",BeanUtils.describe(cd));
+                        newDataJson.put("tree",icListtree );
+
                         jarr.add(newDataJson);
                     }
                 }
