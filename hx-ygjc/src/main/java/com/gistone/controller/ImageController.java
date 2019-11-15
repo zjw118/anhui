@@ -328,7 +328,7 @@ public class ImageController {
     @RequestMapping(value = "/config", method = RequestMethod.POST)
     public ResultVO config(@RequestBody Map<String, Object> paramsMap) {
         try {
-            return ResultVOUtil.success(imageConfigService.selectImageConfig());
+            return imageConfigService.selectImageConfig();
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
