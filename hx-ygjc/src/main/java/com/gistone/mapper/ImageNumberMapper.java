@@ -24,6 +24,6 @@ public interface ImageNumberMapper{
     int deleteImageNumberByImageId(Image image);
 
     //类型外键删除
-    int deleteByImageConfigId(@Param(value="id") Integer id);
+//    int deleteByImageConfigId(@Param(value="id") Integer id);
 
 }

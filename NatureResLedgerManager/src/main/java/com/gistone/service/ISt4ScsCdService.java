@@ -1,10 +1,13 @@
 package com.gistone.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gistone.VO.ResultVO;
+import com.gistone.entity.Image;
 import com.gistone.entity.St4ScsCd;
 import com.gistone.entity.St4SysSa;
 import com.gistone.util.Result;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
@@ -35,4 +38,5 @@ public interface ISt4ScsCdService extends IService<St4ScsCd> {
 
     Map<String,Object> exporExcel(Integer id, HttpServletResponse response);
 
+    ResultVO upload(HttpServletRequest request, Image image);
 }

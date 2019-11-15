@@ -40,7 +40,7 @@ public interface ImageService extends IService<Image> {
 
     ResultVO audit(Image image);
 
-    ResultVO upload(HttpServletRequest request,Image image);
+
 
 
 

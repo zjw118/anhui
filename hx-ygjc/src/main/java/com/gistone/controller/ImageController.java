@@ -45,6 +45,7 @@ public class ImageController {
     private ImageConfigService imageConfigService;
 
 
+
     @Value("${ftp_host}")
     private String ftpHost;
     @Value("${ftp_port}")
@@ -423,19 +424,22 @@ public class ImageController {
 
 
 
+
+
     /**
-     * 导入影像
-     * @param request
+     * 影像类型列表
+     * @param paramsMap
      * @return
      */
-    @PostMapping(value = "/upload")
-    public ResultVO upload(HttpServletRequest request,Image image) {
-        return service.upload(request,image);
+    @RequestMapping(value = "/getConfig", method = RequestMethod.POST)
+    public ResultVO getConfig(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            return ResultVOUtil.success(imageConfigMapper.getImageConfig3());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
+        }
     }
-
-
-
-
 
 
 
