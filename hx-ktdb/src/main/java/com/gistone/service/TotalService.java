@@ -3,7 +3,6 @@ package com.gistone.service;
 import com.gistone.VO.ResultVO;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -30,4 +29,13 @@ public interface TotalService {
     int getBeforeCount(String code,LocalDate beforeTime);
 
     int getBeforeSum(String code,LocalDate beforeTime);
+
+    Map<String,Object> getPreMarkAndRedlineTotal();
+
+    Map<String,Object> getBoardAndRedlineTotal();
+
+    Map<String,Object> getRedlineCount();
+
+    Map<String,Object> getPointCount();
+
 }

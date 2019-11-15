@@ -12,10 +12,7 @@ import com.gistone.entity.ProjectAdmission;
 import com.gistone.exception.ProjectException;
 import com.gistone.service.IAnalysisReportService;
 import com.gistone.service.IProjectAdmissionService;
-import com.gistone.util.ExcelUtil;
-import com.gistone.util.KeyUtil;
-import com.gistone.util.ResultEnum;
-import com.gistone.util.ResultVOUtil;
+import com.gistone.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -85,6 +82,10 @@ public class ProjectAdmissionController {
         String startTime = (String) dataParam.get("startTime");
         String endTime = (String) dataParam.get("endTime");
 
+        String type = (String) dataParam.get("type");
+        String attribute = (String) dataParam.get("attribute");
+        String time = (String)dataParam.get("time");
+
 
         if (pageNum == null) {
             pageNum = 1;
@@ -94,7 +95,7 @@ public class ProjectAdmissionController {
             pageSize = 10;
         }
 
-        Map<String, Object> result = projectAdmissionService.getProjectList(pageNum, pageSize, projectName, shape, startTime, endTime);
+        Map<String, Object> result = projectAdmissionService.getProjectList(pageNum, pageSize, projectName, shape, startTime, endTime,type,attribute,time);
 
         return ResultVOUtil.success(result);
     }
@@ -180,6 +181,24 @@ public class ProjectAdmissionController {
         }
         projectAdmission.setName(projectName);
         params.put("name", projectName);
+
+        String type = (String) dataParam.get("type");
+        if(StringUtils.isBlank(type)){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"类型不能为空");
+        }
+        projectAdmission.setType(type);
+
+        String attribute = (String) dataParam.get("attribute");
+        if(StringUtils.isBlank(attribute)){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"属性不能为空");
+        }
+        projectAdmission.setAttribute(attribute);
+        String time = (String) dataParam.get("time");
+        if(StringUtils.isBlank(time)){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"时间不能为空");
+        }
+        Date date = DateUtils.StrtoDateYMD(time);
+        projectAdmission.setTime(date);
 
 
         String shape = (String) dataParam.get("shape");

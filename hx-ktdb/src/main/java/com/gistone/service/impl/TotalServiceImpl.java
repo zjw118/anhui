@@ -138,4 +138,40 @@ public class TotalServiceImpl implements TotalService {
         int sum = totalMapper.selectBeforeSum(code,beforeTime);
         return sum;
     }
+
+    @Override
+    public Map<String, Object> getPreMarkAndRedlineTotal() {
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String,Object>>  premarkercount = totalMapper.getPreMarkerCount();
+        List<Map<String,Object>> redlinecount = totalMapper.getRedlineCounr();
+        result.put("premarkercount",premarkercount);
+        result.put("redlinecount",redlinecount);
+
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> getBoardAndRedlineTotal() {
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String,Object>>  preboardcount = totalMapper.getPreBoardCount();
+        List<Map<String,Object>> redlinecount = totalMapper.getRedlineCounr();
+        result.put("preboardcount",preboardcount);
+        result.put("redlinecount",redlinecount);
+
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> getRedlineCount() {
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String,Object>>  redlineCount = totalMapper.getRedlineCount();
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> getPointCount() {
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String,Object>>  redlineCount = totalMapper.getPointCount();
+        return result;
+    }
 }

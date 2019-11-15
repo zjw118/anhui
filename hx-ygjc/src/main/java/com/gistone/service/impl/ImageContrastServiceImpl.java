@@ -1,5 +1,6 @@
 package com.gistone.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
@@ -7,8 +8,11 @@ import com.gistone.entity.ImageContrast;
 import com.gistone.mapper.ImageContrastMapper;
 import com.gistone.mapper.ImageMapper;
 import com.gistone.service.ImageContrastService;
+import com.gistone.service.ImageService;
 import com.gistone.util.*;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +20,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -28,7 +34,8 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
     private ImageMapper imageMapper;
     @Autowired
     private ImageContrastMapper imageContrastMapper;
-
+    @Autowired
+    private ImageService imageService;
 
     @Value("${ftp_host}")
     private String ftpHost;
@@ -42,13 +49,13 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
     private String ftpPt;
     @Value("${ftp_url}")
     private String ftpUrl;
-
-
-
     @Value("${PATH}")
     private String PATH;
     @Value("${IMAGE_SERVICE}")
     private String IMAGE_SERVICE;
+
+
+
 
     @Override
     public ResultVO add(ImageContrast imageContrast) throws Exception {
@@ -76,11 +83,11 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         String p3 = "&outfile="+ftpPt+ftpUrl+outUrl;
         String p4 = "&f=pjson";
 
-        System.out.println(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4);
+//        System.out.println(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4);
         HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4,null);
         Thread.sleep(6000);
         boolean b = true;
-        for (int i = 1; i < 20; i++) {
+        for (int i = 1; i <= 20; i++) {
             if(
                     FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.shp")
                     &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.dbf")
@@ -102,6 +109,7 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
             Thread.sleep(2000);
         }
         if(b){
+            System.out.println("SHP文件生成失败");
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4+"<===SHP文件生成失败");
         }
 
@@ -200,7 +208,158 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"删除失败");
     }
 
+    @Override
+    public ResultVO get(Map<String, Object> params) {
+        ImageContrast ic = new ImageContrast();
+        ic.setId(Integer.valueOf(params.get("id")+""));
+        ImageContrast imageContrast = imageContrastMapper.getImageContrast(ic);
+//        ImageContrast imageContrast = imageContrastService.getById(Integer.valueOf(params.get("id")+""));
+        QueryWrapper<Image> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id",imageContrast.getImage1Id());
+        Image entity1 = imageService.getOne(queryWrapper);
+        QueryWrapper<Image> queryWrapper2 = new QueryWrapper<>();
+        queryWrapper2.eq("id",imageContrast.getImage2Id());
+        Image entity2 = imageService.getOne(queryWrapper2);
 
+
+        String shp1 = ShpUtil.readShapeFileToStr(entity1.getShp(),1)+"";
+        String shp2 = ShpUtil.readShapeFileToStr(entity2.getShp(),1)+"";
+
+//        String shp1 = entity1.getShp();
+//        String shp2 = entity2.getShp();
+
+        int nyyd = 0;
+        int jmd = 0;
+        int gkyd = 0;
+        int csc = 0;
+        int nyss = 0;
+        int lyss = 0;
+        int jtss = 0;
+        int yzc = 0;
+        int dl = 0;
+        int qt = 0;
+        JSONArray jsonArray = JSONArray.fromObject(shp1);
+        for (Object ja : jsonArray) {
+            JSONObject jsonObject = JSONObject.fromObject(ja);
+            Object attributes = jsonObject.get("attributes");
+            JSONObject jsonObject1 = JSONObject.fromObject(attributes);
+
+            if(null!=jsonObject1.get("area")){
+                if("农业用地".equals(jsonObject1.get("type")))
+                    nyyd+= Double.valueOf(jsonObject1.get("area")+"");
+                if("居民点".equals(jsonObject1.get("type")))
+                    jmd+= Double.valueOf(jsonObject1.get("area")+"");
+                if("工矿用地".equals(jsonObject1.get("type")))
+                    gkyd+= Double.valueOf(jsonObject1.get("area")+"");
+                if("采石场".equals(jsonObject1.get("type")))
+                    csc+= Double.valueOf(jsonObject1.get("area")+"");
+                if("能源设施".equals(jsonObject1.get("type")))
+                    nyss+= Double.valueOf(jsonObject1.get("area")+"");
+                if("旅游设施".equals(jsonObject1.get("type")))
+                    lyss+= Double.valueOf(jsonObject1.get("area")+"");
+                if("交通设施".equals(jsonObject1.get("type")))
+                    jtss+= Double.valueOf(jsonObject1.get("area")+"");
+                if("养殖场".equals(jsonObject1.get("type")))
+                    yzc+= Double.valueOf(jsonObject1.get("area")+"");
+                if("道路".equals(jsonObject1.get("type")))
+                    dl+= Double.valueOf(jsonObject1.get("area")+"");
+                if("其他人工设施".equals(jsonObject1.get("type")))
+                    qt+= Double.valueOf(jsonObject1.get("area")+"");
+            }
+        }
+
+        int nyyd2 = 0;
+        int jmd2 = 0;
+        int gkyd2 = 0;
+        int csc2 = 0;
+        int nyss2 = 0;
+        int lyss2 = 0;
+        int jtss2 = 0;
+        int yzc2 = 0;
+        int dl2 = 0;
+        int qt2 = 0;
+        JSONArray jsonArray2 = JSONArray.fromObject(shp2);
+        for (Object ja : jsonArray2) {
+            JSONObject jsonObject = JSONObject.fromObject(ja);
+            Object attributes = jsonObject.get("attributes");
+            JSONObject jsonObject1 = JSONObject.fromObject(attributes);
+
+            if(null!=jsonObject1.get("area")){
+                if("农业用地".equals(jsonObject1.get("type")))
+                    nyyd2+= Double.valueOf(jsonObject1.get("area")+"");
+                if("居民点".equals(jsonObject1.get("type")))
+                    jmd2+= Double.valueOf(jsonObject1.get("area")+"");
+                if("工矿用地".equals(jsonObject1.get("type")))
+                    gkyd2+= Double.valueOf(jsonObject1.get("area")+"");
+                if("采石场".equals(jsonObject1.get("type")))
+                    csc2+= Double.valueOf(jsonObject1.get("area")+"");
+                if("能源设施".equals(jsonObject1.get("type")))
+                    nyss2+= Double.valueOf(jsonObject1.get("area")+"");
+                if("旅游设施".equals(jsonObject1.get("type")))
+                    lyss2+= Double.valueOf(jsonObject1.get("area")+"");
+                if("交通设施".equals(jsonObject1.get("type")))
+                    jtss2+= Double.valueOf(jsonObject1.get("area")+"");
+                if("养殖场".equals(jsonObject1.get("type")))
+                    yzc2+= Double.valueOf(jsonObject1.get("area")+"");
+                if("道路".equals(jsonObject1.get("type")))
+                    dl2+= Double.valueOf(jsonObject1.get("area")+"");
+                if("其他人工设施".equals(jsonObject1.get("type")))
+                    qt2+= Double.valueOf(jsonObject1.get("area")+"");
+            }
+        }
+
+        int nyyd3 = nyyd2-nyyd;
+        int jmd3 = jmd2-jmd;
+        int gkyd3 = gkyd2-gkyd;
+        int csc3 = csc2-csc;
+        int nyss3 = nyss2-nyss;
+        int lyss3 = lyss2-lyss;
+        int jtss3 = jtss2-jtss;
+        int yzc3 = yzc2-yzc;
+        int dl3 = dl2-dl;
+        int qt3 = qt2-qt;
+
+
+        Map map = new HashMap();
+        map.put("imageContrast",imageContrast);
+        map.put("image1",entity1);
+        map.put("image2",entity2);
+
+        map.put("nyyd1",nyyd);
+        map.put("jmd1",jmd);
+        map.put("gkyd1",gkyd);
+        map.put("csc1",csc);
+        map.put("nyss1",nyss);
+        map.put("lyss1",lyss);
+        map.put("jtss1",jtss);
+        map.put("yzc1",yzc);
+        map.put("dl1",dl);
+        map.put("qt1",qt);
+
+        map.put("nyyd2",nyyd2);
+        map.put("jmd2",jmd2);
+        map.put("gkyd2",gkyd2);
+        map.put("csc2",csc2);
+        map.put("nyss2",nyss2);
+        map.put("lyss2",lyss2);
+        map.put("jtss2",jtss2);
+        map.put("yzc2",yzc2);
+        map.put("dl2",dl2);
+        map.put("qt2",qt2);
+
+        map.put("nyyd3",nyyd3);
+        map.put("jmd3",jmd3);
+        map.put("gkyd3",gkyd3);
+        map.put("csc3",csc3);
+        map.put("nyss3",nyss3);
+        map.put("lyss3",lyss3);
+        map.put("jtss3",jtss3);
+        map.put("yzc3",yzc3);
+        map.put("dl3",dl3);
+        map.put("qt3",qt3);
+
+        return ResultVOUtil.success(map);
+    }
 
 
 }

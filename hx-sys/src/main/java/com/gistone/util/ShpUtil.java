@@ -506,6 +506,13 @@ public class ShpUtil {
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("类型").substring(0,2));
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("类型").substring(2));
                 featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("OBJECTID"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("生态与植被"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("斑块名称"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("活动类型"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("环境问题"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("管控措施"));
+
+
                 //featureBuilder.add(jobj.getJSONObject("attributes").getString("center"));
 //                featureBuilder.set("center",jobj.getJSONObject("attributes").getString("center"));
 //				featureBuilder.add(jobj.getJSONObject("attributes").getString("peopleNum"));
@@ -822,6 +829,12 @@ public class ShpUtil {
         builder.length(100).add("type", String.class);
         builder.length(100).add("attribute", String.class);
         builder.length(100).add("Id", Integer.class);
+        builder.length(100).add("plant", String.class);
+        builder.length(100).add("name", String.class);
+        builder.length(100).add("active", String.class);
+        builder.length(100).add("problem", String.class);
+        builder.length(100).add("control", String.class);
+
 
 
         // 生成类型

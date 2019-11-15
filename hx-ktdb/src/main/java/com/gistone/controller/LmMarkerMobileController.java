@@ -727,7 +727,6 @@ public class LmMarkerMobileController {
             lmMarkerMobile.setLmMarkerPhotos(lmMarkerPhotos);
 
 
-
             //3.通过id查询界桩方位物
             List<LmMarkerRelationPosition> positions = iLmMarkerRelationPositionService.list(new QueryWrapper<LmMarkerRelationPosition>().eq("jz_id", id));
             lmMarkerMobile.setLmMarkerRelationPositions(positions);
@@ -1189,7 +1188,7 @@ public class LmMarkerMobileController {
                 System.out.println(sourceImg.getWidth());
                 float proportion = (float) sourceImg.getHeight() / sourceImg.getWidth();
                 height = proportion * 85;
-                System.out.println("height===="+height);
+                System.out.println("height====" + height);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -1506,6 +1505,39 @@ public class LmMarkerMobileController {
 
         lmMarkerMobileService.deleteForever(id);
 
+        return ResultVOUtil.success();
+    }
+
+    @PostMapping("/updateMaker")
+    @SysLog("编辑预设界桩")
+    public ResultVO updateMaker(@RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
+        if (dataParam == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+
+        Integer id = (Integer) dataParam.get("id");
+
+        if (id == null || id < 0) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+        }
+        LmMarkerMobile lmMarkerMobile = new LmMarkerMobile();
+        lmMarkerMobile.setId(id);
+        String jzNum = (String) dataParam.get("jzNum");
+        if (StringUtils.isNotBlank(jzNum)) {
+            lmMarkerMobile.setJzNumber(jzNum);
+        }
+        String jzKh = (String) dataParam.get("jzkh");
+
+        if (StringUtils.isNotBlank(jzKh)) {
+            lmMarkerMobile.setJzKh(jzKh);
+        }
+
+        String code = (String) dataParam.get("code");
+        if (StringUtils.isNotBlank(code)) {
+            lmMarkerMobile.setCode(code);
+        }
+        lmMarkerMobileService.updateById(lmMarkerMobile);
         return ResultVOUtil.success();
     }
 

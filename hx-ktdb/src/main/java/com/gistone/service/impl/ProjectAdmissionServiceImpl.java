@@ -31,7 +31,7 @@ public class ProjectAdmissionServiceImpl extends ServiceImpl<ProjectAdmissionMap
     private ProjectAdmissionMapper projectAdmissionMapper;
 
     @Override
-    public Map<String, Object> getProjectList(Integer pageNum, Integer pageSize, String projectName, String shape, String startTime, String endTime) {
+    public Map<String, Object> getProjectList(Integer pageNum, Integer pageSize, String projectName, String shape, String startTime, String endTime,String type,String attribute,String time) {
         Map<String, Object> result = new HashMap<>();
         QueryWrapper<ProjectAdmission> wrapper = new QueryWrapper<>();
 
@@ -51,6 +51,19 @@ public class ProjectAdmissionServiceImpl extends ServiceImpl<ProjectAdmissionMap
         if (StringUtils.isNotBlank(endTime)) {
             Date endDate = DateUtils.stringToDate(endTime, DateUtils.DATE_TIME_PATTERN);
             wrapper.le("create_date", endDate);
+        }
+
+        if(StringUtils.isNotBlank(type)){
+            wrapper.likeRight("type",type);
+        }
+
+        if(StringUtils.isNotBlank(attribute)){
+            wrapper.likeRight("attribute",attribute);
+        }
+
+        if(StringUtils.isNotBlank(time)){
+            Date endDate = DateUtils.stringToDate(time, DateUtils.DATE_TIME_PATTERN);
+            wrapper.eq("time",endDate);
         }
 
         wrapper.eq("del_flag",1);

@@ -7,11 +7,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.Image;
-import com.gistone.entity.ImageConfig;
-import com.gistone.entity.ShpBatch;
-import com.gistone.entity.SysUser;
+import com.gistone.entity.*;
+import com.gistone.mapper.ImageConfigMapper;
 import com.gistone.mapper.ImageMapper;
+import com.gistone.mapper.ImageNumberMapper;
 import com.gistone.mapper.ShpBatchMapper;
 import com.gistone.service.ImageService;
 import com.gistone.util.*;
@@ -51,6 +50,11 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     private ImageMapper mapper;
     @Autowired
     private com.gistone.mapper.ShpBatchMapper shpBatchMapper;
+    @Autowired
+    private ImageConfigMapper imageConfigMapper;
+    @Autowired
+    private ImageNumberMapper imageNumberMapper;
+
 
 
     @Value("${ftp_host}")
@@ -133,7 +137,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
 
     @Override
     public List<Map<String, Object>> getRlhdTotal() {
-
         //获取到最新数据的id
         int id = mapper.getLastDataId();
         //通过此id分组统计面积
@@ -143,6 +146,24 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
 
     @Override
     public ResultVO getAudit(Integer id) {
+        Image image = mapper.getImageById(id);
+        String json = FileUtil.readFromTextFile(image.getAuditPath());
+        //评分系数
+        List<ImageConfig> imageConfig = imageNumberMapper.selectImageConfigByImageId(id);
+
+        Map map = new HashMap();
+        map.put("image",image);
+        map.put("xs",imageConfig);
+        map.put("out",json);
+        return  ResultVOUtil.success(map);
+    }
+
+
+
+
+
+    @Override
+    public ResultVO addAudit(Integer id,String json) {
         try {
             //获取影像SHP数据的FTP地址
             Image image = mapper.getImageById(id);
@@ -168,29 +189,22 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             String out = "";
             String redline_area = "";
             String stati = "";
-//            for (int i = 0; i < 5; i++) {
-//                Thread.sleep(2000);
-//                out = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId+"/results/out?f=pjson",null);
-//                if(-1==out.indexOf("error")) break;
-//            }
-//            System.out.println(out);
             for (int i = 0; i < 5; i++) {
-                System.out.println("+1");
-                redline_area = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId+"/results/redline_area?f=pjson",null);
+                Thread.sleep(2000);
+                out = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId+"/results/out?f=pjson&returnType=data",null);
+                if(-1==out.indexOf("error")) break;
+            }
+            for (int i = 0; i < 5; i++) {
+                redline_area = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId+"/results/redline_area?f=pjson&returnType=data",null);
                 if(-1==redline_area.indexOf("error")) break;
                 Thread.sleep(2000);
             }
-            System.out.println(redline_area);
-//            for (int i = 0; i < 5; i++) {
-//                stati = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId+"/results/stati?f=pjson",null);
-//                if(-1==stati.indexOf("error")) break;
-//                Thread.sleep(2000);
-//            }
-//            System.out.println(stati);
-
-            if(1==1){
-                return null;
+            for (int i = 0; i < 5; i++) {
+                stati = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId+"/results/stati?f=pjson&returnType=data",null);
+                if(-1==stati.indexOf("error")) break;
+                Thread.sleep(2000);
             }
+
 
             //判断是否成功
             if(-1<out.indexOf("error")||"".equals(out)){
@@ -221,84 +235,60 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
                 sum += Double.valueOf(attributes.get("hxarea")+"");
             }
 
-            //获取系数
-            ImageConfig imageConfig = mapper.getImageConfig();
-            double nyyd = imageConfig.getNyyd();
-            double jmd = imageConfig.getJmd();
-            double gkyd = imageConfig.getGkyd();
-            double csc = imageConfig.getCsc();
-            double nyss = imageConfig.getNyss();
-            double lyss = imageConfig.getLyss();
-            double jtss = imageConfig.getJtss();
-            double yzc = imageConfig.getYzc();
-            double dl = imageConfig.getDl();
-            double qt = imageConfig.getQt();
+            //获取类型列表
+            List<ImageConfig> icList = imageConfigMapper.getImageConfig3();
 
-
-            //1农业用地
-            double nyyds = 0.0;
-            //2居民点
-            double jmds = 0.0;
-            //3工矿用地
-            double gkyds = 0.0;
-            //4采石场
-            double cscs = 0.0;
-            //5能源设施
-            double nysss = 0.0;
-            //6旅游设施
-            double lysss = 0.0;
-            //7交通设施
-            double jtsss = 0.0;
-            //8养殖场
-            double yzcs = 0.0;
-            //9道路
-            double dls = 0.0;
-            //10其它
-            double qts = 0.0;
             JSONObject jobs = JSONObject.fromObject(stati);
             JSONObject job2s = JSONObject.fromObject(jobs.get("value"));
             JSONArray featuress = JSONArray.fromObject(job2s.get("features"));
             for (Object f : featuress) {
                 JSONObject job3s = JSONObject.fromObject(f);
                 JSONObject attributess = JSONObject.fromObject(job3s.get("attributes"));
-                if("农业用地".equals(attributess.get("type")))nyyds += Double.valueOf(attributess.get("SUM_insect")+"");
-                if("居民点".equals(attributess.get("type")))jmds += Double.valueOf(attributess.get("SUM_insect")+"");
-                if("工矿用地".equals(attributess.get("type")))gkyds += Double.valueOf(attributess.get("SUM_insect")+"");
-                if("采石场".equals(attributess.get("type")))cscs += Double.valueOf(attributess.get("SUM_insect")+"");
-                if("能源设施".equals(attributess.get("type")))nysss += Double.valueOf(attributess.get("SUM_insect")+"");
-                if("旅游设施".equals(attributess.get("type")))lysss += Double.valueOf(attributess.get("SUM_insect")+"");
-                if("交通设施".equals(attributess.get("type")))jtsss += Double.valueOf(attributess.get("SUM_insect")+"");
-                if("养殖场".equals(attributess.get("type")))yzcs += Double.valueOf(attributess.get("SUM_insect")+"");
-                if("道路".equals(attributess.get("type")))dls += Double.valueOf(attributess.get("SUM_insect")+"");
-                if("其他人工设施".equals(attributess.get("type")))qts += Double.valueOf(attributess.get("SUM_insect")+"");
+                for (ImageConfig imageConfig : icList) {
+                    if(imageConfig.getId()==Integer.valueOf(attributess.get("type")+"")){
+                        imageConfig.setNum(imageConfig.getNum()+Double.valueOf(attributess.get("SUM_insect")+""));
+                    }
+                }
             }
-            Double num1 = (nyyds*nyyd+jmds*jmd+gkyds*gkyd+cscs*csc+nysss*nyss+lysss*lyss+jtsss*jtss+yzcs*yzc+dls*dl+qts*qt)/sum;
+
+            //删除原影像系数
+            imageNumberMapper.deleteImageNumberByImageId(image);
+            //保存当前影像系数
+            JSONObject numberJson = JSONObject.fromObject(json);
+            for (Object o : numberJson.keySet()) {
+                ImageNumber imageNumber = new ImageNumber();
+                imageNumber.setImage_id(id);
+                imageNumber.setImage_config_id(Integer.valueOf(o+""));
+                imageNumber.setNumber(Double.valueOf(numberJson.get(o)+""));
+                imageNumberMapper.insertImageNumber(imageNumber);
+            }
 
 
+            //获取当前影像系数
+            List<ImageNumber> imageNumbers = imageNumberMapper.selectImageNumberByImageId(id);
+            //评分
             JSONObject jb = new JSONObject();
-            jb.put("num",num1);
-            jb.put("nyyd",nyyd*nyyds);
-            jb.put("jmd",jmd*jmds);
-            jb.put("gkyd",gkyd*gkyds);
-            jb.put("csc",csc*cscs);
-            jb.put("nyss",nyss*nysss);
-            jb.put("lyss",lyss*lysss);
-            jb.put("jtss",jtss*jtsss);
-            jb.put("yzc",yzc*yzcs);
-            jb.put("dl",dl*dls);
-            jb.put("qt",qt*qts);
-
+            double d = 0;
+            for (ImageConfig imageConfig : icList) {
+                double db = 0;
+                if(0<imageNumbers.size()){
+                    //有配置
+                    for (ImageNumber imageNumber : imageNumbers) {
+                        if(imageNumber.getImage_config_id()==imageConfig.getId()){
+                            db = imageConfig.getNum()*imageNumber.getNumber();
+                        }
+                    }
+                    jb.put(imageConfig.getId(),db);
+                    d += db;
+                }
+            }
+            jb.put("avg",d/sum);
 
             //更新数据
             image.setContrastRed(jb+"");
             image.setAuditPath(path+name);
             int res2 = mapper.updateImage(image);
             if(0<res2){
-//                jSONObject = new JSONObject();
-//                jSONObject.put("image",JSON.toJSONString(image, SerializerFeature.DisableCircularReferenceDetect,SerializerFeature.WriteDateUseDateFormat));
-//                jSONObject.put("out",out);
-//                jSONObject.put("redline_area",redline_area);
-//                jSONObject.put("stati",stati);
                 return ResultVOUtil.success();
             }else{
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "更新失败");
@@ -319,133 +309,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "审核失败");
     }
 
-    @Override
-    public ResultVO upload(HttpServletRequest request,Image image) {
-        try {
-            SimpleDateFormat ymdhms = new SimpleDateFormat("yyyy-MM-dd");
-            //上传
-            String[] arr = {"zip","ZIP"};
-            String path = FileUtil.getPath(PATH+"/epr/image/");
-            Map resMap = FileUtil.uploadFiles(request, path, arr, 50);  //每个附件限制50MB
-//            Map<String,String> resMap = FileUtil.uploadFile(request,path,arr,10000000l);//10MB
-            String error = resMap.get("error")+"";
-            if(!"0".equals(error)){
-                return ResultVOUtil.error(ResultEnum.ERROR.getCode(),error);
-            }
-            String newName; //附件名称
-            List<Map> fl = (List)resMap.get("fileList");
-            if(0<fl.size()){
-                newName = fl.get(0).get("newName")+"";
-            }else{
-                return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"上传失败");
-            }
-            String uuid = newName.split("\\.")[0];
-            //解压
-            File f = new File(path+uuid);
-            if(!f.isDirectory()) f.mkdirs();
-            FileUtil.unPackZip(path+newName,path+uuid,null);
 
-            //获取shp文件路径
-            String shp = "";
-            List<File> list = FileUtil.listFiles(new File(path+uuid));
-            for (File pt : list) {
-                if(pt.getName().endsWith(".shp")){
-                    shp = pt.getPath();
-                }
-            }
-            if(StringUtils.isBlank(shp)){
-                return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"未知shp文件");
-            }
-
-            //读取SHP数据
-            String shpStr = ShpUtil.readShapeFileToStr(shp,1)+"";
-            if(StringUtils.isBlank(shpStr)){
-                return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"读取SHP失败");
-            }
-            
-            //替换字段名
-            JSONArray jsonArray = JSONArray.fromObject(shpStr);
-//            System.out.println(jsonArray);
-            JSONArray jSONArray = new JSONArray();
-            for (Object o : jsonArray){
-                JSONObject jo = JSONObject.fromObject(o);
-                JSONObject attributes = JSONObject.fromObject(jo.get("attributes"));
-                JSONObject jSONObject1 = new JSONObject();
-                jSONObject1.put("name",attributes.get("标准名"));
-                jSONObject1.put("type",attributes.get("一级类"));
-                jSONObject1.put("region",attributes.get("功能分"));
-                jSONObject1.put("position",attributes.get("位置"));
-                jSONObject1.put("area",attributes.get("面积")+"");
-                jSONObject1.put("center",attributes.get("实地经")+","+attributes.get("实地纬"));
-
-                JSONObject geometry = JSONObject.fromObject(jo.get("geometry"));
-                geometry.put("rings","\""+geometry.get("rings")+"\"");
-
-                Map<String,String> map = new HashMap();
-                map.put("attributes",jSONObject1+"");
-                map.put("geometry",geometry+"");
-                jSONArray.add(map);
-            }
-//            System.out.println(jSONArray);
-
-
-            //生成新SHP
-            String url = PathUtile.getRandomPath(PATH+"/epr/image/","x.shp");
-            String res2 = ShpUtil.handleWebData(com.alibaba.fastjson.JSONArray.parseArray(jSONArray+""),url);
-            if(!"0".equals(res2)){
-                return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"生成新SHP失败");
-            }
-
-            //新SHP上传FTP
-            String ftpPath = "/epr/image/"+ymdhms.format(new Date())+"/"+new Random().nextInt(20)+"/";//FTP保存路径
-            String fileName1 = uuid+".shp";
-            String fileName2 = uuid+".dbf";
-            String fileName3 = uuid+".prj";
-            String fileName4 = uuid+".sbn";
-            String fileName5 = uuid+".sbx";
-
-            FileInputStream input1 = new FileInputStream(new File(url.split("\\.")[0]+".shp"));
-            FileInputStream input2 = new FileInputStream(new File(url.split("\\.")[0]+".dbf"));
-            FileInputStream input3 = new FileInputStream(new File(url.split("\\.")[0]+".fix"));
-            FileInputStream input4 = new FileInputStream(new File(url.split("\\.")[0]+".prj"));
-            FileInputStream input5 = new FileInputStream(new File(url.split("\\.")[0]+".shx"));
-
-            FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName1, input1);
-            FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName2, input2);
-            FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName3, input3);
-            FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName4, input4);
-            FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName5, input5);
-
-            //插入数据库
-            HttpSession session = request.getSession();
-            SysUser user = (SysUser) session.getAttribute("user");
-
-            image.setShpurl("E:/FTP"+ftpPath+fileName1);
-            if(null!=user)
-                image.setCreateBy(user.getId());
-            image.setCreateDate(LocalDateTime.now());
-            if(null!=user)
-                image.setUpdateBy(user.getId());
-            image.setUpdateDate(new Date());
-            image.setShp(url); //本地SHP路径
-            image.setDelFlag(1);
-            image.setSign(1);
-            if(null!=resMap.get("name"))
-            image.setName(resMap.get("name")+"");
-            if(null!=resMap.get("url"))
-            image.setUrl(resMap.get("url")+"");
-            if(null!=resMap.get("remark"))
-            image.setRemark(resMap.get("remark")+"");
-            int res = mapper.insertImage(image);
-            if(0<res){
-                return ResultVOUtil.success();
-            }
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "导入失败");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "导入失败");
-        }
-    }
 
 
 }

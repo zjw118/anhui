@@ -30,15 +30,13 @@ public class TotalController {
     private ILmPointService iLmPointService;
 
 
-
-
-  /**
-   * @description: 获取行政区划下的红线区的总面积数
-   * @param:
-   * @return
-   * @author zf1017@foxmail.com
-   * @date 2019/4/29 0029 9:12
-   */
+    /**
+     * @return
+     * @description: 获取行政区划下的红线区的总面积数
+     * @param:
+     * @author zf1017@foxmail.com
+     * @date 2019/4/29 0029 9:12
+     */
     @RequestMapping(value = "/getRedlineSumArea", method = RequestMethod.POST)
     public ResultVO getRedlineSumArea(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
@@ -192,18 +190,18 @@ public class TotalController {
         //获取界桩统计
         List<Map<String, Object>> markerList = totalService.getCount(codes, currentTime, beforeTime);
         //获取标识牌统计
-        List<Map<String,Object>> boardList = totalService.getBoardCount(codes, currentTime, beforeTime);
+        List<Map<String, Object>> boardList = totalService.getBoardCount(codes, currentTime, beforeTime);
 
-        int count = totalService.getBeforeCount(codes,beforeTime);
+        int count = totalService.getBeforeCount(codes, beforeTime);
         //查詢节点之前的数据
-        int sum = totalService.getBeforeSum(codes,beforeTime);
+        int sum = totalService.getBeforeSum(codes, beforeTime);
 
         //获取调查表统计
 //        List<Map<String, Object>> surveyList = totalService.getSurveyCount(codes, currentTime, beforeTime);
         result.put("markerCount", markerList);
-        result.put("beforeMarkerCount",sum);
-        result.put("boardCount",boardList);
-        result.put("beforeBoardCount",count);
+        result.put("beforeMarkerCount", sum);
+        result.put("boardCount", boardList);
+        result.put("beforeBoardCount", count);
 //        result.put("surveyCount", surveyList);
         return ResultVOUtil.success(result);
     }
@@ -235,9 +233,9 @@ public class TotalController {
     }
 
     /**
+     * @return
      * @description: 红线斑块功能划分面积统计
      * @param:
-     * @return
      * @author zf1017@foxmail.com
      * @date 2019/4/28 0028 18:08
      */
@@ -274,15 +272,16 @@ public class TotalController {
 
         return ResultVOUtil.success(result);
     }
+
     /**
+     * @return
      * @description: 一张图获取调查表数据
      * @params
-     * @return
      * @author zf1017@foxmail.com
      * @date 2019/5/20 0020 16:45
      */
     @RequestMapping(value = "/getSurveyCount")
-    public ResultVO getSurveyCount(@RequestBody Map<String, Object> paramsMap){
+    public ResultVO getSurveyCount(@RequestBody Map<String, Object> paramsMap) {
 
         //请求参数格式校验
         Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
@@ -314,7 +313,7 @@ public class TotalController {
         LocalDate currentTime = LocalDate.now();
         LocalDate beforeTime = currentTime.minusDays(14);
 
-        Map<String,Object> result = totalService.getSurveySum(codes,currentTime,beforeTime);
+        Map<String, Object> result = totalService.getSurveySum(codes, currentTime, beforeTime);
 
         return ResultVOUtil.success(result);
     }
@@ -336,10 +335,64 @@ public class TotalController {
 
     public static void main(String[] args) {
         int a = 2560;
-        System.out.println(a/1000);
+        System.out.println(a / 1000);
     }
 
+    /**
+     * @param
+     * @return com.gistone.VO.ResultVO
+     * @description:预设界桩与红线斑块统计
+     * @author zf1017@foxmail.com
+     * @motto: Talk is cheap,show me the code
+     * @date 2019/10/17 0017 10:18
+     */
+    @PostMapping("/getPreMarkAndRedlineTotal")
+    public ResultVO getPreMarkAndRedlineTotal() {
+        Map<String, Object> result = totalService.getPreMarkAndRedlineTotal();
+        return ResultVOUtil.success(result);
+    }
 
+    /**
+     * @param
+     * @return com.gistone.VO.ResultVO
+     * @description:标识牌与红线斑块统计
+     * @author zf1017@foxmail.com
+     * @motto: Talk is cheap,show me the code
+     * @date 2019/10/17 0017 10:52
+     */
+    @PostMapping("/getBoardAndRedlineTotal")
+    public ResultVO getBoardAndRedlineTotal() {
+        Map<String, Object> result = totalService.getBoardAndRedlineTotal();
+        return ResultVOUtil.success(result);
+    }
+
+    /**
+     * @param
+     * @return com.gistone.VO.ResultVO
+     * @description:获取预设红线斑块数，按行政区划统计
+     * @author zf1017@foxmail.com
+     * @motto: Talk is cheap,show me the code
+     * @date 2019/11/14 0014 17:15
+     */
+    @PostMapping("/getRedlineCount")
+    public ResultVO getRedlineCount() {
+        Map<String, Object> result = totalService.getRedlineCount();
+        return ResultVOUtil.success(result);
+    }
+
+    /**
+     * @param
+     * @return com.gistone.VO.ResultVO
+     * @description:获取拐点统计数，按行政区划统计
+     * @author zf1017@foxmail.com
+     * @motto: Talk is cheap,show me the code
+     * @date 2019/11/14 0014 17:28
+     */
+    @PostMapping("/getPointCount")
+    public ResultVO getPointCount() {
+        Map<String, Object> result = totalService.getPointCount();
+        return ResultVOUtil.success(result);
+    }
 
 
 }
