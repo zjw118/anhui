@@ -6,7 +6,6 @@ import com.gistone.entity.Image;
 import com.gistone.entity.ImageConfig;
 import com.gistone.mapper.ImageConfigMapper;
 import com.gistone.mapper.ImageMapper;
-import com.gistone.mapper.ImageNumberMapper;
 import com.gistone.service.ILmPointService;
 import com.gistone.service.ImageConfigService;
 import com.gistone.service.ImageService;
@@ -15,7 +14,6 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -60,10 +58,11 @@ public class ImageController {
     private String ftpUrl;
 
 
-
-
-
-
+    /**
+     *
+     * @param paramsMap
+     * @return
+     */
     @PostMapping("/list")
     public ResultVO getList(@RequestBody Map<String, Object> paramsMap) {
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
@@ -83,7 +82,11 @@ public class ImageController {
         return ResultVOUtil.success(result);
     }
 
-
+    /**
+     *
+     * @param params
+     * @return
+     */
     @PostMapping("/detail")
     public ResultVO getById(@RequestBody Map<String, Object> params) {
         Integer id = (Integer) params.get("id");
@@ -98,7 +101,11 @@ public class ImageController {
     }
 
 
-
+    /**
+     *
+     * @param paramsMap
+     * @return
+     */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResultVO add(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
@@ -110,26 +117,26 @@ public class ImageController {
         if (StringUtils.isBlank(name)) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "名称不能为空");
         }
-
         String url = (String) params.get("url");
         if (StringUtils.isBlank(url)) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "地址不能为空");
         }
-
         String remark = (String) params.get("remark");
-
         //判断添加人是否为空
         Integer createBy = (Integer) params.get("createBy");
         if (createBy == null || createBy <= 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "创建人不能为空");
         }
-
         service.insert(name, url, createBy, remark);
         return ResultVOUtil.success();
     }
 
 
-
+    /**
+     *
+     * @param paramsMap
+     * @return
+     */
     @RequestMapping(value = "/delete")
     public ResultVO delete(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
@@ -145,7 +152,11 @@ public class ImageController {
         return ResultVOUtil.success();
     }
 
-
+    /**
+     *
+     * @param paramsMap
+     * @return
+     */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResultVO update(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
@@ -283,6 +294,8 @@ public class ImageController {
         return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "添加失败");
 
     }
+
+
     /**
      * 配置删除
      * @param paramsMap
@@ -427,7 +440,7 @@ public class ImageController {
 
 
     /**
-     * 影像类型列表
+     * 人类活动类型列表
      * @param paramsMap
      * @return
      */

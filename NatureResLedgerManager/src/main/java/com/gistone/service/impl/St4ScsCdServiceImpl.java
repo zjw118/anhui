@@ -501,7 +501,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
 
 
 
-            st4ScsCdMapper.delete(new QueryWrapper<St4ScsCd>().eq("image_id", resMap.get("cd001")));
+            st4ScsCdMapper.delete(new QueryWrapper<St4ScsCd>().eq("image_id", resMap.get("id")));
             //从data中构造属性
             for (Object o : jSONArray) {
                 Map<String, Object> datum = (Map<String, Object>) o;
@@ -539,9 +539,9 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 if (null != attributes.get("descri")) {
                     iterpretation.setDescri(attributes.get("descri") + "");
                 }
-//                if (null != attributes.get("remark")) {
-//                    iterpretation.setCd012(attributes.get("remark") + "");
-//                }
+                if (null != attributes.get("date")) {
+                    iterpretation.setCd012(attributes.get("date") + "");
+                }
 
                 Map<String, Object> rings = (Map<String, Object>) JSONObject.fromObject(datum.get("geometry"));
                 String geometry = rings.get("rings").toString();
