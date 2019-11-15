@@ -6,8 +6,8 @@ import com.gistone.entity.BottomchartType;
 import com.gistone.service.BottomchartTypeService;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultVOUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,26 +24,14 @@ import java.util.Map;
  */
 
 @RestController
-@RequestMapping("/bottomchartType")
+@RequestMapping("/api/ktdb/bottomchartType")
 public class BottomchartTypeController {
     @Autowired
     private BottomchartTypeService service;
 
     @PostMapping("/list")
-    public ResultVO getList(@RequestBody Map<String, Object> params) {
-
-        Integer pageNum = (Integer) params.get("pageNum");
-        Integer pageSize = (Integer) params.get("pageSize");
-        String name = (String) params.get("name");
-        if (pageNum == null) {
-            pageNum = 1;
-        }
-
-        if (pageSize == null) {
-            pageSize = 10;
-        }
-
-        Map<String, Object> result = service.list(pageNum, pageSize, name);
+    public ResultVO getList() {
+        List<BottomchartType> result = service.list();
         return ResultVOUtil.success(result);
     }
 
@@ -60,20 +48,42 @@ public class BottomchartTypeController {
 
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResultVO add(@RequestBody BottomchartType entity, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
+    public ResultVO add(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
+        if (dataParam == null) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "请求数据data不能为空！");
         }
-        //判断添加人是否为空
+        BottomchartType entity = new BottomchartType();
+        String name = (String) dataParam.get("name");
+        if (StringUtils.isBlank(name)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "类别名称不能为空");
+        }
+        entity.setName(name);
+        Integer level = (Integer) dataParam.get("level");
+        if (level == null && level > 0) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "类别级别不能为空");
+        }
+        entity.setLevel(level);
+        Integer Fid = (Integer) dataParam.get("fid");
+        if (Fid == null) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "父id不能为空");
+        }
+        entity.setFId(Fid);
         service.insert(entity);
         return ResultVOUtil.success();
     }
 
 
     @RequestMapping(value = "/delete")
-    public ResultVO delete(@RequestBody Map<String, Object> params) {
-        List<Integer> id = (List<Integer>) params.get("id");
-        if (id != null && id.size() > 0) {
+    public ResultVO delete(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
+        if (dataParam == null) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "请求数据data不能为空！");
+        }
+        List<Integer> id = (List<Integer>) dataParam.get("id");
+        if (id == null || id.size() < 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
         service.delete(id);
@@ -82,11 +92,35 @@ public class BottomchartTypeController {
 
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResultVO update(@RequestBody BottomchartType entity, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
+    public ResultVO update(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
+        if (dataParam == null) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "请求数据data不能为空！");
         }
-//判断更新人加人是否为空
+
+        Integer id = (Integer) dataParam.get("id");
+        if (id == null) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+        }
+
+        BottomchartType entity = service.getById(id);
+        String name = (String) dataParam.get("name");
+        if (StringUtils.isBlank(name)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "类别名称不能为空");
+        }
+        entity.setName(name);
+        Integer level = (Integer) dataParam.get("level");
+        if (level != null) {
+            entity.setLevel(level);
+        }
+        entity.setLevel(level);
+        Integer Fid = (Integer) dataParam.get("fid");
+        if (Fid != null) {
+            entity.setFId(Fid);
+        }
+        entity.setFId(Fid);
+        //判断更新人加人是否为空
         service.edit(entity);
         return ResultVOUtil.success();
     }

@@ -75,6 +75,7 @@ public class BottomChart extends Model<BottomChart> {
      */
     private Integer delFlag;
 
+    private Integer typeId;
 
     @Override
     protected Serializable pkVal() {

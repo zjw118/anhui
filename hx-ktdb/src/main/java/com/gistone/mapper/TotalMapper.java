@@ -1,10 +1,8 @@
 package com.gistone.mapper;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDate;
-
 import java.util.List;
 import java.util.Map;
 
@@ -41,5 +39,14 @@ public interface TotalMapper {
 
     int selectBeforeSum(@Param("code") String code, @Param("beforeTime") LocalDate beforeTime);
 
-    int selectSurveySum(@Param("type") Integer type,@Param("code") String code,@Param("beforeTime") LocalDate beforeTime);
+    int selectSurveySum(@Param("type") Integer type, @Param("code") String code, @Param("beforeTime") LocalDate beforeTime);
+
+    List<Map<String,Object>> getPreMarkerCount();
+
+    List<Map<String,Object>> getRedlineCounr();
+
+    List<Map<String,Object>> getPreBoardCount();
+
+    List<Map<String,Object>> getRedlineCount();
+    List<Map<String,Object>> getPointCount();
 }

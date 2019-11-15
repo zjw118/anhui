@@ -84,7 +84,7 @@ public class LmPointController {
     }
 
     @PostMapping("/list")
-    public ResultVO getPointList(@RequestBody Map<String, Object> paramsMap){
+    public ResultVO getPointList(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
         Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
         if (dataParam == null) {
@@ -103,7 +103,7 @@ public class LmPointController {
             pageSize = 10;
         }
 
-        Map<String,Object> result = iLmPointService.getPointList(boardNum,pageNum,pageSize);
+        Map<String, Object> result = iLmPointService.getPointList(boardNum, pageNum, pageSize);
         return ResultVOUtil.success(result);
 
     }
@@ -346,7 +346,8 @@ public class LmPointController {
     }
 
     /**
-     *查询拐点集合
+     * 查询拐点集合
+     *
      * @param paramsMap
      * @return
      */
@@ -377,7 +378,7 @@ public class LmPointController {
                 } else {
                     codes = code;
                 }
-            }else {
+            } else {
                 codes = code;
             }
         }
@@ -390,26 +391,27 @@ public class LmPointController {
             pageSize = 10;
         }
 
-        List<LmPoint> lmPointList = iLmPointService.selectPointList(codes,param,redlineId,pageNum,pageSize);
+        List<LmPoint> lmPointList = iLmPointService.selectPointList(codes, param, redlineId, pageNum, pageSize);
 
-        int total = iLmPointService.selectTotal(codes,param,redlineId);
+        int total = iLmPointService.selectTotal(codes, param, redlineId);
 
-        Map<String,Object> result = new HashMap<>();
-        result.put("rows",lmPointList);
-        result.put("total",total);
+        Map<String, Object> result = new HashMap<>();
+        result.put("rows", lmPointList);
+        result.put("total", total);
 
         return ResultVOUtil.success(result);
 
     }
+
     /**
-     * @description: 获取所有拐点
      * @param
      * @return
+     * @description: 获取所有拐点
      * @author zf1017@foxmail.com
      * @date 2019/5/16 0016 16:30
      */
     @RequestMapping(value = "/getAllPoint")
-    public ResultVO getAllPoint(){
+    public ResultVO getAllPoint() {
         List<LmPoint> lmPoints = iLmPointService.list(null);
         return ResultVOUtil.success(lmPoints);
 
@@ -436,16 +438,44 @@ public class LmPointController {
                 } else {
                     codes = code;
                 }
-            }else {
+            } else {
                 codes = code;
             }
         }
-        List<LmPointVO> lmPointVOList = iLmPointService.selectPointListForAll(codes,param,redlineId);
-        String filepath = ExcelUtil.toXls("拐点坐标", lmPointVOList, configUtils.getExcel_PATH(),LmPointVO.class ,response);
+        List<LmPointVO> lmPointVOList = iLmPointService.selectPointListForAll(codes, param, redlineId);
+        String filepath = ExcelUtil.toXls("拐点坐标", lmPointVOList, configUtils.getExcel_PATH(), LmPointVO.class, response);
         Map map1 = new HashMap();
         map1.put("filepath", filepath.substring(2));
         return ResultVOUtil.success(map1);
     }
 
+    /**
+     * @param paramsMap
+     * @return com.gistone.VO.ResultVO
+     * @description:拐点编辑
+     * @author zf1017@foxmail.com
+     * @motto: Talk is cheap,show me the code
+     * @date 2019/11/14 0014 20:00
+     */
+    @PostMapping("/updatePoint")
+    public ResultVO updatePoint(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
+        if (dataParam == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        LmPoint lmPoint = new LmPoint();
+        Integer id = (Integer) dataParam.get("id");
+        lmPoint.setLpId(id);
+        if (id == null) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+        }
+        String pointNum = (String) dataParam.get("pointNum");
+        if (StringUtils.isNotBlank(pointNum)) {
+            lmPoint.setLpCode(pointNum);
+        }
+        iLmPointService.updateById(lmPoint);
+        return ResultVOUtil.success();
+    }
 }
 

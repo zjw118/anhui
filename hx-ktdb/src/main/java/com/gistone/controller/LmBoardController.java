@@ -1028,5 +1028,44 @@ public class LmBoardController {
 
         return ResultVOUtil.success();
     }
+
+    /**
+     * @param paramsMap
+     * @return com.gistone.VO.ResultVO
+     * @description:编辑预设标识牌
+     * @author zf1017@foxmail.com
+     * @motto: Talk is cheap,show me the code
+     * @date 2019/11/14 0014 20:19
+     */
+    @PostMapping("/updateBoard")
+    @SysLog("编辑预设标识牌")
+    public ResultVO updateBoard(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
+        if (dataParam == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        Integer id = (Integer) dataParam.get("id");
+
+
+
+        if (id == null || id < 0) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+        }
+        LmBoard lmBoard = lmBoardService.getById(id);
+        lmBoard.setId(id);
+        String redlineId = (String) dataParam.get("redlineId");
+        if (StringUtils.isNotBlank(redlineId)) {
+            lmBoard.setRedlineNum(redlineId);
+        }
+        String num = (String) dataParam.get("boardNum");
+        if(StringUtils.isNotBlank(num)){
+            lmBoard.setNumber(num);
+        }
+
+        lmBoardService.updateById(lmBoard);
+        return ResultVOUtil.success();
+
+    }
 }
 
