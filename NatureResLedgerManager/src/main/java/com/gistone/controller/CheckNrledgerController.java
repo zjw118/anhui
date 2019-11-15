@@ -18,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -248,9 +245,9 @@ public class CheckNrledgerController {
      * @param response
      * @return
      */
-    @ApiOperation(value="导入台账Excel",notes = "导入台账Excel",response = St4ScsCk.class)
-    @RequestMapping(value="/importExcel",method = RequestMethod.POST)
-    public Result importExcel(HttpServletRequest request,HttpServletResponse response) {
+    @ApiOperation(value="(江苏用)导入台账Excel",notes = "导入台账Excel",response = St4ScsCk.class)
+    @RequestMapping(value="/importHumanStage",method = RequestMethod.POST)
+    public Result importHumanStage(@RequestParam MultipartFile file, HttpServletRequest request, HttpServletResponse response) {
         Result result= new Result();
         String token = request.getHeader("token");// 从 http 请求头中取出 token
         try{

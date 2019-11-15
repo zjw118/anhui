@@ -166,7 +166,9 @@ public class St4ScsCy extends BaseEntity  implements Serializable {
     @ApiModelProperty(value = "轨迹里程")
     @TableField(exist = false)
     private String gjlc;
-
+    @ApiModelProperty(value = "轨迹时长")
+    @TableField(exist = false)
+    private Integer rwsc;
     @Ignore
     @ApiModelProperty(value = "权限用，不用管")
     @TableField(exist = false)

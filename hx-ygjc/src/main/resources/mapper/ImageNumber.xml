@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.ImageNumberMapper">
+
+
+    <select id="selectImageNumberByImageId"  parameterType="java.lang.Integer" resultType="com.gistone.entity.ImageNumber">
+        SELECT * from image_number a
+        LEFT JOIN image_config b
+        on a.image_id = b.id
+        where a.image_id = #{id}
+	</select>
+
+    <select id="selectImageConfigByImageId"  parameterType="java.lang.Integer" resultType="com.gistone.entity.ImageConfig">
+        SELECT COALESCE(a.number,1)num,b.name,b.id from image_number a
+        RIGHT JOIN image_config b
+        on a.image_config_id = b.id
+        where (a.image_id = #{id}
+        or a.image_id is null)
+        and b.type = 3
+	</select>
+
+    <insert id="insertImageNumber" parameterType="com.gistone.entity.ImageNumber">
+        INSERT INTO image_number
+        (
+            image_id,
+            image_config_id,
+            number
+        )
+        VALUES(
+            #{imageId},
+            #{imageConfigId},
+            #{number}
+        )
+    </insert>
+
+    <delete id="deleteImageNumberByImageId" parameterType="com.gistone.entity.Image">
+		delete from image_number where image_id = #{id}
+	</delete>
+
+
+
+</mapper>

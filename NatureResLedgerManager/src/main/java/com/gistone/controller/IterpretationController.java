@@ -2,6 +2,7 @@ package com.gistone.controller;
 
 
 import com.gistone.VO.ResultVO;
+import com.gistone.entity.Image;
 import com.gistone.entity.St4ScsCd;
 import com.gistone.entity.SysUser;
 import com.gistone.service.ISt4ScsCdService;
@@ -135,6 +136,16 @@ public class IterpretationController {
     }
 
 
+
+    /**
+     * 导入影像
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/upload")
+    public ResultVO upload(HttpServletRequest request, Image image) {
+        return service.upload(request,image);
+    }
 
 
 

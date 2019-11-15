@@ -28,6 +28,11 @@ public class BottomchartTypeServiceImpl extends ServiceImpl<BottomchartTypeMappe
     @Autowired
     private BottomchartTypeMapper mapper;
 
+
+
+  
+
+
     @Override
     public List<BottomchartType> list() {
         List<BottomchartType> bottomchartTypes = mapper.selectList(null);

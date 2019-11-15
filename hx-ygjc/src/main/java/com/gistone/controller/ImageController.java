@@ -3,28 +3,18 @@ package com.gistone.controller;
 
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
-import com.gistone.entity.SysUser;
+import com.gistone.entity.ImageConfig;
+import com.gistone.mapper.ImageConfigMapper;
 import com.gistone.mapper.ImageMapper;
 import com.gistone.service.ILmPointService;
+import com.gistone.service.ImageConfigService;
 import com.gistone.service.ImageService;
 import com.gistone.util.*;
-import org.apache.commons.collections.bag.SynchronizedSortedBag;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -47,6 +37,13 @@ public class ImageController {
     private ImageMapper mapper;
     @Autowired
     private ILmPointService iLmPointService;
+    @Autowired
+    private ImageConfigMapper imageConfigMapper;
+    @Autowired
+    private ImageConfigService imageConfigService;
+
+
+
     @Value("${ftp_host}")
     private String ftpHost;
     @Value("${ftp_port}")
@@ -61,10 +58,11 @@ public class ImageController {
     private String ftpUrl;
 
 
-
-
-
-
+    /**
+     *
+     * @param paramsMap
+     * @return
+     */
     @PostMapping("/list")
     public ResultVO getList(@RequestBody Map<String, Object> paramsMap) {
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
@@ -84,7 +82,11 @@ public class ImageController {
         return ResultVOUtil.success(result);
     }
 
-
+    /**
+     *
+     * @param params
+     * @return
+     */
     @PostMapping("/detail")
     public ResultVO getById(@RequestBody Map<String, Object> params) {
         Integer id = (Integer) params.get("id");
@@ -93,11 +95,17 @@ public class ImageController {
         }
         Image entity = service.getById(id);
         entity.setList(mapper.selectISt4ScsCd(id));
+        String shpStr = ShpUtil.readShapeFileToStr(entity.getShp(),1)+"";
+        entity.setShp(shpStr);
         return ResultVOUtil.success(entity);
     }
 
 
-
+    /**
+     *
+     * @param paramsMap
+     * @return
+     */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResultVO add(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
@@ -109,26 +117,26 @@ public class ImageController {
         if (StringUtils.isBlank(name)) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "名称不能为空");
         }
-
         String url = (String) params.get("url");
         if (StringUtils.isBlank(url)) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "地址不能为空");
         }
-
         String remark = (String) params.get("remark");
-
         //判断添加人是否为空
         Integer createBy = (Integer) params.get("createBy");
         if (createBy == null || createBy <= 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "创建人不能为空");
         }
-
         service.insert(name, url, createBy, remark);
         return ResultVOUtil.success();
     }
 
 
-
+    /**
+     *
+     * @param paramsMap
+     * @return
+     */
     @RequestMapping(value = "/delete")
     public ResultVO delete(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
@@ -144,7 +152,11 @@ public class ImageController {
         return ResultVOUtil.success();
     }
 
-
+    /**
+     *
+     * @param paramsMap
+     * @return
+     */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResultVO update(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
@@ -247,8 +259,116 @@ public class ImageController {
 
         return ResultVOUtil.success(result);
     }
+
+
+
     /**
-     * 审核详情页
+     * 添加配置
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/addConfig", method = RequestMethod.POST)
+    public ResultVO addConfig(@RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null)
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+
+        Object name = params.get("name");
+        Object parentid = params.get("parentid");
+        Object type = params.get("type");
+        Object orders = params.get("orders");
+        if(null==name)
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "name不能为空！");
+        if(null==parentid)
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "parentid不能为空！");
+        if(null==type)
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "type不能为空！");
+
+        ImageConfig imageConfig = new ImageConfig();
+        imageConfig.setName(name+"");
+        imageConfig.setParentid(Integer.valueOf(parentid+""));
+        imageConfig.setType(Integer.valueOf(type+""));
+        imageConfig.setOrders(Integer.valueOf(orders+""));
+        if(0<imageConfigMapper.insertImageConfig(imageConfig))
+            return ResultVOUtil.success();
+        return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "添加失败");
+
+    }
+
+
+    /**
+     * 配置删除
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/deleteConfig", method = RequestMethod.POST)
+    public ResultVO deleteConfig(@RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null)
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        Object id = params.get("id");
+        if (null==id)
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+        //删除配置表
+        ImageConfig imageConfig = new ImageConfig();
+        imageConfig.setId(Integer.valueOf(id+""));
+        int i = imageConfigMapper.deleteImageConfig(imageConfig);
+
+        //删除系数表-无需
+        if(0<i)
+            return ResultVOUtil.success();
+        return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "删除失败");
+    }
+
+    /**
+     * 配置树形结构
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/config", method = RequestMethod.POST)
+    public ResultVO config(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            return imageConfigService.selectImageConfig();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
+        }
+    }
+
+    /**
+     * 配置修改
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/updateConfig", method = RequestMethod.POST)
+    public ResultVO updateConfig(@RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null)
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        Object id = params.get("id");
+        if (null==id)
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+        Object name = params.get("name");
+        Object parentid = params.get("parentid");
+        Object type = params.get("type");
+        Object orders = params.get("orders");
+
+        ImageConfig imageConfig = new ImageConfig();
+        imageConfig.setId(Integer.valueOf(id+""));
+        imageConfig.setName(name+"");
+        imageConfig.setParentid(Integer.valueOf(parentid+""));
+        imageConfig.setType(Integer.valueOf(type+""));
+        imageConfig.setOrders(Integer.valueOf(orders+""));
+
+        if(0<imageConfigMapper.updateImageConfig(imageConfig))
+            return ResultVOUtil.success();
+        return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
+    }
+
+
+
+    /**
+     * 审核详情
      * @param paramsMap
      * @return
      */
@@ -264,6 +384,30 @@ public class ImageController {
         }
         return service.getAudit(Integer.valueOf(id));
     }
+
+
+    /**
+     * 审核计算
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/addAudit", method = RequestMethod.POST)
+    public ResultVO addAudit(@RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        String id = (String) params.get("id");
+        if (StringUtils.isBlank(id)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "主键id不能为空");
+        }
+        String json = (String) params.get("json");
+        if (StringUtils.isBlank(json)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "系数json不能为空");
+        }
+        return service.addAudit(Integer.valueOf(id),json);
+    }
+
     /**
      * 开始审核
      * @param paramsMap
@@ -293,30 +437,22 @@ public class ImageController {
 
 
 
+
+
     /**
-     * 导入影像
-     * @param request
+     * 人类活动类型列表
+     * @param paramsMap
      * @return
      */
-    @PostMapping(value = "/upload")
-    public ResultVO upload(HttpServletRequest request,Image image) {
-        return service.upload(request,image);
+    @RequestMapping(value = "/getConfig", method = RequestMethod.POST)
+    public ResultVO getConfig(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            return ResultVOUtil.success(imageConfigMapper.getImageConfig3());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
+        }
     }
-
-
-
-
-
-    @PostMapping(value = "/processfiles")
-    public Map ProcessFiles(HttpServletRequest request) {
-        String path = "E:\\epr";
-        String[] arr = {"zip","qwe"};
-        Map map = FileUtil.uploadFiles(request, path, arr, 5);
-
-        return map;
-    }
-
-
 
 
 

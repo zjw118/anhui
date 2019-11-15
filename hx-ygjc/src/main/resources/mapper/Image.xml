@@ -2,6 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gistone.mapper.ImageMapper">
 
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.Image">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="url" property="url" />
+        <result column="shpurl" property="shpurl" />
+        <result column="create_by" property="createBy" />
+        <result column="create_date" property="createDate" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_date" property="updateDate" />
+        <result column="remark" property="remark" />
+        <result column="del_flag" property="delFlag" />
+        <result column="shp" property="shp" />
+        <result column="contrast_red" property="contrastRed" />
+        <result column="sign" property="sign" />
+        <result column="evaluation" property="evaluation" />
+        <result column="audit_date" property="auditDate" />
+        <result column="country_border" property="countryBorder" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, url, shpurl, create_by, create_date, update_by, update_date, remark, del_flag, shp, contrast_red, sign, evaluation, audit_date, country_border
+    </sql>
     <select id="getImageById"  parameterType="java.lang.Integer" resultType="com.gistone.entity.Image">
         SELECT * from image
         WHERE id = #{id}
@@ -70,6 +94,10 @@
             active_type
     </select>
 
+    <select id="getImageConfig" resultType="com.gistone.entity.ImageConfig">
+        SELECT * from image_config LIMIT 1
+    </select>
+
     <update id="updateImage" parameterType="Object" >
 		update image
 		<set>
@@ -84,6 +112,9 @@
             </if>
             <if test="null!=auditDate">
                 audit_date=#{auditDate},
+            </if>
+            <if test="null!=auditPath">
+                audit_path=#{auditPath},
             </if>
         </set>
 		where id=#{id}

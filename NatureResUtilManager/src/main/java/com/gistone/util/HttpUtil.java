@@ -23,7 +23,7 @@ public class HttpUtil {
         try {
             URL realUrl = new URL(url);
             URLConnection connection = realUrl.openConnection();
-            connection.setConnectTimeout(5000);  //连接超时时间 5秒
+            connection.setConnectTimeout(10000);  //连接超时时间 5秒
             connection.setReadTimeout(180000);   //读取数据时间 180秒
             connection.setRequestProperty("accept", "*/*");
             connection.setRequestProperty("connection", "Keep-Alive");
@@ -38,7 +38,10 @@ public class HttpUtil {
             connection.connect();
             in = new BufferedReader(new InputStreamReader(connection.getInputStream(),"UTF-8"));
             String line;
-            while ((line = in.readLine()) != null) result += line;
+
+            while ((line = in.readLine()) != null) {
+                result += line;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -52,7 +55,11 @@ public class HttpUtil {
             return result;
         }
     }
-    
+
+
+
+
+
     /**
      * POST请求
      * @param url   请求地址
