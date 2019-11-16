@@ -56,9 +56,9 @@ public class RedLineController {
      * @param cbbLedger
      * @return
      */
-    @ApiOperation(value="生态保护红线边界数据列表(按照标识码BMS查询模糊查询按照调整时间查询起止时间还是传递strTime和endTime)",notes = "生态保护红线边界数据列表",response = St4ScsCbb.class)
+    @ApiOperation(value="各类保护地数据列表 (按照标识码BMS查询模糊查询按照调整时间查询起止时间还是传递strTime和endTime)",notes = "列表数据列表",response = St4ScsCbb.class)
     @RequestMapping(value="/listReserveData",method = RequestMethod.POST)
-    public ResultVO listReserveData(@RequestBody @ApiParam(name="生态保护红线边界数据列表", value="json格式", required=true)
+    public ResultVO listReserveData(@RequestBody @ApiParam(name="各类保护地数据 列表", value="json格式", required=true)
                                         Swagger<St4ScsCbb> cbbLedger) {
         St4ScsCbb cbb = cbbLedger.getData();
         if(!ObjectUtils.isNotNullAndEmpty(cbb.getPageNumber())||!ObjectUtils.isNotNullAndEmpty(cbb.getPageSize())){
