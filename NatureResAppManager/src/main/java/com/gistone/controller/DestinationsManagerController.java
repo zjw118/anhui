@@ -151,6 +151,9 @@ public class DestinationsManagerController {
             } else if (scscc.getCc003() == 1) { //核查(台账表)
                 St4ScsCk scsCk = new St4ScsCk();
                 St4ScsCk ck = destination.getSt4ScsCk();
+                if(!ObjectUtils.isNotNullAndEmpty(ck.getCk049())){
+                    return ResultCp.build(1005,"核查人不能为空" );
+                }
                 if (ck == null) {
                     return ResultCp.build(1001, "添加核查信息不能为空");
                 }
@@ -325,6 +328,9 @@ public class DestinationsManagerController {
                 } else if (scscc.getCc003() == 1) {//核查(台账表)
                     St4ScsCk scsCk = new St4ScsCk();
                     St4ScsCk ck = destination.getSt4ScsCk();
+                    if(!ObjectUtils.isNotNullAndEmpty(ck.getCk049())){
+                        return ResultCp.build(1005,"核查人不能为空" );
+                    }
                     if (ck == null) {
                         return ResultCp.build(1001, "添加核查信息不能为空");
                     }
