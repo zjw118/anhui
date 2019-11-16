@@ -43,6 +43,8 @@ public class ResultMsg {
 
     public static final String MSG_1017="密码错误";
 
+    public static final String MSG_1018="pageSize以及pageNumber均不能为空！";
+
 
 
 }
