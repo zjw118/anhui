@@ -4,9 +4,13 @@ package com.gistone.controller;
 import com.gistone.VO.ResultVO;
 import com.gistone.annotation.SysLog;
 import com.gistone.entity.ShpBatch;
+import com.gistone.pkname.Swagger;
 import com.gistone.service.ShpBatchService;
+import com.gistone.util.Result;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultVOUtil;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -31,6 +35,17 @@ public class ShpBatchController {
     @Autowired
     private ShpBatchService service;
 
+    /**
+     * 边界数据列表无分页
+     * @return
+     */
+    @ApiOperation(value = "边界数据列表无分页及详情接口", notes = "边界数据列表无分页接口", response = ResultVO.class)
+    @PostMapping("/listShp")
+    public ResultVO listShp(@RequestBody @ApiParam(name = "", value = "json格式", required = true) Swagger<ShpBatch> data) {
+        ShpBatch sb = data.getData();
+
+        return  service.listShp(sb);
+    }
     /**
      * @param params
      * @return com.gistone.VO.ResultVO

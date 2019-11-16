@@ -14,9 +14,12 @@ import java.util.List;
  * @since 2019-10-29
  */
 public interface ShpBatchMapper extends BaseMapper<ShpBatch> {
+
     List<ShpBatch> getNewList();
+
     ShpBatch getNewShpBatch();
 
+    List<ShpBatch> getBorderData(ShpBatch sb);
 
 
 }

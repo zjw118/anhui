@@ -1,14 +1,15 @@
 package com.gistone.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.St4ScsCba;
 import com.gistone.entity.St4ScsCbb;
-import com.gistone.entity.St4ScsCk;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.ISt4ScsCbaService;
 import com.gistone.service.ISt4ScsCbbService;
-import com.gistone.util.*;
+import com.gistone.util.ObjectUtils;
+import com.gistone.util.ResultEnum;
+import com.gistone.util.ResultMsg;
+import com.gistone.util.ResultVOUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
@@ -44,7 +43,7 @@ public class RedLineController {
      */
     @ApiOperation(value="生态保护红线边界数据列表(按照标识码BMS查询模糊查询按照调整时间查询起止时间还是传递strTime和endTime)",notes = "生态保护红线边界数据列表",response = St4ScsCba.class)
     @RequestMapping(value="/listRedLineLedger",method = RequestMethod.POST)
-    public ResultVO doSelfStage(@RequestBody @ApiParam(name="生态保护红线边界数据列表", value="json格式", required=true)
+    public ResultVO listRedLineLedger(@RequestBody @ApiParam(name="生态保护红线边界数据列表", value="json格式", required=true)
                                       Swagger<St4ScsCba> cbaLedger) {
         St4ScsCba cba = cbaLedger.getData();
         if(!ObjectUtils.isNotNullAndEmpty(cba.getPageNumber())||!ObjectUtils.isNotNullAndEmpty(cba.getPageSize())){

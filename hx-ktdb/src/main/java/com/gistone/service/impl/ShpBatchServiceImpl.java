@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.*;
 import com.gistone.exception.ImportException;
 import com.gistone.mapper.*;
@@ -69,7 +70,11 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
     private String ftpPassword;
     @Value("${ftp.path}")
     private String ftpPath;
-
+    @Override
+    public ResultVO listShp (ShpBatch sb){
+        List<ShpBatch> list = mapper.getBorderData(sb);
+        return ResultVOUtil.success(list);
+    }
 
     @Override
     public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName) {

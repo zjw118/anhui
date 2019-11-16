@@ -1,5 +1,6 @@
 package com.gistone.service;
 
+    import com.gistone.VO.ResultVO;
     import com.gistone.entity.ShpBatch;
     import com.baomidou.mybatisplus.extension.service.IService;
     import java.util.List;
@@ -39,5 +40,12 @@ package com.gistone.service;
     void importPreVectorMarker(String url,String remark);
 
     void importPreImageMarker(String url,String remark);
+
+    /**
+     * 边界数据列表无分页
+     * @param sb
+     * @return
+     */
+    ResultVO listShp (ShpBatch sb);
 
     }

@@ -176,6 +176,7 @@ public class DestinationsManagerController {
                     scsCk.setCn010(ck.getCn010());
                     scsCk.setCk086(date);
                     scsCk.setCk087(userId);
+                    scsCk.setCk088(1);//这里又提交的记录代表已经不是原始台账了所以要设置为1
                     scsCkList.add(scsCk);
                 }else {
                     return ResultCp.build(1001,"核查任务taskId"+ResultMsg.MSG_1001);
@@ -359,6 +360,7 @@ public class DestinationsManagerController {
                         scsCk.setCn010(ck.getCn010());
                         scsCk.setCk086(date);
                         scsCk.setCk087(userId);
+                        scsCk.setCk088(1);//这里又提交的记录代表已经不是原始台账了所以要设置为1
                         scsCkList.add(scsCk);
                     }else {
                         ResultCp.build(1001,"核查任务taskId"+ResultMsg.MSG_1001);

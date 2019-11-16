@@ -13,13 +13,32 @@
         <result column="update_date" property="updateDate" />
         <result column="remark" property="remark" />
         <result column="del_flag" property="delFlag" />
+        <result column="version" property="version" />
+        <result column="json_data" property="jsonData" />
+        <collection property="st4ScsCbcList" ofType="com.gistone.entity.St4ScsCbc">
+            <id column="id" property="id" />
+            <result column="orign_name" property="orignName" />
+            <result column="upload_url" property="uploadUrl" />
+            <result column="preview_url" property="previewUrl" />
+            <result column="pid" property="pid" />
+            <result column="add_user" property="addUser" />
+            <result column="add_time" property="addTime" />
+            <result column="is_del" property="isDel" />
+        </collection>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, shp_url, type, create_by, create_date, update_by, update_date, remark, del_flag
+        id, shp_url, type, create_by, create_date, update_by, update_date, remark, del_flag,version,json_data
     </sql>
-
+    <select id="getBorderData" resultMap="BaseResultMap"  parameterType="com.gistone.entity.ShpBatch">
+        select * from shp_batch sb
+        left join st4_scs_cbc cbc on sb.id = cbc.pid
+        where sb.del_flag = 1
+      <if test="id!=null and id !='' ">
+        and   sb.id=#{id}
+      </if>
+    </select>
     <!--分组查询最新的数据-->
     <select id="getNewList" resultType="com.gistone.entity.ShpBatch">
         SELECT
