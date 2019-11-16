@@ -62,6 +62,8 @@ public class Image extends Model<Image> {
     @TableId(value = "audit_path")
     private String auditPath;
 
+
+
     @TableField(exist = false)
     private List list;
     protected Serializable pkVal() {

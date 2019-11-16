@@ -30,6 +30,8 @@ public class ProjectAdmission implements Serializable {
      */
     private String name;
 
+    
+
     /**
      * 位置的形状
      */
@@ -105,6 +107,14 @@ public class ProjectAdmission implements Serializable {
      */
     @TableField(exist = false)
     private List<Object> coordinate;
+
+    private String type;
+
+    private String attribute;
+
+    private Date time;
+
+
 
 
 }

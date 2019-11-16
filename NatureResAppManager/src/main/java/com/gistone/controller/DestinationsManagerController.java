@@ -116,7 +116,8 @@ public class DestinationsManagerController {
             if (scscc.getCc012() == null || "".equals(scscc.getCc012())) {
                 return ResultCp.build(1001, "航点名称不能为空");
             }
-            String adminRegionName = LonLatToAddress.getAdd(scscc.getCc004(),scscc.getCc005());
+            //访问不了外网所以无法获取行政区注释掉
+            String adminRegionName ="";// LonLatToAddress.getAdd(scscc.getCc004(),scscc.getCc005());
             if(ObjectUtils.isNotNullAndEmpty(adminRegionName)){
                 scscc.setSd001(sdMap.get(adminRegionName));
             }

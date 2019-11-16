@@ -178,6 +178,88 @@
         </if>
     </select>
 
+    <!--查询行政区划下预设的界桩数量-->
+    <select id="getPreMarkerCount" resultType="java.util.Map">
+        SELECT
+            COM_NAME AS NAME,
+            IFNULL(SUM(count), 0) AS makerSum
+        FROM
+            (
+                SELECT
+                    *
+                FROM
+                    (
+                        SELECT
+                            COUNT(*) AS count,
+                            `code` AS `code`
+                        FROM
+                            lm_marker_mobile
+                        WHERE
+                            type = 0
+                        AND del_flag = 1
+                        GROUP BY
+                            `code`
+                    ) t1
+                INNER JOIN (
+                    SELECT
+                        COM_CODE,
+                        COM_F_CODE
+                    FROM
+                        sys_company
+                ) t2 ON t1. CODE = t2.COM_CODE
+            ) s1
+        RIGHT JOIN (
+            SELECT
+                COM_NAME,
+                COM_CODE
+            FROM
+                sys_company
+            WHERE
+                COM_LEVEL = 2
+        ) s2 ON s1.COM_F_CODE = s2.COM_CODE
+        GROUP BY
+            s2.COM_CODE
+    </select>
+    <!--查询行政区划下的红线数量-->
+    <select id="getRedlineCounr" resultType="java.util.Map">
+        SELECT
+            COM_NAME AS NAME,
+            IFNULL(SUM(b), 0) AS redlineSum
+        FROM
+            (
+                SELECT
+                    *
+                FROM
+                    (
+                        SELECT
+                            srld_code,
+                            COUNT(1) AS b
+                        FROM
+                            data_redline_register
+                        GROUP BY
+                            srld_code
+                    ) t1
+                INNER JOIN (
+                    SELECT
+                        COM_CODE,
+                        COM_F_CODE
+                    FROM
+                        sys_company
+                ) t2 ON t1.srld_code = t2.COM_CODE
+            ) s1
+        RIGHT JOIN (
+            SELECT
+                COM_NAME,
+                COM_CODE
+            FROM
+                sys_company
+            WHERE
+                COM_LEVEL = 2
+        ) s2 ON s1.COM_F_CODE = s2.COM_CODE
+        GROUP BY
+            s2.COM_CODE
+    </select>
+
     <!--查询面积-->
     <select id="selectAreas" resultType="java.util.Map">
        <!-- <if test="level==1 ">
@@ -377,7 +459,47 @@
           LEFT (b.survey_time, 10)
     </select>
 
-
+    <select id="getPreBoardCount" resultType="java.util.Map">
+          SELECT
+            COM_NAME AS NAME,
+            IFNULL(SUM(count), 0) AS boardSum
+        FROM
+            (
+                SELECT
+                    *
+                FROM
+                    (
+                        SELECT
+                            COUNT(*) AS count,
+                            `code` AS `code`
+                        FROM
+                            lm_board
+                        WHERE
+                            type = 0
+                        AND del_flag = 1
+                        GROUP BY
+                            `code`
+                    ) t1
+                INNER JOIN (
+                    SELECT
+                        COM_CODE,
+                        COM_F_CODE
+                    FROM
+                        sys_company
+                ) t2 ON t1. CODE = t2.COM_CODE
+            ) s1
+        RIGHT JOIN (
+            SELECT
+                COM_NAME,
+                COM_CODE
+            FROM
+                sys_company
+            WHERE
+                COM_LEVEL = 2
+        ) s2 ON s1.COM_F_CODE = s2.COM_CODE
+        GROUP BY
+            s2.COM_CODE
+    </select>
 
 
     <!--各地区界桩统计-->
@@ -561,6 +683,89 @@
 
         </if>
 
+    </select>
+
+    <select id="getRedlineCount" resultType="java.util.Map">
+        SELECT
+            COM_NAME AS NAME,
+            IFNULL(SUM(count), 0) AS redlineSum
+        FROM
+            (
+                SELECT
+                    *
+                FROM
+                    (
+                        SELECT
+                            COUNT(*) AS count,
+                            `srld_code` AS `code`
+                        FROM
+                            data_redline_register
+
+
+                        GROUP BY
+                            `srld_code`
+                    ) t1
+                INNER JOIN (
+                    SELECT
+                        COM_CODE,
+                        COM_F_CODE
+                    FROM
+                        sys_company
+                ) t2 ON t1. CODE = t2.COM_CODE
+            ) s1
+        RIGHT JOIN (
+            SELECT
+                COM_NAME,
+                COM_CODE
+            FROM
+                sys_company
+            WHERE
+                COM_LEVEL = 2
+        ) s2 ON s1.COM_F_CODE = s2.COM_CODE
+        GROUP BY
+            s2.COM_CODE
+    </select>
+
+    <select id="getPointCount" resultType="java.util.Map">
+        SELECT
+            COM_NAME AS NAME,
+            IFNULL(SUM(count), 0) AS pointSum
+        FROM
+            (
+                SELECT
+                    *
+                FROM
+                    (
+                        SELECT
+                            COUNT(a.lp_id) AS count,
+                            b.srld_code AS code
+                        FROM
+                            lm_point a
+												inner JOIN data_redline_register b ON a.lp_srld_id = b.srld_id
+
+
+                        GROUP BY
+                            b.srld_code
+                    ) t1
+                INNER JOIN (
+                    SELECT
+                        COM_CODE,
+                        COM_F_CODE
+                    FROM
+                        sys_company
+                ) t2 ON t1. CODE = t2.COM_CODE
+            ) s1
+        RIGHT JOIN (
+            SELECT
+                COM_NAME,
+                COM_CODE
+            FROM
+                sys_company
+            WHERE
+                COM_LEVEL = 2
+        ) s2 ON s1.COM_F_CODE = s2.COM_CODE
+        GROUP BY
+            s2.COM_CODE
     </select>
 
 </mapper>

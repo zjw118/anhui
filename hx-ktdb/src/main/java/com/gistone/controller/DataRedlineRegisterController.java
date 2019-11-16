@@ -53,6 +53,14 @@ public class DataRedlineRegisterController {
         return Result.ok(list);
     }
 
+    @PostMapping("/allList")
+    public ResultVO allList(){
+        List<DataRedlineRegister> list = dataRedlineRegisterService.list(null);
+        return ResultVOUtil.success(list);
+    }
+
+
+
     /**
      * @param paramsMap
      * @return ResultVO
@@ -179,6 +187,111 @@ public class DataRedlineRegisterController {
 
         }
 
+    }
+
+    /**
+     * @param paramsMap
+     * @return com.gistone.VO.ResultVO
+     * @description:编辑预设拐点数据
+     * @author zf1017@foxmail.com
+     * @motto: Talk is cheap,show me the code
+     * @date 2019/11/14 0014 19:33
+     */
+    @PostMapping("/updateRedline")
+    public ResultVO updateRedline(@RequestBody Map<String, Object> paramsMap) {
+
+        //请求参数格式校验
+        Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
+        if (dataParam == null) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "请求数据data不能为空！");
+        }
+
+        Integer id = (Integer) dataParam.get("id");
+        if (id == null || id < 0) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+        }
+        DataRedlineRegister dataRedlineRegister = new DataRedlineRegister();
+        dataRedlineRegister.setSrldId(id);
+        String srldNum = (String) dataParam.get("srldNum");
+        if (StringUtils.isNotBlank(srldNum)) {
+            dataRedlineRegister.setSrldNumber(srldNum);
+        }
+
+        String type = (String) dataParam.get("srldType");
+        if (StringUtils.isNotBlank(type)) {
+            dataRedlineRegister.setSrldType(type);
+        }
+
+        String target = (String) dataParam.get("target");
+        if (StringUtils.isNotBlank(target)) {
+            dataRedlineRegister.setSrldTarget(target);
+        }
+
+        String area = (String) dataParam.get("area");
+
+        if (StringUtils.isNotBlank(area)) {
+            dataRedlineRegister.setSrldArea(area);
+        }
+        dataRedlineRegisterService.updateById(dataRedlineRegister);
+
+        return ResultVOUtil.success();
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public ResultVO update(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        DataRedlineRegister dataRedline = new DataRedlineRegister();
+
+
+        Integer id = (Integer) params.get("id");
+        if(id==null){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"红线id不能为空");
+        }
+        dataRedline.setSrldId(id);
+        String srldNumber = (String) params.get("srldBumber");
+        if(StringUtils.isNotBlank(srldNumber)){
+            dataRedline.setSrldNumber(srldNumber);
+        }
+        String type = (String) params.get("type");
+        if(StringUtils.isNotBlank(type)){
+            dataRedline.setSrldType(type);
+        }
+        String target = (String) params.get("target");
+        if(StringUtils.isNotBlank(target)){
+            dataRedline.setSrldTarget(target);
+        }
+        String area = (String) params.get("area");
+        if(StringUtils.isNotBlank(area)){
+            dataRedline.setSrldArea(area);
+        }
+        String  name = (String) params.get("name");
+        if(StringUtils.isNotBlank(name)){
+            dataRedline.setSrldName(name);
+        }
+        String plant = (String) params.get("plant");
+        if(StringUtils.isNotBlank(plant)){
+            dataRedline.setSrldPlantType(plant);
+        }
+        String active = (String) params.get("active");
+        if(StringUtils.isNotBlank(active)){
+            dataRedline.setSrldActive(active);
+        }
+        String problem = (String) params.get("problem");
+        if(StringUtils.isNotBlank(problem)){
+            dataRedline.setSrldProblem(problem);
+        }
+        String control = (String) params.get("control");
+        if(StringUtils.isNotBlank(control)){
+            dataRedline.setSrldControl(control);
+        }
+
+//判断更新人加人是否为空
+        dataRedlineRegisterService.updateById(dataRedline);
+        return ResultVOUtil.success();
     }
 
 

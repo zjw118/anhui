@@ -132,6 +132,13 @@ public class BottomChartController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "类型不能为空");
         }
         bottomChart.setType(type);
+
+        Integer typeId = (Integer) params.get("typeId");
+        if(typeId==null){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "底图类型id不能为空");
+        }
+
+        bottomChart.setTypeId(typeId);
         //判断添加人是否为空
         service.insert(bottomChart);
         return ResultVOUtil.success();
