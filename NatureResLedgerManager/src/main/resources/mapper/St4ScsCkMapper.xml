@@ -1831,6 +1831,7 @@
 
     <select id="selectSt4ScsCk" resultMap="BaseResultMap" resultType="com.gistone.entity.St4ScsCk">
         SELECT
+        com.PK_ID,com.COM_NAME,
         ck.*,cn.CN001,sa.SA001,cl.CL001,cl.CL002,
         sa.SA019,
         IFNULL(ck.CK010,'') ck010,
@@ -1869,7 +1870,7 @@
 
         LEFT JOIN st4_scs_cd cd
         ON cd.CD001 = ck.CD004
-
+        LEFT JOIN sys_company com on com.PK_ID = cd.sd001
         LEFT JOIN rlhd_group co ON cd.group_id = co.id
 
         LEFT JOIN st4_po_cl_co clco ON clco.co001=co.id
@@ -1892,6 +1893,9 @@
         <if test="taskYear!=null and taskYear!=''">
             and cl.CL010 =#{taskYear}
         </if>
+        <!--<if test="sd001!=null and sd001!=''">-->
+            <!--and cd.sd001 =#{sd001}-->
+        <!--</if>-->
         <!--这里时间传递进来时间之后传递大于2019-08-25 00:00:00和2019-08-20 00:00:00前者记录居然不包含后者!-->
         <if test="strTime!=null and strTime!='' ">
             and ck.CK048 <![CDATA[ >= ]]> #{strTime}
@@ -1900,17 +1904,16 @@
             and ck.CK048 <![CDATA[ <= ]]> #{endTime}
         </if>
         <if test="groupByName==null or groupByName=='' ">
-            GROUP BY sa.SA001
+            and cn.cn001 is not null  GROUP BY ck.CK010
         </if>
-
         <if test="groupByName=='ck010' ">
           and cn.cn001 is not null  GROUP BY ck.CK010
         </if>
-        <if test="groupByName=='cn010'">
-            GROUP BY cn.CN010
+        <if test="groupByName=='sd001'">
+            GROUP BY com.PK_ID
         </if>
-        <if test="groupByName=='ck012' ">
-            GROUP BY ck.CK012
+        <if test="groupByName=='ck067'">
+            GROUP BY ck.ck067
         </if>
     </select>
 
