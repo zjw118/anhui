@@ -55,7 +55,7 @@ public class FileUploadController {
     private Map<String, Object> upload(MultipartFile[] files,String phoType)  {
         Map<String, Object> returnMap = new HashMap<>();
         try {
-            if (files!=null) {
+            if (files!=null&&files.length>0) {
                 Map<String, Object> picMap = fileUpAndDownService.uploadPicture(files,phoType);
                 if (ResultMsg.MSG_1000.equals(picMap.get("result"))) {
                     return picMap;
