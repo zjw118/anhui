@@ -15,8 +15,8 @@ public class ImageConfig {
         private Integer orders;
 
         //表外字段
+        @TableField(exist = false)
         private Double num;
-
         @ApiModelProperty(value = "子菜单")
         @TableField(exist = false)
         private List<ImageConfig> children;

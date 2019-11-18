@@ -447,7 +447,7 @@ public class ImageController {
     @RequestMapping(value = "/getConfig", method = RequestMethod.POST)
     public ResultVO getConfig(@RequestBody Map<String, Object> paramsMap) {
         try {
-            return ResultVOUtil.success(imageConfigMapper.getImageConfig3());
+            return ResultVOUtil.success(imageConfigMapper.getImageConfigAll());
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");

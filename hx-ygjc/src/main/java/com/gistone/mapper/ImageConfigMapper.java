@@ -8,6 +8,10 @@ import java.util.List;
 public interface ImageConfigMapper{
     //查询第三层
     List<ImageConfig> getImageConfig3();
+    //查询所有层
+    List<ImageConfig> getImageConfigAll();
+
+
     //查询所有
     List<ImageConfig> getImageConfig();
     //修改
