@@ -376,7 +376,7 @@ public class TotalController {
      */
     @PostMapping("/getRedlineCount")
     public ResultVO getRedlineCount() {
-        Map<String, Object> result = totalService.getRedlineCount();
+        List<Map<String,Object>> result = totalService.getRedlineCount();
         return ResultVOUtil.success(result);
     }
 
@@ -390,7 +390,7 @@ public class TotalController {
      */
     @PostMapping("/getPointCount")
     public ResultVO getPointCount() {
-        Map<String, Object> result = totalService.getPointCount();
+        List<Map<String, Object>> result = totalService.getPointCount();
         return ResultVOUtil.success(result);
     }
 

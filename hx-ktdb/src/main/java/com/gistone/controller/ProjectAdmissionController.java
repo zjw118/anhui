@@ -53,6 +53,9 @@ public class ProjectAdmissionController {
     static BASE64Decoder decoder = new sun.misc.BASE64Decoder();
 
     @Autowired
+    private ConfigUtils configUtils;
+
+    @Autowired
     private IProjectAdmissionService projectAdmissionService;
 
     @Autowired
@@ -87,7 +90,7 @@ public class ProjectAdmissionController {
 
         String type = (String) dataParam.get("type");
         String attribute = (String) dataParam.get("attribute");
-        String time = (String)dataParam.get("time");
+        String time = (String) dataParam.get("time");
 
 
         if (pageNum == null) {
@@ -98,7 +101,7 @@ public class ProjectAdmissionController {
             pageSize = 10;
         }
 
-        Map<String, Object> result = projectAdmissionService.getProjectList(pageNum, pageSize, projectName, shape, startTime, endTime,type,attribute,time);
+        Map<String, Object> result = projectAdmissionService.getProjectList(pageNum, pageSize, projectName, shape, startTime, endTime, type, attribute, time);
 
         return ResultVOUtil.success(result);
     }
@@ -186,19 +189,19 @@ public class ProjectAdmissionController {
         params.put("name", projectName);
 
         String type = (String) dataParam.get("type");
-        if(StringUtils.isBlank(type)){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"类型不能为空");
+        if (StringUtils.isBlank(type)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "类型不能为空");
         }
         projectAdmission.setType(type);
 
         String attribute = (String) dataParam.get("attribute");
-        if(StringUtils.isBlank(attribute)){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"属性不能为空");
+        if (StringUtils.isBlank(attribute)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "属性不能为空");
         }
         projectAdmission.setAttribute(attribute);
         String time = (String) dataParam.get("time");
-        if(StringUtils.isBlank(time)){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"时间不能为空");
+        if (StringUtils.isBlank(time)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "时间不能为空");
         }
         DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
         Date date2 = null;
@@ -247,14 +250,14 @@ public class ProjectAdmissionController {
         params.put("bufferRange", bufferRange);
 
         String images = (String) dataParam.get("image");
-        if(StringUtils.isBlank(images)){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"缩略图不能为空");
+        if (StringUtils.isBlank(images)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "缩略图不能为空");
         }
 
         String proportion = (String) dataParam.get("proportion");
-         if(StringUtils.isBlank(proportion)){
-             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"图片比例不能为空");
-         }
+        if (StringUtils.isBlank(proportion)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "图片比例不能为空");
+        }
         int i = 0;
         if (images.contains(",")) {
             i = images.indexOf(",");
@@ -272,7 +275,7 @@ public class ProjectAdmissionController {
         }
 
         ImageEntity image = new ImageEntity();
-        double d = Double.parseDouble(proportion)*500;
+        double d = Double.parseDouble(proportion) * 500;
         int height = (int) d;
         image.setHeight(height);
         image.setWidth(500);
@@ -436,9 +439,31 @@ public class ProjectAdmissionController {
         ExcelUtil.exportExcel(list, "坐标", "坐标", CoordinateVO.class, "坐标模板.xls", response);
     }
 
-//    @RequestMapping("/exportExcel")
+    /**
+     * @param response
+     * @return com.gistone.VO.ResultVO
+     * @description:导出项目准入任务列表
+     * @author zf1017@foxmail.com
+     * @motto: Talk is cheap,show me the code
+     * @date 2019/11/18 0018 14:40
+     */
+    @RequestMapping("/exportExcel")
+    public ResultVO exportAllExcel(HttpServletResponse response) {
+        List<ProjectAdmission> list = projectAdmissionService.list();
 
- 
+        if (list != null && list.size() > 0) {
+            for (ProjectAdmission projectAdmission : list) {
+                projectAdmission.setCreateTime(DateUtil.DATEtoString(projectAdmission.getCreateDate(), "yyyy-MM-dd"));
+                projectAdmission.setTimeString(DateUtil.DATEtoString(projectAdmission.getTime(), "yyyy-MM-dd"));
+            }
+        }
+        String filepath = ExcelUtil.toXls("项目准入任务列表", list, configUtils.getExcel_PATH(), ProjectAdmission.class, response);
+        Map map1 = new HashMap();
+        map1.put("excelPath", filepath.substring(2));
+
+        return ResultVOUtil.success(map1);
+    }
+
 
 }
 

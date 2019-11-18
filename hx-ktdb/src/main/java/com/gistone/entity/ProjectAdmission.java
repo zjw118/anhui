@@ -1,5 +1,6 @@
 package com.gistone.entity;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -28,6 +29,7 @@ public class ProjectAdmission implements Serializable {
     /**
      * 项目名称
      */
+    @Excel(name = "项目名称",height = 11, width = 15)
     private String name;
 
     
@@ -35,30 +37,36 @@ public class ProjectAdmission implements Serializable {
     /**
      * 位置的形状
      */
+    @Excel(name = "位置的形状",height = 11, width = 15)
     private String shape;
 
     /**
      * 缓冲区半径
      */
+    @Excel(name = "缓冲区半径",height = 11, width = 15)
     private Integer radius;
 
     /**
-     * 缓冲区半径
+     * 缓冲区面积
      */
+    @Excel(name = "缓冲区面积",height = 11, width = 15)
     private Double bufferRange;
 
     /**
      * 项目坐标shape文件存储路径
      */
+//    @Excel(name = "shp路径",height = 11, width = 15)
     private String coordinateUrl;
     /**
      * 项目描述
      */
+    @Excel(name = "项目描述",height = 11, width = 15)
     private String description;
 
     /**
      * 分析结果
      */
+    @Excel(name = "分析结果",height = 11, width = 15)
     private String result;
 
     /**
@@ -69,7 +77,12 @@ public class ProjectAdmission implements Serializable {
     /**
      * 创建日期
      */
+
     private Date createDate;
+
+    @TableField(exist = false)
+    @Excel(name = "创建日期",height = 11, width = 15)
+    private String createTime;
 
     /**
      * 修改人id
@@ -107,12 +120,15 @@ public class ProjectAdmission implements Serializable {
      */
     @TableField(exist = false)
     private List<Object> coordinate;
-
+    @Excel(name = "项目类型",height = 11, width = 15)
     private String type;
-
+    @Excel(name = "项目属性",height = 11, width = 15)
     private String attribute;
 
     private Date time;
+    @TableField(exist = false)
+    @Excel(name = "项目时间",height = 11, width = 15)
+    private String timeString;
 
 
 

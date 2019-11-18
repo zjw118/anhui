@@ -162,16 +162,14 @@ public class TotalServiceImpl implements TotalService {
     }
 
     @Override
-    public Map<String, Object> getRedlineCount() {
-        Map<String, Object> result = new HashMap<>();
+    public List<Map<String,Object>> getRedlineCount() {
         List<Map<String,Object>>  redlineCount = totalMapper.getRedlineCount();
-        return result;
+        return redlineCount;
     }
 
     @Override
-    public Map<String, Object> getPointCount() {
-        Map<String, Object> result = new HashMap<>();
+    public List<Map<String,Object>> getPointCount() {
         List<Map<String,Object>>  redlineCount = totalMapper.getPointCount();
-        return result;
+        return redlineCount;
     }
 }

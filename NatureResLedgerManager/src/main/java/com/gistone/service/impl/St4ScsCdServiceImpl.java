@@ -51,6 +51,8 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     private St4SysSaMapper st4SysSaMapper;
     @Autowired
     private ImageMapper imageMapper;
+    @Autowired
+    private ImageConfigMapper imageConfigMapper;
 
     @Autowired
     private ConfigUtils configUtils;
@@ -446,7 +448,10 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 JSONObject attributes = JSONObject.fromObject(jo.get("attributes"));
                 JSONObject jSONObject1 = new JSONObject();
 
-                jSONObject1.put("type",attributes.get("一级类"));
+                //匹配类型
+                ImageConfig ic = imageConfigMapper.like(attributes.get("一级类") + "");
+                if(null!=ic)
+                    jSONObject1.put("type",ic.getId());
                 jSONObject1.put("region",attributes.get("功能分"));
                 jSONObject1.put("position",attributes.get("位置"));
                 jSONObject1.put("area",attributes.get("面积")+"");
