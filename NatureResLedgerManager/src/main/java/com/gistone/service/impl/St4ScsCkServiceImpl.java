@@ -1203,7 +1203,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                         cd.setReserveName(ck.getSt4SysSg()==null?"":ck.getSt4SysSg().getSg008());
                         cd.setAdminRegionName(ck.getSysCompany()==null?"":ck.getSysCompany().getComName());
                         newDataJson.put("point",BeanUtils.describe(cd));
-                        newDataJson.put("tree",icListtree );
+                       // newDataJson.put("tree",icListtree );
 
                         jarr.add(newDataJson);
                     }
@@ -1377,15 +1377,29 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
 
         if(checkLedgerMapper.updateById(ck)>0){
             St4ScsCk ckk = checkLedgerMapper.getSendMsgByCk001(ck);
-            String pushMsg1 = "您提交的在“"+ckk.getSt4ScsCl().getCl002()+"”任务的下“"+ckk.getSt4ScsCd().getActiveName()+"”斑块的“"+ckk.getRlhdGroup().getName()+"”台账信息已通过审核，请知晓";
-            String pushMsg2 ="您提交的在“"+ckk.getSt4ScsCl().getCl002()+"”任务的下“"
-                    +ckk.getSt4ScsCd().getActiveName()+"”斑块的“"+ckk.getRlhdGroup().getName()+"”台账信息由于“"+ck.getCk070()+"”被拒绝，请确认";
-            System.out.println("pushMsg1--------"+pushMsg1);
-            System.out.println("pushMsg2-----------"+pushMsg2);
+
             if(ck.getCk067()==2){
-                JPushUtil.jiGuangPush(ckk.getSt4SysSa().getSa012(), pushMsg1,"1");
+                try{
+                    String pushMsg ="您提交的在“"+ckk.getSt4ScsCl().getCl002()+"”任务的下“"
+                            +ckk.getSt4ScsCd().getActiveName()+"”斑块的“"+ckk.getRlhdGroup().getName()+"”台账信息由于“"+ck.getCk070()+"”已通过审核，请确认";
+                    System.out.println("pushMsg-----------"+pushMsg);
+                    JPushUtil.jiGuangPush(ckk.getSt4SysSa().getSa012(), pushMsg,"1");
+                }catch (Exception e){
+                    e.printStackTrace();
+                    return ResultVOUtil.success();
+                }
+                return ResultVOUtil.success();
             }else if(ck.getCk067()==1){
-                JPushUtil.jiGuangPush(ckk.getSt4SysSa().getSa012(), pushMsg2,"1");
+                try{
+                    String pushMsg ="您提交的在“"+ckk.getSt4ScsCl().getCl002()+"”任务的下“"
+                            +ckk.getSt4ScsCd().getActiveName()+"”斑块的“"+ckk.getRlhdGroup().getName()+"”台账信息由于“"+ck.getCk070()+"”被拒绝，请确认";
+                    System.out.println("pushMsg2-----------"+pushMsg);
+                    JPushUtil.jiGuangPush(ckk.getSt4SysSa().getSa012(), pushMsg,"1");
+                }catch (Exception e){
+                    e.printStackTrace();
+                    return ResultVOUtil.success();
+                }
+                return ResultVOUtil.success();
             }
             return ResultVOUtil.success();
         }

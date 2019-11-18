@@ -36,7 +36,7 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
 
 
     @Override
-    public ResultVO givePoint(List<Integer> uids, Integer taskId) {
+    public ResultVO givePoint(List<Integer> uids, List<Integer> pointList) {
         /**
          * 这里的业务逻辑是这样的:
          * 1.拿到传递过来的任务id去找到对应的台账(可能是多个)
@@ -48,12 +48,12 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
          *
          */
 
-        List<St4ScsCd> cds= iterpretationMapper.getSpotByTaskId(taskId);
-        if(cds==null||cds.size()<1){
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "由于此任务下的台账无绑定的斑点信息,下发失败！");
-        }
-
-        List<Integer> pointList = cds.stream().map(St4ScsCd::getCd001).collect(Collectors.toList());
+//        List<St4ScsCd> cds= iterpretationMapper.getSpotByTaskId(taskId);
+//        if(cds==null||cds.size()<1){
+//            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "由于此任务下的台账无绑定的斑点信息,下发失败！");
+//        }
+//
+//        List<Integer> pointList = cds.stream().map(St4ScsCd::getCd001).collect(Collectors.toList());
         List<St4PoCdSa> existsaList = null;
         St4PoCdSa saSg=null;
         boolean flag=true;
