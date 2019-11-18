@@ -293,6 +293,9 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private Integer todayNum;
 
+    @ApiModelProperty(name="sendStatus",value="下发状态",dataType = "{}",required = false,example="")
+    @TableField(exist = false)
+    private Integer sendStatus;
 
 
 

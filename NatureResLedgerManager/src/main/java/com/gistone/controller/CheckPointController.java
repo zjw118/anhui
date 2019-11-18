@@ -196,16 +196,16 @@ public class CheckPointController {
          */
         SharePoint sp = spSwagger.getData();
 
-        Integer taskID = sp.getTaskId();
+        List<Integer> pointList = sp.getPointIdList();
         List<Integer> uids = sp.getUidList();
-        if(!ObjectUtils.isNotNullAndEmpty(taskID)){
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "任务不能为空！");
+        if(!ObjectUtils.isNotNullAndEmpty(pointList)){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "问题点不能为空！");
         }
         if(uids==null||uids.size()<1){
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "下发人员不能为空！");
         }
 
-        return checkUserRelavantService.givePoint(uids,taskID);
+        return checkUserRelavantService.givePoint(uids,pointList);
 
     }
 

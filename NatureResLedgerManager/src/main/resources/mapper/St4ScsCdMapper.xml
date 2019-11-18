@@ -34,6 +34,7 @@
         <result column="uncheckNum" property="uncheckNum" />
         <result column="checkedNum" property="checkedNum" />
         <result column="todayNum" property="todayNum" />
+        <result column="sendStatus" property="sendStatus" />
         <association property="image" javaType="com.gistone.entity.Image">
             <id column="id" property="id" />
             <result column="name" property="name" />
@@ -308,7 +309,8 @@
 
         select * from (
             select
-           cd.*,IFNULL(ck088,0) AS ck088
+           cd.*,IFNULL(ck088,0) AS ck088,
+          IFNULL(cdsa.CD001,0) AS sendStatus
             FROM st4_scs_cd cd LEFT JOIN
             (
             SELECT *  FROM (
@@ -317,6 +319,7 @@
             )
             ck
             ON ck.cd004 = cd.cd001
+            left join st4_po_cd_sa cdsa on cdsa.cd001=cd.cd001
             LEFT JOIN rlhd_group co ON co.id = cd.group_id
             LEFT JOIN st4_po_cl_co clco ON clco.co001=co.id
             LEFT JOIN st4_scs_cl cl

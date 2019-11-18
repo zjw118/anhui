@@ -49,7 +49,9 @@ public class RlhdGroupController {
                                             Swagger<St4ScsCd> cdLedger) {
 
         St4ScsCd cd = cdLedger.getData();
-
+        if(!ObjectUtils.isNotNullAndEmpty(cd.getCl001())){
+            return  ResultVOUtil.error("1222", "任务ID不能为空!");
+        }
         if(!ObjectUtils.isNotNullAndEmpty(cd.getPageNumber())||!ObjectUtils.isNotNullAndEmpty(cd.getPageSize())){
             return  ResultVOUtil.error("1222", ResultMsg.MSG_1018);
         }

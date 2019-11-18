@@ -18,10 +18,10 @@ public interface ISt4PoCdSaService extends IService<St4PoCdSa> {
     /**
      * 下发任务
      * @param uids
-     * @param taskId
+     * @param pointList
      * @return
      */
-    ResultVO givePoint(List<Integer> uids, Integer taskId);
+    ResultVO givePoint(List<Integer> uids, List<Integer> pointList);
 
 
 
