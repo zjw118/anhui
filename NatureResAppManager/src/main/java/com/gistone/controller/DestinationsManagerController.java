@@ -116,7 +116,8 @@ public class DestinationsManagerController {
             if (scscc.getCc012() == null || "".equals(scscc.getCc012())) {
                 return ResultCp.build(1001, "航点名称不能为空");
             }
-            String adminRegionName = LonLatToAddress.getAdd(scscc.getCc004(),scscc.getCc005());
+            //访问不了外网所以无法获取行政区注释掉
+            String adminRegionName ="";// LonLatToAddress.getAdd(scscc.getCc004(),scscc.getCc005());
             if(ObjectUtils.isNotNullAndEmpty(adminRegionName)){
                 scscc.setSd001(sdMap.get(adminRegionName));
             }
@@ -150,6 +151,9 @@ public class DestinationsManagerController {
             } else if (scscc.getCc003() == 1) { //核查(台账表)
                 St4ScsCk scsCk = new St4ScsCk();
                 St4ScsCk ck = destination.getSt4ScsCk();
+                if(!ObjectUtils.isNotNullAndEmpty(ck.getCk049())){
+                    return ResultCp.build(1005,"核查人不能为空" );
+                }
                 if (ck == null) {
                     return ResultCp.build(1001, "添加核查信息不能为空");
                 }
@@ -175,6 +179,7 @@ public class DestinationsManagerController {
                     scsCk.setCn010(ck.getCn010());
                     scsCk.setCk086(date);
                     scsCk.setCk087(userId);
+                    scsCk.setCk088(1);//这里又提交的记录代表已经不是原始台账了所以要设置为1
                     scsCkList.add(scsCk);
                 }else {
                     return ResultCp.build(1001,"核查任务taskId"+ResultMsg.MSG_1001);
@@ -323,6 +328,9 @@ public class DestinationsManagerController {
                 } else if (scscc.getCc003() == 1) {//核查(台账表)
                     St4ScsCk scsCk = new St4ScsCk();
                     St4ScsCk ck = destination.getSt4ScsCk();
+                    if(!ObjectUtils.isNotNullAndEmpty(ck.getCk049())){
+                        return ResultCp.build(1005,"核查人不能为空" );
+                    }
                     if (ck == null) {
                         return ResultCp.build(1001, "添加核查信息不能为空");
                     }
@@ -358,6 +366,7 @@ public class DestinationsManagerController {
                         scsCk.setCn010(ck.getCn010());
                         scsCk.setCk086(date);
                         scsCk.setCk087(userId);
+                        scsCk.setCk088(1);//这里又提交的记录代表已经不是原始台账了所以要设置为1
                         scsCkList.add(scsCk);
                     }else {
                         ResultCp.build(1001,"核查任务taskId"+ResultMsg.MSG_1001);

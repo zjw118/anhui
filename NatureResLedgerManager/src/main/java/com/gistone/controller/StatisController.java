@@ -129,7 +129,7 @@ public class StatisController {
 	 * @param response
 	 * @return
 	 */
-	@ApiOperation(value = "(安徽用)台账记录统计接口年份查询传递参数名称taskYear(年份)返回的参数是 sd001(行政区)  ck010(活动设施名称) ck012(活动设施现状) cn010(整改进展)", notes = "台账记录统计接口", response = Result.class)
+	@ApiOperation(value = "(安徽用)台账记录统计接口年份查询传递参数名称taskYear(年份)返回的参数是 sd001(行政区)  ck010(活动设施名称) ck067(审核状态0未审核1已审核2审核不通过)", notes = "台账记录统计接口", response = Result.class)
 	@PostMapping("/listLedger")
 	@PassToken
 	public ResultVO listLedger(@RequestBody Swagger<St4ScsCk> requestData, HttpServletRequest request, HttpServletResponse response){

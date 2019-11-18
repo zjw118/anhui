@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.St4ScsCbaMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.St4ScsCba">
+        <id column="ID" property="id" />
+        <result column="TJSJ" property="tjsj" />
+        <result column="BMS" property="bms" />
+        <result column="Province" property="Province" />
+        <result column="City" property="City" />
+        <result column="DCounty" property="DCounty" />
+        <result column="XZQHDM" property="xzqhdm" />
+        <result column="YSDM" property="ysdm" />
+        <result column="ZDSTXTFWGN" property="zdstxtfwgn" />
+        <result column="HXLX" property="hxlx" />
+        <result column="LXBM" property="lxbm" />
+        <result column="BHDMC" property="bhdmc" />
+        <result column="BHDJB" property="bhdjb" />
+        <result column="HXMM" property="hxmm" />
+        <result column="HXBM" property="hxbm" />
+        <result column="STXTYZBLX" property="stxtyzblx" />
+        <result column="ZYRWHDLX" property="zyrwhdlx" />
+        <result column="STHJWT" property="sthjwt" />
+        <result column="GKCS" property="gkcs" />
+        <result column="TBBM" property="tbbm" />
+        <result column="TBMJ" property="tbmj" />
+        <result column="BZ" property="bz" />
+        <result column="DLFW" property="dlfw" />
+        <result column="HXJTWZ" property="hxjtwz" />
+        <result column="SJMS" property="sjms" />
+        <result column="GNFQ" property="gnfq" />
+        <result column="FD" property="fd" />
+        <result column="YJLY" property="yjly" />
+        <result column="FLMC" property="flmc" />
+        <result column="BHDX" property="bhdx" />
+        <result column="BHMB" property="bhmb" />
+        <result column="GKYQ" property="gkyq" />
+        <result column="BGSJ" property="bgsj" />
+        <result column="XZ" property="xz" />
+        <result column="YQ" property="yq" />
+        <result column="SZXZ" property="szxz" />
+        <result column="SZMB" property="szmb" />
+        <result column="DEL" property="del" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID, TJSJ, BMS, Province, City, DCounty, XZQHDM, YSDM, ZDSTXTFWGN, HXLX, LXBM, BHDMC, BHDJB, HXMM, HXBM, STXTYZBLX, ZYRWHDLX, STHJWT, GKCS, TBBM, TBMJ, BZ, DLFW, HXJTWZ, SJMS, GNFQ, FD, YJLY, FLMC, BHDX, BHMB, GKYQ, BGSJ, XZ, YQ, SZXZ, SZMB, DEL
+    </sql>
+<select id="listRedLineLedger" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCba">
+  select * from st4_scs_cba where del = 1
+
+    <if test="cba.strTime!=null and cba.strTime!='' ">
+        and TJSJ<![CDATA[ >= ]]> #{cba.strTime}
+    </if>
+    <if test="cba.endTime!=null and cba.endTime!='' ">
+        and TJSJ <![CDATA[ <= ]]> #{cba.endTime}
+    </if>
+    <if test="cba.province != null" > and
+        Province = #{cba.province}
+    </if>
+    <if test="cba.city != null" > and
+        City = #{cba.city}
+    </if>
+    <if test="cba.dcounty != null" > and
+        DCounty = #{cba.dcounty}
+    </if>
+    <if test="cba.ysdm != null" > and
+        YSDM = #{cba.ysdm}
+    </if>
+    <if test="cba.lxbm != null" > and
+        LXBM = #{cba.lxbm}
+    </if>
+    <if test="cba.hxbm != null" > and
+        HXBM = #{cba.hxbm}
+    </if>
+    <if test="cba.tbmj != null" > and
+        TBMJ = #{cba.tbmjREAL}
+    </if>
+    <if test="cba.fd != null" > and
+        FD = #{cba.fd}
+    </if>
+    <if test="cba.bgsj != null" > and
+        BGSJ = #{cba.bgsj}
+    </if>
+    <if test="cba.bms != null" > and
+        BMS like '%${cba.bms}%'
+    </if>
+    <if test="cba.xzqhdm != null" > and
+        XZQHDM = #{cba.xzqhdm}
+    </if>
+    <if test="cba.zdstxtfwgn != null" > and
+        ZDSTXTFWGN = #{cba.zdstxtfwgn}
+    </if>
+    <if test="cba.hxlx != null" > and
+        HXLX = #{cba.hxlx}
+    </if>
+    <if test="cba.bhdmc != null" > and
+        BHDMC = #{cba.bhdmc}
+    </if>
+    <if test="cba.bhdjb != null" > and
+        BHDJB = #{cba.bhdjb}
+    </if>
+    <if test="cba.hxmm != null" > and
+        HXMM = #{cba.hxmm}
+    </if>
+    <if test="cba.stxtyzblx != null" > and
+        STXTYZBLX = #{cba.stxtyzblx}
+    </if>
+    <if test="cba.zyrwhdlx != null" > and
+        ZYRWHDLX = #{cba.zyrwhdlx}
+    </if>
+    <if test="cba.sthjwt != null" > and
+        STHJWT = #{cba.sthjwt}
+    </if>
+    <if test="cba.gkcs != null" > and
+        GKCS = #{cba.gkcs}
+    </if>
+    <if test="cba.tbbm != null" > and
+        TBBM = #{cba.tbbm}
+    </if>
+    <if test="cba.bz != null" > and
+        BZ = #{cba.bz}
+    </if>
+    <if test="cba.dlfw != null" > and
+        DLFW = #{cba.dlfw}
+    </if>
+    <if test="cba.hxjtwz != null" > and
+        HXJTWZ = #{cba.hxjtwz}
+    </if>
+    <if test="cba.sjms != null" > and
+        SJMS = #{cba.sjms}
+    </if>
+    <if test="cba.gnfq != null" > and
+        GNFQ = #{cba.gnfq}
+    </if>
+    <if test="cba.yjly != null" > and
+        YJLY = #{cba.yjly}
+    </if>
+    <if test="cba.flmc != null" > and
+        FLMC = #{cba.flmc}
+    </if>
+    <if test="cba.bhdx != null" > and
+        BHDX = #{cba.bhdx}
+    </if>
+    <if test="cba.bhmb != null" > and
+        BHMB = #{cba.bhmb}
+    </if>
+    <if test="cba.gkyq != null" > and
+        GKYQ = #{cba.gkyq}
+    </if>
+    <if test="cba.xz != null" > and
+        XZ = #{cba.xz}
+    </if>
+    <if test="cba.yq != null" > and
+        YQ = #{cba.yq}
+    </if>
+    <if test="cba.szxz != null" > and
+        SZXZ = #{cba.szxz}
+    </if>
+    <if test="cba.szmb != null" > and
+        SZMB = #{cba.szmb}
+    </if>
+</select>
+</mapper>

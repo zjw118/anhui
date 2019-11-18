@@ -3,7 +3,7 @@
 <mapper namespace="com.gistone.com.gistone.mapper.St4ScsCtMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.gistone.com.gistone.entity.St4ScsCt">
+    <resultMap id="BaseResultMap" type="com.gistone.entity.St4ScsCt">
         <id column="CT001" property="ct001" />
         <result column="CT002" property="ct002" />
         <result column="CT003" property="ct003" />

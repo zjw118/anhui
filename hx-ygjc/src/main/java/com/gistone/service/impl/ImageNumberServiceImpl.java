@@ -29,6 +29,8 @@ public class ImageNumberServiceImpl implements ImageConfigService {
             classmap.put("id", list.get(i).getId());
             classmap.put("parentId", list.get(i).getParentid());
             classmap.put("title", list.get(i).getName());
+            classmap.put("type", list.get(i).getType());
+            classmap.put("orders", list.get(i).getOrders());
             classmap.put("children", "");
             int c = 0;
             array = inserts(array, classmap,c);

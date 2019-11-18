@@ -114,8 +114,8 @@ public class St4ScsCtServiceImpl extends ServiceImpl<St4ScsCtMapper, St4ScsCt> i
                 "st4_scs_ct.CT006 AS ct006,st4_scs_ct.CT007 AS ct007,st4_scs_ct.CT008 AS ct008,st4_scs_ct.CT009 AS ct009,st4_scs_ct.CT010 AS ct010,st4_scs_ct.CT011 AS ct011," +
                 "st4_scs_ct.CT012 AS ct012,st4_scs_ct.CT013 AS ct013,st4_scs_ct.CT014 AS ct014,st4_scs_ct.CT015 AS ct015,st4_scs_ct.CT016 AS ct016,st4_scs_ct.CT017 AS ct017," +
                 "st4_scs_ct.CT018 AS ct018,st4_scs_ct.CT019 AS ct019,st4_scs_ct.CT020 AS ct020,st4_scs_ct.SG001 AS sg001,st4_scs_ct.SD001 AS sd001," +
-                "IF(st4_scs_ct.SG001=0,'',(SELECT SG008 FROM st4_sys_sg  WHERE st4_sys_sg.SG001=st4_scs_ct.SG001)) AS sg008," +
-                "IF(st4_scs_ct.SD001=0,'',(SELECT SD008 FROM st4_sys_sd  WHERE st4_sys_sd.SD001=st4_scs_ct.SD001)) AS sd008," +
+                //"IF(st4_scs_ct.SG001=0,'',(SELECT SG008 FROM st4_sys_sg  WHERE st4_sys_sg.SG001=st4_scs_ct.SG001)) AS sg008," +
+                //"IF(st4_scs_ct.SD001=0,'',(SELECT SD008 FROM st4_sys_sd  WHERE st4_sys_sd.SD001=st4_scs_ct.SD001)) AS sd008," +
                 "IF(st4_scs_ct.CT002=0,'',(SELECT CT003 FROM st4_scs_ct s1 WHERE s1.CT001=st4_scs_ct.CT002)) AS ct003Fname ");
         queryWrapper.orderByDesc("CT019");
         List<Map<String, Object>> list = st4ScsCtMapper.selectMaps(queryWrapper);

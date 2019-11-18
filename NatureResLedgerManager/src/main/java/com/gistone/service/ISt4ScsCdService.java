@@ -39,4 +39,11 @@ public interface ISt4ScsCdService extends IService<St4ScsCd> {
     Map<String,Object> exporExcel(Integer id, HttpServletResponse response);
 
     ResultVO upload(HttpServletRequest request, Image image);
+
+    /**
+     *根据任务id查询出所有的问题斑块
+     * @param data
+     * @return
+     */
+    ResultVO getProblemPlaque(St4ScsCd data);
 }

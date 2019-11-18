@@ -1,14 +1,17 @@
 package com.gistone.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -74,6 +77,20 @@ public class ShpBatch extends Model<ShpBatch> {
      * 逻辑删除。0，删除，1是未删除
      */
     private Integer delFlag;
+
+
+    /*
+版本
+     */
+    private String version;
+
+    /*
+        存储空间数据json格式
+     */
+    private Integer jsonData;
+    @ApiModelProperty(value = "边界数据表(江苏用安徽不用管)")
+    @TableField(exist = false)
+    List<St4ScsCbc> st4ScsCbcList;
 
 
     @Override

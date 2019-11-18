@@ -33,4 +33,12 @@ public interface St4ScsCdMapper extends BaseMapper<St4ScsCd> {
     List<St4ScsCd>  getPointBySa001(Integer uid);
     List<St4ScsCd> getStaticPoint(St4ScsCd data);
 
+    /**
+     * 根据任务id查询出所有的问题斑块
+     * @param data
+     * @return
+     */
+    List<St4ScsCd> getProblemPlaque(St4ScsCd data);
+
+
 }

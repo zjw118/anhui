@@ -206,7 +206,6 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private  List<St4PoCdSa> st4PoCdSaList;
 
-
     @ApiModelProperty(name="ck088",value="是否是原始台账（0是原始台账，1是核查数据）",dataType = "{}",required = false,example="")
     @TableField(exist = false)
     private String ck088;

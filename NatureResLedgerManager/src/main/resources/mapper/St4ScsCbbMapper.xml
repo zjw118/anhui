@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.St4ScsCbbMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.St4ScsCbb">
+        <id column="ID" property="id" />
+        <result column="BMS" property="bms" />
+        <result column="Province" property="Province" />
+        <result column="City" property="City" />
+        <result column="DCounty" property="DCounty" />
+        <result column="XZQHDM" property="xzqhdm" />
+        <result column="MC" property="mc" />
+        <result column="JB" property="jb" />
+        <result column="LX" property="lx" />
+        <result column="FQ" property="fq" />
+        <result column="TBMJ" property="tbmj" />
+        <result column="APTime" property="APTime" />
+        <result column="ADtime" property="ADtime" />
+        <result column="BZ" property="bz" />
+        <result column="SSYQ" property="ssyq" />
+        <result column="DEL" property="del" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID, BMS, Province, City, DCounty, XZQHDM, MC, JB, LX, FQ, TBMJ, APTime, ADtime, BZ, SSYQ, DEL
+    </sql>
+<select id="listReserveData"  resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCbb" >
+    select * from st4_scs_cbb where del=1
+    <if test="cbb.bms != null" > and
+        BMS like '%${cbb.bms}%'
+    </if>
+    <if test="cbb.province != null" > and
+        Province = #{cbb.province}
+    </if>
+    <if test="cbb.city != null" > and
+        City = #{cbb.city}
+    </if>
+    <if test="cbb.dcounty != null" > and
+        DCounty = #{cbb.dcounty}
+    </if>
+    <if test="cbb.xzqhdm != null" > and
+        XZQHDM = #{cbb.xzqhdm}
+    </if>
+    <if test="cbb.jb != null" > and
+        JB = #{cbb.jb}
+    </if>
+    <if test="cbb.tbmj != null" > and
+        TBMJ = #{cbb.tbmj}
+    </if>
+    <if test="cbb.aptime != null" > and
+        APTime = #{cbb.aptime}
+    </if>
+
+    <if test="cbb.strTime!=null and cbb.strTime!='' ">
+        and ADtime<![CDATA[ >= ]]> #{cbb.strTime}
+    </if>
+    <if test="cbb.endTime!=null and cbb.endTime!='' ">
+        and ADtime <![CDATA[ <= ]]> #{cbb.endTime}
+    </if>
+
+    <if test="cbb.mc != null" > and
+        MC = #{cbb.mc}
+    </if>
+    <if test="cbb.lx != null" > and
+        LX = #{cbb.lx}
+    </if>
+    <if test="cbb.fq != null" > and
+        FQ = #{cbb.fq}
+    </if>
+    <if test="cbb.bz != null" > and
+        BZ = #{cbb.bz}
+    </if>
+    <if test="cbb.ssyq != null" > and
+        SSYQ = #{cbb.ssyq}
+    </if>
+
+</select>
+</mapper>

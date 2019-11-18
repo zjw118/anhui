@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.St4ScsCbcMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.St4ScsCbc">
+        <id column="id" property="id" />
+        <result column="orign_name" property="orignName" />
+        <result column="upload_url" property="uploadUrl" />
+        <result column="preview_url" property="previewUrl" />
+        <result column="pid" property="pid" />
+        <result column="add_user" property="addUser" />
+        <result column="add_time" property="addTime" />
+        <result column="is_del" property="isDel" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, orign_name, upload_url, preview_url, pid, add_user, add_time, is_del
+    </sql>
+
+</mapper>

@@ -45,7 +45,6 @@ public class St4ScsCabServiceImpl extends ServiceImpl<St4ScsCabMapper, St4ScsCab
         St4ScsCab res = st4ScsCabMapper.getByIdForApp(data);
         Result result = new Result();
         result.setData(res);
-        //result.setTotal(total);
         result.setStatus(1000);
         return result;
     }

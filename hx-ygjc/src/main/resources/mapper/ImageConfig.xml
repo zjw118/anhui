@@ -10,6 +10,9 @@
     <select id="getImageConfig3"   resultType="com.gistone.entity.ImageConfig">
         SELECT * from image_config where type = 3
 	</select>
+    <select id="getImageConfigAll"   resultType="com.gistone.entity.ImageConfig">
+        SELECT * from image_config
+	</select>
 
     <select id="getImageConfig"   resultType="com.gistone.entity.ImageConfig">
         SELECT * from image_config ORDER BY parentid,orders

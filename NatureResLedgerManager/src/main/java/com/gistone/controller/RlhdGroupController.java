@@ -3,9 +3,19 @@ package com.gistone.controller;
 
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.RlhdGroup;
+import com.gistone.entity.St4ScsCb;
+import com.gistone.entity.St4ScsCbb;
+import com.gistone.entity.St4ScsCd;
+import com.gistone.pkname.Swagger;
+import com.gistone.service.ISt4ScsCdService;
 import com.gistone.service.RlhdGroupService;
+import com.gistone.util.ObjectUtils;
 import com.gistone.util.ResultEnum;
+import com.gistone.util.ResultMsg;
 import com.gistone.util.ResultVOUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -23,12 +33,29 @@ import java.util.Map;
  * @version v1.0
  * @since 2019-10-25
  */
-
+@Api(value="人类活动台账信息表",tags = "人类活动台账信息表")
 @RestController
 @RequestMapping("/api/ygjc/rlhdGroup")
 public class RlhdGroupController {
     @Autowired
     private RlhdGroupService service;
+
+    @Autowired
+    private ISt4ScsCdService st4ScsCdService;
+
+    @ApiOperation(value="根据任务id查询其下的所有斑块及下发的人(斑块是否核查看st4ScsCk对象里的ck088的字段是0代表未核查否则是已核查)",notes = "列表数据列表",response = St4ScsCd.class)
+    @PostMapping(value="/listReserveData")
+    public ResultVO listReserveData(@RequestBody @ApiParam(name="各类保护地数据 列表", value="json格式", required=true)
+                                            Swagger<St4ScsCd> cdLedger) {
+
+        St4ScsCd cd = cdLedger.getData();
+
+        if(!ObjectUtils.isNotNullAndEmpty(cd.getPageNumber())||!ObjectUtils.isNotNullAndEmpty(cd.getPageSize())){
+            return  ResultVOUtil.error("1222", ResultMsg.MSG_1018);
+        }
+
+        return st4ScsCdService.getProblemPlaque(cd);
+    }
 
     @PostMapping("/list")
     public ResultVO getList(@RequestBody Map<String, Object> paramsMap) {
