@@ -34,8 +34,8 @@ public interface TotalService {
 
     Map<String,Object> getBoardAndRedlineTotal();
 
-    Map<String,Object> getRedlineCount();
+    List<Map<String,Object>> getRedlineCount();
 
-    Map<String,Object> getPointCount();
+    List<Map<String,Object>> getPointCount();
 
 }
