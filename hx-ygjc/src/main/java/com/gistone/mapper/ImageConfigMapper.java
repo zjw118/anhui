@@ -2,12 +2,16 @@ package com.gistone.mapper;
 
 import com.gistone.entity.ImageConfig;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 @Mapper
 public interface ImageConfigMapper{
     //查询第三层
     List<ImageConfig> getImageConfig3();
+    //查询第三层完整数据
+    List<ImageConfig> getImageConfig3s();
     //查询所有层
     List<ImageConfig> getImageConfigAll();
 
@@ -22,6 +26,8 @@ public interface ImageConfigMapper{
     int deleteImageConfig(ImageConfig imageConfig);
     //主键获取
     ImageConfig get(ImageConfig imageConfig);
+    //模糊查询
+    ImageConfig like(@Param(value="name") String name);
 
 
 }

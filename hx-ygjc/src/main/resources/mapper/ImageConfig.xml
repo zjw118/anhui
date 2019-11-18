@@ -3,6 +3,10 @@
 <mapper namespace="com.gistone.mapper.ImageConfigMapper">
 
 
+    <select id="like"  parameterType="java.lang.String" resultType="com.gistone.entity.ImageConfig" >
+        SELECT * from image_config where name like '%${name}%' limit 1
+	</select>
+
     <select id="get"  parameterType="java.lang.Integer" resultType="com.gistone.entity.ImageConfig" >
         SELECT * from image_config where id = #{id}
 	</select>
@@ -10,6 +14,21 @@
     <select id="getImageConfig3"   resultType="com.gistone.entity.ImageConfig">
         SELECT * from image_config where type = 3
 	</select>
+
+    <select id="getImageConfig3s"   resultType="com.gistone.entity.ImageConfig">
+        SELECT a.*,b.name name2,c.name name1 from
+        (SELECT * from image_config
+        where type = 3)a
+        LEFT JOIN
+        (SELECT * from image_config
+        where type = 2)b
+        on a.parentid = b.id
+        LEFT JOIN
+        (SELECT * from image_config
+        where type = 1)c
+        on b.parentid = c.id
+	</select>
+
     <select id="getImageConfigAll"   resultType="com.gistone.entity.ImageConfig">
         SELECT * from image_config
 	</select>

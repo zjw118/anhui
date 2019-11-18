@@ -3,39 +3,49 @@
 <mapper namespace="com.gistone.mapper.ImageNumberMapper">
 
 
-    <select id="selectImageNumberByImageId"  parameterType="java.lang.Integer" resultType="com.gistone.entity.ImageNumber">
-        SELECT * from image_number a
-        LEFT JOIN image_config b
-        on a.image_id = b.id
-        where a.image_id = #{id}
+    <select id="selectName"  resultType="java.lang.String">
+        SELECT name from image_number
+        GROUP BY name
 	</select>
 
-    <select id="selectImageConfigByImageId"  parameterType="java.lang.Integer" resultType="com.gistone.entity.ImageConfig">
-        SELECT COALESCE(a.number,1)num,b.name,b.id from image_number a
-        RIGHT JOIN image_config b
+    <select id="selectImageNumber"  parameterType="java.lang.String" resultType="com.gistone.entity.ImageNumber">
+        SELECT a.*,b.name data from image_number a
+        LEFT JOIN image_config b
         on a.image_config_id = b.id
-        where (a.image_id = #{id}
-        or a.image_id is null)
-        and b.type = 3
+        where name = #{name}
 	</select>
 
     <insert id="insertImageNumber" parameterType="com.gistone.entity.ImageNumber">
-        INSERT INTO image_number
-        (
-            image_id,
+        INSERT INTO image_number(
             image_config_id,
-            number
-        )
-        VALUES(
-            #{imageId},
-            #{imageConfigId},
-            #{number}
+            number,
+            name
+        )VALUES(
+            #{image_config_id},
+            #{number},
+            #{name}
         )
     </insert>
 
-    <delete id="deleteImageNumberByImageId" parameterType="com.gistone.entity.Image">
-		delete from image_number where image_id = #{id}
+    <delete id="deleteImageNumber" parameterType="java.lang.Integer">
+		delete from image_number where id = #{id}
 	</delete>
+
+    <update id="updateImageNumber" parameterType="Object" >
+        update image_number
+        <set>
+            <if test="null!= imageConfigId">
+                image_config_id = #{imageConfigId},
+            </if>
+            <if test="null!= number">
+                number = #{number},
+            </if>
+            <if test="null!= name and ''!= name">
+                name = #{name},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
 
 
 

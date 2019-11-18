@@ -147,13 +147,15 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     @Override
     public ResultVO getAudit(Integer id) {
         Image image = mapper.getImageById(id);
-        String json = FileUtil.readFromTextFile(image.getAuditPath());
+        String json = "";
+        if(StringUtils.isNotBlank(image.getAuditPath()))
+            json = FileUtil.readFromTextFile(image.getAuditPath());
         //评分系数
-        List<ImageConfig> imageConfig = imageNumberMapper.selectImageConfigByImageId(id);
+//        List<ImageConfig> imageConfig = imageNumberMapper.selectImageConfigByImageId(id);
 
         Map map = new HashMap();
         map.put("image",image);
-        map.put("xs",imageConfig);
+        map.put("xs",imageNumberMapper.selectName());
         map.put("out",json);
         return  ResultVOUtil.success(map);
     }
@@ -251,21 +253,16 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
                 }
             }
 
-            //删除原影像系数
-            imageNumberMapper.deleteImageNumberByImageId(image);
-            //保存当前影像系数
+            //影像系数
+            List<ImageNumber> imageNumbers = new ArrayList();
             JSONObject numberJson = JSONObject.fromObject(json);
             for (Object o : numberJson.keySet()) {
                 ImageNumber imageNumber = new ImageNumber();
-                imageNumber.setImage_id(id);
                 imageNumber.setImage_config_id(Integer.valueOf(o+""));
                 imageNumber.setNumber(Double.valueOf(numberJson.get(o)+""));
-                imageNumberMapper.insertImageNumber(imageNumber);
+                imageNumbers.add(imageNumber);
             }
 
-
-            //获取当前影像系数
-            List<ImageNumber> imageNumbers = imageNumberMapper.selectImageNumberByImageId(id);
             //评分
             JSONObject jb = new JSONObject();
             double d = 0;

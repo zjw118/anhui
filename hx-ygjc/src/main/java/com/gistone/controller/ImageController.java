@@ -4,8 +4,10 @@ package com.gistone.controller;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
 import com.gistone.entity.ImageConfig;
+import com.gistone.entity.ImageNumber;
 import com.gistone.mapper.ImageConfigMapper;
 import com.gistone.mapper.ImageMapper;
+import com.gistone.mapper.ImageNumberMapper;
 import com.gistone.service.ILmPointService;
 import com.gistone.service.ImageConfigService;
 import com.gistone.service.ImageService;
@@ -41,6 +43,8 @@ public class ImageController {
     private ImageConfigMapper imageConfigMapper;
     @Autowired
     private ImageConfigService imageConfigService;
+    @Autowired
+    private ImageNumberMapper imageNumberMapper;
 
 
 
@@ -285,9 +289,14 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "type不能为空！");
 
         ImageConfig imageConfig = new ImageConfig();
+
+        if(null!=name)
         imageConfig.setName(name+"");
+        if(parentid!=null)
         imageConfig.setParentid(Integer.valueOf(parentid+""));
+        if(null!=type)
         imageConfig.setType(Integer.valueOf(type+""));
+        if(null!=orders)
         imageConfig.setOrders(Integer.valueOf(orders+""));
         if(0<imageConfigMapper.insertImageConfig(imageConfig))
             return ResultVOUtil.success();
@@ -355,9 +364,13 @@ public class ImageController {
 
         ImageConfig imageConfig = new ImageConfig();
         imageConfig.setId(Integer.valueOf(id+""));
+        if(null!=name)
         imageConfig.setName(name+"");
+        if(null!=parentid)
         imageConfig.setParentid(Integer.valueOf(parentid+""));
+        if(null!=type)
         imageConfig.setType(Integer.valueOf(type+""));
+        if(null!=orders)
         imageConfig.setOrders(Integer.valueOf(orders+""));
 
         if(0<imageConfigMapper.updateImageConfig(imageConfig))
@@ -451,6 +464,68 @@ public class ImageController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
+        }
+    }
+
+
+
+
+    //系数批次名列表
+    @RequestMapping(value = "/getNumberNames", method = RequestMethod.POST)
+    public ResultVO getNumberNames(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            return ResultVOUtil.success(imageNumberMapper.selectName());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
+        }
+    }
+    //系数批次名查询列表
+    @RequestMapping(value = "/getNumberByName", method = RequestMethod.POST)
+    public ResultVO getNumberByName(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params == null) {
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            }
+            String name = (String) params.get("name");
+            if (StringUtils.isBlank(name)) {
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
+            }
+            return ResultVOUtil.success(imageNumberMapper.selectImageNumber(name));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
+        }
+    }
+
+
+    //系数修改
+    @RequestMapping(value = "/updateNumber", method = RequestMethod.POST)
+    public ResultVO updateNumber(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params == null) {
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            }
+            String id = (String) params.get("id");
+            if (StringUtils.isBlank(id)) {
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+            }
+
+            ImageNumber imageNumber = new ImageNumber();
+            imageNumber.setId(Integer.valueOf(id));
+            if(null!=params.get("imageConfigId"))
+            imageNumber.setImage_config_id(Integer.valueOf(params.get("imageConfigId")+""));
+            if(null!=params.get("number"))
+            imageNumber.setNumber(Double.valueOf(params.get("number")+""));
+            if(null!=params.get("name"))
+            imageNumber.setName(params.get("name")+"");
+
+            return ResultVOUtil.success(imageNumberMapper.updateImageNumber(imageNumber));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
         }
     }
 
