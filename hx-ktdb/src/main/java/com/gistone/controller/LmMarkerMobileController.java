@@ -1521,8 +1521,7 @@ public class LmMarkerMobileController {
         if (id == null || id < 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
-        LmMarkerMobile lmMarkerMobile = new LmMarkerMobile();
-        lmMarkerMobile.setId(id);
+        LmMarkerMobile lmMarkerMobile = lmMarkerMobileService.findMarkerById(id);
         String jzNum = (String) dataParam.get("jzNum");
         if (StringUtils.isNotBlank(jzNum)) {
             lmMarkerMobile.setJzNumber(jzNum);

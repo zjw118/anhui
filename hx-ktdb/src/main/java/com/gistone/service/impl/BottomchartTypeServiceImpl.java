@@ -30,7 +30,7 @@ public class BottomchartTypeServiceImpl extends ServiceImpl<BottomchartTypeMappe
 
 
 
-  
+
 
 
     @Override

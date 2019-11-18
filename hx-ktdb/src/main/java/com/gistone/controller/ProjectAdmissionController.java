@@ -32,6 +32,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -197,8 +200,14 @@ public class ProjectAdmissionController {
         if(StringUtils.isBlank(time)){
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"时间不能为空");
         }
-        Date date = DateUtils.StrtoDateYMD(time);
-        projectAdmission.setTime(date);
+        DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+        Date date2 = null;
+        try {
+            date2 = format2.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        projectAdmission.setTime(date2);
 
 
         String shape = (String) dataParam.get("shape");
@@ -427,6 +436,9 @@ public class ProjectAdmissionController {
         ExcelUtil.exportExcel(list, "坐标", "坐标", CoordinateVO.class, "坐标模板.xls", response);
     }
 
+//    @RequestMapping("/exportExcel")
+
+ 
 
 }
 
