@@ -596,6 +596,25 @@ public class St4ScsCk extends BaseEntity implements Serializable {
     @ApiModelProperty(value="水电设施数量",example = "99")
     private String waterElectricityNum;
 
+    @ApiModelProperty(example="44",value="未核查数")
+    @TableField(exist = false)
+    private String tzUncheckedNum;
+
+    @ApiModelProperty(example="44",value="已核查数")
+    @TableField(exist = false)
+    private String tzCheckedNum;
+
+    @ApiModelProperty(example="44",value="待审核数")
+    @TableField(exist = false)
+    private String unEmaminedNum;
+
+    @ApiModelProperty(example="44",value="通过数目")
+    @TableField(exist = false)
+    private String emaminedNum;
+
+    @ApiModelProperty(example="44",value="退回数目")
+    @TableField(exist = false)
+    private String backNum;
 
     @Ignore
     @TableField(exist = false)
