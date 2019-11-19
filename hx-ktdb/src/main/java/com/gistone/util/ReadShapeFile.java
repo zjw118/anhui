@@ -106,6 +106,10 @@ public class ReadShapeFile {
                 if (property.getName().toString().equals("latitude")) {
                     model.setLatitude(Double.parseDouble(property.getValue().toString()));
                 }
+
+                if(property.getName().toString().equals("objectid")){
+                    model.setObjectId(Integer.parseInt(property.getValue().toString()));
+                }
 //                if (property.getName().toString().equals("redline_id")) {
 //                    model.setRedlineId(Integer.parseInt(property.getValue().toString()));
 //                }

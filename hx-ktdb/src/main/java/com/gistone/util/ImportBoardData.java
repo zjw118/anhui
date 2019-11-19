@@ -98,6 +98,10 @@ public class ImportBoardData {
                     model.setCode(property.getValue().toString());
                 }
 
+                if(property.getName().toString().equals("objectid")){
+                    model.setObjectId(Integer.parseInt(property.getValue().toString()));
+                }
+
 
             }
             models.add(model);
