@@ -1920,10 +1920,10 @@
             and ck.CK048 <![CDATA[ <= ]]> #{endTime}
         </if>
         <if test="groupByName==null or groupByName=='' ">
-            and ck.ck001 is not null  GROUP BY ck.CK010
+             AND ck.CK010 IS NOT NULL AND ck.CK010 !=''  GROUP BY ck.CK010
         </if>
         <if test="groupByName=='ck010' ">
-          and ck.ck001 is not null  GROUP BY ck.CK010
+            AND ck.CK010 IS NOT NULL AND ck.CK010 !=''  GROUP BY ck.CK010
         </if>
         <if test="groupByName=='sd001'">
             GROUP BY com.PK_ID
