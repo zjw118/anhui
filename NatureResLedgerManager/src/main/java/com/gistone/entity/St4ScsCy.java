@@ -174,5 +174,9 @@ public class St4ScsCy extends BaseEntity  implements Serializable {
     @TableField(exist = false)
     private Integer type;
 
+    @ApiModelProperty(value = "权限用，不用管")
+    @TableField(exist = false)
+    private String deptName;
+
 
 }

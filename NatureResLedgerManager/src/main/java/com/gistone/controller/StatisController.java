@@ -40,7 +40,7 @@ public class StatisController {
 	 * @param response
 	 * @return
 	 */
-	@ApiOperation(value = "(安徽用)航迹数据统计接口只能传递uname)", notes = "巡查-统计列表", response = Result.class)
+	@ApiOperation(value = "(安徽用)航迹数据统计接口只能传递uname其中groupByName默认传递sf,点击单位的时候传递sa015,sysCompany对象的comFPkid默认传递1)", notes = "巡查-统计列表", response = Result.class)
 	@PostMapping("/listPatrol")
 	public ResultVO listPatrol(@RequestBody Swagger<St4ScsCy> requestData, HttpServletRequest request, HttpServletResponse response){
 		try {

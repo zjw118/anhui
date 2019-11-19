@@ -509,6 +509,10 @@ public class St4ScsCk extends BaseEntity implements Serializable {
     @TableField(exist = false)
     @ApiModelProperty(value="任务批次主键",example = "1")
     private Integer cl001;
+
+    @TableField(exist = false)
+    @ApiModelProperty(value="任务名称",example = "1")
+    private String tname;
     @TableField(exist = false)
     @ApiModelProperty(value="保护区名称",example = "模糊查询")
     private String bhqmc;
