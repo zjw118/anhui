@@ -44,6 +44,8 @@ public class BottomchartType extends Model<BottomchartType> {
      */
     private Integer fId;
 
+    private Integer type;
+
     /**
      * 子菜单
      */
