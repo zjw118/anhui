@@ -68,6 +68,9 @@ public class ShpBatch extends Model<ShpBatch> {
      */
     private LocalDateTime updateDate;
 
+
+    private Integer count;
+
     /**
      * 备注
      */

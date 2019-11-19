@@ -137,6 +137,9 @@ public class LmMarkerMobile implements Serializable {
     @TableField("create_time")
     private Date createTime;
 
+    
+    private Integer ObjectId;
+
 
     /**
      * 更新时间
