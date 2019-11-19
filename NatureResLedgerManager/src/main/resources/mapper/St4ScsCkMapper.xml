@@ -917,6 +917,9 @@
 
         left join  st4_sys_sa sa on sa.SA001= ck.CK049
         where CK085 = 1
+        <if test="ck.tname != null">
+            and cl.CL002 like '%${ck.tname}%'
+        </if>
         <if test="ck.rlhdGroup!=null">
             <if test="ck.rlhdGroup.name!=null and ck.rlhdGroup.name!='' ">
               and   co.name like '%${ck.rlhdGroup.name}%'
@@ -1222,6 +1225,8 @@
         left join  st4_sys_sa sa on sa.SA001= ck.CK049
         left join st4_scs_cl cl on cl.CL001=ck.CK091
         where CK085 = 1 and ck046 !="是"
+
+
         <if test="ck.bhqmc != null">
             and sg.SG008 like '%${ck.bhqmc}%'
         </if>

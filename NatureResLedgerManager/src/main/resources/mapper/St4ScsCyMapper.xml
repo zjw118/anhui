@@ -40,6 +40,7 @@
         <association property="st4SysSa" javaType="com.gistone.entity.St4SysSa">
             <id column="SA001" property="sa001" />
             <result column="SA019" property="sa019" />
+            <result column="SA015" property="sa015" />
         </association>
         <association property="st4ScsCl" javaType="com.gistone.entity.St4ScsCl">
             <id column="CL001" property="cl001" />
@@ -190,26 +191,69 @@
     </select>
 
     <select id="selectPoList" resultMap="BaseResultMap"   parameterType="com.gistone.entity.St4ScsCy">
+        <!-- 2019.11.19.15.59留存
+        SELECT-->
+        <!--cl.*,-->
+        <!--sa.SA019 uname,-->
+        <!--IFNULL(COUNT(*),0)    rwcs,-->
+        <!--IFNULL(SUM(cy.CY006),0)    gjlc,-->
+        <!--IFNULL(SUM(TIMESTAMPDIFF(HOUR,CY003,CY004)),0)    rwsc-->
+        <!--FROM st4_scs_cy cy-->
+        <!--LEFT JOIN st4_sys_sa sa-->
+        <!--ON cy.SA001=sa.SA001-->
+        <!--LEFT JOIN st4_scs_cl cl-->
+        <!--ON cl.CL003=cy.CL003-->
+        <!--WHERE cy.CY016 =1 and   sa.SA019 is not null-->
+        <!--<if test="uname!=null and uname  !=''">-->
+            <!--and sa.SA019 like '%${uname}%'-->
+        <!--</if>-->
+        <!--<if test="cl001!=null and cl001 !=''">-->
+            <!--and cl.CL001 = #{cl001}-->
+        <!--</if>-->
+        <!--GROUP BY  sa.SA001-->
+        <!--ORDER BY CONVERT(sa.SA019 USING GBK)-->
+
         SELECT
-        cl.*,
-        sa.SA019 uname,
-        IFNULL(COUNT(*),0)    rwcs,
+        com.PK_ID,com.COM_NAME,
+        sa.SA019 uname,sa.SA015,
+        IFNULL(COUNT(cy.CY001),0)    rwcs,
         IFNULL(SUM(cy.CY006),0)    gjlc,
         IFNULL(SUM(TIMESTAMPDIFF(HOUR,CY003,CY004)),0)    rwsc
-        FROM st4_scs_cy cy
-        LEFT JOIN st4_sys_sa sa
-        ON cy.SA001=sa.SA001
-        LEFT JOIN st4_scs_cl cl
-        ON cl.CL003=cy.CL003
-        WHERE cy.CY016 =1 and   sa.SA019 is not null
+        FROM sys_company com
+        LEFT JOIN st4_scs_cd cd ON com.PK_ID = cd.SD001
+        LEFT JOIN st4_scs_cc cc ON cc.CD004 = cd.CD001
+        LEFT JOIN st4_scs_cy cy ON cc.CY017 = cy.CY017
+        <choose>
+            <when test="groupByName=='sa015' ">
+                RIGHT JOIN st4_sys_sa sa ON cy.SA001 = sa.SA001
+            </when>
+            <otherwise>
+                left JOIN st4_sys_sa sa ON cy.SA001 = sa.SA001
+            </otherwise>
+        </choose>
+        WHERE 1=1
+        <if test="sysCompany.comFPkid!=null">
+            and com.COM_F_PKID = #{sysCompany.comFPkid}
+        </if>
         <if test="uname!=null and uname  !=''">
             and sa.SA019 like '%${uname}%'
         </if>
-        <if test="cl001!=null and cl001 !=''">
-            and cl.CL001 = #{cl001}
+        <!--<if test="st4ScsCl!=null">-->
+            <!--<if test="st4ScsCl.cl002!=null and st4ScsCl.cl002 !=''">-->
+                <!--and cl.CL002 like  '%${st4ScsCl.cl002}%'-->
+            <!--</if>-->
+        <!--</if>-->
+
+        <if test="groupByName==null or groupByName=='' ">
+            group by com.PK_ID
         </if>
-        GROUP BY  sa.SA001
-        ORDER BY CONVERT(sa.SA019 USING GBK)
+        <if test="groupByName=='sa015'">
+            group by sa.sa015
+        </if>
+        <if test="groupByName=='sf' ">
+            group by com.PK_ID
+        </if>
+
     </select>
 
 
