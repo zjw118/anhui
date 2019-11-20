@@ -34,7 +34,7 @@
     <select id="getBorderData" resultMap="BaseResultMap"  parameterType="com.gistone.entity.ShpBatch">
         select * from shp_batch sb
         left join st4_scs_cbc cbc on sb.id = cbc.pid
-        where sb.del_flag = 1
+        where sb.del_flag = 1 AND TYPE = 1
       <if test="id!=null and id !='' ">
         and   sb.id=#{id}
       </if>
