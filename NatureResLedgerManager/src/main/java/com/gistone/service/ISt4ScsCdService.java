@@ -32,7 +32,7 @@ public interface ISt4ScsCdService extends IService<St4ScsCd> {
     Map list2(Integer id);
     Map<String, Object> list(Integer pageNum, Integer pageSize, Integer id);
     void delete(List<Integer> id);
-    void insert(List<Map<String, Object>> data,Integer imageId,Integer createBy) throws Exception;
+    ResultVO insert(List<Map<String, Object>> data,Integer imageId,Integer createBy) throws Exception;
     void edit(St4ScsCd entity);
 
 

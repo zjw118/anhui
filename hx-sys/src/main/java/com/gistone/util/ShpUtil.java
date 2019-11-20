@@ -434,7 +434,7 @@ public class ShpUtil {
 
             //创建shp文件并写入数据
             if (createSHP(TYPE, features, new File(filePath)).equals("0")) {
-//                System.out.println("文件保存成功");
+                System.out.println("文件保存成功");
             }
 
         } catch (Exception e) {
