@@ -101,7 +101,8 @@ public class ProjectAdmissionController {
             pageSize = 10;
         }
 
-        Map<String, Object> result = projectAdmissionService.getProjectList(pageNum, pageSize, projectName, shape, startTime, endTime, type, attribute, time);
+        Map<String, Object> projectList = projectAdmissionService.getProjectList(pageNum, pageSize, projectName, shape, startTime, endTime, type, attribute, time);
+        Map<String, Object> result = projectList;
 
         return ResultVOUtil.success(result);
     }
