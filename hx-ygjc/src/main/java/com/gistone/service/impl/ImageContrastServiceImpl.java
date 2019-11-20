@@ -22,6 +22,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.File;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -270,13 +274,19 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
             }
         }
 
-
+        DecimalFormat df = new DecimalFormat("######0.00");
         //对比数据
         for (ImageConfig imageConfig3 : imageConfig3s) {
             if(null==imageConfig3.getNum3()){
                 imageConfig3.setNum3(0.0);
             }
-            imageConfig3.setNum3(imageConfig3.getNum2()-imageConfig3.getNum1());
+            if(null==imageConfig3.getNum1()){
+                imageConfig3.setNum1(0.0);
+            }
+            Double num3 = imageConfig3.getNum2()-imageConfig3.getNum1();
+            RoundingMode rMode = RoundingMode.HALF_UP;
+            BigDecimal b = new BigDecimal(Double.toString(num3),new MathContext(3,rMode));
+            imageConfig3.setNum3(b.doubleValue());
         }
 
 

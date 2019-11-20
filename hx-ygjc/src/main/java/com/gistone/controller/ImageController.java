@@ -461,7 +461,6 @@ public class ImageController {
 
 
 
-
     /**
      * 人类活动类型列表
      * @param paramsMap

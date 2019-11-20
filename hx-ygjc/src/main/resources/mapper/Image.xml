@@ -97,9 +97,8 @@
     <select id="getImage2" resultType="com.gistone.entity.Image"  parameterType="java.lang.Integer">
         SELECT * from image
         WHERE del_flag = 1
-        and shpurl is not null
         and id &lt; #{id}
-        ORDER BY id desc
+        ORDER BY create_date desc,id desc
         LIMIT 1
     </select>
 
