@@ -121,10 +121,10 @@ public class ImageController {
         if (StringUtils.isBlank(name)) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "名称不能为空");
         }
-        String url = (String) params.get("url");
-        if (StringUtils.isBlank(url)) {
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "地址不能为空");
-        }
+        String url ="";// (String) params.get("url");
+//        if (StringUtils.isBlank(url)) {
+////            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "地址不能为空");
+////        }
         String createDate = (String) params.get("createDate");
         if (StringUtils.isBlank(createDate)) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "createDate不能为空");

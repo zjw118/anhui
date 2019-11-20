@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +80,8 @@ public class CheckNrledgerController {
     @Autowired
     private ISt4ScsCadService st4ScsCadService;
 
-
+    @Autowired
+    private ConfigUtils configUtils;
 
     /**
      * 台账表的插入2产品化
@@ -226,12 +228,11 @@ public class CheckNrledgerController {
      */
     @ApiOperation(value="台账详情(ck088字段为1的代表是最新的台账，ck088为0代表是原始台账，原始台账一定有，最新台账不一定有，可拿这个值测试'LAL-009')",notes = "台账详情",response = St4ScsCk.class)
     @RequestMapping(value="/getStageDetail",method = RequestMethod.POST)
-    public Result getStageDetail( @RequestBody @ApiParam(name="台账详情", value="json格式", required=true) Swagger<St4ScsCk>  checkLedger
+    public ResultVO getStageDetail( @RequestBody @ApiParam(name="台账详情", value="json格式", required=true) Swagger<St4ScsCk>  checkLedger
                              ) {
         St4ScsCk ck = checkLedger.getData();
         if(ck.getCk001()==null){
-
-            return  Result.build(1001,"问题点编号cd004"+ ResultMsg.MSG_1001);
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "CK001不能为空！");
         }
 
         return icheckLedgerService.getDetail(ck);
@@ -248,6 +249,24 @@ public class CheckNrledgerController {
     @ApiOperation(value="(江苏用)导入台账Excel",notes = "导入台账Excel",response = St4ScsCk.class)
     @RequestMapping(value="/importHumanStage",method = RequestMethod.POST)
     public Result importHumanStage(@RequestParam MultipartFile file, HttpServletRequest request, HttpServletResponse response) {
+//        if(!file.isEmpty()) {
+//            // 在定义一个文件上传后的临时存储路径
+//            request.getServletContext().getRealPath("/");
+//            String temp_savepath = configUtils.getExcel_PATH()+"ledger/temp/importPersonTask" ;
+//            File dirFile = new File(temp_savepath);
+//            if(!dirFile.exists()&&!dirFile.isDirectory()){
+//                //检查临时目录是否存在，不存在则创建
+//                dirFile.mkdirs();
+//            }
+//            String aaa =PictureUtils.getDiyTempFilePath(temp_savepath, file);
+//            try{
+//                return iSt4ScsClService.readExcel(aaa);
+//            }catch (Exception e){
+//                e.printStackTrace();
+//                return ResultVOUtil.error("1222","处理结果失败");
+//            }
+//        }
+
         Result result= new Result();
         String token = request.getHeader("token");// 从 http 请求头中取出 token
         try{

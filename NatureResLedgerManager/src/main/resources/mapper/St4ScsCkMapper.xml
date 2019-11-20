@@ -890,7 +890,7 @@
             <!--AND ck.CD004 = #{cd004} order by CK001 DESC limit 1)-->
         <!--UNION-->
         SELECT
-        ck.*,ce.*,cn.*,sa.SA019 as uname
+        ck.*,ce.*,cd.*,cn.*,sa.SA019 as uname
         FROM st4_scs_ck ck INNER JOIN st4_scs_cd cd ON cd.CD001=ck.CD004
         left join st4_scs_cn cn on cn.CK001=ck.CK001
         LEFT JOIN st4_scs_cc cc ON cc.CC002 = ck.CC002
