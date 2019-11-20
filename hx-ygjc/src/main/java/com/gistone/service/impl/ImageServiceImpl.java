@@ -1,19 +1,22 @@
 package com.gistone.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.*;
+import com.gistone.entity.Image;
+import com.gistone.entity.ImageConfig;
+import com.gistone.entity.ImageNumber;
+import com.gistone.entity.ShpBatch;
 import com.gistone.mapper.ImageConfigMapper;
 import com.gistone.mapper.ImageMapper;
 import com.gistone.mapper.ImageNumberMapper;
-import com.gistone.mapper.ShpBatchMapper;
 import com.gistone.service.ImageService;
-import com.gistone.util.*;
+import com.gistone.util.FileUtil;
+import com.gistone.util.HttpUtil;
+import com.gistone.util.ResultEnum;
+import com.gistone.util.ResultVOUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -22,13 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -141,6 +138,18 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         int id = mapper.getLastDataId();
         //通过此id分组统计面积
         List<Map<String,Object>> result = mapper.getAreaGroupByType(id);
+        return result;
+    }
+
+    @Override
+    public List<Map<String, Object>> getCountGroupByType() {
+        List<Map<String,Object>> result = mapper.getCountGroupByType();
+        return result;
+    }
+
+    @Override
+    public List<Map<String, Object>> getAreaGroupByType() {
+        List<Map<String,Object>> result = mapper.getAreaByType();
         return result;
     }
 

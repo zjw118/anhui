@@ -12,6 +12,9 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,13 +47,29 @@ public class ProjectAdmissionServiceImpl extends ServiceImpl<ProjectAdmissionMap
         }
 
         if (StringUtils.isNotBlank(startTime)) {
-            Date startDate = DateUtils.stringToDate(startTime, DateUtils.DATE_TIME_PATTERN);
-            wrapper.ge("time", startDate);
+            DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+            Date date2 = null;
+
+            try {
+                date2 = format2.parse(startTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Date date = DateUtils.addDateDays(date2, 1);
+            wrapper.ge("time", date);
         }
 
         if (StringUtils.isNotBlank(endTime)) {
-            Date endDate = DateUtils.stringToDate(endTime, DateUtils.DATE_TIME_PATTERN);
-            wrapper.le("time", endDate);
+            DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+            Date date2 = null;
+
+            try {
+                date2 = format2.parse(endTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Date date = DateUtils.addDateDays(date2, 1);
+            wrapper.le("time", date);
         }
 
         if(StringUtils.isNotBlank(type)){
