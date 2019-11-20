@@ -227,7 +227,7 @@ public class LoginController {
         //mainMap.put("航点管理","main_003");
         mainMap.put("问题斑块管理","main_004");
         //mainMap.put("红线边界管理","main_005");
-        mainMap.put("消息中心","main_007");
+       // mainMap.put("消息中心","main_007");
         St4SysSc sc = new St4SysSc();
         for (String main:mainMap.keySet()) {
             sc = new St4SysSc();
@@ -240,7 +240,7 @@ public class LoginController {
         LinkedHashMap<String, String> baseMap = new LinkedHashMap<>();
         baseMap.put("个人信息","base_001");
         baseMap.put("地图管理","base_002");
-        baseMap.put("会话列表","base_003");
+       // baseMap.put("会话列表","base_003");
         baseMap.put("GPX文件管理","base_004");
         baseMap.put("关于","base_005");
         baseMap.put("检查版本升级","base_006");
@@ -253,11 +253,11 @@ public class LoginController {
         //app返回巡护类型
         List<St4SysSc> appPType = new ArrayList<St4SysSc>();
         LinkedHashMap<String, String> typeMap = new LinkedHashMap<>();
-        typeMap.put("日常巡护","ptype");
-        typeMap.put("督查","ptype");
+      //  typeMap.put("日常巡护","ptype");
+      //  typeMap.put("督查","ptype");
         typeMap.put("巡查","ptype");
-        typeMap.put("领导批示","ptype");
-        typeMap.put("暗访","ptype");
+       // typeMap.put("领导批示","ptype");
+       // typeMap.put("暗访","ptype");
         for (String type:typeMap.keySet()) {
             sc = new St4SysSc();
             sc.setSc002(type);
@@ -268,7 +268,7 @@ public class LoginController {
         List<St4SysSc> appTool = new ArrayList<St4SysSc>();
         Map<String,String> toolMap = new HashMap<>();
         toolMap.put("指南针","tool_001");
-        toolMap.put("预警","tool_002");
+       // toolMap.put("预警","tool_002");
         toolMap.put("测量","tool_003");
 
         for (String tool:toolMap.keySet()) {

@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -49,7 +51,8 @@ public class ImageController {
     private ImageNumberMapper imageNumberMapper;
     @Autowired
     private ImageService imageService;
-
+    @Autowired
+    private   ConfigUtils configUtils;
 
     @Value("${ftp_host}")
     private String ftpHost;
@@ -121,7 +124,17 @@ public class ImageController {
         if (StringUtils.isBlank(name)) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "名称不能为空");
         }
-        String url ="";// (String) params.get("url");
+        String oriDir="";
+        String finalDir="";
+        String url="";
+        try {
+            oriDir = "D:\\epr\\attached\\shp";
+            finalDir = "D:\\epr\\attached\\shptemp";
+            url = ExcelUtils.copyDirectiory(oriDir, finalDir);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
 //        if (StringUtils.isBlank(url)) {
 ////            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "地址不能为空");
 ////        }

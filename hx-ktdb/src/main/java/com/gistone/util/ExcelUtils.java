@@ -1,9 +1,6 @@
 package com.gistone.util;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +27,80 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  *
  */
 public class ExcelUtils {
+
+
+
+	/**
+	 * 复制文件夹
+	 * @param sourceDir
+	 * @param targetDir
+	 * @throws IOException
+	 */
+	public static String copyDirectiory(String sourceDir, String targetDir)
+			throws IOException {
+		// 新建目标目录
+		(new File(targetDir)).mkdirs();
+		// 获取源文件夹当前下的文件或目录
+		File[] file = (new File(sourceDir)).listFiles();
+		String shpUrl = "";
+		for (int i = 0; i < file.length; i++) {
+			if (file[i].isFile()) {
+				// 源文件
+				File sourceFile=file[i];
+				// 目标文件
+				Date date = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+				String newName =sdf.format(date)+file[i].getName();
+				String pre = file[i].getName().substring(file[i].getName().lastIndexOf(".")+1);
+				String uurl =newName;
+				File targetFile=new File(uurl);
+				if("shp".equals(pre)){
+					shpUrl ="//shptemp//"+uurl;
+				}
+				copyFile(sourceFile,targetFile);
+			}
+			if (file[i].isDirectory()) {
+				// 复制目录
+				String url1=sourceDir+File.separator+file[i].getName();
+				String url2=targetDir+File.separator+file[i].getName();
+				copyDirectiory(sourceDir, targetDir);
+			}
+
+		}
+		return shpUrl;
+	}
+
+	public static void main(String[] args) throws  Exception{
+		String aa = copyDirectiory("D:\\epr\\attached\\shp","D:\\epr\\attached\\shptemp");
+		System.out.println("成功:"+aa);
+	}
+	// 复制文件
+	public static void copyFile(File sourceFile,File targetFile)
+			throws IOException{
+
+		// 新建文件输入流并对它进行缓冲
+		FileInputStream input = new FileInputStream(sourceFile);
+		BufferedInputStream inBuff=new BufferedInputStream(input);
+
+		// 新建文件输出流并对它进行缓冲
+		FileOutputStream output = new FileOutputStream(targetFile);
+		BufferedOutputStream outBuff=new BufferedOutputStream(output);
+
+		// 缓冲数组
+		byte[] b = new byte[1024 * 5];
+		int len;
+		while ((len =inBuff.read(b)) != -1) {
+			outBuff.write(b, 0, len);
+		}
+		// 刷新此缓冲的输出流
+		outBuff.flush();
+
+		//关闭流
+		inBuff.close();
+		outBuff.close();
+		output.close();
+		input.close();
+	}
 
 	/**
 	 * 数据导出
