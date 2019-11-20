@@ -4,10 +4,11 @@ package com.gistone.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
+
 import com.gistone.util.ResultVOUtil;
 import net.sf.json.JSONObject;
 
-import javax.servlet.http.HttpServletRequest;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,10 @@ public interface ImageService extends IService<Image> {
     int getBeforeCount(String code,LocalDate beforeTime);
 
     List<Map<String, Object>> getRlhdTotal();
+
+    List<Map<String, Object>> getCountGroupByType();
+
+    List<Map<String, Object>> getAreaGroupByType();
 
     ResultVO getAudit(Integer id);
 

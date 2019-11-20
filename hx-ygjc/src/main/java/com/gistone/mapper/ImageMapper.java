@@ -1,18 +1,13 @@
 package com.gistone.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-
 import com.gistone.entity.Image;
-import com.gistone.entity.ImageConfig;
+import com.gistone.entity.St4ScsCdVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-
-import com.gistone.entity.St4ScsCdVo;
-
-import java.util.List;
 
 
 /**
@@ -35,6 +30,10 @@ public interface ImageMapper extends BaseMapper<Image> {
     int getLastDataId();
 
     List<Map<String,Object>> getAreaGroupByType(int id);
+
+    List<Map<String,Object>> getCountGroupByType();
+
+    List<Map<String,Object>> getAreaByType();
 
     int updateImage(Image image);
 
