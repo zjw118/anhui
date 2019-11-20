@@ -38,7 +38,7 @@ public class Image extends Model<Image> {
     @TableId(value = "create_by")
     private Integer createBy;
     @TableId(value = "create_date")
-    private LocalDateTime createDate;
+    private String createDate;
     @TableId(value = "update_by")
     private Integer updateBy;
     @TableId(value = "update_date")
@@ -61,6 +61,8 @@ public class Image extends Model<Image> {
     private String countryBorder;
     @TableId(value = "audit_path")
     private String auditPath;
+    @TableId(value = "score")
+    private String score;
 
 
 

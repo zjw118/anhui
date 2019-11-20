@@ -95,6 +95,7 @@
             a.active_type
     </select>
 
+
     <select id="getCountGroupByType" resultType="java.util.Map">
         SELECT
             count(*) count,
@@ -118,8 +119,16 @@
 
 
 
-    <select id="getImageConfig" resultType="com.gistone.entity.ImageConfig">
-        SELECT * from image_config LIMIT 1
+
+
+    <select id="getImage2" resultType="com.gistone.entity.Image"  parameterType="java.lang.Integer">
+        SELECT * from image
+        WHERE del_flag = 1
+        and shpurl is not null
+        and id &lt; #{id}
+        ORDER BY id desc
+        LIMIT 1
+
     </select>
 
     <update id="updateImage" parameterType="Object" >
@@ -139,6 +148,9 @@
             </if>
             <if test="null!=auditPath">
                 audit_path=#{auditPath},
+            </if>
+            <if test="null!=score">
+                score=#{score},
             </if>
         </set>
 		where id=#{id}
@@ -162,7 +174,8 @@
             contrast_red,
             sign,
             evaluation,
-            audit_date
+            audit_date,
+            score
         )
         VALUES(
             #{name},
@@ -178,7 +191,8 @@
             #{contrastRed},
             #{sign},
             #{evaluation},
-            #{auditDate}
+            #{auditDate},
+            #{score}
         )
     </insert>
 

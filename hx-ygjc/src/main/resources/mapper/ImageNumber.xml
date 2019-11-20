@@ -8,11 +8,11 @@
         GROUP BY name
 	</select>
 
-    <select id="selectImageNumber"  parameterType="java.lang.String" resultType="com.gistone.entity.ImageNumber">
-        SELECT a.*,b.name data from image_number a
-        LEFT JOIN image_config b
+    <select id="selectImageNumber"  parameterType="com.gistone.entity.ImageNumber" resultType="com.gistone.entity.ImageNumber">
+        SELECT a.id,COALESCE(a.number,0)number,a.name,b.name data,b.id imageConfigId from image_number a
+        right JOIN image_config b
         on a.image_config_id = b.id
-        where name = #{name}
+        where (a.name = #{name} or a.name is null)
 	</select>
 
     <insert id="insertImageNumber" parameterType="com.gistone.entity.ImageNumber">
@@ -30,12 +30,15 @@
     <delete id="deleteImageNumber" parameterType="java.lang.Integer">
 		delete from image_number where id = #{id}
 	</delete>
+    <delete id="deleteImageName" parameterType="java.lang.String">
+		delete from image_number where name = #{name}
+	</delete>
 
     <update id="updateImageNumber" parameterType="Object" >
         update image_number
         <set>
-            <if test="null!= imageConfigId">
-                image_config_id = #{imageConfigId},
+            <if test="null!= image_config_id">
+                image_config_id = #{image_config_id},
             </if>
             <if test="null!= number">
                 number = #{number},
