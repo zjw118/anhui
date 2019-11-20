@@ -108,7 +108,7 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                             // 压缩文件
                             //Thumbnails.of(oldFile).scale(config.getScaleRatio()).toFile(path);
                             // 显示路径
-                            json.put("path", "/ld/" +  dirId + "/" + baseDateDir +"/" + newUUID  + sufName);
+                            json.put("path", "/" +  dirId + "/" + baseDateDir +"/" + newUUID  + sufName);
 
                         } else {
                             path = config.getUpPath() + "/" +  dirId + "/" + baseDateDir + "/" + uuid   + sufName;
@@ -121,7 +121,7 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                             uploadFile.createNewFile();
                             file.transferTo(uploadFile);
                             // 显示路径
-                            json.put("path", "/ld/" +  dirId + "/" + baseDateDir + "/" + uuid  + sufName);
+                            json.put("path", "/" +  dirId + "/" + baseDateDir + "/" + uuid  + sufName);
                         }
                         if("nr_object".equals(dirId)){
                             int num = oldFileName.lastIndexOf(".");
