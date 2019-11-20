@@ -112,6 +112,15 @@
         <result column="feetNum" property="feetNum" />
         <result column="roadNum" property="roadNum" />
         <result column="waterElectricityNum" property="waterElectricityNum" />
+
+        <result column="tzCheckedNum" property="tzCheckedNum" />
+        <result column="tzUncheckedNum" property="tzUncheckedNum" />
+
+        <result column="unEmaminedNum" property="unEmaminedNum" />
+        <result column="emaminedNum" property="emaminedNum" />
+        <result column="backNum" property="backNum" />
+
+
         <association property="st4ScsCac" javaType="com.gistone.entity.St4ScsCac">
             <result column="CK001" property="ck001" />
             <result column="CAC002" property="cac002" />
@@ -884,7 +893,7 @@
             AND ck.CD004 =#{cd004} order by CK001 DESC limit 1)
     </select>
     <select id="listLedger" resultMap="BaseResultMap"  >
-        SELECT
+        SELECT cl.CL001,cl.CL002,
         <include refid="Base_Column_List5"/>,sa.SA019 as uname,cd.*,co.*
         FROM
 
@@ -908,6 +917,9 @@
 
         left join  st4_sys_sa sa on sa.SA001= ck.CK049
         where CK085 = 1
+        <if test="ck.tname != null">
+            and cl.CL002 like '%${ck.tname}%'
+        </if>
         <if test="ck.rlhdGroup!=null">
             <if test="ck.rlhdGroup.name!=null and ck.rlhdGroup.name!='' ">
               and   co.name like '%${ck.rlhdGroup.name}%'
@@ -1213,6 +1225,8 @@
         left join  st4_sys_sa sa on sa.SA001= ck.CK049
         left join st4_scs_cl cl on cl.CL001=ck.CK091
         where CK085 = 1 and ck046 !="是"
+
+
         <if test="ck.bhqmc != null">
             and sg.SG008 like '%${ck.bhqmc}%'
         </if>
@@ -1830,29 +1844,41 @@
 
 
     <select id="selectSt4ScsCk" resultMap="BaseResultMap" resultType="com.gistone.entity.St4ScsCk">
-        SELECT
-        com.PK_ID,com.COM_NAME,
-        ck.*,cn.CN001,sa.SA001,cl.CL001,cl.CL002,
-        sa.SA019,
-        IFNULL(ck.CK010,'') ck010,
-        IFNULL(ck.CK012,'') ck012,
-        IFNULL(cn.CN010,'') cn010,
-        IF(COUNT(*) IS NULL, 0, COUNT(*)) AS tzNum,
-        IFNULL(SUM(ck046='是' OR ck046='已销号' ),0) AS xhNum,
-        IFNULL(SUM(ck046='否' OR ck046='未销号' ) ,0)AS unxhNum,
-        IFNULL(SUM(ck016='农业用地'),0) AS farmNum,
-        IFNULL(SUM(ck016='居民点'),0) AS residentNum,
-        IFNULL(SUM(ck016='工矿用地'),0) AS industrialNum,
-        IFNULL(SUM(ck016='采石场'),0) AS quarryNum,
-        IFNULL(SUM(ck016='能源设施'),0) AS EnergyNum,
-        IFNULL(SUM(ck016='旅游设施'),0) AS journeyNum,
-        IFNULL(SUM(ck016='交通设施'),0) AS trafficNum,
-        IFNULL(SUM(ck016='养殖场'),0) AS feetNum,
-        IFNULL(SUM(ck016='道路'),0) AS roadNum,
-        IFNULL(SUM(ck016='水电设施'),0) AS waterElectricityNum,
-        IFNULL(SUM(ck014=1 ),0) AS isPunishNum,
-        IFNULL(SUM(ck014=0 ),0) AS isNotPunishNum
-        FROM st4_scs_ck ck
+        SELECT  com.PK_ID, com.COM_NAME, ck.*, cn.CN001, sa.SA001
+        , cl.CL001, cl.CL002, sa.SA019
+        , IFNULL(ck.CK010, '') AS ck010
+        , IFNULL(ck.CK012, '') AS ck012
+        , IFNULL(cn.CN010, '') AS cn010
+        , IF(COUNT(*) IS NULL, 0, COUNT(*)) AS tzNum
+        , IFNULL(SUM(ck046 = '是'
+        OR ck046 = '已销号'), 0) AS xhNum
+        , IFNULL(SUM(ck046 = '否'
+        OR ck046 = '未销号'), 0) AS unxhNum
+        , IF(COUNT(*) IS NULL, 0, COUNT(*)) AS tzCheckedNum
+        , IFNULL(SUM(ck088 = 0
+        OR ck088 IS NULL), 0) AS tzUncheckedNum
+        , IFNULL(SUM(ck016 = '农业用地'), 0) AS farmNum
+        , IFNULL(SUM(ck016 = '居民点'), 0) AS residentNum
+        , IFNULL(SUM(ck016 = '工矿用地'), 0) AS industrialNum
+        , IFNULL(SUM(ck016 = '采石场'), 0) AS quarryNum
+        , IFNULL(SUM(ck016 = '能源设施'), 0) AS EnergyNum
+        , IFNULL(SUM(ck016 = '旅游设施'), 0) AS journeyNum
+        , IFNULL(SUM(ck016 = '交通设施'), 0) AS trafficNum
+        , IFNULL(SUM(ck016 = '养殖场'), 0) AS feetNum
+        , IFNULL(SUM(ck016 = '道路'), 0) AS roadNum
+        , IFNULL(SUM(ck016 = '水电设施'), 0) AS waterElectricityNum
+        , IFNULL(SUM(ck014 = 1), 0) AS isPunishNum
+        , IFNULL(SUM(ck014 = 0), 0) AS isNotPunishNum,
+        IFNULL(SUM(ck067 = 0), 0) AS unEmaminedNum,
+        IFNULL(SUM(ck067 = 1), 0) AS emaminedNum,
+        IFNULL(SUM(ck067 = 2), 0) AS backNum
+
+        FROM
+        sys_company com
+        LEFT JOIN st4_scs_cd cd  ON com.PK_ID = cd.sd001
+        LEFT JOIN
+        st4_scs_ck ck ON ck.CD004=cd.CD001
+
         LEFT JOIN (
         SELECT *
         FROM (
@@ -1865,19 +1891,14 @@
         ) t
         INNER JOIN st4_scs_cn d ON t.id = d.CN001
         ) cnn
-        ) cn ON ck.CK001 = cn.CK001
+        ) cn
+        ON ck.CK001 = cn.CK001
         LEFT JOIN st4_sys_sa sa ON sa.SA001 = ck.CK049
 
-        LEFT JOIN st4_scs_cd cd
-        ON cd.CD001 = ck.CD004
-        LEFT JOIN sys_company com on com.PK_ID = cd.sd001
         LEFT JOIN rlhd_group co ON cd.group_id = co.id
-
-        LEFT JOIN st4_po_cl_co clco ON clco.co001=co.id
-
-        LEFT JOIN st4_scs_cl cl
-        ON cl.CL001 = clco.cl001
-        WHERE ck.CK085 = 1
+        LEFT JOIN st4_po_cl_co clco ON clco.co001 = co.id
+        LEFT JOIN st4_scs_cl cl ON cl.CL001 = clco.cl001
+        WHERE 1=1
         <!--年份、核查任务、时间区间、省份、保护地、巡查人员；!-->
         <if test="st4SysSa != null">
             <if test="st4SysSa.sa001!=null and st4SysSa.sa001  !=''">
@@ -1904,17 +1925,17 @@
             and ck.CK048 <![CDATA[ <= ]]> #{endTime}
         </if>
         <if test="groupByName==null or groupByName=='' ">
-            and cn.cn001 is not null  GROUP BY ck.CK010
+             AND ck.CK010 IS NOT NULL AND ck.CK010 !=''  GROUP BY ck.CK010
         </if>
         <if test="groupByName=='ck010' ">
-          and cn.cn001 is not null  GROUP BY ck.CK010
+            AND ck.CK010 IS NOT NULL AND ck.CK010 !=''  GROUP BY ck.CK010
         </if>
         <if test="groupByName=='sd001'">
             GROUP BY com.PK_ID
         </if>
-        <if test="groupByName=='ck067'">
-            GROUP BY ck.ck067
-        </if>
+        <!--<if test="groupByName=='ck067'">-->
+            <!--GROUP BY ck.ck067-->
+        <!--</if>-->
     </select>
 
 

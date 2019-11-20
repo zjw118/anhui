@@ -3,6 +3,7 @@ package com.gistone.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.entity.*;
 
+import com.gistone.mapper.St4ScsCeMapper;
 import com.gistone.service.*;
 import com.gistone.util.ReadJson;
 import com.gistone.util.Result;
@@ -48,6 +49,9 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
 
     @Autowired
     private ISt4ScsCgService cgService;
+
+    @Autowired
+    private St4ScsCeMapper st4ScsCeMapper;
 
     @Autowired
     private  MessageProperties config;
@@ -114,6 +118,16 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
         Boolean cf = cfService.saveBatch(cfList);
         if (!cf) {
             new RuntimeException("插入数据库入航点信息错误");
+        }
+        if(ceList!=null&&ceList.size()>0){
+            QueryWrapper<St4ScsCe> ceQueryWrapper = new QueryWrapper<>();
+            String sign = ceList.get(0).getCe002();
+            ceQueryWrapper.eq("CE002", sign);
+            if(st4ScsCeMapper.selectCount(ceQueryWrapper)>0) {
+                ceQueryWrapper = new QueryWrapper<>();
+                ceQueryWrapper.eq("CE002", sign);
+                st4ScsCeMapper.delete(ceQueryWrapper);
+            }
         }
         Boolean ce = ceService.saveBatch(ceList);
         if (!ce) {
@@ -200,6 +214,16 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
         Boolean cf = cfService.saveBatch(cfList);
         if (!cf) {
             new RuntimeException("插入数据库入航点信息错误");
+        }
+        if(ceList!=null&&ceList.size()>0){
+            QueryWrapper<St4ScsCe> ceQueryWrapper = new QueryWrapper<>();
+            String sign = ceList.get(0).getCe002();
+            ceQueryWrapper.eq("CE002", sign);
+            if(st4ScsCeMapper.selectCount(ceQueryWrapper)>0) {
+                ceQueryWrapper = new QueryWrapper<>();
+                ceQueryWrapper.eq("CE002", sign);
+                st4ScsCeMapper.delete(ceQueryWrapper);
+            }
         }
         Boolean ce = ceService.saveBatch(ceList);
         if (!ce) {

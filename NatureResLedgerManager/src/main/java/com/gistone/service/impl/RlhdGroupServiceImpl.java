@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gistone.entity.Image;
 import com.gistone.entity.RlhdGroup;
 import com.gistone.entity.St4ScsCd;
+import com.gistone.mapper.ImageMapper;
 import com.gistone.mapper.RlhdGroupMapper;
 import com.gistone.mapper.St4ScsCdMapper;
 import com.gistone.service.RlhdGroupService;
@@ -38,6 +40,9 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
 
     @Autowired
     private St4ScsCdMapper iterpretationMapper;
+
+    @Autowired
+    private ImageMapper imageMapper;
 
     public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName) {
 
@@ -94,6 +99,17 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
     public Map<String,Object> getDetailById(Integer pageNum,Integer pageSize,Integer id) {
         Map<String,Object> result = new HashMap<>();
         IPage<St4ScsCd> iPage = iterpretationMapper.selectPage(new Page<>(pageNum, pageSize), new QueryWrapper<St4ScsCd>().eq("group_id", id));
+        if(iPage.getRecords()!=null&&iPage.getRecords().size()>0){
+            for (St4ScsCd record : iPage.getRecords()) {
+                Integer imageId = record.getImageId();
+                Image image = imageMapper.selectById(imageId);
+                if(image!=null){
+                    record.setImageName(image.getName());
+                }
+
+
+            }
+        }
         result.put("rows",iPage.getRecords());
         result.put("total",iPage.getTotal());
         return result;

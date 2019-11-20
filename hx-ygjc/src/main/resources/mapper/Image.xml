@@ -78,7 +78,7 @@
             ) s
         LEFT JOIN image b ON s.image_id = b.id
         ORDER BY
-            b.create_date
+            b.create_date DESC
         LIMIT 1
     </select>
 

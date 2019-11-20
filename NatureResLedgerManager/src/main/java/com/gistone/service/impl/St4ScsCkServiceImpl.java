@@ -1203,7 +1203,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                         cd.setReserveName(ck.getSt4SysSg()==null?"":ck.getSt4SysSg().getSg008());
                         cd.setAdminRegionName(ck.getSysCompany()==null?"":ck.getSysCompany().getComName());
                         newDataJson.put("point",BeanUtils.describe(cd));
-                       // newDataJson.put("tree",icListtree );
+                        newDataJson.put("tree",icListtree );
 
                         jarr.add(newDataJson);
                     }

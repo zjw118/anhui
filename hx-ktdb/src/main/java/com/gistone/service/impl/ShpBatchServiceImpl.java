@@ -198,7 +198,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
                 }
             }
 
-            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setFtpShpUrl(ftpPath + ftpPathUrl + shpName).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(1);
+            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setFtpShpUrl(ftpPath + ftpPathUrl + shpName).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(1).setCount(counint);
             if (StringUtils.isNotBlank(remark)) {
                 shpBatch.setRemark(remark);
             }
@@ -313,7 +313,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             }
 
             //批次表中录数据
-            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setShpUrl(ftpPath + ftpPathUrl + shpName).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(2);
+            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setFtpShpUrl(ftpPath + ftpPathUrl + shpName).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(2).setCount(counint);
             if (StringUtils.isNotBlank(remark)) {
                 shpBatch.setRemark(remark);
             }
@@ -412,14 +412,14 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
 
 
             //批次表中录数据
-            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setFtpShpUrl(ftpPath + ftpPathUrl + shpName).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(3);
+            ShpBatch shpBatch = new ShpBatch().setShpUrl(fileUrl.substring(2)).setFtpShpUrl(ftpPath + ftpPathUrl + shpName).setCreateDate(LocalDateTime.now()).setServiceUrl(url).setCreateBy(1).setType(3).setCount(counint);
             if (StringUtils.isNotBlank(remark)) {
                 shpBatch.setRemark(remark);
             }
             mapper.insert(shpBatch);
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("导入预置标识牌数据失败，异常信息为:", e.getMessage());
+            log.error("导入预置标识牌数据失败，异常信息为:", e);
             throw new ImportException(ResultEnum.ERROR.getCode(), "导入预置标识牌数据失败");
         }
     }

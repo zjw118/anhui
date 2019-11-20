@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gistone.mapper.St4ScsCeMapper">
+<delete id="batchDelete"   parameterType="java.util.List">
+    delete from st4_scs_ce where CE002 in
+    <foreach item="item" index="index"  collection="list" open="(" separator="," close=")">
+        #{item}
+    </foreach>
 
+</delete>
 </mapper>

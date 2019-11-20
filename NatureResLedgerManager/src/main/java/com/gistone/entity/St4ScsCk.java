@@ -509,6 +509,10 @@ public class St4ScsCk extends BaseEntity implements Serializable {
     @TableField(exist = false)
     @ApiModelProperty(value="任务批次主键",example = "1")
     private Integer cl001;
+
+    @TableField(exist = false)
+    @ApiModelProperty(value="任务名称",example = "1")
+    private String tname;
     @TableField(exist = false)
     @ApiModelProperty(value="保护区名称",example = "模糊查询")
     private String bhqmc;
@@ -596,6 +600,25 @@ public class St4ScsCk extends BaseEntity implements Serializable {
     @ApiModelProperty(value="水电设施数量",example = "99")
     private String waterElectricityNum;
 
+    @ApiModelProperty(example="44",value="未核查数")
+    @TableField(exist = false)
+    private String tzUncheckedNum;
+
+    @ApiModelProperty(example="44",value="已核查数")
+    @TableField(exist = false)
+    private String tzCheckedNum;
+
+    @ApiModelProperty(example="44",value="待审核数")
+    @TableField(exist = false)
+    private String unEmaminedNum;
+
+    @ApiModelProperty(example="44",value="通过数目")
+    @TableField(exist = false)
+    private String emaminedNum;
+
+    @ApiModelProperty(example="44",value="退回数目")
+    @TableField(exist = false)
+    private String backNum;
 
     @Ignore
     @TableField(exist = false)
