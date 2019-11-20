@@ -3,8 +3,6 @@ package com.gistone.controller;
 
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.RlhdGroup;
-import com.gistone.entity.St4ScsCb;
-import com.gistone.entity.St4ScsCbb;
 import com.gistone.entity.St4ScsCd;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.ISt4ScsCdService;
@@ -18,7 +16,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -138,7 +135,12 @@ public class RlhdGroupController {
 
 
     @RequestMapping(value = "/delete")
-    public ResultVO delete(@RequestBody Map<String, Object> params) {
+    public ResultVO delete(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
         List<Integer> id = (List<Integer>) params.get("id");
         if (id != null && id.size() > 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
@@ -149,12 +151,28 @@ public class RlhdGroupController {
 
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResultVO update(@RequestBody RlhdGroup entity, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
+    public ResultVO update(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
         }
+        Integer id = (Integer) params.get("id");
+        if(id==null){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"id不能为空");
+        }
+        RlhdGroup rlhdGroup = service.getById(id);
+        String name = (String) params.get("name");
+        if(StringUtils.isNotBlank(name)){
+            rlhdGroup.setName(name);
+        }
+        String remark = (String) params.get("name");
+        if (StringUtils.isNotBlank(remark)){
+            rlhdGroup.setRemark(remark);
+        }
+
 //判断更新人加人是否为空
-        service.edit(entity);
+        service.edit(rlhdGroup);
         return ResultVOUtil.success();
     }
 

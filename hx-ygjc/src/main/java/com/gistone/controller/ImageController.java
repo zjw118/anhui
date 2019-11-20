@@ -242,7 +242,14 @@ public class ImageController {
 
     @PostMapping("/getCountChange")
     public ResultVO getCountChange(){
-        return ResultVOUtil.success();
+        List<Map<String, Object>> result = service.getCountChange();
+        return ResultVOUtil.success(result);
+    }
+
+    @PostMapping("/getAreaChange")
+    public ResultVO getAreaChange(){
+        List<Map<String, Object>> result = service.getAreaChange();
+        return ResultVOUtil.success(result);
     }
 
     /**

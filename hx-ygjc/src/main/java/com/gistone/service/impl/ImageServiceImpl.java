@@ -26,15 +26,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -166,6 +158,19 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     @Override
     public List<Map<String, Object>> getAreaGroupByType() {
         List<Map<String,Object>> result = mapper.getAreaByType();
+        return result;
+    }
+
+    @Override
+    public List<Map<String, Object>> getCountChange() {
+
+            List<Map<String,Object>> result = mapper.getCountChange();
+            return result;
+    }
+
+    @Override
+    public List<Map<String, Object>> getAreaChange() {
+        List<Map<String,Object>> result = mapper.getAreaChange();
         return result;
     }
 
