@@ -87,6 +87,8 @@ public class LmBoard implements Serializable {
      */
     private Double latitude;
 
+    private Integer objectId;
+
     /**
      * 0预置数据，1采集数据
      */

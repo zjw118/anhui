@@ -39,7 +39,7 @@ public interface ISt4ScsCkService extends IService<St4ScsCk> {
 
     Result listLedgerSpace(Integer roleId, St4ScsCk checkLedger);
 
-    Result getDetail(St4ScsCk ck);
+    ResultVO getDetail(St4ScsCk ck);
 
 
     Result importExcelCommon(Map<String, MultipartFile> map, St4SysSa seUser, Integer taskId, List<Integer> uidList);

@@ -143,6 +143,7 @@
         a.`code`,
         a.jz_kh jzKh,
         a.landform,
+        a.object_id objectId,
         a.jz_number jzNumber,
         a.longitude,
         a.latitude,

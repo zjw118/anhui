@@ -281,96 +281,107 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     }
 
     @Override
-    public void insert(List<Map<String, Object>> data, Integer imageId, Integer createBy) throws FileNotFoundException {
-        //通过影像id先删除记录然后再插入,然后再写入shp文件，将地址更新到影像表中！
-        st4ScsCdMapper.delete(new QueryWrapper<St4ScsCd>().eq("image_id", imageId));
-        //从data中构造属性
-        for (Map<String, Object> datum : data) {
-            Map<String, Object> attributes = (Map<String, Object>) datum.get("attributes");
-            //通过属性构造参数
-            St4ScsCd iterpretation = new St4ScsCd();
-            if (null != attributes.get("name")){
-                iterpretation.setActiveName(attributes.get("name") + "");
-            }
-            if (null != attributes.get("center")) {
-                String center = attributes.get("center") + "";
-                iterpretation.setCenter(center);
-                if(-1<center.indexOf("°")){
-                    iterpretation.setCd013(center.split(",")[0]);
-                    iterpretation.setCd014(center.split(",")[1]);
-                    iterpretation.setCd015(1);
+    public ResultVO insert(List<Map<String, Object>> data, Integer imageId, Integer createBy){
+        try {
+            //通过影像id先删除记录然后再插入,然后再写入shp文件，将地址更新到影像表中！
+            st4ScsCdMapper.delete(new QueryWrapper<St4ScsCd>().eq("image_id", imageId));
+            //从data中构造属性
+            for (Map<String, Object> datum : data) {
+                Map<String, Object> attributes = (Map<String, Object>) datum.get("attributes");
+                //通过属性构造参数
+                St4ScsCd iterpretation = new St4ScsCd();
+                if (null != attributes.get("name")){
+                    iterpretation.setActiveName(attributes.get("name") + "");
+                }
+                if (null != attributes.get("center")) {
+                    String center = attributes.get("center") + "";
+                    iterpretation.setCenter(center);
+                    if(-1<center.indexOf("°")){
+                        iterpretation.setCd013(center.split(",")[0]);
+                        iterpretation.setCd014(center.split(",")[1]);
+                        iterpretation.setCd015(1);
+                    }else{
+                        iterpretation.setCd002(center.split(",")[0]);
+                        iterpretation.setCd003(center.split(",")[1]);
+                        iterpretation.setCd015(0);
+                    }
+                }
+                if (null != attributes.get("area")) {
+                    iterpretation.setArea(attributes.get("area") + "");
+                }
+                if (null != attributes.get("position")) {
+                    iterpretation.setPosition(attributes.get("position") + "");
+                }
+                if (null != attributes.get("region")) {
+                    iterpretation.setRegion(attributes.get("region") + "");
+                }
+                if (null != attributes.get("type")) {
+                    iterpretation.setActiveType(attributes.get("type") + "");
                 }else{
-                    iterpretation.setCd002(center.split(",")[0]);
-                    iterpretation.setCd003(center.split(",")[1]);
-                    iterpretation.setCd015(0);
+                    return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "类型不能为空");
+                }
+                if (null != attributes.get("descri")) {
+                    iterpretation.setDescri(attributes.get("descri") + "");
+                }
+    //            if (null != attributes.get("remark")) {
+    //                iterpretation.setCd012(attributes.get("remark") + "");
+    //            }
+                Map<String, Object> rings = (Map<String, Object>) datum.get("geometry");
+                String geometry = rings.get("rings").toString();
+                iterpretation.setGeometry(geometry);
+                iterpretation.setImageId(imageId);
+                iterpretation.setCd010(createBy);
+                iterpretation.setCd011(LocalDateTime.now());
+                iterpretation.setCd004(UUID.randomUUID().toString().replace("-", ""));
+                st4ScsCdMapper.insert(iterpretation);
+            }
+
+            //写入本地shp文件
+            String url = PathUtile.getRandomPath(PATH+"/epr/image/","x.shp");
+
+            String res = ShpUtil.handleWebData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+""),url);
+            //SHP上传到GIS服务器
+            String u = url.split("\\:")[1];
+            String ftpPath = u.split("\\.")[0];
+            ftpPath = ftpPath.substring(0,u.lastIndexOf("/"))+"/";
+            String name = u.substring(u.lastIndexOf("/")+1);
+            name = name.split("\\.")[0];
+
+            String fileName1 = name+".shp";
+            FileInputStream input1 = new FileInputStream(new File(url));
+            String fileName2 = name + ".dbf";
+            FileInputStream input2 = new FileInputStream(new File(url.split("\\.")[0] + ".dbf"));
+            String fileName3 = name + ".fix";
+            FileInputStream input3 = new FileInputStream(new File(url.split("\\.")[0] + ".fix"));
+            String fileName4 = name + ".prj";
+            FileInputStream input4 = new FileInputStream(new File(url.split("\\.")[0] + ".prj"));
+            String fileName5 = name + ".shx";
+            FileInputStream input5 = new FileInputStream(new File(url.split("\\.")[0] + ".shx"));
+
+            String res1 = FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName1, input1);
+            String res2 = FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName2, input2);
+            String res3 = FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName3, input3);
+            String res4 = FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName4, input4);
+            String res5 = FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName5, input5);
+
+            if ("00000".equals(res1 + res2 + res3 + res4 + res5)) {
+                //插入影像表
+                if ("0".equals(res)) {
+                    Image image = new Image();
+                    image.setId(imageId);
+                    image.setShpurl(ftpPt+ftpUrl+ftpPath+fileName1);
+                    image.setShp(url);
+    //                image.setUpdateDate(new Date());
+                    int r = imageMapper.updateById(image);
+                    if(0<r){
+                        return ResultVOUtil.success();
+                    }
                 }
             }
-            if (null != attributes.get("area")) {
-                iterpretation.setArea(attributes.get("area") + "");
-            }
-            if (null != attributes.get("position")) {
-                iterpretation.setPosition(attributes.get("position") + "");
-            }
-            if (null != attributes.get("region")) {
-                iterpretation.setRegion(attributes.get("region") + "");
-            }
-            if (null != attributes.get("type")) {
-                iterpretation.setActiveType(attributes.get("type") + "");
-            }
-            if (null != attributes.get("descri")) {
-                iterpretation.setDescri(attributes.get("descri") + "");
-            }
-//            if (null != attributes.get("remark")) {
-//                iterpretation.setCd012(attributes.get("remark") + "");
-//            }
-            Map<String, Object> rings = (Map<String, Object>) datum.get("geometry");
-            String geometry = rings.get("rings").toString();
-            iterpretation.setGeometry(geometry);
-            iterpretation.setImageId(imageId);
-            iterpretation.setCd010(createBy);
-            iterpretation.setCd011(LocalDateTime.now());
-            iterpretation.setCd004(UUID.randomUUID().toString().replace("-", ""));
-            st4ScsCdMapper.insert(iterpretation);
-        }
-
-        //写入本地shp文件
-        String url = PathUtile.getRandomPath(PATH+"/epr/image/","x.shp");
-
-        String res = ShpUtil.handleWebData(JSONArray.parseArray(net.sf.json.JSONArray.fromObject(data)+""),url);
-        //SHP上传到GIS服务器
-        String u = url.split("\\:")[1];
-        String ftpPath = u.split("\\.")[0];
-        ftpPath = ftpPath.substring(0,u.lastIndexOf("/"))+"/";
-        String name = u.substring(u.lastIndexOf("/")+1);
-        name = name.split("\\.")[0];
-
-        String fileName1 = name+".shp";
-        FileInputStream input1 = new FileInputStream(new File(url));
-        String fileName2 = name + ".dbf";
-        FileInputStream input2 = new FileInputStream(new File(url.split("\\.")[0] + ".dbf"));
-        String fileName3 = name + ".fix";
-        FileInputStream input3 = new FileInputStream(new File(url.split("\\.")[0] + ".fix"));
-        String fileName4 = name + ".prj";
-        FileInputStream input4 = new FileInputStream(new File(url.split("\\.")[0] + ".prj"));
-        String fileName5 = name + ".shx";
-        FileInputStream input5 = new FileInputStream(new File(url.split("\\.")[0] + ".shx"));
-
-        String res1 = FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName1, input1);
-        String res2 = FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName2, input2);
-        String res3 = FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName3, input3);
-        String res4 = FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName4, input4);
-        String res5 = FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName5, input5);
-
-        if ("00000".equals(res1 + res2 + res3 + res4 + res5)) {
-            //插入影像表
-            if ("0".equals(res)) {
-                Image image = new Image();
-                image.setId(imageId);
-                image.setShpurl(ftpPt+ftpUrl+ftpPath+fileName1);
-                image.setShp(url);
-                image.setUpdateDate(new Date());
-                imageMapper.updateById(image);
-            }
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "添加失败");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "添加失败");
         }
     }
 
@@ -403,18 +414,13 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             //上传
             String[] arr = {"zip","ZIP"};
             String path = FileUtil.getPath(PATH+"/epr/image/");
-            Map resMap = FileUtil.uploadFiles(request, path, arr, 50);  //每个附件限制50MB
-            String error = resMap.get("error")+"";
-            if(!"0".equals(error)){
-                return ResultVOUtil.error(ResultEnum.ERROR.getCode(),error);
+            Map resMap = FileUtil.uploadFile(request, path, arr, 30000000l);  //限制30MB
+            if(null!=resMap.get("error")){
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(),resMap.get("error")+"");
             }
-            String newName; //附件名称
-            List<Map> fl = (List)resMap.get("fileList");
-            if(0<fl.size()){
-                newName = fl.get(0).get("newName")+"";
-            }else{
-                return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"上传失败");
-            }
+            String newName = resMap.get("newName")+""; //附件名称
+
+
             String uuid = newName.split("\\.")[0];
             //解压
             File f = new File(path+uuid);
@@ -457,12 +463,14 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 jSONObject1.put("area",attributes.get("面积")+"");
                 jSONObject1.put("center",attributes.get("实地经")+","+attributes.get("实地纬"));
 
-                if (null != resMap.get("descri"))
-                jSONObject1.put("descri",resMap.get("descri"));
-                if (null != resMap.get("remark"))
-                jSONObject1.put("remark",resMap.get("remark"));
-                if (null != resMap.get("name"))
-                jSONObject1.put("name",resMap.get("name"));
+                if (StringUtils.isNotBlank(image.getRemark()))
+                    jSONObject1.put("remark",image.getRemark());
+                if (StringUtils.isNotBlank(image.getName()))
+                    jSONObject1.put("name",image.getName());
+
+                if (null!=image.getCreateDate()){
+                    jSONObject1.put("createDate",image.getCreateDate());
+                }
 
                 JSONObject geometry = JSONObject.fromObject(jo.get("geometry"));
                 geometry.put("rings","\""+geometry.get("rings")+"\"");
@@ -509,21 +517,17 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             image.setShpurl("E:/FTP"+ftpPath+fileName1);
             if(null!=user)
                 image.setCreateBy(user.getId());
-            image.setCreateDate(LocalDateTime.now());
             if(null!=user)
                 image.setUpdateBy(user.getId());
-            image.setUpdateDate(new Date());
+//            image.setUpdateDate(new Date());
             image.setShp(url); //本地SHP路径
-            if(null!=resMap.get("name"))
-            image.setUrl(resMap.get("name")+"");
+            image.setRemark(image.getRemark());
             image.setDelFlag(1);
             image.setSign(1);
-            if(null!=resMap.get("name"))
-                image.setName(resMap.get("name")+"");
-            if(null!=resMap.get("url"))
-                image.setUrl(resMap.get("url")+"");
-            if(null!=resMap.get("remark"))
-                image.setRemark(resMap.get("remark")+"");
+            if(null!=image.getCreateDate()){
+                image.setCreateDate(image.getCreateDate());
+            }
+
             int res1 = imageMapper.updateById(image);
             if(0==res1){
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"插入image失败");
@@ -579,7 +583,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 Map<String, Object> rings = (Map<String, Object>) JSONObject.fromObject(datum.get("geometry"));
                 String geometry = rings.get("rings").toString();
                 iterpretation.setGeometry(geometry);
-                iterpretation.setImageId(Integer.valueOf(resMap.get("cd001")+""));
+                iterpretation.setImageId(image.getId());
                 if(null!=user)
                     iterpretation.setCd010(user.getId());
                 iterpretation.setCd011(LocalDateTime.now());

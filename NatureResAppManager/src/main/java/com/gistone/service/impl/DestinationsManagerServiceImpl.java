@@ -3,7 +3,9 @@ package com.gistone.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.entity.*;
 
+import com.gistone.mapper.St4ScsCeMapper;
 import com.gistone.service.*;
+import com.gistone.util.FileUtil;
 import com.gistone.util.ReadJson;
 import com.gistone.util.Result;
 import com.gistone.util.ResultCp;
@@ -50,7 +52,12 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
     private ISt4ScsCgService cgService;
 
     @Autowired
+    private St4ScsCeMapper st4ScsCeMapper;
+
+    @Autowired
     private  MessageProperties config;
+//    @Autowired
+//    private Config
 
     @Override
     @Transactional
@@ -114,6 +121,19 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
         Boolean cf = cfService.saveBatch(cfList);
         if (!cf) {
             new RuntimeException("插入数据库入航点信息错误");
+        }
+        if(ceList!=null&&ceList.size()>0){
+            QueryWrapper<St4ScsCe> ceQueryWrapper = new QueryWrapper<>();
+            String sign = ceList.get(0).getCe002();
+            ceQueryWrapper.eq("CE002", sign);
+            List<St4ScsCe> ceExistList = st4ScsCeMapper.selectList(ceQueryWrapper);
+            if(ceExistList!=null&&ceExistList.size()>0) {
+                List<String> attachUrls = ceExistList.stream().map(St4ScsCe::getCe003).collect(Collectors.toList());
+                for (String url:attachUrls) {
+                    FileUtil.deleteFile(config.getUpPath()+url);
+                }
+                st4ScsCeMapper.delete(ceQueryWrapper);
+            }
         }
         Boolean ce = ceService.saveBatch(ceList);
         if (!ce) {
@@ -200,6 +220,19 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
         Boolean cf = cfService.saveBatch(cfList);
         if (!cf) {
             new RuntimeException("插入数据库入航点信息错误");
+        }
+        if(ceList!=null&&ceList.size()>0){
+            QueryWrapper<St4ScsCe> ceQueryWrapper = new QueryWrapper<>();
+            String sign = ceList.get(0).getCe002();
+            ceQueryWrapper.eq("CE002", sign);
+            List<St4ScsCe> ceExistList = st4ScsCeMapper.selectList(ceQueryWrapper);
+            if(st4ScsCeMapper.selectCount(ceQueryWrapper)>0) {
+                List<String> attachUrls = ceExistList.stream().map(St4ScsCe::getCe003).collect(Collectors.toList());
+                for (String url:attachUrls) {
+                    FileUtil.deleteFile(config.getUpPath()+url);
+                }
+                st4ScsCeMapper.delete(ceQueryWrapper);
+            }
         }
         Boolean ce = ceService.saveBatch(ceList);
         if (!ce) {

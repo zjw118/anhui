@@ -434,7 +434,7 @@ public class ShpUtil {
 
             //创建shp文件并写入数据
             if (createSHP(TYPE, features, new File(filePath)).equals("0")) {
-//                System.out.println("文件保存成功");
+                System.out.println("文件保存成功");
             }
 
         } catch (Exception e) {
@@ -599,6 +599,8 @@ public class ShpUtil {
                 featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("X坐标"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("Y坐标"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("redline_id"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("OBJECTID_1"));
+
 //                featureBuilder.add(jobj.getJSONObject("attributes").getString("attribute"));
                 //featureBuilder.add(jobj.getJSONObject("attributes").getString("center"));
 //                featureBuilder.set("center",jobj.getJSONObject("attributes").getString("center"));
@@ -681,6 +683,7 @@ public class ShpUtil {
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("hxcode"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("redline_id"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("编号"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("OBJECTID_1"));
 //                featureBuilder.add(jobj.getJSONObject("attributes").getString("attribute"));
                 //featureBuilder.add(jobj.getJSONObject("attributes").getString("center"));
 //                featureBuilder.set("center",jobj.getJSONObject("attributes").getString("center"));
@@ -860,6 +863,7 @@ public class ShpUtil {
         builder.length(100).add("longitude", Double.class);
         builder.length(100).add("latitude", Double.class);
         builder.length(100).add("redline_id", Integer.class);
+        builder.length(100).add("objectid", Integer.class);
 
 
         // 生成类型
@@ -878,6 +882,8 @@ public class ShpUtil {
         builder.length(100).add("hxcode", String.class);
         builder.length(100).add("redline_id", Integer.class);
         builder.length(100).add("number",String.class);
+        builder.length(100).add("objectid", Integer.class);
+
 
 
         // 生成类型

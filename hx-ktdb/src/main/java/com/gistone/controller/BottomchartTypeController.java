@@ -69,7 +69,18 @@ public class BottomchartTypeController {
         if (Fid == null) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "父id不能为空");
         }
+
+        BottomchartType byId = service.getById(Fid);
+        if(byId!=null&&byId.getType()==2){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "此节点不能创建子节点");
+        }
         entity.setFId(Fid);
+        Integer type = (Integer) dataParam.get("type");
+        if(type==null){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "type不能为空");
+        }
+        entity.setType(type);
+
         service.insert(entity);
         return ResultVOUtil.success();
     }
@@ -120,6 +131,11 @@ public class BottomchartTypeController {
             entity.setFId(Fid);
         }
         entity.setFId(Fid);
+
+        Integer type = (Integer) dataParam.get("type");
+        if(type!=null){
+            entity.setType(type);
+        }
         //判断更新人加人是否为空
         service.edit(entity);
         return ResultVOUtil.success();

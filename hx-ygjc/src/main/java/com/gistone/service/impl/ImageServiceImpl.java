@@ -1,19 +1,22 @@
 package com.gistone.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.*;
+import com.gistone.entity.Image;
+import com.gistone.entity.ImageConfig;
+import com.gistone.entity.ImageNumber;
+import com.gistone.entity.ShpBatch;
 import com.gistone.mapper.ImageConfigMapper;
 import com.gistone.mapper.ImageMapper;
 import com.gistone.mapper.ImageNumberMapper;
-import com.gistone.mapper.ShpBatchMapper;
 import com.gistone.service.ImageService;
-import com.gistone.util.*;
+import com.gistone.util.FileUtil;
+import com.gistone.util.HttpUtil;
+import com.gistone.util.ResultEnum;
+import com.gistone.util.ResultVOUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -22,15 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -54,6 +50,8 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     private ImageConfigMapper imageConfigMapper;
     @Autowired
     private ImageNumberMapper imageNumberMapper;
+    @Autowired
+    private ImageMapper imageMapper;
 
 
 
@@ -102,9 +100,16 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
 
 
     @Override
-    public void insert(String name, String url, Integer createBy,String remark) {
+    public void insert(String name, String url, Integer createBy,String remark,String createDate) {
         //具体逻辑
-        Image image = new Image().setName(name).setUrl(url).setCreateDate(LocalDateTime.now()).setCreateBy(createBy).setUpdateDate(new Date());
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        Date date = null;
+//        try {
+//            date = simpleDateFormat.parse(createDate);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+        Image image = new Image().setName(name).setUrl(url).setCreateDate(createDate).setCreateBy(createBy).setUpdateDate(new Date());
         if(StringUtils.isNotBlank(remark)){
            image.setRemark(remark);
        }
@@ -145,6 +150,31 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     }
 
     @Override
+    public List<Map<String, Object>> getCountGroupByType() {
+        List<Map<String,Object>> result = mapper.getCountGroupByType();
+        return result;
+    }
+
+    @Override
+    public List<Map<String, Object>> getAreaGroupByType() {
+        List<Map<String,Object>> result = mapper.getAreaByType();
+        return result;
+    }
+
+    @Override
+    public List<Map<String, Object>> getCountChange() {
+
+            List<Map<String,Object>> result = mapper.getCountChange();
+            return result;
+    }
+
+    @Override
+    public List<Map<String, Object>> getAreaChange() {
+        List<Map<String,Object>> result = mapper.getAreaChange();
+        return result;
+    }
+
+    @Override
     public ResultVO getAudit(Integer id) {
         Image image = mapper.getImageById(id);
         String json = "";
@@ -152,11 +182,52 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             json = FileUtil.readFromTextFile(image.getAuditPath());
         //评分系数
 //        List<ImageConfig> imageConfig = imageNumberMapper.selectImageConfigByImageId(id);
+        String contrastRed = image.getContrastRed();
+        List<ImageConfig> imageConfig3s = null;
+
+
+        Double num = 0.0;               //总分
+        if(StringUtils.isNotBlank(contrastRed)){
+            JSONObject jsonObject = JSONObject.fromObject(contrastRed);
+            Object o1 = jsonObject.get("num");  //总分
+            Object o2 = jsonObject.get("hxpf"); //评分JSON
+            Object o3 = jsonObject.get("mj");   //面积JSON
+            Object o4 = jsonObject.get("bhl");   //变化量
+
+            if(null!=o1) num = Double.valueOf(jsonObject.get("num")+"");
+
+
+
+            //获取类别
+            imageConfig3s = imageConfigMapper.getImageConfig3s();
+            for (ImageConfig imageConfig3 : imageConfig3s) {
+                //面积
+                if(null!=o3){
+                    JSONObject j2 = JSONObject.fromObject(o3);
+                    for (Object o : j2.keySet()) {
+                        if(imageConfig3.getId()==Integer.valueOf(o+"")){
+                            imageConfig3.setNum1(Double.valueOf(j2.get(o+"")+""));
+                        }
+                    }
+                }
+                //变化量
+                if(null!=o4){
+                    JSONObject j3 = JSONObject.fromObject(o4);
+                    for (Object o : j3.keySet()) {
+                        if(imageConfig3.getId()==Integer.valueOf(o+"")){
+                            imageConfig3.setNum2(Double.valueOf(j3.get(o+"")+""));
+                        }
+                    }
+                }
+            }
+        }
 
         Map map = new HashMap();
         map.put("image",image);
+        map.put("imageConfig",imageConfig3s);
         map.put("xs",imageNumberMapper.selectName());
         map.put("out",json);
+        map.put("sum",num);
         return  ResultVOUtil.success(map);
     }
 
@@ -165,7 +236,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
 
 
     @Override
-    public ResultVO addAudit(Integer id,String json) {
+    public ResultVO addAudit(Integer id,JSONObject json) {
         try {
             //获取影像SHP数据的FTP地址
             Image image = mapper.getImageById(id);
@@ -181,6 +252,8 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             }
 //            System.out.println( "?humanActivity="+shpUrl);
 //            System.out.println("&redline="+ftpShpUrl);
+
+
             //发送请求
             String p1 = "?humanActivity="+shpUrl;
             String p2 = "&redline="+ftpShpUrl;
@@ -191,6 +264,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             String out = "";
             String redline_area = "";
             String stati = "";
+
             for (int i = 0; i < 5; i++) {
                 Thread.sleep(2000);
                 out = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId+"/results/out?f=pjson&returnType=data",null);
@@ -207,6 +281,10 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
                 Thread.sleep(2000);
             }
 
+            System.out.println(redline_area);
+            System.out.println(stati);
+
+
 
             //判断是否成功
             if(-1<out.indexOf("error")||"".equals(out)){
@@ -218,6 +296,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             if(-1<stati.indexOf("error")||"".equals(stati)){
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "stati请求失败");
             }
+
 
             //保存文件
             String path = FileUtil.getPath(PATH+"/epr/out/");
@@ -237,6 +316,8 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
                 sum += Double.valueOf(attributes.get("hxarea")+"");
             }
 
+
+
             //获取类型列表
             List<ImageConfig> icList = imageConfigMapper.getImageConfig3();
 
@@ -247,15 +328,24 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
                 JSONObject job3s = JSONObject.fromObject(f);
                 JSONObject attributess = JSONObject.fromObject(job3s.get("attributes"));
                 for (ImageConfig imageConfig : icList) {
-                    if(imageConfig.getId()==Integer.valueOf(attributess.get("type")+"")){
-                        imageConfig.setNum(imageConfig.getNum()+Double.valueOf(attributess.get("SUM_insect")+""));
+                    if(StringUtils.isNotBlank(attributess.get("type")+"")){
+                        if(imageConfig.getId()==Integer.valueOf(attributess.get("type")+"")){
+                            if(StringUtils.isNotBlank(attributess.get("SUM_insect")+"")){
+                                if(null==imageConfig.getNum()) {
+                                    imageConfig.setNum(0.0);
+                                }
+                                imageConfig.setNum(imageConfig.getNum()+Double.valueOf(attributess.get("SUM_insect")+""));
+                            }
+                        }
                     }
                 }
             }
 
+
+
             //影像系数
             List<ImageNumber> imageNumbers = new ArrayList();
-            JSONObject numberJson = JSONObject.fromObject(json);
+            JSONObject numberJson = json;
             for (Object o : numberJson.keySet()) {
                 ImageNumber imageNumber = new ImageNumber();
                 imageNumber.setImage_config_id(Integer.valueOf(o+""));
@@ -263,15 +353,25 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
                 imageNumbers.add(imageNumber);
             }
 
-            //评分
+            //影像评分
             JSONObject jb = new JSONObject();
+            JSONObject mj = new JSONObject();
+            JSONObject bhl = new JSONObject();
             double d = 0;
             for (ImageConfig imageConfig : icList) {
+                if(null==imageConfig.getNum()) {
+                    imageConfig.setNum(0.0);
+                }
+                mj.put(imageConfig.getId(),imageConfig.getNum());
                 double db = 0;
                 if(0<imageNumbers.size()){
                     //有配置
                     for (ImageNumber imageNumber : imageNumbers) {
                         if(imageNumber.getImage_config_id()==imageConfig.getId()){
+                            if(null==imageConfig.getNum())
+                                imageConfig.setNum(0.0);
+                            if(null==imageNumber.getNumber())
+                                imageNumber.setNumber(0.0);
                             db = imageConfig.getNum()*imageNumber.getNumber();
                         }
                     }
@@ -279,11 +379,36 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
                     d += db;
                 }
             }
-            jb.put("avg",d/sum);
+            JSONObject jSONObject = new JSONObject();
+            jSONObject.put("num",d/sum);
+            jSONObject.put("hxpf",jb);
+            jSONObject.put("mj",mj);
+
+
+            //变化量
+            Image image2 = imageMapper.getImage2(id);
+            String contrastRed = image2.getContrastRed();
+            if(null!=contrastRed){
+                JSONObject jsonObject1 = JSONObject.fromObject(contrastRed);
+                Object mj1 = jsonObject1.get("mj");
+                JSONObject jsonObject2 = JSONObject.fromObject(mj1);
+                for (Object o1 : jsonObject2.keySet()) {
+                    for (Object o2 : mj.keySet()) {
+                        if(Integer.valueOf(o1+"")==Integer.valueOf(o2+"")){
+                            double bn = Double.valueOf(mj.get(o2)+"")-Double.valueOf(jsonObject2.get(o1)+"");
+                            bhl.put(o1+"",bn);
+                        }
+                    }
+                }
+                jSONObject.put("bhl",bhl);
+            }
+
+
 
             //更新数据
-            image.setContrastRed(jb+"");
+            image.setContrastRed(jSONObject+"");
             image.setAuditPath(path+name);
+            image.setScore(json.toString());
             int res2 = mapper.updateImage(image);
             if(0<res2){
                 return ResultVOUtil.success();
@@ -305,6 +430,48 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         }
         return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "审核失败");
     }
+
+    @Override
+    public ResultVO oldNumber(Integer id) {
+        Image image = imageMapper.getImageById(id);
+        List<ImageConfig> imageConfig3 = imageConfigMapper.getImageConfig3();
+        boolean bb = false;
+        if(null!=image){
+            String score = image.getScore();
+            if(StringUtils.isNotBlank(score)){
+                JSONObject jsonObject = JSONObject.fromObject(score);
+                for (ImageConfig imageConfig : imageConfig3) {
+                    boolean b = false;
+                    for (Object o : jsonObject.keySet()) {
+                        if(imageConfig.getId()==Integer.valueOf(o.toString())){
+                            imageConfig.setNum(Double.valueOf(jsonObject.get(o).toString()));
+                            b = true;
+                            bb = true;
+                        }
+                    }
+                    if(!b){
+                        imageConfig.setNum(0.0);
+                    }
+                }
+                JSONObject jSONObject = new JSONObject();
+                jSONObject.put("list",imageConfig3);
+                if(bb){
+                    jSONObject.put("sign","0");// 有默认数据
+                }else{
+                    jSONObject.put("sign","1");//无默认数据
+                }
+                return ResultVOUtil.success(jSONObject);
+            }else{
+                JSONObject jSONObject = new JSONObject();
+                jSONObject.put("sign","1");//无默认数据
+                return ResultVOUtil.success(jSONObject);
+            }
+        }
+
+        return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "查询失败");
+    }
+
+
 
 
 

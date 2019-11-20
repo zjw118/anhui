@@ -286,6 +286,15 @@
             <id column="CL001" property="cl001" />
             <result column="CL002" property="cl002" />
         </collection>
+        <collection property="st4ScsCeList" ofType="com.gistone.entity.St4ScsCe">
+            <id column="CE001" property="ce001" />
+            <result column="CE002" property="ce002" />
+            <result column="CE003" property="ce003" />
+            <result column="CE004" property="ce004" />
+            <result column="CE005" property="ce005" />
+            <result column="CE006" property="ce006" />
+            <result column="CE007" property="ce007" />
+        </collection>
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -868,29 +877,26 @@
         </trim>
     </insert>
     <select id="getStageDetail" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCk" >
-               ( SELECT
-        <include refid="Base_Column_List2"/>
-               ,sa.SA019 as uname
-        FROM st4_scs_ck ck
-        left join st4_scs_cd cd on cd.CD004=ck.CD004
-        LEFT JOIN st4_sys_sg sg on sg.SG001=ck.SG001
-            LEFT JOIN st4_sys_sa sa
-            ON ck.CK049 = sa.SA001
-        WHERE CK085 = 1
-            AND CK088 = 0
-            AND ck.CD004 = #{cd004} order by CK001 DESC limit 1)
-        UNION
-        (SELECT
-        <include refid="Base_Column_List2"/>
-        ,sa.SA019 as uname
-        FROM st4_scs_ck ck
-        left join st4_scs_cd cd on cd.CD004=ck.CD004
-        LEFT JOIN st4_sys_sg sg on sg.SG001=ck.SG001
-        LEFT JOIN st4_sys_sa sa
-          ON ck.CK049 = sa.SA001
-        WHERE CK085 = 1
-            AND CK088 = 1
-            AND ck.CD004 =#{cd004} order by CK001 DESC limit 1)
+               <!--( SELECT-->
+        <!--<include refid="Base_Column_List2"/>-->
+               <!--,sa.SA019 as uname-->
+        <!--FROM st4_scs_ck ck-->
+        <!--left join st4_scs_cd cd on cd.CD004=ck.CD004-->
+        <!--LEFT JOIN st4_sys_sg sg on sg.SG001=ck.SG001-->
+            <!--LEFT JOIN st4_sys_sa sa-->
+            <!--ON ck.CK049 = sa.SA001-->
+        <!--WHERE CK085 = 1-->
+            <!--AND CK088 = 0-->
+            <!--AND ck.CD004 = #{cd004} order by CK001 DESC limit 1)-->
+        <!--UNION-->
+        SELECT
+        ck.*,ce.*,cd.*,cn.*,sa.SA019 as uname
+        FROM st4_scs_ck ck INNER JOIN st4_scs_cd cd ON cd.CD001=ck.CD004
+        left join st4_scs_cn cn on cn.CK001=ck.CK001
+        LEFT JOIN st4_scs_cc cc ON cc.CC002 = ck.CC002
+        LEFT JOIN st4_scs_ce ce ON ce.CE002 = cc.CC002
+        LEFT JOIN st4_sys_sa sa ON ck.CK049 = sa.SA001
+        WHERE CK085 = 1  AND ck.CK001 =#{ck001}
     </select>
     <select id="listLedger" resultMap="BaseResultMap"  >
         SELECT cl.CL001,cl.CL002,
@@ -917,6 +923,9 @@
 
         left join  st4_sys_sa sa on sa.SA001= ck.CK049
         where CK085 = 1
+        <if test="ck.tname != null">
+            and cl.CL002 like '%${ck.tname}%'
+        </if>
         <if test="ck.rlhdGroup!=null">
             <if test="ck.rlhdGroup.name!=null and ck.rlhdGroup.name!='' ">
               and   co.name like '%${ck.rlhdGroup.name}%'
@@ -1222,6 +1231,8 @@
         left join  st4_sys_sa sa on sa.SA001= ck.CK049
         left join st4_scs_cl cl on cl.CL001=ck.CK091
         where CK085 = 1 and ck046 !="是"
+
+
         <if test="ck.bhqmc != null">
             and sg.SG008 like '%${ck.bhqmc}%'
         </if>

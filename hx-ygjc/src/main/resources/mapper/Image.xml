@@ -78,24 +78,116 @@
             ) s
         LEFT JOIN image b ON s.image_id = b.id
         ORDER BY
-            b.create_date
+            b.create_date DESC
         LIMIT 1
     </select>
 
     <select id="getAreaGroupByType" resultType="java.util.Map">
         SELECT
             SUM(area) area,
-            active_type
+            b.name as active_type
         FROM
-            st4_scs_cd
+            st4_scs_cd a
+        INNER JOIN image_config b ON a.active_type = b.id
         WHERE
-            image_id = #{id}
+            a.image_id = #{id}
         GROUP BY
-            active_type
+            a.active_type
     </select>
 
-    <select id="getImageConfig" resultType="com.gistone.entity.ImageConfig">
-        SELECT * from image_config LIMIT 1
+    <select id="getLastId" resultType="int">
+        SELECT
+            s.image_id
+        FROM
+            (
+                SELECT
+                    COUNT(*),
+                    image_id
+                FROM
+                    `st4_scs_cd` a
+                GROUP BY
+                    image_id
+            ) s
+        LEFT JOIN image b ON s.image_id = b.id
+        ORDER BY
+            b.create_date DESC
+        LIMIT 2
+    </select>
+
+
+    <select id="getCountGroupByType" resultType="java.util.Map">
+        SELECT
+            count(*) count,
+            b.`name` type
+        FROM
+            st4_scs_cd a
+        LEFT JOIN image_config b ON a.active_type = b.id
+        WHERE a.active_type IS NOT NULL
+        GROUP BY
+            a.active_type
+    </select>
+
+    <select id="getCountByType" resultType="java.util.Map">
+        SELECT
+            count(*) count,
+            b.`name` type
+        FROM
+            st4_scs_cd a
+        LEFT JOIN image_config b ON a.active_type = b.id
+        where
+        a.image_id = #{id}
+        GROUP BY
+            a.active_type
+    </select>
+    <select id="getAreaByType" resultType="java.util.Map">
+        SELECT
+            SUM(a.area) area,
+            b.`name` type
+        FROM
+            st4_scs_cd a
+        LEFT JOIN image_config b ON a.active_type = b.id
+        WHERE a.active_type IS NOT NULL
+        GROUP BY
+            a.active_type
+    </select>
+
+    <select id="getCountChange" resultType="java.util.Map">
+        SELECT
+            count(*) count,
+            b.`name` name
+        FROM
+            st4_scs_cd a
+        inner JOIN image b ON a.image_id = b.id
+        GROUP BY
+            a.image_id
+        ORDER BY b.create_date DESC
+        LIMIT 1,5
+    </select>
+
+    <select id="getAreaChange" resultType="java.util.Map">
+        SELECT
+            SUM(a.area) area,
+            b.`name` name
+        FROM
+            st4_scs_cd a
+        inner JOIN image b ON a.image_id = b.id
+        GROUP BY
+            a.image_id
+        ORDER BY b.create_date DESC
+        LIMIT 1,5
+    </select>
+
+
+
+
+
+    <select id="getImage2" resultType="com.gistone.entity.Image"  parameterType="java.lang.Integer">
+        SELECT * from image
+        WHERE del_flag = 1
+        and id &lt; #{id}
+        ORDER BY create_date desc,id desc
+        LIMIT 1
+
     </select>
 
     <update id="updateImage" parameterType="Object" >
@@ -115,6 +207,9 @@
             </if>
             <if test="null!=auditPath">
                 audit_path=#{auditPath},
+            </if>
+            <if test="null!=score">
+                score=#{score},
             </if>
         </set>
 		where id=#{id}
@@ -138,7 +233,8 @@
             contrast_red,
             sign,
             evaluation,
-            audit_date
+            audit_date,
+            score
         )
         VALUES(
             #{name},
@@ -154,7 +250,8 @@
             #{contrastRed},
             #{sign},
             #{evaluation},
-            #{auditDate}
+            #{auditDate},
+            #{score}
         )
     </insert>
 
