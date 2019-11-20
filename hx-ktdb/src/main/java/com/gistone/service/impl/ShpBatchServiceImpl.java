@@ -83,7 +83,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
         if (StringUtils.isNotBlank(userName)) {
             //wrapper.likeRight("SA008",userName);
         }
-        // wrapper.eq("SA007",1);
+         wrapper.eq("type",1);
         //wrapper.orderByDesc("SA003");
         IPage<ShpBatch> iPage = mapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
 
