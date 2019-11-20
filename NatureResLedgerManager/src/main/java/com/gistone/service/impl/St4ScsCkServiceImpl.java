@@ -89,7 +89,9 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
     St4PoClCoMapper st4PoClCoMapper;
 
     @Autowired
-            ImageConfigMapper imageConfigMapper;
+    ImageConfigMapper imageConfigMapper;
+    @Autowired
+            MessageProperties messageProperties;
 
     DateTimeFormatter dfMd = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     @Override
@@ -387,18 +389,12 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
     @Override
     public Result getDetail(St4ScsCk ck) {
         Result result = new Result();
-        List<St4ScsCk> list = checkLedgerMapper.getStageDetail(ck);
-        if(list.size()>0){
-            for (St4ScsCk checkLedger:list) {
-
-                QueryWrapper<St4ScsCn>    wrapper1 = new QueryWrapper<>();
-                wrapper1.eq("CK001",checkLedger.getCk001());
-                checkLedger.setCheckLedgerAttach(checkLedgerAttachMapper.selectList(wrapper1));
-            }
-
-        }
+        St4ScsCk ckR = checkLedgerMapper.getStageDetail(ck);
+//        QueryWrapper<St4ScsCn>    wrapper1 = new QueryWrapper<>();
+//        wrapper1.eq("CK001",ckR.getCk001());
+//        ckR.setCheckLedgerAttach(checkLedgerAttachMapper.selectList(wrapper1));
         result.setStatus(1000);
-        result.setRows(list);
+        result.setData(ckR);
         result.setMsg("加载"+ResultMsg.MSG_1000);
         return result;
     }
@@ -1190,11 +1186,11 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                         cd.setCd004(cd.getCd001().toString());
                         String videoUrl = "";
                         if(image!=null){
-                            videoUrl=image.getUrl()+"/export?bbox="+ image.getCountryBorder()+"&bboxSR=4490&size=256,256&format=png24&transparent=true&dpi=96&f=image";
+                            videoUrl=image.getUrl();
                         }
                         cd.setVideoMsg(videoUrl);
                         String geometry= cd.getGeometry().replaceAll("\\[\\[\\[","" )
-                                .replaceAll("\\]\\]\\]","" )
+                                .replaceAll("\\]\\/listPhoneUserToView]\\]","" )
                                 .replaceAll("\\]\\,\\ \\[", "##").replaceAll("\\]\\,\\[", "##");
                         cd.setGeometry(geometry);
                         cd.setTaskName(cl==null?"":cl.getCl002());

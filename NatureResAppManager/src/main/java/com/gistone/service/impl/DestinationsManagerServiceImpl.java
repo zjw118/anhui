@@ -5,6 +5,7 @@ import com.gistone.entity.*;
 
 import com.gistone.mapper.St4ScsCeMapper;
 import com.gistone.service.*;
+import com.gistone.util.FileUtil;
 import com.gistone.util.ReadJson;
 import com.gistone.util.Result;
 import com.gistone.util.ResultCp;
@@ -55,6 +56,8 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
 
     @Autowired
     private  MessageProperties config;
+//    @Autowired
+//    private Config
 
     @Override
     @Transactional
@@ -123,9 +126,12 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
             QueryWrapper<St4ScsCe> ceQueryWrapper = new QueryWrapper<>();
             String sign = ceList.get(0).getCe002();
             ceQueryWrapper.eq("CE002", sign);
-            if(st4ScsCeMapper.selectCount(ceQueryWrapper)>0) {
-                ceQueryWrapper = new QueryWrapper<>();
-                ceQueryWrapper.eq("CE002", sign);
+            List<St4ScsCe> ceExistList = st4ScsCeMapper.selectList(ceQueryWrapper);
+            if(ceExistList!=null&&ceExistList.size()>0) {
+                List<String> attachUrls = ceExistList.stream().map(St4ScsCe::getCe003).collect(Collectors.toList());
+                for (String url:attachUrls) {
+                    FileUtil.deleteFile(config.getUpPath()+url);
+                }
                 st4ScsCeMapper.delete(ceQueryWrapper);
             }
         }
@@ -219,9 +225,12 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
             QueryWrapper<St4ScsCe> ceQueryWrapper = new QueryWrapper<>();
             String sign = ceList.get(0).getCe002();
             ceQueryWrapper.eq("CE002", sign);
+            List<St4ScsCe> ceExistList = st4ScsCeMapper.selectList(ceQueryWrapper);
             if(st4ScsCeMapper.selectCount(ceQueryWrapper)>0) {
-                ceQueryWrapper = new QueryWrapper<>();
-                ceQueryWrapper.eq("CE002", sign);
+                List<String> attachUrls = ceExistList.stream().map(St4ScsCe::getCe003).collect(Collectors.toList());
+                for (String url:attachUrls) {
+                    FileUtil.deleteFile(config.getUpPath()+url);
+                }
                 st4ScsCeMapper.delete(ceQueryWrapper);
             }
         }

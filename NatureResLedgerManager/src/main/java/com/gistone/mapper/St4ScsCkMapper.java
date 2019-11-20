@@ -26,7 +26,7 @@ public interface St4ScsCkMapper extends BaseMapper<St4ScsCk> {
     IPage<St4ScsCk> listHkyLedger(IPage<St4ScsCk> page, @Param("ck") St4ScsCk checkLedger);
 //    List<St4ScsCk> getDetailLedger(St4ScsCk checkLedger);
 
-    List<St4ScsCk> getStageDetail(St4ScsCk checkLedger);
+    St4ScsCk getStageDetail(St4ScsCk checkLedger);
 
     void insertList(List<St4ScsCk> list);
     /**

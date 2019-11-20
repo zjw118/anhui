@@ -229,7 +229,7 @@ public class CheckNrledgerController {
     public Result getStageDetail( @RequestBody @ApiParam(name="台账详情", value="json格式", required=true) Swagger<St4ScsCk>  checkLedger
                              ) {
         St4ScsCk ck = checkLedger.getData();
-        if(ck.getCd004()==null){
+        if(ck.getCk001()==null){
 
             return  Result.build(1001,"问题点编号cd004"+ ResultMsg.MSG_1001);
         }

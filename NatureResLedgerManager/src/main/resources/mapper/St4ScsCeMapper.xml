@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gistone.mapper.St4ScsCeMapper">
-<delete id="batchDelete"   parameterType="java.util.List">
-    delete from st4_scs_ce where CE002 in
-    <foreach item="item" index="index"  collection="list" open="(" separator="," close=")">
-        #{item}
-    </foreach>
 
-</delete>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gistone.entity.St4ScsCe">
+        <id column="CE001" property="ce001" />
+        <result column="CE002" property="ce002" />
+        <result column="CE003" property="ce003" />
+        <result column="CE004" property="ce004" />
+        <result column="CE005" property="ce005" />
+        <result column="CE006" property="ce006" />
+        <result column="CE007" property="ce007" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CE001, CE002, CE003, CE004, CE005, CE006, CE007
+    </sql>
+
 </mapper>

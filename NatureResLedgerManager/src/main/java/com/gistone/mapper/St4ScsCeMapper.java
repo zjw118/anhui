@@ -14,5 +14,4 @@ import java.util.List;
  * @since 2019-08-14
  */
 public interface St4ScsCeMapper extends BaseMapper<St4ScsCe> {
-    int batchDelete (List<String> list);
 }
