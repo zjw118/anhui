@@ -294,113 +294,49 @@ public class FileUtil {
 
 
     /**
-     * 表单附件上传
-     * 必须spring.servlet.multipart.enabled=false 禁用spring附件大小限制
-     * 必须post请求
-     * 必须multipart/form-data请求类型
-     * 表单字段数据只能从此获取
+     * 上传单个附件（前端标识 file）允许附件为空
      * @param request
-     * @param path  附件保存目录   E:/xxx/xxx
+     * @param path  完整目录
      * @param arr    扩展名  String[] arr = {"xxx",""};
-     * @param size    单附件大小  1MB = 1
-     * @return  Map    正常返回 fileList[oldName,newName]  +  表单字段  + 错误返回说明 error!="0"
+     * @param size    附件大小  1MB = 1000 000
+     * @return  Map    正常返回 oldName,newName  错误返回说明 error
      */
-    public static Map<String,Object> uploadFiles(HttpServletRequest request, String path,String[] arr, int size){
-        InputStream in = null;
-        OutputStream out = null;
-        Map<String,Object> map = null;
+    public static Map<String,String> uploadFile(HttpServletRequest request, String path,String[] arr, Long size){
+        Map<String,String> map = null;
         try {
-            map = new HashMap<>();
-            map.put("error","0");
-            DiskFileItemFactory factory = new DiskFileItemFactory();
-            //判断表单类型
-            if (!ServletFileUpload.isMultipartContent(request)) {
-                map.put("error","表单类型错误，请使用multipart/form-data");
-                return map;
-            }
-            //设置缓存文件的路径
+            map = new HashMap();
+            //创建目录
             File f = new File(path);
             if(!f.isDirectory()) f.mkdirs();
-            factory.setRepository(new File(path));
-            //设置缓存的大小
-            factory.setSizeThreshold(50 * 1024 * 1024);
-            //文件上传解析器
-            ServletFileUpload upload = new ServletFileUpload(factory);
-            upload.setHeaderEncoding("UTF-8");
-            //限制单个上传文件大小(M)
-            upload.setFileSizeMax(1024 * 1024 * size);
-            //限制总上传文件大小(M)
-            //upload.setSizeMax(1024 * 1024 * 5);
-            List<FileItem> fileItemList = upload.parseRequest(request);
-            if (0 < fileItemList.size()) {
-                List<Map<String,String>> list = new ArrayList();
-                for (FileItem item : fileItemList) {
-                    Map<String,String> m = new HashMap();
-                    if (item.isFormField()) {
-                        //表单
-                        map.put(item.getFieldName(),item.getString("UTF-8"));
-                    } else {
-                        //附件
-                        String fileName = item.getName();
-                        //处理不同的浏览器提交的附件名不一样的问题
-                        fileName = fileName.substring(fileName.lastIndexOf("\\") + 1);
-                        String suffix = fileName.substring(fileName.lastIndexOf(".")+1);
-                        boolean b = Arrays.asList(arr).contains(suffix);
-                        if(!b){
-                            map.put("error","附件格式错误");
-                            return map;
-                        }
-                        //跳过上传输为空的附件
-                        if (org.apache.commons.lang.StringUtils.isBlank(fileName)) continue;
-                        //附件新名称
-                        String newName = UUID.randomUUID().toString()+"."+suffix;
-                        if(!path.endsWith("/")) path += "/";
-                        //开始上传
-                        File srcFile = new File(path + newName);
-                        in = item.getInputStream();
-                        out = new FileOutputStream(srcFile);
-                        byte[] buf = new byte[1024];
-                        int length;
-                        while ((length = in.read(buf)) != -1) {
-                            out.write(buf, 0, length);
-                        }
-                        m.put("oldName",fileName);
-                        m.put("newName",newName);
-                        //删除临时文件
-                        Thread.sleep(1000);
-                        item.delete();
-                    }
-                    if(0<m.size()) list.add(m);
-                }
-                map.put("fileList",list);
-            }else{
-                map.put("error","请求异常");
+            if(!ServletFileUpload.isMultipartContent(request)) return null;
+            MultipartHttpServletRequest multipartRequest = WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class);
+            MultipartFile file = multipartRequest.getFile("file");
+            //判断附件格式
+            String oldName = file.getOriginalFilename();
+            String suffix = oldName.substring(oldName.lastIndexOf("."));
+            boolean b = Arrays.asList(arr).contains((suffix.split("\\."))[1]);
+            if(!b){
+                map.put("error","附件格式错误");
                 return map;
             }
-        } catch (FileUploadException e) {
-            map.put("error","附件超出大小限制");
+            //判断附件大小
+            if(size<file.getSize()){
+                map.put("error","附件超出大小限制");
+                return map;
+            }
+            //生成附件名称
+            SimpleDateFormat ymdhms = new SimpleDateFormat("yyyyMMdd-HHmmss");
+            String newName = ymdhms.format(new Date())+UUID.randomUUID().toString().substring(23,36)+oldName.substring(oldName.lastIndexOf("."));
+            file.transferTo(new File(path,newName));
+            map.put("oldName",oldName);
+            map.put("newName",newName);
+            return map;
         } catch (Exception e) {
-            map.put("error","附件上传失败");
             e.printStackTrace();
-        } finally {
-            try {
-                if(null!=in){
-                    in.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                if(null!=out){
-                    out.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            map.put("error","上传失败");
             return map;
         }
     }
-
 
 
 

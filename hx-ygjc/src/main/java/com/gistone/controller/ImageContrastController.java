@@ -23,7 +23,6 @@ import java.util.Map;
 public class ImageContrastController {
     @Autowired
     private ImageContrastService imageContrastService;
-
     @Value("${PATH}")
     private String PATH;
 

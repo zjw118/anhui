@@ -12,6 +12,7 @@ import com.gistone.service.ILmPointService;
 import com.gistone.service.ImageConfigService;
 import com.gistone.service.ImageService;
 import com.gistone.util.*;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,6 +46,8 @@ public class ImageController {
     private ImageConfigService imageConfigService;
     @Autowired
     private ImageNumberMapper imageNumberMapper;
+    @Autowired
+    private ImageService imageService;
 
 
 
@@ -125,13 +128,18 @@ public class ImageController {
         if (StringUtils.isBlank(url)) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "地址不能为空");
         }
+        String createDate = (String) params.get("createDate");
+        if (StringUtils.isBlank(createDate)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "createDate不能为空");
+        }
         String remark = (String) params.get("remark");
+
         //判断添加人是否为空
         Integer createBy = (Integer) params.get("createBy");
         if (createBy == null || createBy <= 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "创建人不能为空");
         }
-        service.insert(name, url, createBy, remark);
+        service.insert(name, url, createBy, remark,createDate);
         return ResultVOUtil.success();
     }
 
@@ -391,11 +399,11 @@ public class ImageController {
         if (params == null) {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
         }
-        String id = (String) params.get("id");
-        if (StringUtils.isBlank(id)) {
+        Object id =  params.get("id");
+        if (null==id) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "影像主键id不能为空");
         }
-        return service.getAudit(Integer.valueOf(id));
+        return service.getAudit(Integer.valueOf(id+""));
     }
 
 
@@ -414,11 +422,13 @@ public class ImageController {
         if (StringUtils.isBlank(id)) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "主键id不能为空");
         }
-        String json = (String) params.get("json");
-        if (StringUtils.isBlank(json)) {
+
+        Object json = params.get("json");
+        if (null==json) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "系数json不能为空");
         }
-        return service.addAudit(Integer.valueOf(id),json);
+        JSONObject job = JSONObject.fromObject(json);
+        return service.addAudit(Integer.valueOf(id),job);
     }
 
     /**
@@ -468,8 +478,6 @@ public class ImageController {
     }
 
 
-
-
     //系数批次名列表
     @RequestMapping(value = "/getNumberNames", method = RequestMethod.POST)
     public ResultVO getNumberNames(@RequestBody Map<String, Object> paramsMap) {
@@ -480,6 +488,7 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
         }
     }
+
     //系数批次名查询列表
     @RequestMapping(value = "/getNumberByName", method = RequestMethod.POST)
     public ResultVO getNumberByName(@RequestBody Map<String, Object> paramsMap) {
@@ -492,7 +501,10 @@ public class ImageController {
             if (StringUtils.isBlank(name)) {
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
             }
-            return ResultVOUtil.success(imageNumberMapper.selectImageNumber(name));
+
+            ImageNumber imageNumber = new ImageNumber();
+            imageNumber.setName(name);
+            return ResultVOUtil.success(imageNumberMapper.selectImageNumber(imageNumber));
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
@@ -521,7 +533,6 @@ public class ImageController {
             imageNumber.setNumber(Double.valueOf(params.get("number")+""));
             if(null!=params.get("name"))
             imageNumber.setName(params.get("name")+"");
-
             return ResultVOUtil.success(imageNumberMapper.updateImageNumber(imageNumber));
         } catch (Exception e) {
             e.printStackTrace();
@@ -529,6 +540,72 @@ public class ImageController {
         }
     }
 
+
+    //添加系数
+    @RequestMapping(value = "/addNumber", method = RequestMethod.POST)
+    public ResultVO addNumber(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params == null) {
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            }
+            ImageNumber imageNumber = new ImageNumber();
+            if(null!=params.get("imageConfigId"))
+            imageNumber.setImage_config_id(Integer.valueOf(params.get("imageConfigId")+""));
+            if(null!=params.get("number"))
+            imageNumber.setNumber(Double.valueOf(params.get("number")+""));
+            if(null!=params.get("name"))
+            imageNumber.setName(params.get("name")+"");
+            return ResultVOUtil.success(imageNumberMapper.insertImageNumber(imageNumber));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "添加失败");
+        }
+    }
+
+
+    //删除系数
+    @RequestMapping(value = "/deleteNumber", method = RequestMethod.POST)
+    public ResultVO deleteNumber(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params == null) {
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            }
+            String name = (String) params.get("name");
+            if (StringUtils.isBlank(name)) {
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
+            }
+            return ResultVOUtil.success(imageNumberMapper.deleteImageName(name));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "删除失败");
+        }
+    }
+
+
+    /**
+     * 获取默认系数
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/oldNumber", method = RequestMethod.POST)
+    public ResultVO oldNumber(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params == null) {
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            }
+            Object id = params.get("id");
+            if (null==id) {
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+            }
+            return imageService.oldNumber(Integer.valueOf(id.toString()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
+        }
+    }
 
 
 

@@ -8,13 +8,14 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ImageConfig {
         private Integer id;
         private String name;
         private Integer parentid;
         private Integer type;
         private Integer orders;
+        private Integer sign;
 
         //表外字段
         @TableField(exist = false)
