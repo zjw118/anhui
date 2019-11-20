@@ -107,10 +107,8 @@ public class IterpretationController {
             if(user!=null){
                 createBy = user.getId();
             }
-
         }
-        service.insert(data,imageId,createBy);
-        return ResultVOUtil.success();
+        return service.insert(data,imageId,createBy);
     }
 
 

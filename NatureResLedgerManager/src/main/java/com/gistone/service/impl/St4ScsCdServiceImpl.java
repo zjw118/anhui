@@ -281,7 +281,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     }
 
     @Override
-    public void insert(List<Map<String, Object>> data, Integer imageId, Integer createBy) throws FileNotFoundException {
+    public ResultVO insert(List<Map<String, Object>> data, Integer imageId, Integer createBy) throws FileNotFoundException {
         //通过影像id先删除记录然后再插入,然后再写入shp文件，将地址更新到影像表中！
         st4ScsCdMapper.delete(new QueryWrapper<St4ScsCd>().eq("image_id", imageId));
         //从data中构造属性
@@ -316,6 +316,8 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             }
             if (null != attributes.get("type")) {
                 iterpretation.setActiveType(attributes.get("type") + "");
+            }else{
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "解译数据不能为空");
             }
             if (null != attributes.get("descri")) {
                 iterpretation.setDescri(attributes.get("descri") + "");
@@ -368,10 +370,13 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 image.setId(imageId);
                 image.setShpurl(ftpPt+ftpUrl+ftpPath+fileName1);
                 image.setShp(url);
-                image.setUpdateDate(new Date());
+//                image.setUpdateDate(new Date());
                 imageMapper.updateById(image);
+
+                ResultVOUtil.success();
             }
         }
+        return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "添加失败");
     }
 
     @Override
@@ -403,18 +408,13 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             //上传
             String[] arr = {"zip","ZIP"};
             String path = FileUtil.getPath(PATH+"/epr/image/");
-            Map resMap = FileUtil.uploadFiles(request, path, arr, 50);  //每个附件限制50MB
-            String error = resMap.get("error")+"";
-            if(!"0".equals(error)){
-                return ResultVOUtil.error(ResultEnum.ERROR.getCode(),error);
+            Map resMap = FileUtil.uploadFile(request, path, arr, 30000000l);  //限制30MB
+            if(null!=resMap.get("error")){
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(),resMap.get("error")+"");
             }
-            String newName; //附件名称
-            List<Map> fl = (List)resMap.get("fileList");
-            if(0<fl.size()){
-                newName = fl.get(0).get("newName")+"";
-            }else{
-                return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"上传失败");
-            }
+            String newName = resMap.get("newName")+""; //附件名称
+
+
             String uuid = newName.split("\\.")[0];
             //解压
             File f = new File(path+uuid);
@@ -457,12 +457,14 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 jSONObject1.put("area",attributes.get("面积")+"");
                 jSONObject1.put("center",attributes.get("实地经")+","+attributes.get("实地纬"));
 
-                if (null != resMap.get("descri"))
-                jSONObject1.put("descri",resMap.get("descri"));
-                if (null != resMap.get("remark"))
-                jSONObject1.put("remark",resMap.get("remark"));
-                if (null != resMap.get("name"))
-                jSONObject1.put("name",resMap.get("name"));
+                if (StringUtils.isNotBlank(image.getRemark()))
+                    jSONObject1.put("remark",image.getRemark());
+                if (StringUtils.isNotBlank(image.getName()))
+                    jSONObject1.put("name",image.getName());
+
+                if (null!=image.getCreateDate()){
+                    jSONObject1.put("createDate",image.getCreateDate());
+                }
 
                 JSONObject geometry = JSONObject.fromObject(jo.get("geometry"));
                 geometry.put("rings","\""+geometry.get("rings")+"\"");
@@ -509,21 +511,17 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             image.setShpurl("E:/FTP"+ftpPath+fileName1);
             if(null!=user)
                 image.setCreateBy(user.getId());
-            image.setCreateDate(LocalDateTime.now());
             if(null!=user)
                 image.setUpdateBy(user.getId());
-            image.setUpdateDate(new Date());
+//            image.setUpdateDate(new Date());
             image.setShp(url); //本地SHP路径
-            if(null!=resMap.get("name"))
-            image.setUrl(resMap.get("name")+"");
+            image.setRemark(image.getRemark());
             image.setDelFlag(1);
             image.setSign(1);
-            if(null!=resMap.get("name"))
-                image.setName(resMap.get("name")+"");
-            if(null!=resMap.get("url"))
-                image.setUrl(resMap.get("url")+"");
-            if(null!=resMap.get("remark"))
-                image.setRemark(resMap.get("remark")+"");
+            if(null!=image.getCreateDate()){
+                image.setCreateDate(image.getCreateDate());
+            }
+
             int res1 = imageMapper.updateById(image);
             if(0==res1){
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"插入image失败");
@@ -579,7 +577,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 Map<String, Object> rings = (Map<String, Object>) JSONObject.fromObject(datum.get("geometry"));
                 String geometry = rings.get("rings").toString();
                 iterpretation.setGeometry(geometry);
-                iterpretation.setImageId(Integer.valueOf(resMap.get("cd001")+""));
+                iterpretation.setImageId(image.getId());
                 if(null!=user)
                     iterpretation.setCd010(user.getId());
                 iterpretation.setCd011(LocalDateTime.now());

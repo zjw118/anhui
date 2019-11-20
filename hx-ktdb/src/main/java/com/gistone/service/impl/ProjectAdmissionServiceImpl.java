@@ -45,12 +45,12 @@ public class ProjectAdmissionServiceImpl extends ServiceImpl<ProjectAdmissionMap
 
         if (StringUtils.isNotBlank(startTime)) {
             Date startDate = DateUtils.stringToDate(startTime, DateUtils.DATE_TIME_PATTERN);
-            wrapper.ge("create_date", startDate);
+            wrapper.ge("time", startDate);
         }
 
         if (StringUtils.isNotBlank(endTime)) {
             Date endDate = DateUtils.stringToDate(endTime, DateUtils.DATE_TIME_PATTERN);
-            wrapper.le("create_date", endDate);
+            wrapper.le("time", endDate);
         }
 
         if(StringUtils.isNotBlank(type)){
