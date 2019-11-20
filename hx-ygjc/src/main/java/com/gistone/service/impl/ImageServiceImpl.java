@@ -252,6 +252,8 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             }
 //            System.out.println( "?humanActivity="+shpUrl);
 //            System.out.println("&redline="+ftpShpUrl);
+
+
             //发送请求
             String p1 = "?humanActivity="+shpUrl;
             String p2 = "&redline="+ftpShpUrl;
@@ -262,6 +264,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             String out = "";
             String redline_area = "";
             String stati = "";
+
             for (int i = 0; i < 5; i++) {
                 Thread.sleep(2000);
                 out = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId+"/results/out?f=pjson&returnType=data",null);
@@ -277,6 +280,9 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
                 if(-1==stati.indexOf("error")) break;
                 Thread.sleep(2000);
             }
+
+            System.out.println(redline_area);
+            System.out.println(stati);
 
 
 
@@ -379,70 +385,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             jSONObject.put("mj",mj);
 
 
-
-            //红线版块
-//            List<Map> list = new ArrayList();
-//            JSONObject outjson = JSONObject.fromObject(out);
-//            Object o = JSONObject.fromObject(outjson.get("value")).get("features");
-//            JSONArray jsonArray = JSONArray.fromObject(o);
-//            for (Object o1 : jsonArray) {
-//                Object attributes = JSONObject.fromObject(o1).get("attributes");
-//                JSONObject jsonObject1 = JSONObject.fromObject(attributes);
-//                //首次添加
-//                if(0==list.size()){
-//                    Map<String,Object> map = new HashMap();
-//                    //直接插入
-//                    map.put("mc",jsonObject1.get("hxcode"));
-//                    map.put("hdmj",jsonObject1.get("insectarea"));
-//                    map.put("zmj",jsonObject1.get("hxarea"));
-//                    //评分
-//                    for (Object f : numberJson.keySet()) {
-//                        if(jsonObject1.get("type").toString().equals(f.toString())){
-//                            Double d1 = Double.valueOf(jsonObject1.get("insectarea").toString());//活动面积
-//                            Double d2 = Double.valueOf(numberJson.get(f).toString()); //系数
-//                            Double d3 = Double.valueOf(jsonObject1.get("hxarea").toString()); //红线面积
-//                            map.put("pf",d1*d2/d3);
-//                        }
-//                    }
-//                    list.add(map);
-//                }else{
-//                    for (Map hxmap : list) {
-//                        Object mc = hxmap.get("mc");
-//                        if(!mc.toString().equals(jsonObject1.get("hxcode"))){
-//                            Map<String,Object> map = new HashMap();
-//                            //直接插入
-//                            map.put("mc",jsonObject1.get("hxcode"));
-//                            map.put("hdmj",jsonObject1.get("insectarea"));
-//                            map.put("zmj",jsonObject1.get("hxarea"));
-//                            //评分
-//                            for (Object f : numberJson.keySet()) {
-//                                if(jsonObject1.get("type").toString().equals(f.toString())){
-//                                    Double d1 = Double.valueOf(jsonObject1.get("insectarea").toString());//活动面积
-//                                    Double d2 = Double.valueOf(numberJson.get(f).toString()); //系数
-//                                    Double d3 = Double.valueOf(jsonObject1.get("hxarea").toString()); //红线面积
-//                                    map.put("pf",d1*d2/d3);
-//                                }
-//                            }
-//                            list.add(map);
-//                        }else{
-//                            //累加活动面积
-//                            hxmap.put("hdmj",Double.valueOf(hxmap.get("hdmj")+"")+Double.valueOf(jsonObject1.get("insectarea")+""));
-//                            //评分
-//                            for (Object f : numberJson.keySet()) {
-//                                if(jsonObject1.get("type").toString().equals(f.toString())){
-//                                    Double d1 = Double.valueOf(jsonObject1.get("insectarea").toString());//活动面积
-//                                    Double d2 = Double.valueOf(numberJson.get(f).toString()); //系数
-//                                    Double d3 = Double.valueOf(jsonObject1.get("hxarea").toString()); //红线面积
-//                                    Double d4 = Double.valueOf(hxmap.get("pf").toString()); //原评分
-//                                    hxmap.put("pf",d1*d2/d3+d4);
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-
-
             //变化量
             Image image2 = imageMapper.getImage2(id);
             String contrastRed = image2.getContrastRed();
@@ -519,8 +461,13 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
                     jSONObject.put("sign","1");//无默认数据
                 }
                 return ResultVOUtil.success(jSONObject);
+            }else{
+                JSONObject jSONObject = new JSONObject();
+                jSONObject.put("sign","1");//无默认数据
+                return ResultVOUtil.success(jSONObject);
             }
         }
+
         return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "查询失败");
     }
 

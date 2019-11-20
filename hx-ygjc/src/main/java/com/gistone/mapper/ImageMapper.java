@@ -45,7 +45,7 @@ public interface ImageMapper extends BaseMapper<Image> {
 
     int insertImage(Image image);
 
-//    获取下一期数据
+//  获取下一期数据
     Image getImage2(@Param(value="id")Integer id);
 
     List<Integer> getLastId();

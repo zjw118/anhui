@@ -477,7 +477,9 @@ public class St4ScsCk extends BaseEntity implements Serializable {
     @TableField(exist = false)
     @ApiModelProperty(value="整改状态",example = "")
     private List<St4ScsCn> st4ScsCnList;
-
+    @TableField(exist = false)
+    @ApiModelProperty(value="航点附件信息",example = "")
+    private List<St4ScsCe> st4ScsCeList;
     //核查小组
     @ApiModelProperty(value="核查小组(包裹所属核查小组的信息)",example = "")
     @TableField(exist = false)
