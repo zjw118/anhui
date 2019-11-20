@@ -129,7 +129,7 @@ public class ImageController {
         String url="";
         try {
             oriDir = "D:\\epr\\attached\\shp";
-            finalDir = "D:\\epr\\attached\\shptemp";
+            finalDir = "D:\\FTP\\epr\\image\\shptemp";
             url = ExcelUtils.copyDirectiory(oriDir, finalDir);
         }catch (Exception e){
             e.printStackTrace();

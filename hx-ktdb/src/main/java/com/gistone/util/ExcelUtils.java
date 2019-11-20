@@ -52,10 +52,10 @@ public class ExcelUtils {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 				String newName =sdf.format(date)+file[i].getName();
 				String pre = file[i].getName().substring(file[i].getName().lastIndexOf(".")+1);
-				String uurl =newName;
+				String uurl = new File(targetDir).getAbsolutePath()+File.separator+newName;
 				File targetFile=new File(uurl);
 				if("shp".equals(pre)){
-					shpUrl ="//shptemp//"+uurl;
+					shpUrl =uurl;
 				}
 				copyFile(sourceFile,targetFile);
 			}
@@ -71,7 +71,7 @@ public class ExcelUtils {
 	}
 
 	public static void main(String[] args) throws  Exception{
-		String aa = copyDirectiory("D:\\epr\\attached\\shp","D:\\epr\\attached\\shptemp");
+		String aa = copyDirectiory("D:\\epr\\attached\\shp","D:\\FTP\\epr\\image\\shptemp");
 		System.out.println("成功:"+aa);
 	}
 	// 复制文件

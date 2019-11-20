@@ -109,7 +109,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
 //        } catch (ParseException e) {
 //            e.printStackTrace();
 //        }
-        Image image = new Image().setName(name).setUrl(url).setCreateDate(createDate).setCreateBy(createBy).setUpdateDate(new Date());
+        Image image = new Image().setName(name).setShpurl(url).setCreateDate(createDate).setCreateBy(createBy).setUpdateDate(new Date());
         if(StringUtils.isNotBlank(remark)){
            image.setRemark(remark);
        }
