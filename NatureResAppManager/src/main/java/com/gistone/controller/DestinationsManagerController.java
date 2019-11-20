@@ -177,6 +177,7 @@ public class DestinationsManagerController {
                     scsCk.setCc002(ck.getCc002());//航点信息唯一标识 这里特别注意一下 动态配置的时候考虑到移动端如果把cc002同步回去的话就会显示这里避免移动端做修改所以这里将cc002取出来
                     scsCk.setCd004(ck.getCd004());
                     scsCk.setCn010(ck.getCn010());
+                    scsCk.setCn004(ck.getCn004());
                     scsCk.setCk086(date);
                     scsCk.setCk087(userId);
                     scsCk.setCk088(1);//这里又提交的记录代表已经不是原始台账了所以要设置为1
@@ -363,6 +364,7 @@ public class DestinationsManagerController {
                         //下面这2个字段不是可选的但是是必传所以这里必须处理
                         scsCk.setCc002(ck.getCc002());//航点信息唯一标识 这里特别注意一下 动态配置的时候考虑到移动端如果把cc002同步回去的话就会显示这里避免移动端做修改所以这里将cc002取出来
                         scsCk.setCd004(ck.getCd004());
+                        scsCk.setCn004(ck.getCn004());
                         scsCk.setCn010(ck.getCn010());
                         scsCk.setCk086(date);
                         scsCk.setCk087(userId);
