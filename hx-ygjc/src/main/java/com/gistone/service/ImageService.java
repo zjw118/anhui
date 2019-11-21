@@ -23,7 +23,7 @@ public interface ImageService extends IService<Image> {
 
     void delete(List<Integer> id);
 
-    void insert(String name, String url, Integer createBy,String remark,String date);
+    void insert(String name,  String url,String ftpurl,Integer createBy,String remark,String date);
 
     void edit(Integer id,String name,String url,Integer updateBy,String remark);
 

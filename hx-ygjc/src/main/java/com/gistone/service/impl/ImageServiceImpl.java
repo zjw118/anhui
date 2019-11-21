@@ -100,7 +100,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
 
 
     @Override
-    public void insert(String name, String url, Integer createBy,String remark,String createDate) {
+    public void insert(String name, String url,String ftpurl,Integer createBy,String remark,String createDate) {
         //具体逻辑
 //        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 //        Date date = null;
@@ -109,7 +109,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
 //        } catch (ParseException e) {
 //            e.printStackTrace();
 //        }
-        Image image = new Image().setName(name).setShpurl(url).setCreateDate(createDate).setCreateBy(createBy).setUpdateDate(new Date());
+        Image image = new Image().setName(name).setUrl(url).setShpurl(ftpurl).setCreateDate(createDate).setCreateBy(createBy).setUpdateDate(new Date());
         if(StringUtils.isNotBlank(remark)){
            image.setRemark(remark);
        }

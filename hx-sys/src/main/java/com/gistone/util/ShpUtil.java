@@ -41,9 +41,10 @@ import java.util.*;
  */
 @Slf4j
 public class ShpUtil {
-//    public static void main(String[] args) {
-//        System.out.println(readShapeFileToStr("C:\\Users\\KING\\Desktop\\人类活动\\人类活动测试数据.shp",1));
-//    }
+    public static void main(String[] args) {
+        String shpStr = ShpUtil.readShapeFileToStr("D:\\epr\\attached\\shp\\anhuiResult1.shp", 1) + "";
+        System.out.println(shpStr);
+    }
 
     /**
      * @param filePath
