@@ -94,33 +94,7 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
 
 //        System.out.println(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4);
         HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4,null);
-        Thread.sleep(6000);
-        boolean b = true;
-        for (int i = 1; i <= 20; i++) {
-            if(
-                    FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.shp")
-                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.dbf")
-                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.cpg")
-                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.prj")
-                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.shx")
-                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"add.shp.xml")
-                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"sub.shp")
-                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"sub.dbf")
-                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"sub.cpg")
-                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"sub.prj")
-                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"sub.shx")
-                    &&FTPUtil.isDri(ftpHost,ftpUserName,ftpPassword,ftpPort,outUrl+"sub.shp.xml")
-            ){
-                b = false;
-                break;
-            }
-            HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4,null);
-            Thread.sleep(2000);
-        }
-        if(b){
-            System.out.println("SHP文件生成失败");
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4+"<===SHP文件生成失败");
-        }
+        Thread.sleep(10000);
 
         //FTP将SHP复制到本地
         String ftpPath = outUrl; // 原ftp文件路径

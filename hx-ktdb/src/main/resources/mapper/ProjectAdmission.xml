@@ -19,4 +19,15 @@
         <!--<result column="file_url" property="fileUrl" />-->
     </resultMap>
 
+
+    <select id="get"  parameterType="java.lang.Integer" resultType="com.gistone.entity.ProjectAdmission">
+		SELECT * from project_admission
+        WHERE del_flag = 1
+        and id = #{id}
+	</select>
+
+
+
+
+
 </mapper>

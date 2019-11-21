@@ -10,6 +10,7 @@ import com.gistone.VO.ResultVO;
 import com.gistone.entity.AnalysisReport;
 import com.gistone.entity.ProjectAdmission;
 import com.gistone.exception.ProjectException;
+import com.gistone.mapper.ProjectAdmissionMapper;
 import com.gistone.service.IAnalysisReportService;
 import com.gistone.service.IProjectAdmissionService;
 import com.gistone.util.*;
@@ -57,11 +58,16 @@ public class ProjectAdmissionController {
 
     @Autowired
     private IProjectAdmissionService projectAdmissionService;
+    @Autowired
+    private ProjectAdmissionMapper projectAdmissionMapper;
 
     @Autowired
     private IAnalysisReportService analysisReportService;
     @Value("${WORD_PATH}")
     private String WORD_PATH;
+    @Value("${PATH}")
+    private String PATH;
+
 
     /**
      * @return
@@ -131,6 +137,30 @@ public class ProjectAdmissionController {
         return ResultVOUtil.success();
     }
 
+
+
+    @PostMapping(value = "/getFeature")
+    public ResultVO getFeature(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
+        if (dataParam == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        Integer id = (Integer) dataParam.get("id");
+        if (id == null || id <= 0) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+        }
+        ProjectAdmission projectAdmission = projectAdmissionMapper.get(id);
+        if(null!=projectAdmission){
+            String featurePath = projectAdmission.getFeaturePath();
+            if(StringUtils.isNotBlank(featurePath)){
+                return ResultVOUtil.success(FileUtil.readFromTextFile(PATH+featurePath));
+            }
+        }
+        return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "查询失败");
+    }
+
+
     /**
      * @return
      * @description: 查看单个项目
@@ -194,6 +224,7 @@ public class ProjectAdmissionController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "类型不能为空");
         }
         projectAdmission.setType(type);
+
 
         String attribute = (String) dataParam.get("attribute");
         if (StringUtils.isBlank(attribute)) {
@@ -349,6 +380,22 @@ public class ProjectAdmissionController {
                 fos.close();
             }
 
+            //feature数据保存本地文件
+            String feature = (String) dataParam.get("feature");
+            if (StringUtils.isBlank(feature)) {
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "feature不能为空");
+            }
+
+            String path = "/epr/feature/";
+            String name = UUID.randomUUID().toString()+".txt";
+            boolean b = FileUtil.writeInFile(PATH+path, name, feature);
+            if(b){
+                projectAdmission.setFeaturePath(path+name);
+            }else{
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "featur上传失败");
+            }
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -392,6 +439,10 @@ public class ProjectAdmissionController {
         result1.put("fileUrl", projectAdmission.getFileUrl());
         return ResultVOUtil.success(result1);
     }
+
+
+
+
 
     /**
      * @return

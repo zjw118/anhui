@@ -12,7 +12,9 @@
 	</select>
 
     <select id="getImageConfig3"   resultType="com.gistone.entity.ImageConfig">
-        SELECT * from image_config where type = 3
+        SELECT a.* ,
+        (SELECT name from image_config where id = a.parentid)parentName
+        from image_config a where a.type = 3
 	</select>
 
     <select id="getImageConfig3s"   resultType="com.gistone.entity.ImageConfig">

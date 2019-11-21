@@ -14,6 +14,10 @@ public class ImageNumber {
     private String data;
     @TableField(exist = false)
     private Integer imageConfigId;
+    @TableField(exist = false)
+    private Integer parentid;
+    @TableField(exist = false)
+    private String parentName;
 
 
 }
