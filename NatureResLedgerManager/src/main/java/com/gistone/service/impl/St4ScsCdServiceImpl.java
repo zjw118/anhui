@@ -299,8 +299,12 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                     if(-1<center.indexOf("°")){
                         iterpretation.setCd013(center.split(",")[0]);
                         iterpretation.setCd014(center.split(",")[1]);
+                        iterpretation.setCd002(PointHelp.Dms2D(center.split(",")[0]));
+                        iterpretation.setCd003(PointHelp.Dms2D(center.split(",")[1]));
                         iterpretation.setCd015(1);
                     }else{
+                        iterpretation.setCd013(PointHelp.toDfm(center.split(",")[0]));
+                        iterpretation.setCd014(PointHelp.toDfm(center.split(",")[1]));
                         iterpretation.setCd002(center.split(",")[0]);
                         iterpretation.setCd003(center.split(",")[1]);
                         iterpretation.setCd015(0);

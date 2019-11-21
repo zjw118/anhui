@@ -4,16 +4,25 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.St4ScsCkrl;
 import com.gistone.entity.St4SysSa;
 import com.gistone.mapper.St4ScsCkrlMapper;
 import com.gistone.service.ISt4ScsCkrlService;
 import com.gistone.service.ISt4ScsCsService;
 import com.gistone.util.*;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -282,5 +291,74 @@ public class St4ScsCkrlServiceImpl extends ServiceImpl<St4ScsCkrlMapper, St4ScsC
         }
 
         return null;
+    }
+
+    @Override
+    public ResultVO importExcel(String fileName) throws Exception {
+//
+//        //这里得对台账进行map的处理因为任务导入的时候是有可能填的台账是系统里存在了的
+//
+//        InputStream is = new FileInputStream(new File(fileName));
+//        Workbook hssfWorkbook = null;
+//        if (fileName.endsWith("xlsx")){
+//            hssfWorkbook = new XSSFWorkbook(is);//Excel 2007
+//        }else if (fileName.endsWith("xls")){
+//            hssfWorkbook = new HSSFWorkbook(is);//Excel 2003
+//
+//        }
+//        // HSSFWorkbook hssfWorkbook = new HSSFWorkbook(is);
+//        // XSSFWorkbook hssfWorkbook = new XSSFWorkbook(is);
+//        St4ScsCkrl ckrl = null;
+//        // 循环工作表Sheet
+//        for (int numSheet = 0; numSheet <hssfWorkbook.getNumberOfSheets(); numSheet++) {
+//            //HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
+//            Sheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
+//            if (hssfSheet == null) {
+//                continue;
+//            }
+//            // 循环行Row
+//            for (int rowNum = 1; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
+//                //HSSFRow hssfRow = hssfSheet.getRow(rowNum);
+//                Row hssfRow = hssfSheet.getRow(rowNum);
+//                if (hssfRow != null) {
+//                    ckrl = new St4ScsCkrl();
+//                    ckrl.setCl012(1);
+//                    ckrl.setCl003("1");//todo 这里写死成1原因是目前没有没有对任务进行核查字段不同情况的处理
+//                    ckrl.setCl015(0);//因为是导入所以默认是系统创建
+//                    //HSSFCell name = hssfRow.getCell(0);
+//                    //HSSFCell pwd = hssfRow.getCell(1);
+//                    Cell taskName = hssfRow.getCell(0);  //任务批次名称
+//                    Cell taskDescri = hssfRow.getCell(1);//任务描述
+//                    Cell taskYear = hssfRow.getCell(2);//任务年份
+//                    Cell taskLedger = hssfRow.getCell(3);//任务台账
+//
+//                    Cell taskName = hssfRow.getCell(4);  //任务批次名称
+//                    Cell taskDescri = hssfRow.getCell(5);//任务描述
+//                    Cell taskYear = hssfRow.getCell(6);//任务年份
+//                    Cell taskLedger = hssfRow.getCell(7);//任务台账
+//
+//                    Cell taskName = hssfRow.getCell(8);  //任务批次名称
+//                    Cell taskDescri = hssfRow.getCell(9);//任务描述
+//                    Cell taskYear = hssfRow.getCell(10);//任务年份
+//                    Cell taskLedger = hssfRow.getCell(11);//任务台账
+//
+//                    Cell taskName = hssfRow.getCell(12);  //任务批次名称
+//                    Cell taskName = hssfRow.getCell(13);  //任务批次名称
+//
+//                    //这里是自己的逻辑
+//                    ckrl.setCl002(taskName==null?"":taskName.toString());
+//                    ckrl.setCl009(taskDescri==null?"":taskDescri.toString());
+//                    ckrl.setCl010(taskYear==null?"":taskYear.toString());
+//                    if(ObjectUtils.isNotNullAndEmpty(taskLedger)){
+//                        if(ObjectUtils.isNotNullAndEmpty(map.get(taskLedger.toString().trim()))){
+//                            cl.setLedgerId(map.get(taskLedger.toString()).toString());
+//                        }
+//                    }
+//                    list.add(cl);
+//                }
+//            }
+//        }
+
+        return ResultVOUtil.error("1444","服务器未读取到数据，请确认所上传excel是否有信息");
     }
 }

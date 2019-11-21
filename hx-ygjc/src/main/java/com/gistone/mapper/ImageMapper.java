@@ -31,9 +31,15 @@ public interface ImageMapper extends BaseMapper<Image> {
 
     List<Map<String,Object>> getAreaGroupByType(int id);
 
+    List<Map<String,Object>> getCountByType(int id);
+
     List<Map<String,Object>> getCountGroupByType();
 
     List<Map<String,Object>> getAreaByType();
+
+    List<Map<String,Object>> getCountChange();
+
+    List<Map<String,Object>> getAreaChange();
 
     int updateImage(Image image);
 
@@ -41,6 +47,9 @@ public interface ImageMapper extends BaseMapper<Image> {
 
 //  获取下一期数据
     Image getImage2(@Param(value="id")Integer id);
+
+    List<Integer> getLastId();
+
 
 
 }

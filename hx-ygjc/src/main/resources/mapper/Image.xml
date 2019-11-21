@@ -95,6 +95,25 @@
             a.active_type
     </select>
 
+    <select id="getLastId" resultType="int">
+        SELECT
+            s.image_id
+        FROM
+            (
+                SELECT
+                    COUNT(*),
+                    image_id
+                FROM
+                    `st4_scs_cd` a
+                GROUP BY
+                    image_id
+            ) s
+        LEFT JOIN image b ON s.image_id = b.id
+        ORDER BY
+            b.create_date DESC
+        LIMIT 2
+    </select>
+
 
     <select id="getCountGroupByType" resultType="java.util.Map">
         SELECT
@@ -103,6 +122,20 @@
         FROM
             st4_scs_cd a
         LEFT JOIN image_config b ON a.active_type = b.id
+        WHERE a.active_type IS NOT NULL
+        GROUP BY
+            a.active_type
+    </select>
+
+    <select id="getCountByType" resultType="java.util.Map">
+        SELECT
+            count(*) count,
+            b.`name` type
+        FROM
+            st4_scs_cd a
+        LEFT JOIN image_config b ON a.active_type = b.id
+        where
+        a.image_id = #{id}
         GROUP BY
             a.active_type
     </select>
@@ -113,8 +146,35 @@
         FROM
             st4_scs_cd a
         LEFT JOIN image_config b ON a.active_type = b.id
+        WHERE a.active_type IS NOT NULL
         GROUP BY
             a.active_type
+    </select>
+
+    <select id="getCountChange" resultType="java.util.Map">
+        SELECT
+            count(*) count,
+            b.`name` name
+        FROM
+            st4_scs_cd a
+        inner JOIN image b ON a.image_id = b.id
+        GROUP BY
+            a.image_id
+        ORDER BY b.create_date DESC
+        LIMIT 1,5
+    </select>
+
+    <select id="getAreaChange" resultType="java.util.Map">
+        SELECT
+            SUM(a.area) area,
+            b.`name` name
+        FROM
+            st4_scs_cd a
+        inner JOIN image b ON a.image_id = b.id
+        GROUP BY
+            a.image_id
+        ORDER BY b.create_date DESC
+        LIMIT 1,5
     </select>
 
 

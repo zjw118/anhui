@@ -4,11 +4,7 @@ package com.gistone.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
-
-import com.gistone.util.ResultVOUtil;
 import net.sf.json.JSONObject;
-
-
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.List;
@@ -27,7 +23,7 @@ public interface ImageService extends IService<Image> {
 
     void delete(List<Integer> id);
 
-    void insert(String name, String url, Integer createBy,String remark,String date);
+    void insert(String name,  String url,String ftpurl,Integer createBy,String remark,String date);
 
     void edit(Integer id,String name,String url,Integer updateBy,String remark);
 
@@ -40,6 +36,10 @@ public interface ImageService extends IService<Image> {
     List<Map<String, Object>> getCountGroupByType();
 
     List<Map<String, Object>> getAreaGroupByType();
+
+    List<Map<String, Object>> getCountChange();
+
+    List<Map<String, Object>> getAreaChange();
 
     ResultVO getAudit(Integer id);
 

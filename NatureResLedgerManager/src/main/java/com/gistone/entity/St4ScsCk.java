@@ -123,7 +123,7 @@ public class St4ScsCk extends BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "有无环评手续(1是 0无)",dataType = "Integer",example = "1")
     @TableField("CK021")
-    private Integer ck021;
+    private String ck021;
 
     @ApiModelProperty(value = "环评手续批复及验收文号",dataType = "String",example = "a")
     @TableField("CK022")
@@ -414,12 +414,12 @@ public class St4ScsCk extends BaseEntity implements Serializable {
     @TableField("CK091")
     private Integer ck091;
 
-    @ApiModelProperty(value = "问题分类",dataType = "Integer",example = "2")
-    @TableField("CK092")
-    private String ck092;
-    @ApiModelProperty(value = "是否是巡查点",dataType = "Integer",example = "2")
-    @TableField("CK093")
-    private String ck093;
+//    @ApiModelProperty(value = "问题分类",dataType = "Integer",example = "2")
+//    @TableField("CK092")
+//    private String ck092;
+//    @ApiModelProperty(value = "是否是巡查点",dataType = "Integer",example = "2")
+//    @TableField("CK093")
+//    private String ck093;
 
 
     @ApiModelProperty(name="checkLedgerAttach",value="照片集合",dataType = "List",example="[d:1.jpg,d:2.png]")
@@ -477,7 +477,9 @@ public class St4ScsCk extends BaseEntity implements Serializable {
     @TableField(exist = false)
     @ApiModelProperty(value="整改状态",example = "")
     private List<St4ScsCn> st4ScsCnList;
-
+    @TableField(exist = false)
+    @ApiModelProperty(value="航点附件信息",example = "")
+    private List<St4ScsCe> st4ScsCeList;
     //核查小组
     @ApiModelProperty(value="核查小组(包裹所属核查小组的信息)",example = "")
     @TableField(exist = false)

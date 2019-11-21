@@ -21,19 +21,10 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -108,7 +99,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
 
 
     @Override
-    public void insert(String name, String url, Integer createBy,String remark,String createDate) {
+    public void insert(String name, String url,String ftpurl,Integer createBy,String remark,String createDate) {
         //具体逻辑
 //        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 //        Date date = null;
@@ -117,7 +108,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
 //        } catch (ParseException e) {
 //            e.printStackTrace();
 //        }
-        Image image = new Image().setName(name).setUrl(url).setCreateDate(createDate).setCreateBy(createBy).setUpdateDate(new Date());
+        Image image = new Image().setName(name).setUrl(url).setShpurl(ftpurl).setCreateDate(createDate).setCreateBy(createBy).setUpdateDate(new Date());
         if(StringUtils.isNotBlank(remark)){
            image.setRemark(remark);
        }
@@ -166,6 +157,19 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     @Override
     public List<Map<String, Object>> getAreaGroupByType() {
         List<Map<String,Object>> result = mapper.getAreaByType();
+        return result;
+    }
+
+    @Override
+    public List<Map<String, Object>> getCountChange() {
+
+            List<Map<String,Object>> result = mapper.getCountChange();
+            return result;
+    }
+
+    @Override
+    public List<Map<String, Object>> getAreaChange() {
+        List<Map<String,Object>> result = mapper.getAreaChange();
         return result;
     }
 
