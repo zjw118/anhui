@@ -26,8 +26,12 @@ public interface ImageConfigMapper{
     int deleteImageConfig(ImageConfig imageConfig);
     //主键获取
     ImageConfig get(ImageConfig imageConfig);
+
+    ImageConfig getone(int id);
     //模糊查询
     ImageConfig like(@Param(value="name") String name);
+
+
 
 
 }

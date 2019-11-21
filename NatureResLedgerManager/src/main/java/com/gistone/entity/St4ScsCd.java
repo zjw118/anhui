@@ -302,5 +302,7 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     private String year;
     @TableField(exist = false)
     private String imageName;
+    @TableField(exist = false)
+    private String activeTypeName;
 
 }
