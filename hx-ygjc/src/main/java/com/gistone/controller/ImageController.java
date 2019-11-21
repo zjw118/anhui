@@ -17,7 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -49,7 +49,8 @@ public class ImageController {
     private ImageNumberMapper imageNumberMapper;
     @Autowired
     private ImageService imageService;
-
+    @Autowired
+    private   ConfigUtils configUtils;
 
     @Value("${ftp_host}")
     private String ftpHost;
@@ -100,7 +101,8 @@ public class ImageController {
         }
         Image entity = service.getById(id);
         entity.setList(mapper.selectISt4ScsCd(id));
-        String shpStr = ShpUtil.readShapeFileToStr(entity.getShp(), 1) + "";
+        //String shpData = ShpUtil.readShapeFileToStr(, 1) + ""; 暂时写死
+        String shpStr = ShpUtil.readShapeFileToStr("D:\\epr\\attached\\shp\\anhuiResult1.shp", 1) + "";
         entity.setShp(shpStr);
         return ResultVOUtil.success(entity);
     }
@@ -121,10 +123,30 @@ public class ImageController {
         if (StringUtils.isBlank(name)) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "名称不能为空");
         }
-        String url = (String) params.get("url");
-        if (StringUtils.isBlank(url)) {
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "地址不能为空");
+        String oriDir="";
+        String finalDir="";
+        String ftpurl="";
+        try {
+            oriDir = "D:\\epr\\attached\\shp";
+            finalDir = "D:\\FTP\\epr\\image\\shptemp";
+            ftpurl = ExcelUtils.copyDirectiory(oriDir, finalDir);
+        }catch (Exception e){
+            e.printStackTrace();
         }
+        /**这里是因为11.21演示所以在服务器的上放置了演示用的shp相关文件这里的地址是移动端加载的这里去掉了url必填项的检验
+         *这里传递进去的是shape文件拷贝后存放的ftp地址
+         *
+         */
+
+
+        String url =  params.get("url")==null?"": params.get("url").toString();
+//        if (StringUtils.isBlank(url)) {
+//            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "地址不能为空");
+//        }
+        if (StringUtils.isBlank(url)) {
+           return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "地址不能为空");
+        }
+
         String createDate = (String) params.get("createDate");
         if (StringUtils.isBlank(createDate)) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "createDate不能为空");
@@ -136,7 +158,7 @@ public class ImageController {
         if (createBy == null || createBy <= 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "创建人不能为空");
         }
-        service.insert(name, url, createBy, remark,createDate);
+        service.insert(name,url,ftpurl, createBy, remark,createDate);
         return ResultVOUtil.success();
     }
 
@@ -649,6 +671,36 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
         }
     }
+
+    //拐点-生成SHP
+    @RequestMapping(value = "/gdShp", method = RequestMethod.POST)
+    public ResultVO gdShp(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params == null) {
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            }
+            Object rc = params.get("rc");  //容差
+            if (null==rc) {
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "容差rc不能为空");
+            }
+            return service.gdShp(Double.valueOf(rc.toString()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
+        }
+    }
+
+    //拐点-下载
+    @RequestMapping(value = "/gdFile")
+    public void gdFile(HttpServletResponse response) {
+        try {
+            service.gdFile(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 

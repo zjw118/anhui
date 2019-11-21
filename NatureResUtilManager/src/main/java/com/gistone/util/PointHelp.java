@@ -2,7 +2,7 @@ package com.gistone.util;
 
 public class PointHelp {
     /**
-     * 经纬度转换 ，度分秒转度
+     * 度分秒转经纬度
      * @param jwd
      * @author Cai_YF
      * @return
@@ -54,4 +54,7 @@ public class PointHelp {
         return du1 + "°" + Math.abs(fen) + "′" + miao + "″";
     }
 
+    public static void main(String[] args) {
+        System.out.println(toDfm("111.2321"));
+    }
 }

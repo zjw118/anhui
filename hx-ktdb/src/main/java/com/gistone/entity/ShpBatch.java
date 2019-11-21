@@ -76,6 +76,8 @@ public class ShpBatch extends Model<ShpBatch> {
      */
     private String remark;
 
+    private String grpoint;
+
     /**
      * 逻辑删除。0，删除，1是未删除
      */

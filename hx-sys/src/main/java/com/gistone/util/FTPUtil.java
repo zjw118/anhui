@@ -220,7 +220,15 @@ public class FTPUtil {
     }
 
 
-
+    /**
+     * 判断是否存在目录
+     * @param ftpHost
+     * @param ftpUserName
+     * @param ftpPassword
+     * @param ftpPort
+     * @param ftpPath
+     * @return
+     */
     public static boolean isDri(String ftpHost, String ftpUserName, String ftpPassword, int ftpPort, String ftpPath) {
         FTPClient ftp;
         try {
@@ -232,6 +240,44 @@ public class FTPUtil {
             System.out.println(e.toString());
         }
         return false;
+    }
+
+
+    /**
+     * 获取目录下附件数量
+     * @param ftpHost 		地址
+     * @param ftpUserName 	账号    anonymous匿名用户登录，不需要密码。
+     * @param ftpPassword 	密码
+     * @param ftpPort 		端口
+     * @param ftpPath		路径,不包含计算机盘符与ftp设定盘符   /xx/xx/
+     * @return
+     */
+    public static int isFile(String ftpHost, String ftpUserName, String ftpPassword, int ftpPort, String ftpPath) {
+        FTPClient ftp = null;
+        int i = 0;
+        try {
+            ftp = getFTPClient(ftpHost, ftpUserName, ftpPassword, ftpPort);
+            FTPFile[] files = ftp.listFiles(ftpPath);
+            if (files!=null&&files.length>0) {
+                i = files.length;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally{
+            try {
+                if(null!=ftp)
+                    ftp.logout(); // 退出登录
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if(null!=ftp)
+                    ftp.disconnect();// 断开连接
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return i;
+        }
     }
 
 
@@ -326,6 +372,8 @@ public class FTPUtil {
         }
         return fileNames;
     }
+
+
 
 
 
