@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.entity.Image;
+import com.gistone.entity.ImageConfig;
 import com.gistone.entity.RlhdGroup;
 import com.gistone.entity.St4ScsCd;
+import com.gistone.mapper.ImageConfigMapper;
 import com.gistone.mapper.ImageMapper;
 import com.gistone.mapper.RlhdGroupMapper;
 import com.gistone.mapper.St4ScsCdMapper;
@@ -44,14 +46,17 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
     @Autowired
     private ImageMapper imageMapper;
 
+    @Autowired
+    private ImageConfigMapper imageConfigMapper;
+
     public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName) {
 
         QueryWrapper<RlhdGroup> wrapper = new QueryWrapper<>();
         if (StringUtils.isNotBlank(userName)) {
-            //wrapper.likeRight("SA008",userName);
+            wrapper.likeRight("name",userName);
         }
-        // wrapper.eq("SA007",1);
-        //wrapper.orderByDesc("SA003");
+         wrapper.eq("del_flag",1);
+        wrapper.orderByDesc("create_date");
         IPage<RlhdGroup> iPage = mapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
 
 
@@ -78,8 +83,11 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
             mapper.updateById(rlhdGroup);
 
             St4ScsCd iterpretation = iterpretationMapper.selectOne(new QueryWrapper<St4ScsCd>().eq("group_id",id));
-            iterpretation.setGroupId(0);
-            iterpretationMapper.updateById(iterpretation);
+            if(iterpretation!=null){
+                iterpretation.setGroupId(0);
+                iterpretationMapper.updateById(iterpretation);
+            }
+
         }
 
     }
@@ -113,11 +121,13 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
         if(iPage.getRecords()!=null&&iPage.getRecords().size()>0){
             for (St4ScsCd record : iPage.getRecords()) {
                 Integer imageId = record.getImageId();
+
                 Image image = imageMapper.selectById(imageId);
                 if(image!=null){
                     record.setImageName(image.getName());
                 }
-
+                ImageConfig getone = imageConfigMapper.getone(Integer.parseInt(record.getActiveType()));
+                record.setActiveTypeName(getone.getName());
 
             }
         }
