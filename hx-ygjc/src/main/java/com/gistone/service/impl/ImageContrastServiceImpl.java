@@ -177,7 +177,6 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
             }
 
             if(!file1||!file2||!file3||!file4||!file5||!file6||!file7||!file8||!file9||!file10||!file11||!file12){
-                System.out.println(filePath+"<=FTP转存本地丢失文件");
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"丢失FTP转存文件");
             }
             String str1 = ShpUtil.readShapeFileToStr(filePath+fileName1,1)+"";

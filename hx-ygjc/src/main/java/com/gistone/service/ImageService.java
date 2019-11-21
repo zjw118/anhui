@@ -9,6 +9,7 @@ import com.gistone.util.ResultVOUtil;
 import net.sf.json.JSONObject;
 
 
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,18 @@ public interface ImageService extends IService<Image> {
 
     ResultVO oldNumber(Integer id);
 
+    /**
+     * 获取拐点shp
+     * @param rc
+     * @return
+     */
+    ResultVO gdShp(double rc);
+
+    /**
+     * 下载最新拐点
+     * @return
+     */
+    ResultVO gdFile(HttpServletResponse response);
 
 
 }

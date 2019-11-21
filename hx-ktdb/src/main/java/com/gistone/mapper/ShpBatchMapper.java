@@ -21,5 +21,9 @@ public interface ShpBatchMapper extends BaseMapper<ShpBatch> {
 
     List<ShpBatch> getBorderData(ShpBatch sb);
 
+    //修改拐点附件路径
+    int updateGrpoint(ShpBatch shpBatch);
+
+
 
 }

@@ -13,10 +13,7 @@ import com.gistone.mapper.ImageConfigMapper;
 import com.gistone.mapper.ImageMapper;
 import com.gistone.mapper.ImageNumberMapper;
 import com.gistone.service.ImageService;
-import com.gistone.util.FileUtil;
-import com.gistone.util.HttpUtil;
-import com.gistone.util.ResultEnum;
-import com.gistone.util.ResultVOUtil;
+import com.gistone.util.*;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -25,11 +22,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -62,7 +61,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     private ImageMapper imageMapper;
 
 
-
     @Value("${ftp_host}")
     private String ftpHost;
     @Value("${ftp_port}")
@@ -79,6 +77,8 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     private String PATH;
     @Value("${IMAGE_EVA}")
     private String IMAGE_EVA;
+    @Value("${GRPOINT}")
+    private String GRPOINT;
 
 
     @Override
@@ -276,8 +276,8 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
                 Thread.sleep(2000);
             }
 
-            System.out.println(redline_area);
-            System.out.println(stati);
+//            System.out.println(redline_area);
+//            System.out.println(stati);
 
 
 
@@ -462,9 +462,132 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
                 return ResultVOUtil.success(jSONObject);
             }
         }
-
         return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "查询失败");
     }
+
+    @Override
+    public ResultVO gdShp(double rc) {
+        try {
+            //获取最新红线url
+            ShpBatch newShpBatch = shpBatchMapper.getNewShpBatch();
+            if(null!=newShpBatch){
+                String ftpShpUrl = newShpBatch.getFtpShpUrl();
+                if(StringUtils.isNotBlank(ftpShpUrl)){
+                    //请求GP服务
+                    JSONObject jSONObject = new JSONObject();
+                    jSONObject.put("distance",rc);
+                    jSONObject.put("units","esriMeters");
+                    //在FTP目录中创建文件
+                    String uuid = UUID.randomUUID().toString();
+
+                    String path1 = ftpPt+ftpUrl;
+                    String path2 = "/grpoint/" + uuid + "/grpoint.shp";
+                    FTPUtil.createDri(ftpHost, ftpUserName, ftpPassword, ftpPort,"/grpoint/"+uuid+"/");
+                    String url1 = GRPOINT+"/submitJob?容差="+jSONObject+"&parms="+path1+path2+"&redlineUrl="+ftpShpUrl+"&env%3AoutSR=&env%3AprocessSR=&returnZ=false&returnM=false&f=pjson";
+                    String num = HttpUtil.GET(url1,null);
+                    JSONObject jsonObject = JSONObject.fromObject(num);
+                    Object jobId = jsonObject.get("jobId");
+                    String url2 = GRPOINT+"/jobs/"+jobId;
+
+                    boolean bb = false;
+                    for (int i = 1; i <= 10; i++) {
+                        HttpUtil.GET(url2,null);
+                        Thread.sleep(2000);
+                        //判断FTP目录中是否有此文件
+                        int a = FTPUtil.isFile(ftpHost, ftpUserName, ftpPassword, ftpPort,"/grpoint/" + uuid+"/");
+                        if(6==a){
+                            bb = true;
+                            break;
+                        }
+                    }
+                    if(!bb){
+                        return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "SHP文件生成失败");
+                    }
+
+                    //FTP下载到本地
+                    String outUrl = "/grpoint/"+uuid+"/";     // 原ftp文件路径
+                    String filePath = PATH+"/epr/grpoint/"+uuid+"/";   // 本地路径
+                    String fileName1 = "grpoint.cpg";   // 原ftp文件名称
+                    String fileName2 = "grpoint.dbf";   // 原ftp文件名称
+                    String fileName3 = "grpoint.prj";   // 原ftp文件名称
+                    String fileName4 = "grpoint.shp";   // 原ftp文件名称
+                    String fileName5 = "grpoint.shp.xml";   // 原ftp文件名称
+                    String fileName6 = "grpoint.shx";   // 原ftp文件名称
+
+                    File f = new File(filePath);
+                    if(!f.isDirectory()) f.mkdirs();
+
+                    FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort,outUrl, filePath, fileName1);
+                    FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort,outUrl, filePath, fileName2);
+                    FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort,outUrl, filePath, fileName3);
+                    FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort,outUrl, filePath, fileName4);
+                    FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort,outUrl, filePath, fileName5);
+                    FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort,outUrl, filePath, fileName6);
+
+                    boolean b = false;
+                    for (int i = 0; i < 5; i++) {
+                        Thread.sleep(2000);
+                        boolean file1 = new File(filePath+fileName1).exists();
+                        boolean file2 = new File(filePath+fileName2).exists();
+                        boolean file3 = new File(filePath+fileName3).exists();
+                        boolean file4 = new File(filePath+fileName4).exists();
+                        boolean file5 = new File(filePath+fileName5).exists();
+                        boolean file6 = new File(filePath+fileName6).exists();
+
+                        if(file1&&file2&&file3&&file4&&file5&&file6){
+                            b = true;
+                            break;
+                        }
+                    }
+                    if(!b){
+                        return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "FTP下载失败");
+                    }
+                    //生成shp
+                    List<String> list = ShpUtil.readShapeFileToStr(filePath + fileName4, 2);
+                    newShpBatch.setGrpoint(filePath);
+                    shpBatchMapper.updateGrpoint(newShpBatch);
+                    return ResultVOUtil.success(JSONArray.fromObject(list));
+                }
+            }else{
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "最新红线数据获取失败");
+            }
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
+        }
+    }
+
+    @Override
+    public ResultVO gdFile(HttpServletResponse response) {
+        try {
+            String uuid = UUID.randomUUID().toString();
+            //获取最新红线拐点附件地址
+            ShpBatch newShpBatch = shpBatchMapper.getNewShpBatch();
+            if(null==newShpBatch){
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取红线数据失败");
+            }
+            //压缩
+            String srcDir = newShpBatch.getGrpoint();
+            if(StringUtils.isBlank(srcDir)){
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取红线本地路径失败");
+            }
+            boolean b = FileUtil.toZip(srcDir, new File(PATH + "/epr/grpoint/" + uuid + ".zip"), false);
+            if(!b){
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "解压失败");
+            }
+            //下载
+            boolean b2 = FileUtil.downFile(response,PATH+"/epr/grpoint/"+uuid+".zip","grpoint.zip");
+            if(!b2){
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "下载失败");
+            }
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "下载完成");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "下载失败");
+        }
+    }
+
 
 
 

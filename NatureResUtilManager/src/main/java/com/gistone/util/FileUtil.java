@@ -10,10 +10,14 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.util.WebUtils;
 import net.lingala.zip4j.core.ZipFile;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Created by qiang on 2017/8/1.
@@ -435,6 +439,129 @@ public class FileUtil {
             return "";
         }
     }
+
+
+
+    /**
+     * 压缩ZIP
+     * @param srcDir 压缩文件夹路径
+     * @param file  new File("d:/xxx.zip"));
+     * @param KeepDirStructure 是否保留原来的目录结构,true:保留目录结构;
+     *                        false:所有文件跑到压缩包根目录下(注意：不保留目录结构可能会出现同名文件,会压缩失败)
+     * @throws RuntimeException
+     */
+    public static boolean toZip(String srcDir, File file, boolean KeepDirStructure){
+        boolean isItDone = true;
+        ZipOutputStream zos = null;
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(file);
+            zos = new ZipOutputStream(out);
+            File sourceFile = new File(srcDir);
+            compress(sourceFile, zos, sourceFile.getName(), KeepDirStructure);
+        } catch (Exception e) {
+            throw new RuntimeException("zip error from ZipUtils", e);
+        } finally {
+            if (zos != null) {
+                try {
+                    zos.close();
+                } catch (IOException e) {
+                    isItDone = false;
+                    e.printStackTrace();
+                }
+            }
+            if(null!=out){
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    isItDone = false;
+                    e.printStackTrace();
+                }
+            }
+        }
+        return isItDone;
+    }
+    private static void compress(File sourceFile, ZipOutputStream zos, String name, boolean KeepDirStructure) throws Exception {
+        byte[] buf = new byte[2048];
+        if (sourceFile.isFile()) {
+            // 向zip输出流中添加一个zip实体，构造器中name为zip实体的文件的名字
+            zos.putNextEntry(new ZipEntry(name));
+            // copy文件到zip输出流中
+            int len;
+            FileInputStream in = new FileInputStream(sourceFile);
+            while ((len = in.read(buf)) != -1) {
+                zos.write(buf, 0, len);
+            }
+            zos.closeEntry();
+            in.close();
+        } else {
+            File[] listFiles = sourceFile.listFiles();
+            if (listFiles == null || listFiles.length == 0) {
+                // 需要保留原来的文件结构时,需要对空文件夹进行处理
+                if (KeepDirStructure) {
+                    zos.putNextEntry(new ZipEntry(name + "/"));
+                    zos.closeEntry();
+                }
+            } else {
+                for (File file : listFiles) {
+                    // 判断是否需要保留原来的文件结构
+                    if (KeepDirStructure) {
+                        compress(file, zos, name + "/" + file.getName(), KeepDirStructure);
+                    } else {
+                        compress(file, zos, file.getName(), KeepDirStructure);
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    /**
+     * 下载附件-字节流
+     * @param response
+     * @param path 附件全路径  D:/xxx.txt
+     * @param name 附件回显名称  xxx.txt
+     */
+    public static boolean downFile(HttpServletResponse response, String path, String name){
+        InputStream in = null;
+        OutputStream out = null;
+        Boolean b = true;
+        try {
+//            response.setCharacterEncoding("UTF-8");
+            response.addHeader("Content-Disposition","attachment;filename="+ URLEncoder.encode(name,"UTF-8"));
+            response.setContentType("multipart/form-data"); //自动判断下载文件类型
+            in = new BufferedInputStream(new FileInputStream(new File(path)));
+            int len = 0;
+            byte[] buffer = new byte[1024];
+            out = response.getOutputStream();
+            while((len = in.read(buffer)) > 0) {
+                out.write(buffer,0,len);
+            }
+            out.flush();
+        } catch (Exception e) {
+            b = false;
+            e.printStackTrace();
+        } finally{
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return b;
+        }
+    }
+
+
 
 
 

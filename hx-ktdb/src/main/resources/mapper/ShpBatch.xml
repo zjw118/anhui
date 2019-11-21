@@ -69,6 +69,15 @@
 
 
 
+    <update id="updateGrpoint" parameterType="Object" >
+        update shp_batch
+        <set>
+            <if test="null!=grpoint and ''!=grpoint">
+                grpoint=#{grpoint},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
 
 
 
