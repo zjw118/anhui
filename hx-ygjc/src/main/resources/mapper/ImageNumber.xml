@@ -7,12 +7,26 @@
         SELECT name from image_number
         GROUP BY name
 	</select>
+    <select id="selectName2"  resultType="com.gistone.entity.ImageNumber">
+        SELECT name,sign from image_number
+        GROUP BY name
+	</select>
+
+    <select id="selectImageNumber2"  resultType="com.gistone.entity.ImageNumber" parameterType="java.lang.String">
+        SELECT * from image_number
+        WHERE name = #{name}
+	</select>
 
     <select id="selectImageNumber"  parameterType="com.gistone.entity.ImageNumber" resultType="com.gistone.entity.ImageNumber">
-        SELECT a.id,COALESCE(a.number,0)number,a.name,b.name data,b.id imageConfigId from image_number a
-        right JOIN image_config b
+        SELECT a.id,COALESCE(a.number,0)number,a.name,b.name data,b.id imageConfigId,b.parentid,
+        (SELECT name from image_config where id = b.parentid)parentName
+        from
+        (SELECT * from image_number
+        where name = #{name})a
+        INNER JOIN image_config b
         on a.image_config_id = b.id
-        where (a.name = #{name} or a.name is null)
+        where b.type = 3
+        ORDER BY b.id
 	</select>
 
     <insert id="insertImageNumber" parameterType="com.gistone.entity.ImageNumber">
@@ -34,7 +48,7 @@
 		delete from image_number where name = #{name}
 	</delete>
 
-    <update id="updateImageNumber" parameterType="Object" >
+    <update id="updateImageNumber" parameterType="com.gistone.entity.ImageNumber" >
         update image_number
         <set>
             <if test="null!= image_config_id">
@@ -48,6 +62,16 @@
             </if>
         </set>
         where id=#{id}
+    </update>
+
+    <update id="updateNum" parameterType="Object" >
+        update image_number
+        <set>
+            <if test="null!= name and ''!= name">
+                name = #{data},
+            </if>
+        </set>
+        where name = #{name}
     </update>
 
 

@@ -26,8 +26,14 @@ public interface ImageConfigMapper{
     int deleteImageConfig(ImageConfig imageConfig);
     //主键获取
     ImageConfig get(ImageConfig imageConfig);
+
+    ImageConfig getone(int id);
     //模糊查询
     ImageConfig like(@Param(value="name") String name);
+
+    //设置默认系数
+    int defaultNumber1(@Param(value="name") String name);
+    int defaultNumber2(@Param(value="name") String name);
 
 
 }

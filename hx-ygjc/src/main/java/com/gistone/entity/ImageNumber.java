@@ -7,6 +7,7 @@ import lombok.Data;
 public class ImageNumber {
     private Integer id;
     private Integer image_config_id;
+    private Integer sign;
     private Double number;
     private String name;
 
@@ -14,6 +15,10 @@ public class ImageNumber {
     private String data;
     @TableField(exist = false)
     private Integer imageConfigId;
+    @TableField(exist = false)
+    private Integer parentid;
+    @TableField(exist = false)
+    private String parentName;
 
 
 }

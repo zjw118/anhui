@@ -8,7 +8,6 @@ import java.util.List;
 
 @Mapper
 public interface ImageNumberMapper{
-
     //添加
     int insertImageNumber(ImageNumber imageNumber);
     //主键真删
@@ -17,11 +16,16 @@ public interface ImageNumberMapper{
     int deleteImageName(@Param(value="name")String name);
     //获取所有批次名
     List<String> selectName();
-    //批次名查询列表
-    List<ImageNumber> selectImageNumber(ImageNumber imageNumber);
+    List<ImageNumber> selectName2();
     //修改
     int updateImageNumber(ImageNumber imageNumber);
 
+    //批次名查询列表1
+    List<ImageNumber> selectImageNumber(ImageNumber imageNumber);
+    //批次名查询列表2
+    List<ImageNumber> selectImageNumber2(@Param(value="name")String name);
 
+    //批次名修改
+    int updateNum(ImageNumber imageNumber);
 
 }

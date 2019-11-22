@@ -132,5 +132,6 @@ public class ProjectAdmission implements Serializable {
 
 
 
+    private String featurePath;
 
 }

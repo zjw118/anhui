@@ -252,7 +252,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
 //            System.out.println( "?humanActivity="+shpUrl);
 //            System.out.println("&redline="+ftpShpUrl);
 
-
             //发送请求
             String p1 = "?humanActivity="+shpUrl;
             String p2 = "&redline="+ftpShpUrl;
@@ -264,37 +263,38 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             String redline_area = "";
             String stati = "";
 
+            boolean b1 = false;
             for (int i = 0; i < 5; i++) {
                 Thread.sleep(2000);
                 out = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId+"/results/out?f=pjson&returnType=data",null);
-                if(-1==out.indexOf("error")) break;
+                if(-1==out.indexOf("error")){
+                    b1 = true;
+                    break;
+                }
             }
+            if(!b1)return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "redline请求失败");
+            boolean b2 = false;
             for (int i = 0; i < 5; i++) {
                 redline_area = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId+"/results/redline_area?f=pjson&returnType=data",null);
-                if(-1==redline_area.indexOf("error")) break;
+                if(-1==redline_area.indexOf("error")){
+                    b2 = true;
+                    break;
+                }
                 Thread.sleep(2000);
             }
+            if(!b2)return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "out请求失败");
+            boolean b3 = false;
             for (int i = 0; i < 5; i++) {
                 stati = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId+"/results/stati?f=pjson&returnType=data",null);
-                if(-1==stati.indexOf("error")) break;
+                if(-1==stati.indexOf("error")){
+                    b3 = true;
+                    break;
+                }
                 Thread.sleep(2000);
             }
-
-//            System.out.println(redline_area);
-//            System.out.println(stati);
+            if(!b3)return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "stati请求失败");
 
 
-
-            //判断是否成功
-            if(-1<out.indexOf("error")||"".equals(out)){
-                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "out请求失败");
-            }
-            if(-1<redline_area.indexOf("error")||"".equals(redline_area)){
-                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "redline_area请求失败");
-            }
-            if(-1<stati.indexOf("error")||"".equals(stati)){
-                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "stati请求失败");
-            }
 
 
             //保存文件
@@ -467,6 +467,16 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             }
         }
         return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "查询失败");
+    }
+
+    @Override
+    public ResultVO defaultNumber(String name) {
+        int res1 = imageConfigMapper.defaultNumber1(name);
+        int res2 = imageConfigMapper.defaultNumber2(name);
+        if(0<res1&&0<res2){
+            return ResultVOUtil.success();
+        }
+        return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
     }
 
     @Override
