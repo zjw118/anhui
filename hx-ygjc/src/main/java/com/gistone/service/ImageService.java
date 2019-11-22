@@ -49,6 +49,8 @@ public interface ImageService extends IService<Image> {
 
     ResultVO oldNumber(Integer id);
 
+    ResultVO defaultNumber(String name);
+
     /**
      * 获取拐点shp
      * @param rc

@@ -15,7 +15,7 @@ public interface ImageNumberMapper{
     //批次真删
     int deleteImageName(@Param(value="name")String name);
     //获取所有批次名
-    List<String> selectName();
+    List<ImageNumber> selectName();
     //修改
     int updateImageNumber(ImageNumber imageNumber);
 

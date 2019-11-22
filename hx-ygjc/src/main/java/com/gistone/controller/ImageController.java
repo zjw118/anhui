@@ -596,24 +596,20 @@ public class ImageController {
             if (params == null) {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
             }
-            Object id = params.get("id");
-            if(null==id)
-                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "id不能为空！");
+            Object json = params.get("json");
+            if(null==json)
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "json不能为空！");
+            JSONObject jsonObject = JSONObject.fromObject(json);
 
-
-            ImageNumber imageNumber = new ImageNumber();
-            imageNumber.setId(Integer.valueOf(id.toString()));
-            if(null!=params.get("imageConfigId"))
-                imageNumber.setImage_config_id(Integer.valueOf(params.get("imageConfigId")+""));
-            if(null!=params.get("number"))
-                imageNumber.setNumber(Double.valueOf(params.get("number")+""));
-            if(null!=params.get("name"))
-                imageNumber.setName(params.get("name")+"");
-            int res = imageNumberMapper.updateImageNumber(imageNumber);
-            if(0>res){
-                return ResultVOUtil.success();
+            for (Object o : jsonObject.keySet()) {
+                ImageNumber imageNumber = new ImageNumber();
+                imageNumber.setId(Integer.valueOf(o.toString()));
+                imageNumber.setNumber(Double.valueOf(jsonObject.get(o)+""));
+                imageNumberMapper.updateImageNumber(imageNumber);
+                imageNumber = null;
             }
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
+
+            return ResultVOUtil.success();
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
@@ -635,11 +631,17 @@ public class ImageController {
             }
             Object name = params.get("name");
             if(null==name)
-                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "name不能为空！");
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "原名称name不能为空！");
             Object data = params.get("data");
             if(null==data)
-                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data不能为空！");
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "新名称data不能为空！");
 
+
+            //判断名称是否重复
+            List list = imageNumberMapper.selectImageNumber2(data.toString());
+            if(0<list.size()){
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "名称已存在！");
+            }
 
             ImageNumber imageNumber = new ImageNumber();
             imageNumber.setName(name.toString());
@@ -708,7 +710,7 @@ public class ImageController {
 
 
     /**
-     * 获取默认系数
+     * 获取默认系数  （准备删除）
      * @param paramsMap
      * @return
      */
@@ -729,6 +731,34 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
         }
     }
+
+
+    /**
+     * 选择默认系数
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/defaultNumber", method = RequestMethod.POST)
+    public ResultVO defaultNumber(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params == null) {
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            }
+            Object name = params.get("name");
+            if (null==name) {
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
+            }
+            return imageService.defaultNumber(name.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
+        }
+    }
+
+
+
+
 
     //拐点-生成SHP
     @RequestMapping(value = "/gdShp", method = RequestMethod.POST)
