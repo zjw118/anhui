@@ -3,7 +3,11 @@
 <mapper namespace="com.gistone.mapper.ImageNumberMapper">
 
 
-    <select id="selectName"  resultType="com.gistone.entity.ImageNumber">
+    <select id="selectName"  resultType="java.lang.String">
+        SELECT name from image_number
+        GROUP BY name
+	</select>
+    <select id="selectName2"  resultType="com.gistone.entity.ImageNumber">
         SELECT name,sign from image_number
         GROUP BY name
 	</select>
@@ -44,7 +48,7 @@
 		delete from image_number where name = #{name}
 	</delete>
 
-    <update id="updateImageNumber" parameterType="Object" >
+    <update id="updateImageNumber" parameterType="com.gistone.entity.ImageNumber" >
         update image_number
         <set>
             <if test="null!= image_config_id">

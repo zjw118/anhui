@@ -7,6 +7,7 @@ import lombok.Data;
 public class ImageNumber {
     private Integer id;
     private Integer image_config_id;
+    private Integer sign;
     private Double number;
     private String name;
 

@@ -499,27 +499,27 @@ public class ImageController {
      * @param paramsMap
      * @return
      */
-    @RequestMapping(value = "/audit", method = RequestMethod.POST)
-    public ResultVO audit(@RequestBody Map<String, Object> paramsMap) {
-        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-        if (params == null) {
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
-        }
-        Image image = new Image();
-        String id = (String) params.get("id");
-        if (StringUtils.isBlank(id)) {
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "影像主键id不能为空");
-        }
-        if (null != params.get("evaluation")) {
-            image.setEvaluation(params.get("evaluation") + "");
-        }
-        if (null != params.get("sign")) {
-            image.setSign(Integer.valueOf(params.get("sign") + ""));
-        }
-        image.setId(Integer.valueOf(id));
-        image.setAuditDate(new Date());
-        return service.audit(image);
-    }
+//    @RequestMapping(value = "/audit", method = RequestMethod.POST)
+//    public ResultVO audit(@RequestBody Map<String, Object> paramsMap) {
+//        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+//        if (params == null) {
+//            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+//        }
+//        Image image = new Image();
+//        String id = (String) params.get("id");
+//        if (StringUtils.isBlank(id)) {
+//            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "影像主键id不能为空");
+//        }
+//        if (null != params.get("evaluation")) {
+//            image.setEvaluation(params.get("evaluation") + "");
+//        }
+//        if (null != params.get("sign")) {
+//            image.setSign(Integer.valueOf(params.get("sign") + ""));
+//        }
+//        image.setId(Integer.valueOf(id));
+//        image.setAuditDate(new Date());
+//        return service.audit(image);
+//    }
 
 
 
@@ -544,7 +544,7 @@ public class ImageController {
     @RequestMapping(value = "/getNumberNames", method = RequestMethod.POST)
     public ResultVO getNumberNames(@RequestBody Map<String, Object> paramsMap) {
         try {
-            return ResultVOUtil.success(imageNumberMapper.selectName());
+            return ResultVOUtil.success(imageNumberMapper.selectName2());
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
@@ -559,19 +559,19 @@ public class ImageController {
             if (params == null) {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
             }
-            String name = (String) params.get("name");
-            if (StringUtils.isBlank(name)) {
+            Object name = params.get("name");
+            if (null==name) {
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
             }
             ImageNumber imageNumber = new ImageNumber();
-            imageNumber.setName(name);
+            imageNumber.setName(name.toString());
             List<ImageNumber> imageNumbers = imageNumberMapper.selectImageNumber(imageNumber);
             //判断是否需要新增
             for (ImageNumber number : imageNumbers) {
                 if(null==number.getId()){
                     ImageNumber add = new ImageNumber();
                     add.setImage_config_id(number.getImageConfigId());
-                    add.setName(name);
+                    add.setName(name.toString());
                     add.setNumber(0.0);
                     imageNumberMapper.insertImageNumber(add);
                 }
@@ -601,14 +601,13 @@ public class ImageController {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "json不能为空！");
             JSONObject jsonObject = JSONObject.fromObject(json);
 
-            for (Object o : jsonObject.keySet()) {
+            for (Object o : jsonObject.keySet()){
                 ImageNumber imageNumber = new ImageNumber();
                 imageNumber.setId(Integer.valueOf(o.toString()));
                 imageNumber.setNumber(Double.valueOf(jsonObject.get(o)+""));
                 imageNumberMapper.updateImageNumber(imageNumber);
                 imageNumber = null;
             }
-
             return ResultVOUtil.success();
         } catch (Exception e) {
             e.printStackTrace();

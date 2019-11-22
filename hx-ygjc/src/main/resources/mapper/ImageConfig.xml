@@ -25,11 +25,11 @@
         SELECT a.*,b.name name2,c.name name1 from
         (SELECT * from image_config
         where type = 3)a
-        LEFT JOIN
+        inner JOIN
         (SELECT * from image_config
         where type = 2)b
         on a.parentid = b.id
-        LEFT JOIN
+        inner JOIN
         (SELECT * from image_config
         where type = 1)c
         on b.parentid = c.id
