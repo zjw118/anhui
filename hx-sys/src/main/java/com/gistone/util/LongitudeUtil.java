@@ -25,7 +25,7 @@ public class LongitudeUtil {
     public static void main(String[] args) {
         Double d =116.37032;
         String s = LongitudeUtil.dblToLocation(d);
-        System.out.println(s);
+//        System.out.println(s);
     }
 
 }

@@ -13,10 +13,10 @@ import java.util.Date;
 public class Test {
     public static void main(String[] args) {
         Date date = new Date();
-        System.out.println(date);
+//        System.out.println(date);
         String format = DateUtils.format(date);
-        System.out.println(format);
+//        System.out.println(format);
         LocalDate date1 = LocalDate.now();
-        System.out.println(date1);
+//        System.out.println(date1);
     }
 }

@@ -79,7 +79,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             wrapper.like("name",userName);
         }
         wrapper.eq("del_flag",1);
-        wrapper.orderByDesc("update_date");
+        wrapper.orderByDesc("create_date").orderByDesc("id");
         IPage<Image> imageIPage = mapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
         Map<String, Object> result = new HashMap<>();
         result.put("rows", imageIPage.getRecords());
@@ -187,8 +187,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
 
             if(null!=o1) num = Double.valueOf(jsonObject.get("num")+"");
 
-
-
             //获取类别
             imageConfig3s = imageConfigMapper.getImageConfig3s();
             for (ImageConfig imageConfig3 : imageConfig3s) {
@@ -223,9 +221,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     }
 
 
-
-
-
     @Override
     public ResultVO addAudit(Integer id,JSONObject json) {
         try {
@@ -241,8 +236,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             if(StringUtils.isBlank(ftpShpUrl)){
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "未知红线数据");
             }
-//            System.out.println( "?humanActivity="+shpUrl);
-//            System.out.println("&redline="+ftpShpUrl);
 
             //发送请求
             String p1 = "?humanActivity="+shpUrl;
@@ -254,7 +247,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             String out = "";
             String redline_area = "";
             String stati = "";
-
             boolean b1 = false;
             for (int i = 0; i < 5; i++) {
                 Thread.sleep(2000);
@@ -306,8 +298,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
                 JSONObject attributes = JSONObject.fromObject(job3.get("attributes"));
                 sum += Double.valueOf(attributes.get("hxarea")+"");
             }
-
-
 
             //获取类型列表
             List<ImageConfig> icList = imageConfigMapper.getImageConfig3();
@@ -393,8 +383,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
                 }
                 jSONObject.put("bhl",bhl);
             }
-
-
 
             //更新数据
             image.setContrastRed(jSONObject+"");

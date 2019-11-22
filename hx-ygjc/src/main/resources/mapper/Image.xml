@@ -177,17 +177,12 @@
         LIMIT 1,5
     </select>
 
-
-
-
-
     <select id="getImage2" resultType="com.gistone.entity.Image"  parameterType="java.lang.Integer">
         SELECT * from image
         WHERE del_flag = 1
         and id &lt; #{id}
-        ORDER BY create_date desc,id desc
+        ORDER BY create_date,id
         LIMIT 1
-
     </select>
 
     <update id="updateImage" parameterType="Object" >
