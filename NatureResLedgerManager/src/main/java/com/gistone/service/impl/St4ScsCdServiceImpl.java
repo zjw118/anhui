@@ -305,9 +305,10 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     }
 
     public Map list2(Integer id) {
-        QueryWrapper<St4ScsCd> wrapper = new QueryWrapper<>();
-        wrapper.eq("image_id", id);
-        List<St4ScsCd> st4ScsCds = st4ScsCdMapper.selectList(wrapper);
+//        QueryWrapper<St4ScsCd> wrapper = new QueryWrapper<>();
+//        wrapper.eq("image_id", id);
+//        List<St4ScsCd> st4ScsCds = st4ScsCdMapper.selectList(wrapper);
+        List<Map> st4ScsCds = st4ScsCdMapper.select(id);
         Map map = new HashMap();
         map.put("data", st4ScsCds);
         return map;
@@ -324,6 +325,8 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             //通过影像id先删除记录然后再插入,然后再写入shp文件，将地址更新到影像表中！
             st4ScsCdMapper.delete(new QueryWrapper<St4ScsCd>().eq("image_id", imageId));
             //从data中构造属性
+            int plaqueNumber = data.size(); //斑块数量
+            double area = 0; //总面积
             for (Map<String, Object> datum : data) {
                 Map<String, Object> attributes = (Map<String, Object>) datum.get("attributes");
                 //通过属性构造参数
@@ -349,6 +352,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                     }
                 }
                 if (null != attributes.get("area")) {
+                    area += Double.valueOf(attributes.get("area")+"");
                     iterpretation.setArea(attributes.get("area") + "");
                 }
                 if (null != attributes.get("position")) {
@@ -413,7 +417,8 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                     image.setId(imageId);
                     image.setShpurl(ftpPt+ftpUrl+ftpPath+fileName1);
                     image.setShp(url);
-    //                image.setUpdateDate(new Date());
+                    image.setArea(area);
+                    image.setPlaqueNumber(plaqueNumber);
                     int r = imageMapper.updateById(image);
                     if(0<r){
                         return ResultVOUtil.success();

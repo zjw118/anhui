@@ -32,7 +32,8 @@ public class LedgerHelp {
 			rhSet.add(rf);
 		}*/
         String aa="39°40′15.93″";
-        System.out.println(IsRulelon(aa));
+//        System.out.println(IsRulelon(aa));
+
         //System.out.println(checkLongude("61.325566"));
         //System.out.println(checkItude("39.371967777777776"));
         //System.out.println(IsRulelon("116°10′47.27″"));

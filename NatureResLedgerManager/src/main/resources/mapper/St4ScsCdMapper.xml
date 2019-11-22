@@ -560,4 +560,44 @@ where cd.cd001 not in (select cd001 from st4_po_cd_sa )
     </select>
 
 
+    <select id="select"  resultType="java.util.Map" parameterType="Integer">
+        SELECT
+        a.CD001,
+        a.CD002,
+        a.CD003,
+        a.CD004,
+        a.SG001,
+        a.CL001,
+        a.CD007,
+        a.SD001,
+        a.CD009,
+        a.CD010,
+        a.CD011,
+        a.CD012,
+        a.CD013,
+        a.CD014,
+        a.CD015,
+        a.image_id imageId,
+        a.active_name activeName,
+        a.area,
+        a.descri,
+        a.geometry,
+        a.group_id groupId,
+        a.CD016,
+        a.CD017,
+        a.center,
+        a.position,
+        a.region,
+        a.CD020,
+        b.name activeType
+        from st4_scs_cd a
+        LEFT JOIN image_config b
+        on a.active_type = b.id
+        where a.CD009 = 1
+        and a.image_id = 118
+    </select>
+
+
+
+
 </mapper>

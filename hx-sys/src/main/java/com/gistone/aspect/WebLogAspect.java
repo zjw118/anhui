@@ -126,7 +126,7 @@ public class WebLogAspect {
         String retString = JSONObject.toJSONString(ret);
         sysLog.setResponse(retString.length()>5000? JSONObject.toJSONString("请求参数数据过长不与显示"):retString);
         sysLog.setUseTime(System.currentTimeMillis() - startTime.get());
-        System.out.println(sysLog.toString());
+//        System.out.println(sysLog.toString());
         sysLog.setCreateDate(new Date());
         sysLogService.save(sysLog);
     }

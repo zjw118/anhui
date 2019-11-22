@@ -718,7 +718,7 @@ public class LmMarkerMobileController {
         LmMarkerMobile lmMarkerMobile = lmMarkerMobileService.findMarkerById(id);
 
 
-        System.out.println(lmMarkerMobile.toString());
+//        System.out.println(lmMarkerMobile.toString());
         //如果之前导出过word则不再导出 && StringUtils.isBlank(lmMarkerMobile.getFileUrl())
         if (lmMarkerMobile != null) {
             //2.通过id查询界桩图片
@@ -964,7 +964,7 @@ public class LmMarkerMobileController {
         LmMarkerMobile lmMarkerMobile = lmMarkerMobileService.findMarkerById(id);
 
 
-        System.out.println(lmMarkerMobile.toString());
+//        System.out.println(lmMarkerMobile.toString());
         //如果之前导出过word则不再导出
         if (lmMarkerMobile != null && StringUtils.isNotBlank(lmMarkerMobile.getWordUrl())) {
             //2.通过id查询界桩图片
@@ -1184,11 +1184,11 @@ public class LmMarkerMobileController {
             try {
                 BufferedImage sourceImg = ImageIO.read(new FileInputStream(picture));
 
-                System.out.println(sourceImg.getHeight());
-                System.out.println(sourceImg.getWidth());
+//                System.out.println(sourceImg.getHeight());
+//                System.out.println(sourceImg.getWidth());
                 float proportion = (float) sourceImg.getHeight() / sourceImg.getWidth();
                 height = proportion * 85;
-                System.out.println("height====" + height);
+//                System.out.println("height====" + height);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -1365,7 +1365,7 @@ public class LmMarkerMobileController {
             }
         }
 
-        System.out.println(lmMarkerMobiles);
+//        System.out.println(lmMarkerMobiles);
 
         //先将之前的数据删除
         lmMarkerMobileService.deleteAll();

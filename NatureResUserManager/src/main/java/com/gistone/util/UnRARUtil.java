@@ -46,7 +46,7 @@ public class UnRARUtil {
 	                   }    
 	                   //3解压缩文件    
 	                   fos = new FileOutputStream(new File(destFileName)); 
-	                   System.out.println(destFileName);
+//	                   System.out.println(destFileName);
 	                   try {
 	                	   a.extractFile(fh, fos);    
 	                   } catch (Exception e) {
@@ -140,7 +140,7 @@ public class UnRARUtil {
 					
 					//3解压缩文件    
 					fos = new FileOutputStream(new File(destFileName)); 
-					System.out.println(destFileName);
+//					System.out.println(destFileName);
 					try {
 						a.extractFile(fh, fos);    
 					} catch (Exception e) {

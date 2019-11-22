@@ -208,8 +208,11 @@
             <if test="null!=auditPath">
                 audit_path=#{auditPath},
             </if>
-            <if test="null!=score">
-                score=#{score},
+            <if test="null!=area">
+                area=#{area},
+            </if>
+            <if test="null!=plaqueNumber">
+                plaque_number=#{plaqueNumber},
             </if>
         </set>
 		where id=#{id}
@@ -234,7 +237,8 @@
             sign,
             evaluation,
             audit_date,
-            score
+            area,
+            plaque_number
         )
         VALUES(
             #{name},
@@ -251,7 +255,8 @@
             #{sign},
             #{evaluation},
             #{auditDate},
-            #{score}
+            #{area},
+            #{plaque_number}
         )
     </insert>
 
