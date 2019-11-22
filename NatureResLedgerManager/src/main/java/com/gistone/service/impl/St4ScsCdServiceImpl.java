@@ -76,27 +76,65 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     private String ftpUrl;
 
     @Override
+    public ResultVO deletePersonAndPoint(Integer uid, List<Integer> points) {
+        QueryWrapper<St4PoCdSa> cdSaQueryWrapper = new QueryWrapper<>();
+        cdSaQueryWrapper.eq("sa001", uid);
+        cdSaQueryWrapper.in("cd001",points );
+        if(st4PoCdSaMapper.delete(cdSaQueryWrapper)>0){
+            return ResultVOUtil.success();
+        }else {
+            return ResultVOUtil.error("1222","处理结果失败");
+        }
+
+    }
+    @Override
+    public ResultVO getPersonAndPoint(Integer data) {
+       // List<St4SysSa
+        List<St4SysSa> list = st4ScsCdMapper.getPersonAndPoint(0);
+//        List<String> sa001List = null;
+//        for (Map<String,Object> map:list) {
+//            sa001List.add(map.get("cd001").toString());
+//        }
+//        List<Map<String,Object>> listR = new ArrayList<>();/listReserveData
+//        Map<String,Object> mapr = new HashMap<>();
+//        for (Map<String,Object> map:list) {
+//            String cdid = map.get("cd001").toString();
+//            if(ObjectUtils.isNotNullAndEmpty(map.get("cd001"))){
+//                if(sa001List!=null&&sa001List.contains(map.get("cd001").toString())){
+//                    mapr.
+//                }
+//            }
+//
+//        }
+//        List<Map> listR = new ArrayList<>();
+
+        return ResultVOUtil.success(list);
+    }
+
+
+
+    @Override
     public ResultVO getProblemPlaque(St4ScsCd data) {
-        List<St4ScsCd> cdList = new ArrayList<>();
+        //List<St4ScsCd> cdList = new ArrayList<>();
         try {
-            int size = data.getPageSize();//每页条数
-            int number = data.getPageNumber();//开始索引
-            int numberReal =0;
-            if(0==number){
-                numberReal = number;
-            }else{
-                numberReal= (number-1)*size;
-            }
-            data.setPageNumber(numberReal);
-            data.setPageSize(size);
-            List<St4ScsCd> list = cdList = st4ScsCdMapper.getProblemPlaque(data);
+//            int size = data.getPageSize();//每页条数
+//            int number = data.getPageNumber();//开始索引
+//            int numberReal =0;
+//            if(0==number){
+//                numberReal = number;
+//            }else{
+//                numberReal= (number-1)*size;
+//            }
+//            data.setPageNumber(numberReal);
+//            data.setPageSize(size);
+            List<St4ScsCd> list  = st4ScsCdMapper.getProblemPlaque(data);
             data.setPageNumber(null);
             data.setPageSize(null);
             Result result = new Result();
-            Integer tsize =st4ScsCdMapper.getProblemPlaque(data).size();
-            result.setTotal(tsize);
-            result.setRows(cdList);
-            result.setPage((int)Math.ceil((double)tsize/size));
+            //Integer tsize =st4ScsCdMapper.getProblemPlaque(data).size();
+           // result.setTotal(tsize);
+            result.setData(list);
+           // result.setPage((int)Math.ceil((double)tsize/size));
             return ResultVOUtil.success(result);
         }catch (Exception e){
             e.printStackTrace();

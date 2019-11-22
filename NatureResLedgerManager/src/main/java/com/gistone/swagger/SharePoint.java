@@ -15,6 +15,10 @@ public class SharePoint {
     @ApiModelProperty(value = "人员ID（必传）", required = true,example="1")
     public List<Integer> uidList;
 
+
+    @ApiModelProperty(value = "撤销下发斑块时传递的人员ID", required = true,example="1")
+    public Integer uid;
+
 //    @ApiModelProperty(value = "任务ID（必传）", required = true,example="1")
 //    public Integer taskId;
 //

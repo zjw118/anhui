@@ -4,9 +4,11 @@ package com.gistone.controller;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.RlhdGroup;
 import com.gistone.entity.St4ScsCd;
+import com.gistone.entity.St4SysSa;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.ISt4ScsCdService;
 import com.gistone.service.RlhdGroupService;
+import com.gistone.swagger.SharePoint;
 import com.gistone.util.ObjectUtils;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultMsg;
@@ -39,19 +41,42 @@ public class RlhdGroupController {
 
     @Autowired
     private ISt4ScsCdService st4ScsCdService;
+    @ApiOperation(value="删除已下发的斑块",notes = "",response = St4ScsCd.class)
+    @PostMapping(value="/deletePersonAndPoint")
+    public ResultVO deletePersonAndPoint(@RequestBody @ApiParam(name="", value="json格式", required=true)
+                                              Swagger<SharePoint> cdLedger) {
+        SharePoint sp = cdLedger.getData();
+        if(!ObjectUtils.isNotNullAndEmpty(sp.getUid())){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "下发人员不能为空！");
+        }
+        if(!ObjectUtils.isNotNullAndEmpty(sp.getPointIdList())||sp.getPointIdList().size()<1){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "斑块id不能为空！");
+        }
+        return st4ScsCdService.deletePersonAndPoint(sp.getUid(),sp.getPointIdList());
+    }
+    @ApiOperation(value="根据任务id查询其下的所有斑块及下发的人",notes = "",response = St4ScsCd.class)
+    @PostMapping(value="/getPersonAndPoint")
+    public ResultVO getPersonAndPoint(@RequestBody @ApiParam(name="", value="json格式", required=true)
+                                            Swagger<St4SysSa> cdLedger) {
+        St4SysSa sa = cdLedger.getData();
+//        if(!ObjectUtils.isNotNullAndEmpty(sa.getSa001())){
+//            return  ResultVOUtil.error("1222", "人员ID不能为空!");
+//        }
+        return st4ScsCdService.getPersonAndPoint( sa.getSa001());
 
-    @ApiOperation(value="根据任务id查询其下的所有斑块及下发的人(斑块是否核查看st4ScsCk对象里的ck088的字段是0代表未核查否则是已核查)",notes = "列表数据列表",response = St4ScsCd.class)
+    }
+    @ApiOperation(value="根据任务id查询其下的所有斑块及下发的人",notes = "",response = St4ScsCd.class)
     @PostMapping(value="/listReserveData")
-    public ResultVO listReserveData(@RequestBody @ApiParam(name="各类保护地数据 列表", value="json格式", required=true)
+    public ResultVO listReserveData(@RequestBody @ApiParam(name="", value="json格式", required=true)
                                             Swagger<St4ScsCd> cdLedger) {
 
         St4ScsCd cd = cdLedger.getData();
         if(!ObjectUtils.isNotNullAndEmpty(cd.getCl001())){
             return  ResultVOUtil.error("1222", "任务ID不能为空!");
         }
-        if(!ObjectUtils.isNotNullAndEmpty(cd.getPageNumber())||!ObjectUtils.isNotNullAndEmpty(cd.getPageSize())){
-            return  ResultVOUtil.error("1222", ResultMsg.MSG_1018);
-        }
+//        if(!ObjectUtils.isNotNullAndEmpty(cd.getPageNumber())||!ObjectUtils.isNotNullAndEmpty(cd.getPageSize())){
+//            return  ResultVOUtil.error("1222", ResultMsg.MSG_1018);
+//        }
 
         return st4ScsCdService.getProblemPlaque(cd);
     }

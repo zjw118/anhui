@@ -2,10 +2,12 @@ package com.gistone.mapper;
 
 import com.gistone.entity.St4ScsCd;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.gistone.entity.St4SysSa;
 import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -39,6 +41,13 @@ public interface St4ScsCdMapper extends BaseMapper<St4ScsCd> {
      * @return
      */
     List<St4ScsCd> getProblemPlaque(St4ScsCd data);
+
+    /**
+     *
+     * @param uid
+     * @return
+     */
+    List<St4SysSa> getPersonAndPoint(Integer uid);
 
 
 }

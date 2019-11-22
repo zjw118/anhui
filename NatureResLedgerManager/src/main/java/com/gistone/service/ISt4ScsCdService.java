@@ -46,4 +46,19 @@ public interface ISt4ScsCdService extends IService<St4ScsCd> {
      * @return
      */
     ResultVO getProblemPlaque(St4ScsCd data);
+
+    /**
+     * 得到已经分配到的问题斑块的人和点
+     * @param uid
+     * @return
+     */
+    ResultVO getPersonAndPoint(Integer uid);
+
+    /**
+     * 撤销下发的问题斑块
+     * @param uid
+     * @param points
+     * @return
+     */
+    ResultVO deletePersonAndPoint(Integer uid,List<Integer> points);
 }
