@@ -147,9 +147,7 @@ public class DataRedlineRegisterController {
                 }
             }
         }
-        System.out.println(lmMarkerMobiles);
         boolean b = dataRedlineRegisterService.saveBatch(lmMarkerMobiles);
-        System.out.println("======导入红线数据");
 
     }
 

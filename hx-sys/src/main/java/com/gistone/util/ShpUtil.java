@@ -42,7 +42,7 @@ import java.util.*;
 @Slf4j
 public class ShpUtil {
     public static void main(String[] args) {
-        String shpStr = ShpUtil.readShapeFileToStr("D:\\epr\\attached\\shp\\anhuiResult1.shp", 1) + "";
+        String shpStr = ShpUtil.readShapeFileToStr("E:/epr/image/2019-11-22/8/b8bf5d37e7fd48c8ae8db59f82fdeb04.shp", 1) + "";
         System.out.println(shpStr);
     }
 

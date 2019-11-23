@@ -7,6 +7,10 @@
         SELECT name from image_number
         GROUP BY name
 	</select>
+    <select id="selectName2"  resultType="com.gistone.entity.ImageNumber">
+        SELECT name,sign from image_number
+        GROUP BY name
+	</select>
 
     <select id="selectImageNumber2"  resultType="com.gistone.entity.ImageNumber" parameterType="java.lang.String">
         SELECT * from image_number
@@ -19,7 +23,7 @@
         from
         (SELECT * from image_number
         where name = #{name})a
-        RIGHT JOIN image_config b
+        INNER JOIN image_config b
         on a.image_config_id = b.id
         where b.type = 3
         ORDER BY b.id
@@ -44,7 +48,7 @@
 		delete from image_number where name = #{name}
 	</delete>
 
-    <update id="updateImageNumber" parameterType="Object" >
+    <update id="updateImageNumber" parameterType="com.gistone.entity.ImageNumber" >
         update image_number
         <set>
             <if test="null!= image_config_id">

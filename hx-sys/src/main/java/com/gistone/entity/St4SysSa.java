@@ -124,7 +124,9 @@ public class St4SysSa extends BaseEntity implements Serializable {
     @TableField("SG001")
     private Integer sg001;
 
-
+    @ApiModelProperty(value = "辅助信息斑块")
+    @TableField(exist = false)
+    private List<CdHelper> cdHelper;
     @ApiModelProperty(value = "权限信息")
     @TableField(exist = false)
     private List<St4SysSc> st4SysSc;

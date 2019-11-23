@@ -79,7 +79,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             wrapper.like("name",userName);
         }
         wrapper.eq("del_flag",1);
-        wrapper.orderByDesc("update_date");
+        wrapper.orderByDesc("create_date").orderByDesc("id");
         IPage<Image> imageIPage = mapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
         Map<String, Object> result = new HashMap<>();
         result.put("rows", imageIPage.getRecords());
@@ -100,14 +100,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
 
     @Override
     public void insert(String name, String url,String ftpurl,Integer createBy,String remark,String createDate) {
-        //具体逻辑
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        Date date = null;
-//        try {
-//            date = simpleDateFormat.parse(createDate);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
         Image image = new Image().setName(name).setUrl(url).setShpurl(ftpurl).setCreateDate(createDate).setCreateBy(createBy).setUpdateDate(new Date());
         if(StringUtils.isNotBlank(remark)){
            image.setRemark(remark);
@@ -185,8 +177,8 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         String json = "";
         if(StringUtils.isNotBlank(image.getAuditPath()))
             json = FileUtil.readFromTextFile(image.getAuditPath());
+
         //评分系数
-//        List<ImageConfig> imageConfig = imageNumberMapper.selectImageConfigByImageId(id);
         String contrastRed = image.getContrastRed();
         List<ImageConfig> imageConfig3s = null;
 
@@ -200,8 +192,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             Object o4 = jsonObject.get("bhl");   //变化量
 
             if(null!=o1) num = Double.valueOf(jsonObject.get("num")+"");
-
-
 
             //获取类别
             imageConfig3s = imageConfigMapper.getImageConfig3s();
@@ -237,9 +227,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     }
 
 
-
-
-
     @Override
     public ResultVO addAudit(Integer id,JSONObject json) {
         try {
@@ -255,9 +242,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             if(StringUtils.isBlank(ftpShpUrl)){
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "未知红线数据");
             }
-//            System.out.println( "?humanActivity="+shpUrl);
-//            System.out.println("&redline="+ftpShpUrl);
-
 
             //发送请求
             String p1 = "?humanActivity="+shpUrl;
@@ -269,39 +253,39 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             String out = "";
             String redline_area = "";
             String stati = "";
-
+            boolean b1 = false;
             for (int i = 0; i < 5; i++) {
                 Thread.sleep(2000);
                 out = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId+"/results/out?f=pjson&returnType=data",null);
-                if(-1==out.indexOf("error")) break;
+                if(-1==out.indexOf("error")){
+                    b1 = true;
+                    break;
+                }
             }
+            if(!b1)return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "redline请求失败");
+            boolean b2 = false;
             for (int i = 0; i < 5; i++) {
                 redline_area = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId+"/results/redline_area?f=pjson&returnType=data",null);
-                if(-1==redline_area.indexOf("error")) break;
+                if(-1==redline_area.indexOf("error")){
+                    b2 = true;
+                    break;
+                }
                 Thread.sleep(2000);
             }
+            if(!b2)return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "out请求失败");
+            boolean b3 = false;
             for (int i = 0; i < 5; i++) {
                 stati = HttpUtil.GET(IMAGE_EVA+"/jobs"+jobId+"/results/stati?f=pjson&returnType=data",null);
-                if(-1==stati.indexOf("error")) break;
+                if(-1==stati.indexOf("error")){
+                    b3 = true;
+                    break;
+                }
                 Thread.sleep(2000);
             }
-
-//            System.out.println(redline_area);
-//            System.out.println(stati);
+            if(!b3)return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "stati请求失败");
 
 
-
-            //判断是否成功
-            if(-1<out.indexOf("error")||"".equals(out)){
-                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "out请求失败");
-            }
-            if(-1<redline_area.indexOf("error")||"".equals(redline_area)){
-                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "redline_area请求失败");
-            }
-            if(-1<stati.indexOf("error")||"".equals(stati)){
-                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "stati请求失败");
-            }
-
+//            System.out.println("out=="+out);
 
             //保存文件
             String path = FileUtil.getPath(PATH+"/epr/out/");
@@ -320,8 +304,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
                 JSONObject attributes = JSONObject.fromObject(job3.get("attributes"));
                 sum += Double.valueOf(attributes.get("hxarea")+"");
             }
-
-
 
             //获取类型列表
             List<ImageConfig> icList = imageConfigMapper.getImageConfig3();
@@ -408,12 +390,9 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
                 jSONObject.put("bhl",bhl);
             }
 
-
-
             //更新数据
             image.setContrastRed(jSONObject+"");
             image.setAuditPath(path+name);
-            image.setScore(json.toString());
             int res2 = mapper.updateImage(image);
             if(0<res2){
                 return ResultVOUtil.success();
@@ -436,43 +415,53 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "审核失败");
     }
 
+//    @Override
+//    public ResultVO oldNumber(Integer id) {
+//        Image image = imageMapper.getImageById(id);
+//        List<ImageConfig> imageConfig3 = imageConfigMapper.getImageConfig3();
+//        boolean bb = false;
+//        if(null!=image){
+//            String score = image.getScore();
+//            if(StringUtils.isNotBlank(score)){
+//                JSONObject jsonObject = JSONObject.fromObject(score);
+//                for (ImageConfig imageConfig : imageConfig3) {
+//                    boolean b = false;
+//                    for (Object o : jsonObject.keySet()) {
+//                        if(imageConfig.getId()==Integer.valueOf(o.toString())){
+//                            imageConfig.setNum(Double.valueOf(jsonObject.get(o).toString()));
+//                            b = true;
+//                            bb = true;
+//                        }
+//                    }
+//                    if(!b){
+//                        imageConfig.setNum(0.0);
+//                    }
+//                }
+//                JSONObject jSONObject = new JSONObject();
+//                jSONObject.put("list",imageConfig3);
+//                if(bb){
+//                    jSONObject.put("sign","0");// 有默认数据
+//                }else{
+//                    jSONObject.put("sign","1");//无默认数据
+//                }
+//                return ResultVOUtil.success(jSONObject);
+//            }else{
+//                JSONObject jSONObject = new JSONObject();
+//                jSONObject.put("sign","1");//无默认数据
+//                return ResultVOUtil.success(jSONObject);
+//            }
+//        }
+//        return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "查询失败");
+//    }
+
     @Override
-    public ResultVO oldNumber(Integer id) {
-        Image image = imageMapper.getImageById(id);
-        List<ImageConfig> imageConfig3 = imageConfigMapper.getImageConfig3();
-        boolean bb = false;
-        if(null!=image){
-            String score = image.getScore();
-            if(StringUtils.isNotBlank(score)){
-                JSONObject jsonObject = JSONObject.fromObject(score);
-                for (ImageConfig imageConfig : imageConfig3) {
-                    boolean b = false;
-                    for (Object o : jsonObject.keySet()) {
-                        if(imageConfig.getId()==Integer.valueOf(o.toString())){
-                            imageConfig.setNum(Double.valueOf(jsonObject.get(o).toString()));
-                            b = true;
-                            bb = true;
-                        }
-                    }
-                    if(!b){
-                        imageConfig.setNum(0.0);
-                    }
-                }
-                JSONObject jSONObject = new JSONObject();
-                jSONObject.put("list",imageConfig3);
-                if(bb){
-                    jSONObject.put("sign","0");// 有默认数据
-                }else{
-                    jSONObject.put("sign","1");//无默认数据
-                }
-                return ResultVOUtil.success(jSONObject);
-            }else{
-                JSONObject jSONObject = new JSONObject();
-                jSONObject.put("sign","1");//无默认数据
-                return ResultVOUtil.success(jSONObject);
-            }
+    public ResultVO defaultNumber(String name) {
+        int res1 = imageConfigMapper.defaultNumber1(name);
+        int res2 = imageConfigMapper.defaultNumber2(name);
+        if(0<res1&&0<res2){
+            return ResultVOUtil.success();
         }
-        return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "查询失败");
+        return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
     }
 
     @Override

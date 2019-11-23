@@ -53,6 +53,10 @@
             <result column="audit_date" property="auditDate" />
             <result column="country_border" property="countryBorder" />
         </association>
+        <association property="st4SysSa" javaType="com.gistone.entity.St4SysSa">
+            <id column="SA001" property="sa001"  />
+            <result column="SA019" property="sa019" />
+        </association>
         <association property="st4ScsCl" javaType="com.gistone.entity.St4ScsCl">
             <result column="CL001" property="cl001" />
             <result column="CL002" property="cl002" />
@@ -294,7 +298,14 @@
             </collection>
         </collection>
     </resultMap>
-
+    <resultMap id="BaseResultMap2" type="com.gistone.entity.St4SysSa" >
+        <id column="SA001" property="sa001"  />
+        <result column="SA019" property="sa019"  />
+        <collection property="cdHelper" ofType="com.gistone.entity.CdHelper">
+            <id column="cd001" property="cd001" />
+            <result column="active_name" property="active_name" />
+        </collection>
+    </resultMap>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         CD001, CD002, CD003, CD004, SG001, CL001, CD007, SD001, CD009, CD010, CD011, CD012, CD013, CD014, CD015
@@ -305,6 +316,13 @@
     <sql id="ck_list">
          ck3.CK002, ck3.CD004, ck3.SG001, ck3.CK005, ck3.CK006, ck3.CK007, ck3.CK008, ck3.CK009, ck3.CK010, ck3.CK011, ck3.CK012, ck3.CK013, ck3.CK014, ck3.CK015, ck3.CK016, ck3.CK017, ck3.CK018, ck3.CK019, ck3.CK020, ck3.CK021, ck3.CK022, ck3.CK023, ck3.CK024, ck3.CK025, ck3.CK026, ck3.CK027, ck3.CK028, ck3.CK029, ck3.CK030, ck3.CK031, ck3.CK032, ck3.CK033, ck3.CK034, ck3.CK035, ck3.CK036, ck3.CK037, ck3.CK038, ck3.CK039, ck3.CK040, ck3.CK041, ck3.CK042, ck3.CK043, ck3.CK044, ck3.CK045, ck3.CK046, ck3.CK047, ck3.CK048, ck3.CK049, ck3.CK050, ck3.CK051, ck3.CK052, ck3.CK053, ck3.CK054, ck3.CK055, ck3.CK056, ck3.CK057, ck3.CK058, ck3.CK059, ck3.CK060, ck3.CK061, ck3.CK062, ck3.CK063, ck3.CK064, ck3.CK065, ck3.CK066, ck3.CK067, ck3.CK068, ck3.CK069, ck3.CK070, ck3.CK071, ck3.CK072, ck3.CC002, ck3.CK074, ck3.CK075, ck3.CK076, ck3.CK077, ck3.CK078, ck3.CK079, ck3.CK080, ck3.CK081, ck3.CK082, ck3.CK083, ck3.CK084, ck3.CK085, ck3.CK086, ck3.CK087, ck3.CK088, ck3.CK089, ck3.CK090, ck3.CK091
     </sql>
+    <select id="getPersonAndPoint" resultMap="BaseResultMap2"  parameterType="Integer">
+       SELECT sa.sa001, sa.sa019 ,  IFNULL(cd.active_name,'') active_name,
+        IFNULL(cd.CD001,'') cd001
+    FROM st4_sys_sa sa
+        LEFT JOIN st4_po_cd_sa cdsa ON cdsa.SA001 = sa.SA001
+        LEFT JOIN st4_scs_cd cd ON cd.CD001 = cdsa.CD001 WHERE cdsa.sa001 IS NOT NULL
+    </select>
     <select id="getProblemPlaque" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCd">
 
         select * from (
@@ -326,14 +344,15 @@
             ON clco.CL001 = cl.CL001
             WHERE  cd.CD009 =1
             AND cl.cl001 =#{cl001}
-        <if test="pageSize!=null  and pageNumber!=null ">
-            limit #{pageNumber},#{pageSize}
-        </if>
+
+        <!--<if test="pageSize!=null  and pageNumber!=null ">-->
+            <!--limit #{pageNumber},#{pageSize}-->
+        <!--</if>-->
 
     ) cd
     left join st4_po_cd_sa cdsa on cdsa.CD001  = cd.CD001
         LEFT JOIN  st4_sys_sa sa on sa.SA001 = cdsa.SA001
-
+where cd.cd001 not in (select cd001 from st4_po_cd_sa )
 
     </select>
     <select id="getPointBySa001" resultMap="BaseResultMap" parameterType="Integer">
@@ -539,6 +558,46 @@
         where
          cd.CD009=1 and cl.CL001=#{cl001}
     </select>
+
+
+    <select id="select"  resultType="java.util.Map" parameterType="Integer">
+        SELECT
+        a.CD001,
+        a.CD002,
+        a.CD003,
+        a.CD004,
+        a.SG001,
+        a.CL001,
+        a.CD007,
+        a.SD001,
+        a.CD009,
+        a.CD010,
+        a.CD011,
+        a.CD012,
+        a.CD013,
+        a.CD014,
+        a.CD015,
+        a.image_id imageId,
+        a.active_name activeName,
+        a.area,
+        a.descri,
+        a.geometry,
+        a.group_id groupId,
+        a.CD016,
+        a.CD017,
+        a.center,
+        a.position,
+        a.region,
+        a.CD020,
+        b.name activeType
+        from st4_scs_cd a
+        LEFT JOIN image_config b
+        on a.active_type = b.id
+        where a.CD009 = 1
+        and a.image_id = #{image_id}
+    </select>
+
+
 
 
 </mapper>

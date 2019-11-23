@@ -21,7 +21,7 @@ public class SmallPicUtil {
 	    	
 	        //Runtime.getRuntime().exec("cmd /c start "+ffmpegPath+" " + videoRealPath + " " + imageRealPath);
 	    	String cmd = projectPath + "/ffmpeg/ffmpeg.exe -i "+videoRealPath+" -ss 2 -vframes 1 -r 1 -ac 1 -ab 2 -s 160*120 -f  image2 "+imageRealPath +" &&　exit";
-	    	System.out.println(cmd);
+//	    	System.out.println(cmd);
 	    	Runtime.getRuntime().exec("cmd /c start " +cmd);
 	    	return vname.substring(0,vname.indexOf('.'))+".jpg";
 	    } catch (Exception e) {  

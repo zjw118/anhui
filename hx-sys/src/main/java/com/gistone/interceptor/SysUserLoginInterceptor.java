@@ -28,7 +28,7 @@ public class SysUserLoginInterceptor implements HandlerInterceptor {
             throws Exception {
 
         String uri = request.getRequestURI();
-        System.out.println("=>"+uri);
+//        System.out.println("=>"+uri);
 
 
 //        Object accessToken = getCookieByName(request, "token") != null ? getCookieByName(request, "token").getValue() : null;

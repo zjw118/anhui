@@ -111,7 +111,7 @@ public class LmMarkerMobileDeviceIDServiceImpl extends ServiceImpl<LmMarkerMobil
             if (StringUtils.isNotBlank(stringList.get(13))) {
                 String mbwj = configUtils.getPICTURE_PATH() + "ktdb/" + DateUtils.format(new Date()) + "/ZipThumbnail/";
                 ExcelUtil.mkdirsmy(mbwj, "数据库关联文件,且勿删除");
-                System.out.println(stringList.get(13).substring(stringList.get(13).lastIndexOf("/") + 1));
+//                System.out.println(stringList.get(13).substring(stringList.get(13).lastIndexOf("/") + 1));
                 ExcelUtil.copyFile(configUtils.getZIP_DECOM_PATH() + fileNameNoIndex + "\\thumbnail\\" + stringList.get(13).substring(stringList.get(13).lastIndexOf("/") + 1), mbwj);
                 Integer type = 6;
                 prePhotoInfo(lmMarkerMobile, mbwj.substring(2) + stringList.get(13).substring(stringList.get(13).lastIndexOf("/") + 1), type);

@@ -508,7 +508,7 @@ public class LmBoardController {
                 }
             }
             int index = sb.lastIndexOf(",");
-            System.out.println(photos);
+//            System.out.println(photos);
             if (!"".equals(sb.toString())) {
                 params.put("number", sb.substring(0, index));
             } else {
@@ -659,7 +659,7 @@ public class LmBoardController {
                 }
             }
             int index = sb.lastIndexOf(",");
-            System.out.println(photos);
+//            System.out.println(photos);
             if (!"".equals(sb)) {
                 params.put("number", sb.substring(0, index));
             } else {

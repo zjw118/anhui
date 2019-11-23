@@ -65,7 +65,7 @@ public class DataRedlineRegisterServiceImpl extends ServiceImpl<DataRedlineRegis
 			for (DataRedlineRegister record : IPage.getRecords()) {
 
 				BigDecimal b = new BigDecimal(record.getSrldArea());
-				System.out.println(b.toPlainString());
+//				System.out.println(b.toPlainString());
 				record.setSrldArea(b.toPlainString());
 
 			}

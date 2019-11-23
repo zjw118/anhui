@@ -434,8 +434,8 @@ public class FileUtil {
                 stringBuffer.append(temp);
             }
             return stringBuffer+"";
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+//            e.printStackTrace();
             return "";
         }
     }

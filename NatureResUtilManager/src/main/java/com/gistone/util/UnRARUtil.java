@@ -47,7 +47,7 @@ public class UnRARUtil {
 	                   }
 	                   //3解压缩文件
 	                   fos = new FileOutputStream(new File(destFileName));
-	                   System.out.println(destFileName);
+//	                   System.out.println(destFileName);
 	                   try {
 	                	   a.extractFile(fh, fos);
 	                   } catch (Exception e) {
@@ -141,7 +141,7 @@ public class UnRARUtil {
 
 					//3解压缩文件
 					fos = new FileOutputStream(new File(destFileName));
-					System.out.println(destFileName);
+//					System.out.println(destFileName);
 					try {
 						a.extractFile(fh, fos);
 					} catch (Exception e) {
@@ -197,7 +197,7 @@ public class UnRARUtil {
 			}
 			// 兼容main方法执行和javaweb下执行
 			String winrarPath = " C:"+File.separator+ "Program Files"+File.separator+"WinRAR"+File.separator+"WinRAR.exe";
-			System.out.println( winrarPath );
+//			System.out.println( winrarPath );
 
 			boolean bool = false;
 			if (!zipFile.exists()) {
@@ -206,7 +206,7 @@ public class UnRARUtil {
 
 			// 开始调用命令行解压，参数-o+是表示覆盖的意思
 			String cmd = winrarPath + " X -o+ -ibck " + zipFile + " " + destDir;
-			System.out.println( cmd );
+//			System.out.println( cmd );
 			try {
 				Process proc = Runtime.getRuntime().exec( cmd );
 				if (proc.waitFor() != 0) {

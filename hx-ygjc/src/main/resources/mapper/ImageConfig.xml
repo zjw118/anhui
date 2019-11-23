@@ -25,11 +25,11 @@
         SELECT a.*,b.name name2,c.name name1 from
         (SELECT * from image_config
         where type = 3)a
-        LEFT JOIN
+        inner JOIN
         (SELECT * from image_config
         where type = 2)b
         on a.parentid = b.id
-        LEFT JOIN
+        inner JOIN
         (SELECT * from image_config
         where type = 1)c
         on b.parentid = c.id
@@ -60,6 +60,17 @@
             </if>
         </set>
         where id=#{id}
+    </update>
+
+    <update id="defaultNumber1" parameterType="java.lang.String" >
+        update image_number
+        set sign = 1
+        where name = #{name}
+    </update>
+    <update id="defaultNumber2" parameterType="java.lang.String" >
+        update image_number
+        set sign = 0
+        where name != #{name}
     </update>
 
 
