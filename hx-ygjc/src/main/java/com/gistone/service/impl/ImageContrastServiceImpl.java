@@ -195,6 +195,7 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         ImageContrast ic = new ImageContrast();
         ic.setId(Integer.valueOf(params.get("id")+""));
         ImageContrast imageContrast = imageContrastMapper.getImageContrast(ic);
+
         QueryWrapper<Image> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id",imageContrast.getImage1Id());
         Image entity1 = imageService.getOne(queryWrapper);
@@ -208,19 +209,24 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         //获取3级类型
         List<ImageConfig> imageConfig3s = imageConfigMapper.getImageConfig3s();
 
+        //各类型面积
+        Map map = new HashMap();
 
         //shp1汇总数据
+        double num1s = 0;
         JSONArray jsonArray = JSONArray.fromObject(shp1);
         for (Object ja : jsonArray) {
             JSONObject jsonObject = JSONObject.fromObject(ja);
             Object attributes = jsonObject.get("attributes");
             JSONObject jsonObject1 = JSONObject.fromObject(attributes);
+            map.put(jsonObject1.get("type"),jsonObject1.get("area"));
             if(null!=jsonObject1.get("area")){
                 for (ImageConfig imageConfig3 : imageConfig3s) {
                     if(null==imageConfig3.getNum1()){
                         imageConfig3.setNum1(0.0);
                     }
                     if(imageConfig3.getId().toString().equals(jsonObject1.get("type"))){
+                        num1s += imageConfig3.getNum1()+Double.valueOf(jsonObject1.get("area")+"");
                         imageConfig3.setNum1(imageConfig3.getNum1()+Double.valueOf(jsonObject1.get("area")+""));
                     }
                 }
@@ -229,17 +235,20 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
 
 
         //shp2汇总数据
+        double num2s = 0;
         JSONArray jsonArray2 = JSONArray.fromObject(shp2);
         for (Object ja : jsonArray2) {
             JSONObject jsonObject = JSONObject.fromObject(ja);
             Object attributes = jsonObject.get("attributes");
             JSONObject jsonObject1 = JSONObject.fromObject(attributes);
+            map.put(jsonObject1.get("type"),jsonObject1.get("area"));
             if(null!=jsonObject1.get("area")){
                 for (ImageConfig imageConfig3 : imageConfig3s) {
                     if(null==imageConfig3.getNum2()){
                         imageConfig3.setNum2(0.0);
                     }
                     if(imageConfig3.getId().toString().equals(jsonObject1.get("type"))){
+                        num2s += imageConfig3.getNum2()+Double.valueOf(jsonObject1.get("area")+"");
                         imageConfig3.setNum2(imageConfig3.getNum2()+Double.valueOf(jsonObject1.get("area")+""));
                     }
 
@@ -247,8 +256,8 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
             }
         }
 
-        DecimalFormat df = new DecimalFormat("######0.00");
         //对比数据
+        double num3s = 0;
         for (ImageConfig imageConfig3 : imageConfig3s) {
             if(null==imageConfig3.getNum3()){
                 imageConfig3.setNum3(0.0);
@@ -257,19 +266,21 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
                 imageConfig3.setNum1(0.0);
             }
             Double num3 = imageConfig3.getNum2()-imageConfig3.getNum1();
-            RoundingMode rMode = RoundingMode.HALF_UP;
-            BigDecimal b = new BigDecimal(Double.toString(num3),new MathContext(3,rMode));
-            imageConfig3.setNum3(b.doubleValue());
+            num3s += num3;
+            imageConfig3.setNum3(num3);
         }
 
 
-
-        Map map = new HashMap();
-        map.put("imageContrast",imageContrast);
-        map.put("image1",entity1);
-        map.put("image2",entity2);
-        map.put("imageConfig",imageConfig3s);
-        return ResultVOUtil.success(map);
+        Map maps = new HashMap();
+        maps.put("area",map);
+        maps.put("num1s",num1s);
+        maps.put("num2s",num2s);
+        maps.put("num3s",num3s);
+        maps.put("imageContrast",imageContrast);
+        maps.put("image1",entity1);
+        maps.put("image2",entity2);
+        maps.put("imageConfig",imageConfig3s);
+        return ResultVOUtil.success(maps);
     }
 
 

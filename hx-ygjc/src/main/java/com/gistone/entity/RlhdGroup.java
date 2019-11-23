@@ -60,6 +60,8 @@ public class RlhdGroup extends Model<RlhdGroup> {
     private Integer delFlag;
 
     private Integer sonCount;
+    @TableField(exist = false)
+    private Double sonArea;
 
 private List<St4ScsCdVo> st4ScsCdList;
 

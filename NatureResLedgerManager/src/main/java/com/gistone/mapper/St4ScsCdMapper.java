@@ -3,9 +3,7 @@ package com.gistone.mapper;
 import com.gistone.entity.St4ScsCd;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.gistone.entity.St4SysSa;
-import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +16,9 @@ import java.util.Map;
  * @since 2019-08-13
  */
 public interface St4ScsCdMapper extends BaseMapper<St4ScsCd> {
+
     void insertList(List<St4ScsCd> list);
+
     List<St4ScsCd> batchSelectByCode(List<String> list);
 
     List<St4ScsCd> listCheckPointToView(St4ScsCd data);
@@ -29,11 +29,15 @@ public interface St4ScsCdMapper extends BaseMapper<St4ScsCd> {
 
     List<St4ScsCd> getDataByCd004(St4ScsCd data);
 
-
     List<St4ScsCd> getSpotByTaskId(Integer tid);
-    List<St4ScsCd> sysSpotData(Integer tid);
+
     List<St4ScsCd>  getPointBySa001(Integer uid);
+
     List<St4ScsCd> getStaticPoint(St4ScsCd data);
+
+    List<Map> select(@Param("image_id")Integer image_id);
+
+
 
     /**
      * 根据任务id查询出所有的问题斑块

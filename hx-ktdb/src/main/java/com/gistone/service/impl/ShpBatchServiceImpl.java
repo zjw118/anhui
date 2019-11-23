@@ -8,14 +8,16 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.*;
+import com.gistone.entity.DataRedlineRegister;
+import com.gistone.entity.LmBoard;
+import com.gistone.entity.LmMarkerMobile;
+import com.gistone.entity.ShpBatch;
 import com.gistone.exception.ImportException;
 import com.gistone.mapper.*;
 import com.gistone.service.ShpBatchService;
 import com.gistone.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -70,8 +72,9 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
     private String ftpPassword;
     @Value("${ftp.path}")
     private String ftpPath;
+
     @Override
-    public ResultVO listShp (ShpBatch sb){
+    public ResultVO listShp(ShpBatch sb) {
         List<ShpBatch> list = mapper.getBorderData(sb);
         return ResultVOUtil.success(list);
     }
@@ -83,7 +86,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
         if (StringUtils.isNotBlank(userName)) {
             //wrapper.likeRight("SA008",userName);
         }
-         wrapper.eq("type",1);
+        wrapper.eq("type", 1);
         //wrapper.orderByDesc("SA003");
         IPage<ShpBatch> iPage = mapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
 
@@ -139,12 +142,12 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
                 JSONObject parse1 = JSON.parseObject(sum);
                 JSONArray jsonArray1 = (JSONArray) parse1.get("features");
                 jsonArray.addAll(jsonArray1);
-                System.out.println(i);
+//                System.out.println(i);
             }
 
             //将数据写入shp文件
             String fileUrl = PathUtile.getRandomPath(PATH + "/epr/shp/", "x.shp");
-            System.out.println(fileUrl);
+//            System.out.println(fileUrl);
 
             ShpUtil.importPreRedlinedata(jsonArray, fileUrl);
 
@@ -159,9 +162,10 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             if (lmMarkerMobiles != null && lmMarkerMobiles.size() > 0) {
                 for (DataRedlineRegister lmMarkerMobile : lmMarkerMobiles) {
                     dataRedlineRegisterMapper.insert(lmMarkerMobile);
-                    DataRedline dataRedline = new DataRedline();
+                    /*DataRedline dataRedline = new DataRedline();
                     BeanUtils.copyProperties(lmMarkerMobile,dataRedline);
-                    dataRedlineMapper.insert(dataRedline);
+                    dataRedlineMapper.insert(dataRedline);*/
+
                 }
             }
 
@@ -180,8 +184,8 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
 
             String nowTime = DateUtils.format(new Date(), "yyyyMMdd");
             String token = UUID.randomUUID().toString().replaceAll("-", "");
-            String  ftpPathUrl = "/redlineshp/" + nowTime + "-" + token + "-redline/";
-            FTPUtil.createDri(ftpHost, ftpUserName, ftpPassword, ftpPort,ftpPathUrl);
+            String ftpPathUrl = "/redlineshp/" + nowTime + "-" + token + "-redline/";
+            FTPUtil.createDri(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPathUrl);
 
             String shpName = "";
             for (int i = 0; i < fa.length; i++) {
@@ -189,7 +193,6 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
                 if (fs.isDirectory()) {
                     System.out.println(fs.getName() + " [目录]");
                 } else {
-                    System.out.println(fs.getName());
                     FileInputStream input = new FileInputStream(new File(path + File.separatorChar + fs.getName()));
                     FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPathUrl, fs.getName(), input);
                 }
@@ -239,18 +242,15 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
                 JSONObject parse1 = JSON.parseObject(sum);
                 JSONArray jsonArray1 = (JSONArray) parse1.get("features");
                 jsonArray.addAll(jsonArray1);
-                System.out.println(i);
             }
 //
             String fileUrl = PathUtile.getRandomPath(PATH + "/epr/shp/", "x.shp");
-            System.out.println(fileUrl);
 //            JSONArray objects = JSON.parseArray(sb.toString().substring(0,sb.toString().length()-1));
             ShpUtil.importPreMarkerdata(jsonArray, fileUrl);
 
             //读shp录数据
             ReadShapeFile readShapeFile = new ReadShapeFile();
             ArrayList<LmMarkerMobile> lmMarkerMobiles = readShapeFile.readShapeFile(fileUrl);
-            System.out.println(lmMarkerMobiles.size());
 
             if (lmMarkerMobiles != null && lmMarkerMobiles.size() > 0) {
 
@@ -269,7 +269,6 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
                 }
             }
 
-            System.out.println(lmMarkerMobiles);
 
             //先将之前的数据删除
             lmMarkerMobileMapper.delete(null);
@@ -295,7 +294,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             String nowTime = DateUtils.format(new Date(), "yyyyMMdd");
             String token = UUID.randomUUID().toString().replaceAll("-", "");
             String ftpPathUrl = "/redlineshp/" + nowTime + "-" + token + "-jz/";
-            FTPUtil.createDri(ftpHost, ftpUserName, ftpPassword, ftpPort,ftpPathUrl );
+            FTPUtil.createDri(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPathUrl);
 
             String shpName = "";
             for (int i = 0; i < fa.length; i++) {
@@ -303,7 +302,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
                 if (fs.isDirectory()) {
                     System.out.println(fs.getName() + " [目录]");
                 } else {
-                    System.out.println(fs.getName());
+//                    System.out.println(fs.getName());
                     FileInputStream input = new FileInputStream(new File(path + File.separatorChar + fs.getName()));
                     FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPathUrl, fs.getName(), input);
                 }
@@ -351,11 +350,11 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
                 JSONObject parse1 = JSON.parseObject(sum);
                 JSONArray jsonArray1 = (JSONArray) parse1.get("features");
                 jsonArray.addAll(jsonArray1);
-                System.out.println(i);
+//                System.out.println(i);
             }
             //将数据写入shp文件
             String fileUrl = PathUtile.getRandomPath(PATH + "/epr/shp/", "x.shp");
-            System.out.println(fileUrl);
+//            System.out.println(fileUrl);
 
             ShpUtil.importPreBoarddata(jsonArray, fileUrl);
 
@@ -393,7 +392,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             String nowTime = DateUtils.format(new Date(), "yyyyMMdd");
             String token = UUID.randomUUID().toString().replaceAll("-", "");
             String ftpPathUrl = "/redlineshp/" + nowTime + "-" + token + "-bsp/";
-            FTPUtil.createDri(ftpHost, ftpUserName, ftpPassword, ftpPort,ftpPathUrl );
+            FTPUtil.createDri(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPathUrl);
 
             String shpName = "";
             for (int i = 0; i < fa.length; i++) {
@@ -401,7 +400,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
                 if (fs.isDirectory()) {
                     System.out.println(fs.getName() + " [目录]");
                 } else {
-                    System.out.println(fs.getName());
+//                    System.out.println(fs.getName());
                     FileInputStream input = new FileInputStream(new File(path + File.separatorChar + fs.getName()));
                     FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPathUrl, fs.getName(), input);
                 }

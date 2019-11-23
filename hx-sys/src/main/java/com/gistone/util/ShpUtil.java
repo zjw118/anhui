@@ -42,7 +42,7 @@ import java.util.*;
 @Slf4j
 public class ShpUtil {
     public static void main(String[] args) {
-        String shpStr = ShpUtil.readShapeFileToStr("D:\\epr\\attached\\shp\\anhuiResult1.shp", 1) + "";
+        String shpStr = ShpUtil.readShapeFileToStr("E:/epr/image/2019-11-22/8/b8bf5d37e7fd48c8ae8db59f82fdeb04.shp", 1) + "";
         System.out.println(shpStr);
     }
 
@@ -511,6 +511,7 @@ public class ShpUtil {
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("活动类型"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("环境问题"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("管控措施"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("区域性红线"));
 
 
                 //featureBuilder.add(jobj.getJSONObject("attributes").getString("center"));
@@ -837,6 +838,7 @@ public class ShpUtil {
         builder.length(100).add("active", String.class);
         builder.length(100).add("problem", String.class);
         builder.length(100).add("control", String.class);
+        builder.length(100).add("redline", String.class);
 
 
 

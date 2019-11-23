@@ -61,8 +61,10 @@ public class Image extends Model<Image> {
     private String countryBorder;
     @TableId(value = "audit_path")
     private String auditPath;
-    @TableId(value = "score")
-    private String score;
+    @TableId(value = "area")
+    private Double area;
+    @TableId(value = "plaque_number")
+    private Integer plaqueNumber;
 
 
 

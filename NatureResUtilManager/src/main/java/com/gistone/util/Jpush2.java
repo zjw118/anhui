@@ -48,7 +48,7 @@ public class Jpush2 {
         }
 
         if (null != msgResult) {
-            System.out.println(msgResult.getResponseCode());
+//            System.out.println(msgResult.getResponseCode());
         } else {
             System.out.println("无法获取数据");
         }

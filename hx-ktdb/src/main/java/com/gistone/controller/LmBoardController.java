@@ -508,7 +508,7 @@ public class LmBoardController {
                 }
             }
             int index = sb.lastIndexOf(",");
-            System.out.println(photos);
+//            System.out.println(photos);
             if (!"".equals(sb.toString())) {
                 params.put("number", sb.substring(0, index));
             } else {
@@ -659,7 +659,7 @@ public class LmBoardController {
                 }
             }
             int index = sb.lastIndexOf(",");
-            System.out.println(photos);
+//            System.out.println(photos);
             if (!"".equals(sb)) {
                 params.put("number", sb.substring(0, index));
             } else {
@@ -1056,7 +1056,7 @@ public class LmBoardController {
         lmBoard.setId(id);
         String redlineId = (String) dataParam.get("redlineId");
         if (StringUtils.isNotBlank(redlineId)) {
-            lmBoard.setRedlineNum(redlineId);
+            lmBoard.setRedlineId(Integer.parseInt(redlineId));
         }
         String num = (String) dataParam.get("boardNum");
         if(StringUtils.isNotBlank(num)){

@@ -137,14 +137,7 @@ public class ImageController {
          *
          */
 
-
         String url =  params.get("url")==null?"": params.get("url").toString();
-//        if (StringUtils.isBlank(url)) {
-//            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "地址不能为空");
-//        }
-        if (StringUtils.isBlank(url)) {
-           return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "地址不能为空");
-        }
 
         String createDate = (String) params.get("createDate");
         if (StringUtils.isBlank(createDate)) {
@@ -242,8 +235,15 @@ public class ImageController {
      * @date 2019/11/20 0020 10:17
      */
     @PostMapping("/getCountGroupByType")
-    public ResultVO getCountGroupByType() {
-        List<Map<String, Object>> result = service.getCountGroupByType();
+    public ResultVO getCountGroupByType(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+
+        Integer  imageId = (Integer) params.get("imageId");
+        List<Map<String, Object>> result = service.getCountGroupByType(imageId);
         return ResultVOUtil.success(result);
     }
 
@@ -256,8 +256,16 @@ public class ImageController {
      * @date 2019/11/20 0020 10:18
      */
     @PostMapping("/getAreaGroupByType")
-    public ResultVO getAreaGroupByType() {
-        List<Map<String, Object>> result = service.getAreaGroupByType();
+    public ResultVO getAreaGroupByType(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+
+
+        Integer  imageId = (Integer) params.get("imageId");
+        List<Map<String, Object>> result = service.getAreaGroupByType(imageId);
         return ResultVOUtil.success(result);
     }
 
@@ -268,7 +276,7 @@ public class ImageController {
     }
 
     @PostMapping("/getAreaChange")
-    public ResultVO getAreaChange(){
+    public ResultVO getAreaChange(@RequestBody Map<String, Object> paramsMap){
         List<Map<String, Object>> result = service.getAreaChange();
         return ResultVOUtil.success(result);
     }
@@ -482,12 +490,10 @@ public class ImageController {
         if (StringUtils.isBlank(id)) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "主键id不能为空");
         }
-
         Object json = params.get("json");
         if (null==json) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "系数json不能为空");
         }
-
         JSONObject job = JSONObject.fromObject(json);
         return service.addAudit(Integer.valueOf(id),job);
 
@@ -713,23 +719,22 @@ public class ImageController {
      * @param paramsMap
      * @return
      */
-    @RequestMapping(value = "/oldNumber", method = RequestMethod.POST)
-    public ResultVO oldNumber(@RequestBody Map<String, Object> paramsMap) {
-        try {
-            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-            if (params == null) {
-                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
-            }
-            Object id = params.get("id");
-            if (null==id) {
-                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
-            }
-            return imageService.oldNumber(Integer.valueOf(id.toString()));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
-        }
-    }
+//    @RequestMapping(value = "/oldNumber", method = RequestMethod.POST)
+//    public ResultVO oldNumber(@RequestBody Map<String, Object> paramsMap) {
+//        try {
+//            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+//            if (params == null) {
+//                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+//            }
+//            Object id = params.get("id");
+//            if (null==id) {
+//                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+//            }
+//            return imageService.oldNumber(Integer.valueOf(id.toString()));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
+//    }
 
 
     /**
@@ -759,34 +764,34 @@ public class ImageController {
 
 
 
-    //拐点-生成SHP
-    @RequestMapping(value = "/gdShp", method = RequestMethod.POST)
-    public ResultVO gdShp(@RequestBody Map<String, Object> paramsMap) {
-        try {
-            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-            if (params == null) {
-                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
-            }
-            Object rc = params.get("rc");  //容差
-            if (null==rc) {
-                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "容差rc不能为空");
-            }
-            return service.gdShp(Double.valueOf(rc.toString()));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
-        }
-    }
-
-    //拐点-下载
-    @RequestMapping(value = "/gdFile")
-    public void gdFile(HttpServletResponse response) {
-        try {
-            service.gdFile(response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    //拐点-生成SHP
+//    @RequestMapping(value = "/gdShp", method = RequestMethod.POST)
+//    public ResultVO gdShp(@RequestBody Map<String, Object> paramsMap) {
+//        try {
+//            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+//            if (params == null) {
+//                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+//            }
+//            Object rc = params.get("rc");  //容差
+//            if (null==rc) {
+//                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "容差rc不能为空");
+//            }
+//            return service.gdShp(Double.valueOf(rc.toString()));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
+//        }
+//    }
+//
+//    //拐点-下载
+//    @RequestMapping(value = "/gdFile")
+//    public void gdFile(HttpServletResponse response) {
+//        try {
+//            service.gdFile(response);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
 
