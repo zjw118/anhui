@@ -13,11 +13,87 @@
         <result column="remark" property="remark" />
         <result column="del_flag" property="delFlag" />
         <result column="son_count" property="sonCount" />
+
+
+        <collection property="st4ScsCdList" ofType="com.gistone.entity.St4ScsCd">
+            <id column="CD001" property="cd001" />
+            <result column="CD002" property="cd002" />
+            <result column="CD003" property="cd003" />
+            <result column="CD004" property="cd004" />
+            <result column="SG001" property="sg001" />
+            <result column="CL001" property="cl001" />
+            <result column="CD007" property="cd007" />
+            <result column="SD001" property="sd001" />
+            <result column="CD009" property="cd009" />
+            <result column="CD010" property="cd010" />
+            <result column="CD011" property="cd011" />
+            <result column="CD012" property="cd012" />
+            <result column="CD013" property="cd013" />
+            <result column="CD014" property="cd014" />
+            <result column="CD015" property="cd015" />
+            <result column="CD016" property="cd016" />
+            <result column="CD017" property="cd017" />
+            <result column="CD020" property="cd020" />
+            <result column="image_id" property="imageId" />
+            <result column="active_name" property="activeName" />
+            <result column="active_type" property="activeType" />
+            <result column="area" property="area" />
+            <result column="descri" property="descri" />
+            <result column="geometry" property="geometry" />
+            <result column="group_id" property="groupId" />
+            <result column="activityName" property="activityName" />
+            <result column="sendStatus" property="sendStatus" />
+            <association property="st4SysSa" javaType="com.gistone.entity.St4SysSa">
+                <id column="SA001" property="sa001" />
+                <result column="SA019" property="sa019" />
+                <result column="SD001" property="sd001" />
+            </association>
+        </collection>
+
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, name, create_by, create_date, update_by, update_date, remark, del_flag
     </sql>
+    <select id="getLedgerUnbinded" resultMap="BaseResultMap" parameterType="Integer">
+                  SELECT *
+        FROM rlhd_group rg
+          LEFT JOIN st4_po_cl_co clco
+            ON clco.co001 = rg.id
+        WHERE rg.del_flag = 1
+            AND rg.id NOT IN(SELECT
+                               co001
+                             FROM st4_po_cl_co) order by create_date desc
+    </select>
+
+    <select id="getPointFromStage" resultMap="BaseResultMap" parameterType="Integer">
+             SELECT
+      *,
+      ck.CK001,
+      IFNULL(ck.ck088,0)    sendStatus,
+    sa.sa001,sa.sa019 sa019,
+      ck.CD004
+    FROM rlhd_group rg
+      LEFT JOIN st4_scs_cd cd
+        ON cd.group_id = rg.id
+      LEFT JOIN (SELECT *
+                 FROM (SELECT
+                         MAX(CK001) AS ID
+                       FROM st4_scs_ck
+                       GROUP BY CD004) t
+                   INNER JOIN st4_scs_ck d
+                     ON t.ID = d.CK001) ck
+        ON ck.cd004 = cd.cd001
+         LEFT JOIN st4_sys_sa sa ON sa.sa001= ck.ck049
+      LEFT JOIN st4_po_cd_sa cdsa
+        ON cdsa.CD001 = cd.CD001
+      LEFT JOIN st4_po_cl_co clco
+        ON clco.co001 = rg.id
+      LEFT JOIN st4_scs_cl cl
+        ON cl.CL001 = clco.CL001
+    WHERE rg.del_flag = 1
+        AND cl.CL001 =#{id}
+    </select>
 
 </mapper>

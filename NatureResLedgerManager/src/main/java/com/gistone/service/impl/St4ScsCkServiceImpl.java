@@ -1378,9 +1378,9 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
             if(ck.getCk067()==2){
                 try{
                     String pushMsg ="您提交的在“"+ckk.getSt4ScsCl().getCl002()+"”任务的下“"
-                            +ckk.getSt4ScsCd().getActiveName()+"”斑块的“"+ckk.getRlhdGroup().getName()+"”台账信息由于“"+ck.getCk070()+"”已通过审核，请确认";
+                            +ckk.getSt4ScsCd().getActiveName()+"”斑块的“"+ckk.getRlhdGroup().getName()+"”台账信息由于“"+ck.getCk070()+"”被拒绝，请确认";
                     System.out.println("pushMsg-----------"+pushMsg);
-                    JPushUtil.jiGuangPush(ckk.getSt4SysSa().getSa012(), pushMsg,"1");
+                   // JPushUtil.jiGuangPush(ckk.getSt4SysSa().getSa012(), pushMsg,"1");
                 }catch (Exception e){
                     e.printStackTrace();
                     return ResultVOUtil.success();
@@ -1389,11 +1389,11 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
             }else if(ck.getCk067()==1){
                 try{
                     String pushMsg ="您提交的在“"+ckk.getSt4ScsCl().getCl002()+"”任务的下“"
-                            +ckk.getSt4ScsCd().getActiveName()+"”斑块的“"+ckk.getRlhdGroup().getName()+"”台账信息由于“"+ck.getCk070()+"”被拒绝，请确认";
+                            +ckk.getSt4ScsCd().getActiveName()+"”斑块的“"+ckk.getRlhdGroup().getName()+"”台账信息由于“"+ck.getCk070()+"”已通过审核，请确认";
                     System.out.println("pushMsg2-----------"+pushMsg);
                     JPushUtil.jiGuangPush(ckk.getSt4SysSa().getSa012(), pushMsg,"1");
                 }catch (Exception e){
-                    e.printStackTrace();
+                   // e.printStackTrace();
                     return ResultVOUtil.success();
                 }
                 return ResultVOUtil.success();

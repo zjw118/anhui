@@ -12,5 +12,5 @@ import com.gistone.entity.RlhdGroup;
  * @since 2019-10-25
  */
 public interface RlhdGroupMapper extends BaseMapper<RlhdGroup> {
-
+    RlhdGroup getPointFromStage(Integer rl);
 }

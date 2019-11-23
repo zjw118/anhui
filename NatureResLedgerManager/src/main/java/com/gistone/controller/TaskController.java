@@ -118,6 +118,7 @@ public class TaskController {
         ResultCp resultCp = new ResultCp();
 
         List<RlhdGroup> coList = rlhdGroupService.list();
+
         resultCp.setData(coList);
         return ResultVOUtil.success(resultCp);
 

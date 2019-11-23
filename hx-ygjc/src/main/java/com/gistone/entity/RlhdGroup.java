@@ -1,6 +1,7 @@
 package com.gistone.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
@@ -9,6 +10,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -58,6 +60,8 @@ public class RlhdGroup extends Model<RlhdGroup> {
     private Integer delFlag;
 
     private Integer sonCount;
+
+private List<St4ScsCdVo> st4ScsCdList;
 
 
     @Override

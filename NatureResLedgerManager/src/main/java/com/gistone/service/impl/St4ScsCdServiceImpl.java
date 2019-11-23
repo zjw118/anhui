@@ -42,6 +42,8 @@ import java.util.stream.Collectors;
 public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> implements ISt4ScsCdService {
 
     @Autowired
+    private RlhdGroupMapper rlhdGroupMapper;
+    @Autowired
     private St4ScsCdMapper st4ScsCdMapper;
     @Autowired
     private St4PoCdSaMapper st4PoCdSaMapper;
@@ -75,6 +77,13 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     @Value("${ftp_url}")
     private String ftpUrl;
 
+
+    @Override
+    public ResultVO getPointFromStage(Integer rlGroupID) {
+
+        return ResultVOUtil.success(rlhdGroupMapper.getPointFromStage(rlGroupID));
+    }
+
     @Override
     public ResultVO deletePersonAndPoint(Integer uid, List<Integer> points) {
         QueryWrapper<St4PoCdSa> cdSaQueryWrapper = new QueryWrapper<>();
@@ -96,7 +105,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
 //            sa001List.add(map.get("cd001").toString());
 //        }
 //        List<Map<String,Object>> listR = new ArrayList<>();/listReserveData
-//        Map<String,Object> mapr = new HashMap<>();
+//        Map<String,Object> mapr = new HashMap<>();getPersonAndPoint
 //        for (Map<String,Object> map:list) {
 //            String cdid = map.get("cd001").toString();
 //            if(ObjectUtils.isNotNullAndEmpty(map.get("cd001"))){

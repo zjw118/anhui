@@ -61,4 +61,13 @@ public interface ISt4ScsCdService extends IService<St4ScsCd> {
      * @return
      */
     ResultVO deletePersonAndPoint(Integer uid,List<Integer> points);
+
+
+
+    /**
+     * 根据台账id查询到具体的斑块信息
+     * @param rlGroupID
+     * @return
+     */
+    ResultVO getPointFromStage(Integer rlGroupID);
 }

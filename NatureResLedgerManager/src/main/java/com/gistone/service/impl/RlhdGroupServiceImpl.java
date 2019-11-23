@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
 import com.gistone.entity.ImageConfig;
 import com.gistone.entity.RlhdGroup;
@@ -48,6 +49,9 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
 
     @Autowired
     private ImageConfigMapper imageConfigMapper;
+
+
+
 
     public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName) {
 
@@ -152,6 +156,13 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
             iterpretationMapper.updateById(iterpretation);
         }
     }
+
+    @Override
+    public ResultVO listLedger() {
+
+        return null;
+    }
+
 
 }
 
