@@ -242,8 +242,15 @@ public class ImageController {
      * @date 2019/11/20 0020 10:17
      */
     @PostMapping("/getCountGroupByType")
-    public ResultVO getCountGroupByType() {
-        List<Map<String, Object>> result = service.getCountGroupByType();
+    public ResultVO getCountGroupByType(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+
+        Integer  imageId = (Integer) params.get("imageId");
+        List<Map<String, Object>> result = service.getCountGroupByType(imageId);
         return ResultVOUtil.success(result);
     }
 
@@ -256,8 +263,16 @@ public class ImageController {
      * @date 2019/11/20 0020 10:18
      */
     @PostMapping("/getAreaGroupByType")
-    public ResultVO getAreaGroupByType() {
-        List<Map<String, Object>> result = service.getAreaGroupByType();
+    public ResultVO getAreaGroupByType(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+
+
+        Integer  imageId = (Integer) params.get("imageId");
+        List<Map<String, Object>> result = service.getAreaGroupByType(imageId);
         return ResultVOUtil.success(result);
     }
 
@@ -268,7 +283,7 @@ public class ImageController {
     }
 
     @PostMapping("/getAreaChange")
-    public ResultVO getAreaChange(){
+    public ResultVO getAreaChange(@RequestBody Map<String, Object> paramsMap){
         List<Map<String, Object>> result = service.getAreaChange();
         return ResultVOUtil.success(result);
     }

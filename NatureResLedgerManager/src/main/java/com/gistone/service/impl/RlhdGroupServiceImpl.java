@@ -66,6 +66,15 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
             for (RlhdGroup record : iPage.getRecords()) {
                 List<St4ScsCd> list = iterpretationMapper.selectList(new QueryWrapper<St4ScsCd>().eq("group_id", record.getId()));
                 record.setSonCount(list.size());
+                double sum = 0.0;
+                if(list!=null&&list.size()>0){
+                    for (St4ScsCd st4ScsCd : list) {
+                        String area = st4ScsCd.getArea();
+                       sum+= Double.parseDouble(area);
+                    }
+                }
+
+                record.setSonArea(sum);
             }
         }
         result.put("rows", iPage.getRecords());

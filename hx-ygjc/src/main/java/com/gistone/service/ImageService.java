@@ -33,9 +33,9 @@ public interface ImageService extends IService<Image> {
 
     List<Map<String, Object>> getRlhdTotal();
 
-    List<Map<String, Object>> getCountGroupByType();
+    List<Map<String, Object>> getCountGroupByType(Integer imageId);
 
-    List<Map<String, Object>> getAreaGroupByType();
+    List<Map<String, Object>> getAreaGroupByType(Integer imageId);
 
     List<Map<String, Object>> getCountChange();
 

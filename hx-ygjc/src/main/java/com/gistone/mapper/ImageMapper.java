@@ -33,9 +33,9 @@ public interface ImageMapper extends BaseMapper<Image> {
 
     List<Map<String,Object>> getCountByType(int id);
 
-    List<Map<String,Object>> getCountGroupByType();
+    List<Map<String,Object>> getCountGroupByType(Integer imageId);
 
-    List<Map<String,Object>> getAreaByType();
+    List<Map<String,Object>> getAreaByType(Integer imageId);
 
     List<Map<String,Object>> getCountChange();
 
@@ -49,6 +49,8 @@ public interface ImageMapper extends BaseMapper<Image> {
     Image getImage2(@Param(value="id")Integer id);
 
     List<Integer> getLastId();
+
+    Integer getlastImageId();
 
 
 

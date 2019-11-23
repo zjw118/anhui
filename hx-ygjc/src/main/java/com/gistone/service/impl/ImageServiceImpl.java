@@ -149,14 +149,20 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     }
 
     @Override
-    public List<Map<String, Object>> getCountGroupByType() {
-        List<Map<String,Object>> result = mapper.getCountGroupByType();
+    public List<Map<String, Object>> getCountGroupByType(Integer imageId) {
+        if(imageId==null){
+            imageId= mapper.getlastImageId();
+        }
+        List<Map<String,Object>> result = mapper.getCountGroupByType(imageId);
         return result;
     }
 
     @Override
-    public List<Map<String, Object>> getAreaGroupByType() {
-        List<Map<String,Object>> result = mapper.getAreaByType();
+    public List<Map<String, Object>> getAreaGroupByType(Integer imageId) {
+        if(imageId==null){
+            imageId= mapper.getlastImageId();
+        }
+        List<Map<String,Object>> result = mapper.getAreaByType(imageId);
         return result;
     }
 

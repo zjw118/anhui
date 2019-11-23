@@ -242,7 +242,9 @@ public class ProjectAdmissionController {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        projectAdmission.setTime(date2);
+        //时间加一天
+        Date date = DateUtils.addDateDays(date2, 1);
+        projectAdmission.setTime(date);
 
 
         String shape = (String) dataParam.get("shape");
