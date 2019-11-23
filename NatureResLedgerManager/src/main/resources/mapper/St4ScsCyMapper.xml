@@ -26,6 +26,15 @@
         <result column="rwcs" property="rwcs" />
         <result column="rwsc" property="rwsc" />
         <result column="uname" property="uname" />
+        <association property="st4ScsCd" javaType="com.gistone.entity.St4ScsCd">
+            <id column="CD001" property="cd001" />
+            <result column="CD002" property="cd002" />
+            <result column="CD003" property="cd003" />
+            <result column="CD004" property="cd004" />
+            <result column="checkNum" property="checkNum" />
+            <result column="uncheckNum" property="uncheckNum" />
+            <result column="checkedNum" property="checkedNum" />
+        </association>
         <association property="rlhdGroup" javaType="com.gistone.entity.RlhdGroup">
             <id column="id" property="id" />
             <result column="name" property="name" />
@@ -214,26 +223,42 @@
         <!--ORDER BY CONVERT(sa.SA019 USING GBK)-->
 
         SELECT
-        com.PK_ID,com.COM_NAME,
-        sa.SA019 uname,sa.SA015,
-        IFNULL(COUNT(cy.CY001),0)    rwcs,
-        IFNULL(SUM(cy.CY006),0)    gjlc,
-        IFNULL(SUM(TIMESTAMPDIFF(HOUR,CY003,CY004)),0)    rwsc
+        com.PK_ID,
+        com.COM_NAME,sa.SA001 ,sa.SA019 uname,
+        cdsa.CD001,
+        COUNT(cd.cd001)    checkNum,
+        COUNT(IFNULL(ck088,0))    uncheckNum
         FROM sys_company com
-        LEFT JOIN st4_scs_cd cd ON com.PK_ID = cd.SD001
-        LEFT JOIN st4_scs_cc cc ON cc.CD004 = cd.CD001
-        LEFT JOIN st4_scs_cy cy ON cc.CY017 = cy.CY017
+
         <choose>
             <when test="groupByName=='sa015' ">
-                RIGHT JOIN st4_sys_sa sa ON cy.SA001 = sa.SA001
+                RIGHT JOIN st4_sys_sa sa
+                ON sa.SD001 = com.COM_CODE
             </when>
             <otherwise>
-                left JOIN st4_sys_sa sa ON cy.SA001 = sa.SA001
+                LEFT JOIN st4_sys_sa sa
+                ON sa.SD001 = com.COM_CODE
             </otherwise>
         </choose>
-        WHERE 1=1
-        <if test="sysCompany.comFPkid!=null">
-            and com.COM_F_PKID = #{sysCompany.comFPkid}
+
+        LEFT JOIN st4_po_cd_sa cdsa
+        ON cdsa.SA001 = sa.SA001
+        LEFT JOIN st4_scs_cd cd
+        ON cdsa.cd001 = cd.cd001
+        LEFT JOIN (SELECT *
+        FROM (SELECT
+        MAX(CK001)    AS id
+        FROM st4_scs_ck
+        GROUP BY CD004) t
+        INNER JOIN st4_scs_ck k
+        ON t.id = k.CK001) ck
+        ON ck.CK049 = sa.SA001
+
+        WHERE 1=1 and  com.PK_ID!=1
+        <if test="sysCompany!=null">
+            <if test="sysCompany.comFPkid!=null">
+                and com.COM_F_PKID = #{sysCompany.comFPkid}
+            </if>
         </if>
         <if test="uname!=null and uname  !=''">
             and sa.SA019 like '%${uname}%'
@@ -248,7 +273,7 @@
             group by com.PK_ID
         </if>
         <if test="groupByName=='sa015'">
-            group by sa.sa015
+            group by sa.sa001
         </if>
         <if test="groupByName=='sf' ">
             group by com.PK_ID

@@ -114,7 +114,15 @@
         LIMIT 2
     </select>
 
-
+   <select id="getlastImageId" resultType="int">
+        SELECT
+            id
+        FROM
+            image
+        ORDER BY
+            create_date
+        LIMIT 1
+   </select>
     <select id="getCountGroupByType" resultType="java.util.Map">
         SELECT
             count(*) count,
@@ -123,6 +131,7 @@
             st4_scs_cd a
         LEFT JOIN image_config b ON a.active_type = b.id
         WHERE a.active_type IS NOT NULL
+        and  a.image_id = #{imageId}
         GROUP BY
             a.active_type
     </select>
@@ -147,6 +156,7 @@
             st4_scs_cd a
         LEFT JOIN image_config b ON a.active_type = b.id
         WHERE a.active_type IS NOT NULL
+        and a.image_id = #{imageId}
         GROUP BY
             a.active_type
     </select>

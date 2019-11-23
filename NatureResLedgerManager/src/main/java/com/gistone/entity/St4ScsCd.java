@@ -305,4 +305,5 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private String activeTypeName;
 
+
 }

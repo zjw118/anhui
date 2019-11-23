@@ -8,14 +8,16 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.*;
+import com.gistone.entity.DataRedlineRegister;
+import com.gistone.entity.LmBoard;
+import com.gistone.entity.LmMarkerMobile;
+import com.gistone.entity.ShpBatch;
 import com.gistone.exception.ImportException;
 import com.gistone.mapper.*;
 import com.gistone.service.ShpBatchService;
 import com.gistone.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -160,9 +162,10 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             if (lmMarkerMobiles != null && lmMarkerMobiles.size() > 0) {
                 for (DataRedlineRegister lmMarkerMobile : lmMarkerMobiles) {
                     dataRedlineRegisterMapper.insert(lmMarkerMobile);
-                    DataRedline dataRedline = new DataRedline();
-                    BeanUtils.copyProperties(lmMarkerMobile, dataRedline);
-                    dataRedlineMapper.insert(dataRedline);
+                    /*DataRedline dataRedline = new DataRedline();
+                    BeanUtils.copyProperties(lmMarkerMobile,dataRedline);
+                    dataRedlineMapper.insert(dataRedline);*/
+
                 }
             }
 

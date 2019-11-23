@@ -105,6 +105,13 @@ public class ImportRedlineData {
                     model.setSrldType(property.getValue().toString());
                 }
 
+                if(property.getName().toString().equals("redline")){
+                    model.setAreaRedline(property.getValue().toString());
+                }
+                if(property.getName().toString().equals("plant")){
+                    model.setSrldPlantType(property.getValue().toString());
+                }
+
 
             }
             models.add(model);

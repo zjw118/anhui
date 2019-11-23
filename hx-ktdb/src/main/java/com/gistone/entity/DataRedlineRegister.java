@@ -2,6 +2,7 @@ package com.gistone.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -17,8 +18,9 @@ import java.util.Date;
  */
 @TableName("data_redline_register")
 @Data
-public class DataRedlineRegister implements Serializable {
+public class DataRedlineRegister extends Model<DataRedlineRegister> implements Serializable {
 
+//    @TableId(value = "srld_id", type = IdType.AUTO)
     private static final long serialVersionUID = 1L;
 
     /**
@@ -86,6 +88,8 @@ public class DataRedlineRegister implements Serializable {
      */
     @TableField("srld_problem")
     private String srldProblem;
+
+    private String areaRedline;
     /**
      * 管控措施
      */

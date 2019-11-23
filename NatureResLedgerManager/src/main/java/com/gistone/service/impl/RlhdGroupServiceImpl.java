@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
 import com.gistone.entity.ImageConfig;
 import com.gistone.entity.RlhdGroup;
@@ -49,6 +50,9 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
     @Autowired
     private ImageConfigMapper imageConfigMapper;
 
+
+
+
     public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName) {
 
         QueryWrapper<RlhdGroup> wrapper = new QueryWrapper<>();
@@ -66,6 +70,15 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
             for (RlhdGroup record : iPage.getRecords()) {
                 List<St4ScsCd> list = iterpretationMapper.selectList(new QueryWrapper<St4ScsCd>().eq("group_id", record.getId()));
                 record.setSonCount(list.size());
+                double sum = 0.0;
+                if(list!=null&&list.size()>0){
+                    for (St4ScsCd st4ScsCd : list) {
+                        String area = st4ScsCd.getArea();
+                       sum+= Double.parseDouble(area);
+                    }
+                }
+
+                record.setSonArea(sum);
             }
         }
         result.put("rows", iPage.getRecords());
@@ -159,6 +172,13 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
             iterpretationMapper.updateById(iterpretation);
         }
     }
+
+    @Override
+    public ResultVO listLedger() {
+
+        return null;
+    }
+
 
 }
 

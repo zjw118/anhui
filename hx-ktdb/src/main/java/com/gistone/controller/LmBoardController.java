@@ -1056,7 +1056,7 @@ public class LmBoardController {
         lmBoard.setId(id);
         String redlineId = (String) dataParam.get("redlineId");
         if (StringUtils.isNotBlank(redlineId)) {
-            lmBoard.setRedlineNum(redlineId);
+            lmBoard.setRedlineId(Integer.parseInt(redlineId));
         }
         String num = (String) dataParam.get("boardNum");
         if(StringUtils.isNotBlank(num)){

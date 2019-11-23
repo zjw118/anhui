@@ -511,6 +511,7 @@ public class ShpUtil {
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("活动类型"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("环境问题"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("管控措施"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("区域性红线"));
 
 
                 //featureBuilder.add(jobj.getJSONObject("attributes").getString("center"));
@@ -837,6 +838,7 @@ public class ShpUtil {
         builder.length(100).add("active", String.class);
         builder.length(100).add("problem", String.class);
         builder.length(100).add("control", String.class);
+        builder.length(100).add("redline", String.class);
 
 
 

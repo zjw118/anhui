@@ -42,6 +42,16 @@ public class RlhdGroupController {
 
     @Autowired
     private ISt4ScsCdService st4ScsCdService;
+    @ApiOperation(value="得到台账下的斑块点",notes = "",response = St4ScsCd.class)
+    @PostMapping(value="/getPointFromStage")
+    public ResultVO getPointFromStage(@RequestBody @ApiParam(name="", value="json格式", required=true)
+                                                 Swagger<SharePoint> cdLedger) {
+        SharePoint sharePoint =cdLedger.getData();
+        if(!ObjectUtils.isNotNullAndEmpty(sharePoint.getTaskId())){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "台账id不能为空！");
+        }
+        return st4ScsCdService.getPointFromStage(sharePoint.getTaskId());
+    }
     @ApiOperation(value="删除已下发的斑块",notes = "",response = St4ScsCd.class)
     @PostMapping(value="/deletePersonAndPoint")
     public ResultVO deletePersonAndPoint(@RequestBody @ApiParam(name="", value="json格式", required=true)

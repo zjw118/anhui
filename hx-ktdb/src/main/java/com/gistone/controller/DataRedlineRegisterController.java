@@ -1,6 +1,7 @@
 package com.gistone.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.DataRedlineRegister;
 import com.gistone.service.IDataRedlineRegisterService;
@@ -242,15 +243,15 @@ public class DataRedlineRegisterController {
         if (params == null) {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
         }
-        DataRedlineRegister dataRedline = new DataRedlineRegister();
 
 
         Integer id = (Integer) params.get("id");
         if(id==null){
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"红线id不能为空");
         }
-        dataRedline.setSrldId(id);
-        String srldNumber = (String) params.get("srldBumber");
+        DataRedlineRegister dataRedline = dataRedlineRegisterService.getOne(new QueryWrapper<DataRedlineRegister>().eq("srld_id",id));
+
+        String srldNumber = (String) params.get("srldNumber");
         if(StringUtils.isNotBlank(srldNumber)){
             dataRedline.setSrldNumber(srldNumber);
         }
@@ -260,7 +261,7 @@ public class DataRedlineRegisterController {
         }
         String target = (String) params.get("target");
         if(StringUtils.isNotBlank(target)){
-            dataRedline.setSrldTarget(target);
+            dataRedline.setTarget(target);
         }
         String area = (String) params.get("area");
         if(StringUtils.isNotBlank(area)){
@@ -288,7 +289,7 @@ public class DataRedlineRegisterController {
         }
 
 //判断更新人加人是否为空
-        dataRedlineRegisterService.updateById(dataRedline);
+        dataRedlineRegisterService.updateBy(dataRedline);
         return ResultVOUtil.success();
     }
 
