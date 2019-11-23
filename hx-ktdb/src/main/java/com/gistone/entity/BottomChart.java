@@ -51,7 +51,7 @@ public class BottomChart extends Model<BottomChart> {
     /**
      * 创建日期
      */
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd")
     @TableField("createDate")
     private Date createDate;
 

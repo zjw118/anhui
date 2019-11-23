@@ -305,9 +305,6 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     }
 
     public Map list2(Integer id) {
-//        QueryWrapper<St4ScsCd> wrapper = new QueryWrapper<>();
-//        wrapper.eq("image_id", id);
-//        List<St4ScsCd> st4ScsCds = st4ScsCdMapper.selectList(wrapper);
         List<Map> st4ScsCds = st4ScsCdMapper.select(id);
         Map map = new HashMap();
         map.put("data", st4ScsCds);

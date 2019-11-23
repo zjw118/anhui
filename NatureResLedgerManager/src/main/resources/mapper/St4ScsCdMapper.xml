@@ -594,7 +594,7 @@ where cd.cd001 not in (select cd001 from st4_po_cd_sa )
         LEFT JOIN image_config b
         on a.active_type = b.id
         where a.CD009 = 1
-        and a.image_id = 118
+        and a.image_id = #{image_id}
     </select>
 
 
