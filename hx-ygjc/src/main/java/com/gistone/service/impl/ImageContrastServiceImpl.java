@@ -112,8 +112,7 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         String res5 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, outUrl, filePath, fileName5);
         String res6 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, outUrl, filePath, fileName6);
 
-//        String ftpPath2 = outUrl; // ftp文件存放物理路径
-//        String filePath2 = PATH+"/epr/FTP/"+outUrl+"/"; // 文件路径
+
         String fileName11 = "sub.shp";// 原ftp文件名称
         String fileName22 = "sub.dbf";// 原ftp文件名称
         String fileName33 = "sub.cpg";// 原ftp文件名称
@@ -156,10 +155,47 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
             String str1 = ShpUtil.readShapeFileToStr(filePath+fileName1,1)+"";
             String str2 = ShpUtil.readShapeFileToStr(filePath+fileName11,1)+"";
 
+            //使str2与str1保持一致
+//            JSONArray jsonArray = JSONArray.fromObject(str2);
+//            JSONArray newJA = new JSONArray();
+//            for (Object o : jsonArray) {
+//                JSONObject jsonObject = JSONObject.fromObject(o);
+//                Object attributes = jsonObject.get("attributes");
+//                JSONObject jsonObject1 = JSONObject.fromObject(attributes);
+//
+//                JSONObject jSONObject = new JSONObject();
+//                jSONObject.put("aa",jsonObject1.get("name1"));
+//                jSONObject.put("bb",jsonObject1.get("type1"));
+//                jSONObject.put("cc",jsonObject1.get("region1"));
+//                jSONObject.put("dd",jsonObject1.get("position1"));
+//                jSONObject.put("name",jsonObject1.get("name"));
+//                jSONObject.put("Join_Count",jsonObject1.get("Join_Count"));
+//                jSONObject.put("position",jsonObject1.get("position"));
+//                jSONObject.put("type",jsonObject1.get("type"));
+//                jSONObject.put("region",jsonObject1.get("region"));
+//                jSONObject.put("TARGET_FID",jsonObject1.get("TARGET_FID"));
+//
+//                Map<String,String> map = new HashMap();
+//                map.put("attributes",jSONObject.toString());
+//                map.put("geometry",jsonObject.get("geometry").toString());
+//                newJA.add(map);
+//            }
+//            str2 = newJA.toString();
+
+
+
             //存表
             imageContrast.setData1(str1);
             imageContrast.setData2(str2);
-            int addres = imageContrastMapper.insertImageContrast(imageContrast);
+
+            int addres = 0;
+            if(null!=imageContrast.getId()){
+                //修改
+                addres = imageContrastMapper.updateImageContrast(imageContrast);
+            }else{
+                //添加
+                addres = imageContrastMapper.insertImageContrast(imageContrast);
+            }
             if(addres>0){
                 return ResultVOUtil.success(filePath);
             }

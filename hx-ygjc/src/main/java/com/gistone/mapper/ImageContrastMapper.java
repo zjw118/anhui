@@ -20,4 +20,6 @@ public interface ImageContrastMapper extends BaseMapper<ImageContrast> {
     List<Object> selectPoList(PageBean pageBean);
 
     ImageContrast getImageContrast(ImageContrast imageContrast);
+
+    int updateImageContrast(ImageContrast imageContrast);
 }

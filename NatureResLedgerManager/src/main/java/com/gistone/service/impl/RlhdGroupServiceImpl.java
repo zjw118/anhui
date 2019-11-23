@@ -75,19 +75,16 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
     }
 
     public void delete(List<Integer> ids) {
-
         //具体逻辑1.先删除台账信息。2.删除关联信息
         for (Integer id : ids) {
             RlhdGroup rlhdGroup = mapper.selectById(id);
             rlhdGroup.setDelFlag(0);
             mapper.updateById(rlhdGroup);
-
-            St4ScsCd iterpretation = iterpretationMapper.selectOne(new QueryWrapper<St4ScsCd>().eq("group_id",id));
-            if(iterpretation!=null){
-                iterpretation.setGroupId(0);
-                iterpretationMapper.updateById(iterpretation);
+            List<St4ScsCd> group_id = iterpretationMapper.selectList(new QueryWrapper<St4ScsCd>().eq("group_id", id));
+            for (St4ScsCd st4ScsCd : group_id) {
+                st4ScsCd.setGroupId(0);
+                iterpretationMapper.updateById(st4ScsCd);
             }
-
         }
 
     }

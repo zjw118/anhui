@@ -283,7 +283,7 @@
             <result column="CK089" property="ck089" />
             <result column="CK090" property="ck090" />
             <result column="CK091" property="ck091" />
-            <collection property="st4ScsCnList" ofType="com.gistone.entity.St4ScsCn">
+         <!--   <collection property="st4ScsCnList" ofType="com.gistone.entity.St4ScsCn">
                     <id column="CN001" property="cn001" />
                     <result column="CN002" property="cn002" />
                     <result column="CN003" property="cn003" />
@@ -295,7 +295,7 @@
                     <result column="CN008" property="cn008" />
                     <result column="CN009" property="cn009" />
                     <result column="CN010" property="cn010" />
-            </collection>
+            </collection>-->
         </collection>
     </resultMap>
     <resultMap id="BaseResultMap2" type="com.gistone.entity.St4SysSa" >
@@ -589,11 +589,15 @@ where cd.cd001 not in (select cd001 from st4_po_cd_sa )
         a.position,
         a.region,
         a.CD020,
-        b.name activeType
+        b.name activeType,
+        COALESCE(c.name ,'')name
         from st4_scs_cd a
         LEFT JOIN image_config b
         on a.active_type = b.id
+        LEFT JOIN rlhd_group c
+        on a.group_id = c.id
         where a.CD009 = 1
+        and (c.del_flag = 1 or  c.del_flag is null)
         and a.image_id = #{image_id}
     </select>
 

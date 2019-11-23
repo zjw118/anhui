@@ -176,7 +176,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         String contrastRed = image.getContrastRed();
         List<ImageConfig> imageConfig3s = null;
 
-
         Double num = 0.0;               //总分
         if(StringUtils.isNotBlank(contrastRed)){
             JSONObject jsonObject = JSONObject.fromObject(contrastRed);

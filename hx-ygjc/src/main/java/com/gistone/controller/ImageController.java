@@ -1,6 +1,5 @@
 package com.gistone.controller;
 
-
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
 import com.gistone.entity.ImageConfig;
@@ -17,7 +16,6 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -30,8 +28,6 @@ import java.util.*;
  * @version v1.0
  * @since 2019-10-18
  */
-
-
 @RestController
 @RequestMapping("/api/ygjc/image")
 public class ImageController {
@@ -49,8 +45,7 @@ public class ImageController {
     private ImageNumberMapper imageNumberMapper;
     @Autowired
     private ImageService imageService;
-    @Autowired
-    private   ConfigUtils configUtils;
+
 
     @Value("${ftp_host}")
     private String ftpHost;
@@ -317,14 +312,12 @@ public class ImageController {
 //        List<Map<String, Object>> surveyList = totalService.getSurveyCount(codes, currentTime, beforeTime);
         result.put("markerCount", markerList);
         result.put("beforeMarkerCount", count);
-
         return ResultVOUtil.success(result);
     }
 
 
     /**
      * 添加配置
-     *
      * @param paramsMap
      * @return
      */
@@ -333,7 +326,6 @@ public class ImageController {
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
         if (params == null)
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
-
         Object name = params.get("name");
         Object parentid = params.get("parentid");
         Object type = params.get("type");
