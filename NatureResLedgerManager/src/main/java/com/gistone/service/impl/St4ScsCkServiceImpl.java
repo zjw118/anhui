@@ -1041,8 +1041,8 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
     }
     @Override
     public Result sysPointData(Integer uid) {
-        List<ImageConfig> icList = imageConfigMapper.getImageConfig();
-        List<ImageConfig> icListtree = buildTree(icList,-1);
+//        List<ImageConfig> icList = imageConfigMapper.getImageConfig();
+//        List<ImageConfig> icListtree = buildTree(icList,-1);
 
         Map<String,String> checkChangeTypeMap = new HashMap<>();
         QueryWrapper<St4ScsCm> checkChangeTypeWrapper = new QueryWrapper<>();
@@ -1200,7 +1200,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                         cd.setReserveName(ck.getSt4SysSg()==null?"":ck.getSt4SysSg().getSg008());
                         cd.setAdminRegionName(ck.getSysCompany()==null?"":ck.getSysCompany().getComName());
                         newDataJson.put("point",BeanUtils.describe(cd));
-                        newDataJson.put("tree",icListtree );
+                        //newDataJson.put("tree",icListtree );
 
                         jarr.add(newDataJson);
                     }
