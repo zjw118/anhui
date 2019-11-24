@@ -303,7 +303,9 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
             if(null==imageConfig3.getNum1()){
                 imageConfig3.setNum1(0.0);
             }
-            Double num3 = imageConfig3.getNum2()-imageConfig3.getNum1();
+            Double num3 = 0.0;
+            if(null!=imageConfig3.getNum2()&&null!=imageConfig3.getNum1())
+                num3 = imageConfig3.getNum2()-imageConfig3.getNum1();
             num3s += num3;
             imageConfig3.setNum3(num3);
         }

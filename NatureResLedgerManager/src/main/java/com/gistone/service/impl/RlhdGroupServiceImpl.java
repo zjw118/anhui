@@ -93,6 +93,7 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
             RlhdGroup rlhdGroup = mapper.selectById(id);
             rlhdGroup.setDelFlag(0);
             mapper.updateById(rlhdGroup);
+
             List<St4ScsCd> group_id = iterpretationMapper.selectList(new QueryWrapper<St4ScsCd>().eq("group_id", id));
             for (St4ScsCd st4ScsCd : group_id) {
                 st4ScsCd.setGroupId(0);

@@ -33,6 +33,7 @@
         (SELECT * from image_config
         where type = 1)c
         on b.parentid = c.id
+        ORDER BY parentid
 	</select>
 
     <select id="getImageConfigAll"   resultType="com.gistone.entity.ImageConfig">
