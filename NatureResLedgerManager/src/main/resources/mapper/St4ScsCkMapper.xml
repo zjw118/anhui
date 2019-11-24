@@ -1900,7 +1900,7 @@
         ON clco.co001 = co.id
         LEFT JOIN st4_scs_cl cl
         ON cl.CL001 = clco.cl001
-        WHERE 1 = 1 and  com.PK_ID!=1 and com.COM_LEVEL=2
+        WHERE 1 = 1 and  com.PK_ID!=1
         <!--年份、核查任务、时间区间、省份、保护地、巡查人员；!-->
         <if test="st4SysSa != null">
             <if test="st4SysSa.sa001!=null and st4SysSa.sa001  !=''">
