@@ -74,7 +74,6 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         if(!bo){
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"FTP创建文件夹失败");
         }
-
         Image image1 = imageMapper.getImageById(imageContrast.getImage1Id());
         Image image2 = imageMapper.getImageById(imageContrast.getImage2Id());
         String res = "";
@@ -95,6 +94,8 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
 //        System.out.println(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4);
         HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4,null);
         Thread.sleep(10000);
+
+//        System.out.println("=="+ftpPt+ftpUrl+outUrl);
 
         //FTP将SHP复制到本地
         String ftpPath = outUrl; // 原ftp文件路径
@@ -154,6 +155,7 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
             }
             String str1 = ShpUtil.readShapeFileToStr(filePath+fileName1,1)+"";
             String str2 = ShpUtil.readShapeFileToStr(filePath+fileName11,1)+"";
+
 
             //使str2与str1保持一致
 //            JSONArray jsonArray = JSONArray.fromObject(str2);

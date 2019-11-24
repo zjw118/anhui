@@ -459,8 +459,6 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
 
 
 
-
-
     @Override
     public ResultVO upload(HttpServletRequest request, Image image) {
         try {
@@ -499,23 +497,40 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"读取SHP失败");
             }
 
+//            System.out.println(shpStr);
+
+
             //替换字段名
             net.sf.json.JSONArray jsonArray = net.sf.json.JSONArray.fromObject(shpStr);
-//            System.out.println(jsonArray);
             net.sf.json.JSONArray jSONArray = new net.sf.json.JSONArray();
+
+            double area = 0; //总面积
+            int plaque_number = 0; //斑块数量
             for (Object o : jsonArray){
+                plaque_number ++;
                 JSONObject jo = JSONObject.fromObject(o);
                 JSONObject attributes = JSONObject.fromObject(jo.get("attributes"));
                 JSONObject jSONObject1 = new JSONObject();
 
                 //匹配类型
-                ImageConfig ic = imageConfigMapper.like(attributes.get("一级类") + "");
-                if(null!=ic)
+                String type = attributes.get("二级类").toString();
+                if("".equals(type)){
+                    type = attributes.get("一级类").toString();
+                }
+                ImageConfig ic = imageConfigMapper.like(type);
+                if(null!=ic){
                     jSONObject1.put("type",ic.getId());
+                }else{
+                    jSONObject1.put("type",59);
+                }
                 jSONObject1.put("region",attributes.get("功能分"));
                 jSONObject1.put("position",attributes.get("位置"));
                 jSONObject1.put("area",attributes.get("面积")+"");
-                jSONObject1.put("center",attributes.get("实地经")+","+attributes.get("实地纬"));
+                area += Double.valueOf(attributes.get("面积")+"");
+
+                String j = ShpUtil.DddToDms(Double.valueOf(attributes.get("实地经").toString()));
+                String w = ShpUtil.DddToDms(Double.valueOf(attributes.get("实地纬").toString()));
+                jSONObject1.put("center",j+","+w);
 
                 if (StringUtils.isNotBlank(image.getRemark()))
                     jSONObject1.put("remark",image.getRemark());
@@ -573,15 +588,15 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 image.setCreateBy(user.getId());
             if(null!=user)
                 image.setUpdateBy(user.getId());
-//            image.setUpdateDate(new Date());
             image.setShp(url); //本地SHP路径
             image.setRemark(image.getRemark());
             image.setDelFlag(1);
             image.setSign(1);
+            image.setArea(area);
+            image.setPlaqueNumber(plaque_number);
             if(null!=image.getCreateDate()){
                 image.setCreateDate(image.getCreateDate());
             }
-
             int res1 = imageMapper.updateById(image);
             if(0==res1){
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"插入image失败");

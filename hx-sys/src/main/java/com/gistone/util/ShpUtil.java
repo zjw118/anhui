@@ -42,9 +42,40 @@ import java.util.*;
 @Slf4j
 public class ShpUtil {
     public static void main(String[] args) {
-        String shpStr = ShpUtil.readShapeFileToStr("E:/epr/image/2019-11-22/8/b8bf5d37e7fd48c8ae8db59f82fdeb04.shp", 1) + "";
-        System.out.println(shpStr);
+        String shpStr1 = ShpUtil.readShapeFileToStr("E:/epr/image/2019-11-22/3/5ea39139a1584bc18d40b8432c9fe701.shp", 1) + "";
+        String shpStr2 = ShpUtil.readShapeFileToStr("E:/epr/image/2019-11-24/13/c6e98c058fa343adabd8fadb81f5d315.shp", 1) + "";
+        System.out.println("1=="+shpStr1); //手动
+        System.out.println("2=="+shpStr2); //导入
     }
+
+    /**
+     * 117°17′3.12″ 转 117.28805555555556
+     * @param dms
+     * @return
+     */
+    public static Double DmsToDdd(String dms){
+        String[] arr1 = dms.split("°");
+        double num1 = Double.valueOf(arr1[0]);
+        String[] arr2 = arr1[1].split("′");
+        double num2 = Double.valueOf(arr2[0])/60;
+        String[] arr3 = arr2[0].split("″");
+        double num3 = Double.valueOf(arr3[0])/3600;
+        return num1+num2+num3;
+    }
+    /**
+     * 117.288  转  117°17′17″
+     * @param ddd
+     * @return
+     */
+    public static String DddToDms(Double ddd){
+        String[] arr = ddd.toString().split("\\.");
+        String str = Double.valueOf("0."+arr[1])*60+"";
+        String[] arr2 = str.split("\\.");
+        String str2 = Double.valueOf("0."+arr2[1])*60+"";
+        String[] arr3 = str2.split("\\.");
+        return arr[0]+"°"+arr2[0]+"′"+arr3[0]+"″";
+    }
+
 
     /**
      * @param filePath

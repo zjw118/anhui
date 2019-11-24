@@ -706,27 +706,7 @@ public class ImageController {
     }
 
 
-    /**
-     * 获取默认系数  （准备删除）
-     * @param paramsMap
-     * @return
-     */
-//    @RequestMapping(value = "/oldNumber", method = RequestMethod.POST)
-//    public ResultVO oldNumber(@RequestBody Map<String, Object> paramsMap) {
-//        try {
-//            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-//            if (params == null) {
-//                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
-//            }
-//            Object id = params.get("id");
-//            if (null==id) {
-//                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
-//            }
-//            return imageService.oldNumber(Integer.valueOf(id.toString()));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
-//    }
+
 
 
     /**

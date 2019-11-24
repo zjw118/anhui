@@ -43,9 +43,7 @@ public class ExcelUtils {
 		// 获取源文件夹当前下的文件或目录
 		File[] file = (new File(sourceDir)).listFiles();
 		String shpUrl = "";
-		if(file.length>0) {
-
-
+		if(null!=file) {
 			for (int i = 0; i < file.length; i++) {
 				if (file[i].isFile()) {
 					// 源文件

@@ -81,6 +81,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         wrapper.eq("del_flag",1);
         wrapper.orderByDesc("create_date").orderByDesc("id");
         IPage<Image> imageIPage = mapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+
         Map<String, Object> result = new HashMap<>();
         result.put("rows", imageIPage.getRecords());
         result.put("total", imageIPage.getTotal());
