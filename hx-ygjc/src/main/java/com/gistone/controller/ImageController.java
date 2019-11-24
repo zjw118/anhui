@@ -4,19 +4,27 @@ import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
 import com.gistone.entity.ImageConfig;
 import com.gistone.entity.ImageNumber;
+import com.gistone.entity.ImageTemp;
 import com.gistone.mapper.ImageConfigMapper;
 import com.gistone.mapper.ImageMapper;
 import com.gistone.mapper.ImageNumberMapper;
+import com.gistone.pkname.Swagger;
+import com.gistone.service.IImageTempService;
 import com.gistone.service.ILmPointService;
 import com.gistone.service.ImageConfigService;
 import com.gistone.service.ImageService;
 import com.gistone.util.*;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -45,6 +53,8 @@ public class ImageController {
     private ImageNumberMapper imageNumberMapper;
     @Autowired
     private ImageService imageService;
+    @Autowired
+    private IImageTempService iImageTempService;
 
 
     @Value("${ftp_host}")
@@ -59,7 +69,31 @@ public class ImageController {
     private String ftpPt;
     @Value("${ftp_url}")
     private String ftpUrl;
+    @ApiOperation(value = "image识别添加接口", notes = "此接口返回问题点批次数据", response = Result.class)
+    @PostMapping("/insertImagerTemp")
+    public ResultVO insertImagerTemp(@RequestBody @ApiParam(name = "任务批次添加接口", value = "json格式", required = true) Swagger<ImageTemp> data,
+                               HttpServletRequest request) {
+        ImageTemp it = data.getData();
+        if(!ObjectUtils.isNotNullAndEmpty(it.getName())){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "名称不能为空！");
+        }
+        if(!ObjectUtils.isNotNullAndEmpty(it.getZipUrl())){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "识别的url不能为空！");
+        }
+        it.setUpdateDate(LocalDateTime.now());
+        return ResultVOUtil.success(iImageTempService.save(it));
 
+    }
+    @ApiOperation(value = "image识别列表接口", notes = "此接口返回问题点批次数据", response = Result.class)
+    @PostMapping("/listImagerTemp")
+    public ResultVO listImagerTemp(@RequestBody @ApiParam(name = "任务批次添加接口", value = "json格式", required = true) Swagger<ImageTemp> data,
+                               HttpServletRequest request) {
+        ImageTemp param = data.getData();
+        if(!ObjectUtils.isNotNullAndEmpty(param.getPageNumber())||!ObjectUtils.isNotNullAndEmpty(param.getPageSize())){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "pageSize和pageNumber不能为空！");
+        }
+        return  iImageTempService.listImageTemp(param);
+    }
 
     /**
      * @param paramsMap

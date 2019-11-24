@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -50,6 +51,17 @@ public class ZipUtil {
         }
     }
 
+
+    public static void main(String[] args) {
+        File zipfile=new File("C:\\Users\\EDZ\\Desktop\\安徽红线\\前端李帅\\yss_dist.zip");
+//        srcfile.add(new File("e:\\2.xls"));
+//        srcfile.add(new File("e:\\3.xls"));
+//        srcfile.add(new File("e:\\4.xls"));
+//        srcfile.add(new File("e:\\5.xls"));
+
+        String dirfile = "D:\\1jieya";
+        ZipUtil.unZipFiles( zipfile,dirfile);
+    }
     /**
      * 解压缩
      *
@@ -120,7 +132,7 @@ public class ZipUtil {
 
            //4.如果是tif文件或img文件，则返回文件名称
            String shapeName = zipEntryName.substring(zipEntryName.lastIndexOf("."));
-           if(shapeName.equals(".tif") || shapeName.equals(".img") ||  shapeName.equals(".shp")){
+           if(shapeName.equals(".tif") || shapeName.equals(".img") ){
         	   fileUrl = uuidStr +"_"+ zipEntryName;
            }
 
@@ -143,15 +155,5 @@ public class ZipUtil {
      *
      * @param args
      */
-/*    public static void main(String[] args) {
-    	List<File> srcfile=new ArrayList<File>();
-    	srcfile.add(new File("e:\\1.xls"));
-    	srcfile.add(new File("e:\\2.xls"));
-    	srcfile.add(new File("e:\\3.xls"));
-    	srcfile.add(new File("e:\\4.xls"));
-    	srcfile.add(new File("e:\\5.xls"));
 
-        File zipfile = new File("e:\\edm.zip");
-        ZipUtil.zipFiles(srcfile, zipfile);
-    }*/
 }

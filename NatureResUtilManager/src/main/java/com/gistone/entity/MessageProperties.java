@@ -28,6 +28,16 @@ public class MessageProperties {
     private String nr_decode;
     @Value("${nr_other}")
     private String nr_other;
+    @Value("${nr_temp}")
+    private String nr_temp;
+
+    public String getNr_temp() {
+        return nr_temp;
+    }
+
+    public void setNr_temp(String nr_temp) {
+        this.nr_temp = nr_temp;
+    }
 
     public String getNr_system() {
         return nr_system;
