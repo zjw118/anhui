@@ -5,6 +5,7 @@ import com.gistone.VO.ResultVO;
 import com.gistone.annotation.SysLog;
 import com.gistone.entity.RlhdGroup;
 import com.gistone.entity.St4ScsCd;
+import com.gistone.entity.St4ScsCl;
 import com.gistone.entity.St4SysSa;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.ISt4ScsCdService;
@@ -68,12 +69,12 @@ public class RlhdGroupController {
     @ApiOperation(value="根据任务id查询其下的所有斑块及下发的人",notes = "",response = St4ScsCd.class)
     @PostMapping(value="/getPersonAndPoint")
     public ResultVO getPersonAndPoint(@RequestBody @ApiParam(name="", value="json格式", required=true)
-                                            Swagger<St4SysSa> cdLedger) {
-        St4SysSa sa = cdLedger.getData();
+                                            Swagger<St4ScsCl> clSwagger) {
+        St4ScsCl sa = clSwagger.getData();
 //        if(!ObjectUtils.isNotNullAndEmpty(sa.getSa001())){
 //            return  ResultVOUtil.error("1222", "人员ID不能为空!");
 //        }
-        return st4ScsCdService.getPersonAndPoint( sa.getSa001());
+        return st4ScsCdService.getPersonAndPoint( sa.getCl001());
 
     }
     @ApiOperation(value="根据任务id查询其下的所有斑块及下发的人",notes = "",response = St4ScsCd.class)

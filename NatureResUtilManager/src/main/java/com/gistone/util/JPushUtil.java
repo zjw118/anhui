@@ -37,7 +37,7 @@ public class JPushUtil {
      * @param alert	推送的消息内容
      * @param flag 操作类型标识 1：下发参考点 ; 2台账超时未整改或填报时限仅剩5天 3重新激活 4审诉审核未通过
      */
-    public static boolean jiGuangPush(String alias, String alert, String flag) {
+    public static boolean jiGuangPush(String alias, String alert, String flag) throws Exception {
 
         // 声明别名
         log.info("对别名" + alias + "的用户推送信息!");
