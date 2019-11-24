@@ -56,9 +56,13 @@ public class St4PoSaClServiceImpl extends ServiceImpl<St4PoSaClMapper, St4PoSaCl
                 wrapper.in("SA001",uidList);
                 List<St4SysSa> list =st4SysSaMapper.selectList(wrapper);
                 for (St4SysSa sss:list) {
-                    JPushUtil.jiGuangPush(sss.getSa012(), "您有新的任务需要接收！","1");
-                }
+                    try{
+                        JPushUtil.jiGuangPush(sss.getSa012(), "您有新的任务需要接收！","1");
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
 
+                }
                 return  Result.build(1000,"分配"+ ResultMsg.MSG_1000);
             }else{
                 return  Result.build(1006,"分配"+ ResultMsg.MSG_1006);

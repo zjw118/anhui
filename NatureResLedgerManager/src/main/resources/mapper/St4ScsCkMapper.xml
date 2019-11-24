@@ -1869,8 +1869,6 @@
         , IFNULL(SUM(ck016 = '养殖场'), 0) AS feetNum
         , IFNULL(SUM(ck016 = '道路'), 0) AS roadNum
         , IFNULL(SUM(ck016 = '水电设施'), 0) AS waterElectricityNum
-        , IFNULL(SUM(ck014 = 1), 0) AS isPunishNum
-        , IFNULL(SUM(ck014 = 0), 0) AS isNotPunishNum,
         IFNULL(SUM(ck067 = 0), 0) AS unEmaminedNum,
         IFNULL(SUM(ck067 = 1), 0) AS emaminedNum,
         IFNULL(SUM(ck067 = 2), 0) AS backNum

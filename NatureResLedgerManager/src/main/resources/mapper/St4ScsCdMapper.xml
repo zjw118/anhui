@@ -321,9 +321,15 @@
     <select id="getPersonAndPoint" resultMap="BaseResultMap2"  parameterType="Integer">
        SELECT sa.sa001, sa.sa019 ,  IFNULL(cd.active_name,'') active_name,
         IFNULL(cd.CD001,'') cd001
-    FROM st4_sys_sa sa
+        FROM st4_sys_sa sa
         LEFT JOIN st4_po_cd_sa cdsa ON cdsa.SA001 = sa.SA001
-        LEFT JOIN st4_scs_cd cd ON cd.CD001 = cdsa.CD001 WHERE cdsa.sa001 IS NOT NULL
+        LEFT JOIN st4_scs_cd cd ON cd.CD001 = cdsa.CD001
+        left join rlhd_group co on co.id=cd.group_id
+        left join st4_po_cl_co clco on clco.co001 = co.id
+        left join st4_scs_cl cl on cl.cl001 = clco.cl001
+
+        WHERE cdsa.sa001 IS NOT NULL
+
     </select>
 
 
