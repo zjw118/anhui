@@ -382,7 +382,7 @@ public class ProjectAdmissionController {
                 fos.close();
             }
 
-            //feature数据保存本地文件
+           /* //feature数据保存本地文件
             String feature = (String) dataParam.get("feature");
             if (StringUtils.isBlank(feature)) {
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "feature不能为空");
@@ -395,7 +395,7 @@ public class ProjectAdmissionController {
                 projectAdmission.setFeaturePath(path+name);
             }else{
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "featur上传失败");
-            }
+            }*/
 
 
         } catch (Exception e) {
