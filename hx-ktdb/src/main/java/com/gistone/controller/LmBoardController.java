@@ -1039,7 +1039,7 @@ public class LmBoardController {
      */
     @PostMapping("/updateBoard")
     @SysLog("编辑预设标识牌")
-    public ResultVO updateBoard(@RequestBody Map<String, Object> paramsMap) {
+    public ResultVO updateBoard(@RequestBody Map<String, Object> paramsMap)             {
         //请求参数格式校验
         Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
         if (dataParam == null) {

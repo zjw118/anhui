@@ -275,6 +275,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             //再批量插入
             if (lmMarkerMobiles != null && lmMarkerMobiles.size() > 0) {
                 for (LmMarkerMobile lmMarkerMobile : lmMarkerMobiles) {
+                    lmMarkerMobile.setCode(lmMarkerMobile.getJzNumber().substring(0,6));
                     lmMarkerMobileMapper.insert(lmMarkerMobile);
                 }
             }
