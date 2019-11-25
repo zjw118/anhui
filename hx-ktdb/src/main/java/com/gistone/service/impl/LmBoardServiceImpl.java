@@ -207,7 +207,7 @@ public class LmBoardServiceImpl extends ServiceImpl<LmBoardMapper, LmBoard> impl
         QueryWrapper<LmBoard> Wrapper = new QueryWrapper<>();
         Map<String, Object> map = new HashMap<>();
         if (StringUtils.isNotBlank(boardNum)) {
-            Wrapper.eq("number", boardNum);
+            Wrapper.likeRight("number", boardNum);
         }
 
         if (StringUtils.isNotBlank(code)) {

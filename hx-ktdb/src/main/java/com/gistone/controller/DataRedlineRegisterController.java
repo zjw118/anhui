@@ -6,18 +6,13 @@ import com.gistone.VO.ResultVO;
 import com.gistone.entity.DataRedlineRegister;
 import com.gistone.service.IDataRedlineRegisterService;
 import com.gistone.service.ILmPointService;
-import com.gistone.util.ImportRedlineData;
-import com.gistone.util.Result;
-import com.gistone.util.ResultEnum;
-import com.gistone.util.ResultVOUtil;
+import com.gistone.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
 /**
  * <p>
@@ -36,6 +31,8 @@ public class DataRedlineRegisterController {
 
     @Autowired
     private ILmPointService iLmPointService;
+    @Autowired
+    private ConfigUtils configUtils;
 
 
     /**
@@ -292,6 +289,16 @@ public class DataRedlineRegisterController {
         dataRedlineRegisterService.updateBy(dataRedline);
         return ResultVOUtil.success();
     }
+
+    @PostMapping("/exportExcel")
+    public ResultVO exportExcel(HttpServletResponse response){
+        List<DataRedlineRegister> list = dataRedlineRegisterService.list(null);
+        String filepath = ExcelUtil.toXls("预设红线斑块", list, configUtils.getExcel_PATH(), DataRedlineRegister.class, response);
+        Map map1 = new HashMap();
+        map1.put("filepath", filepath.substring(2));
+        return ResultVOUtil.success(map1);
+    }
+
 
 
 }
