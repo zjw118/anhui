@@ -179,6 +179,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         if(StringUtils.isNotBlank(image.getAuditPath()))
             json = FileUtil.readFromTextFile(image.getAuditPath());
 
+
         //评分系数
         String contrastRed = image.getContrastRed();
         List<ImageConfig> imageConfig3s = null;
