@@ -127,6 +127,10 @@ public class St4ScsCy extends BaseEntity  implements Serializable {
     @ApiModelProperty(value = "所在任务信息(包裹任务信息)")
     @TableField(exist = false)
     private St4ScsCl st4ScsCl;
+    @ApiModelProperty(value = "所在问题斑块(包裹问题斑块的核查数信息)")
+    @TableField(exist = false)
+    private  St4ScsCd st4ScsCd;
+
     @ApiModelProperty(value = "包裹台账信息")
     @TableField(exist = false)
     private RlhdGroup rlhdGroup;

@@ -1850,61 +1850,59 @@
 
 
     <select id="selectSt4ScsCk" resultMap="BaseResultMap" resultType="com.gistone.entity.St4ScsCk">
-        SELECT  com.PK_ID, com.COM_NAME, ck.*, cn.CN001, sa.SA001
-        , cl.CL001, cl.CL002, sa.SA019
-        , IFNULL(ck.CK010, '') AS ck010
-        , IFNULL(ck.CK012, '') AS ck012
-        , IFNULL(cn.CN010, '') AS cn010
-        , IF(COUNT(*) IS NULL, 0, COUNT(*)) AS tzNum
-        , IFNULL(SUM(ck046 = '是'
-        OR ck046 = '已销号'), 0) AS xhNum
-        , IFNULL(SUM(ck046 = '否'
-        OR ck046 = '未销号'), 0) AS unxhNum
-        , IF(COUNT(*) IS NULL, 0, COUNT(*)) AS tzCheckedNum
-        , IFNULL(SUM(ck088 = 0
-        OR ck088 IS NULL), 0) AS tzUncheckedNum
-        , IFNULL(SUM(ck016 = '农业用地'), 0) AS farmNum
-        , IFNULL(SUM(ck016 = '居民点'), 0) AS residentNum
-        , IFNULL(SUM(ck016 = '工矿用地'), 0) AS industrialNum
-        , IFNULL(SUM(ck016 = '采石场'), 0) AS quarryNum
-        , IFNULL(SUM(ck016 = '能源设施'), 0) AS EnergyNum
-        , IFNULL(SUM(ck016 = '旅游设施'), 0) AS journeyNum
-        , IFNULL(SUM(ck016 = '交通设施'), 0) AS trafficNum
-        , IFNULL(SUM(ck016 = '养殖场'), 0) AS feetNum
-        , IFNULL(SUM(ck016 = '道路'), 0) AS roadNum
-        , IFNULL(SUM(ck016 = '水电设施'), 0) AS waterElectricityNum
-        , IFNULL(SUM(ck014 = 1), 0) AS isPunishNum
-        , IFNULL(SUM(ck014 = 0), 0) AS isNotPunishNum,
+
+        SELECT *,(unEmaminedNum+emaminedNum+backNum) tzNum FROM
+        (
+        SELECT com.PK_ID,
+        com.COM_NAME,
+        ck.CK001,ck.ck067,ck.ck088,
+        sa.SA001,
+        cl.CL001,
+        cl.CL002,
+        sa.SA019,
+        IFNULL(ck.CK016, '') AS ck010,
+        IFNULL(ck.CK012, '') AS ck012,
+        IFNULL(SUM(ck046 = '是' OR ck046 = '已销号'), 0) AS xhNum,
+        IFNULL(SUM(ck046 = '否' OR ck046 = '未销号'), 0) AS unxhNum,
+        IF(COUNT(*) IS NULL, 0, COUNT(*)) AS tzCheckedNum,
+        IFNULL(SUM(ck088 = 0 OR ck088 IS NULL), 0) AS tzUncheckedNum,
+        IFNULL(SUM(ck016 = '农业用地'), 0) AS farmNum,
+        IFNULL(SUM(ck016 = '居民点'), 0) AS residentNum,
+        IFNULL(SUM(ck016 = '工矿用地'), 0) AS industrialNum,
+        IFNULL(SUM(ck016 = '采石场'), 0) AS quarryNum,
+        IFNULL(SUM(ck016 = '能源设施'), 0) AS EnergyNum,
+        IFNULL(SUM(ck016 = '旅游设施'), 0) AS journeyNum,
+        IFNULL(SUM(ck016 = '交通设施'), 0) AS trafficNum,
+        IFNULL(SUM(ck016 = '养殖场'), 0) AS feetNum,
+        IFNULL(SUM(ck016 = '道路'), 0) AS roadNum,
+        IFNULL(SUM(ck016 = '水电设施'), 0) AS waterElectricityNum,
         IFNULL(SUM(ck067 = 0), 0) AS unEmaminedNum,
         IFNULL(SUM(ck067 = 1), 0) AS emaminedNum,
         IFNULL(SUM(ck067 = 2), 0) AS backNum
+        FROM sys_company com
 
-        FROM
-        sys_company com
-        LEFT JOIN st4_scs_cd cd  ON com.PK_ID = cd.sd001
-        LEFT JOIN
-        st4_scs_ck ck ON ck.CD004=cd.CD001
+        LEFT JOIN st4_sys_sa sa ON sa.SD001 = com.COM_CODE
 
-        LEFT JOIN (
-        SELECT *
-        FROM (
-        SELECT *
-        FROM (
-        SELECT MAX(CN001) AS id
-        FROM st4_scs_cn
-        WHERE CN009 = 1
-        GROUP BY CK001
-        ) t
-        INNER JOIN st4_scs_cn d ON t.id = d.CN001
-        ) cnn
-        ) cn
-        ON ck.CK001 = cn.CK001
-        LEFT JOIN st4_sys_sa sa ON sa.SA001 = ck.CK049
+        LEFT JOIN st4_po_cd_sa cdsa
+        ON cdsa.SA001 = sa.SA001
+        LEFT JOIN st4_scs_cd cd
+        ON cdsa.cd001 = cd.cd001
+        LEFT JOIN (SELECT *
+        FROM (SELECT
+        MAX(CK001) AS id
+        FROM st4_scs_ck
+        GROUP BY CD004) t
+        INNER JOIN st4_scs_ck k
+        ON t.id = k.CK001) ck
+        ON ck.CD004 = cd.cd001
 
-        LEFT JOIN rlhd_group co ON cd.group_id = co.id
-        LEFT JOIN st4_po_cl_co clco ON clco.co001 = co.id
-        LEFT JOIN st4_scs_cl cl ON cl.CL001 = clco.cl001
-        WHERE 1=1
+        LEFT JOIN rlhd_group co
+        ON cd.group_id = co.id
+        LEFT JOIN st4_po_cl_co clco
+        ON clco.co001 = co.id
+        LEFT JOIN st4_scs_cl cl
+        ON cl.CL001 = clco.cl001
+        WHERE 1 = 1 and com.PK_ID!=1
         <!--年份、核查任务、时间区间、省份、保护地、巡查人员；!-->
         <if test="st4SysSa != null">
             <if test="st4SysSa.sa001!=null and st4SysSa.sa001  !=''">
@@ -1931,14 +1929,15 @@
             and ck.CK048 <![CDATA[ <= ]]> #{endTime}
         </if>
         <if test="groupByName==null or groupByName=='' ">
-             AND ck.CK010 IS NOT NULL AND ck.CK010 !=''  GROUP BY ck.CK010
+             AND ck.CK016 IS NOT NULL AND ck.CK016 !=''  GROUP BY ck.CK016
         </if>
         <if test="groupByName=='ck010' ">
-            AND ck.CK010 IS NOT NULL AND ck.CK010 !=''  GROUP BY ck.CK010
+            AND ck.CK016 IS NOT NULL AND ck.CK016 !=''  GROUP BY ck.CK016
         </if>
         <if test="groupByName=='sd001'">
             GROUP BY com.PK_ID
         </if>
+        ) t GROUP BY PK_ID
         <!--<if test="groupByName=='ck067'">-->
             <!--GROUP BY ck.ck067-->
         <!--</if>-->

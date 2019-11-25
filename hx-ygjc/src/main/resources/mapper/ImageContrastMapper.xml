@@ -27,6 +27,38 @@
         )
     </insert>
 
+    <update id="updateImageContrast" parameterType="Object" >
+        update image_contrast
+        <set>
+            <if test="null!=name and ''!=name  ">
+                name=#{name},
+            </if>
+            <if test="null!=data1 and ''!=data1  ">
+                data1=#{data1},
+            </if>
+            <if test="null!=data2 and ''!=data2  ">
+                data2=#{data2},
+            </if>
+            <if test="null!=remark and ''!=remark  ">
+                remark=#{remark},
+            </if>
+            <if test="null!= image1Id">
+                image1_id=#{image1Id},
+            </if>
+            <if test="null!= image2Id">
+                image2_id=#{image2Id},
+            </if>
+            <if test="null!= date">
+                date=#{date},
+            </if>
+            <if test="null!= userId">
+                user_id=#{userId},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+
     <update id="deleteImageContrast" parameterType="java.lang.Integer" >
 		update image_contrast set del_flag='0' where id=#{id}
 	</update>

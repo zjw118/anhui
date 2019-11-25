@@ -81,6 +81,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         wrapper.eq("del_flag",1);
         wrapper.orderByDesc("create_date").orderByDesc("id");
         IPage<Image> imageIPage = mapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+
         Map<String, Object> result = new HashMap<>();
         result.put("rows", imageIPage.getRecords());
         result.put("total", imageIPage.getTotal());
@@ -178,10 +179,10 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         if(StringUtils.isNotBlank(image.getAuditPath()))
             json = FileUtil.readFromTextFile(image.getAuditPath());
 
+
         //评分系数
         String contrastRed = image.getContrastRed();
         List<ImageConfig> imageConfig3s = null;
-
 
         Double num = 0.0;               //总分
         if(StringUtils.isNotBlank(contrastRed)){

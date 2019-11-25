@@ -74,7 +74,6 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         if(!bo){
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"FTP创建文件夹失败");
         }
-
         Image image1 = imageMapper.getImageById(imageContrast.getImage1Id());
         Image image2 = imageMapper.getImageById(imageContrast.getImage2Id());
         String res = "";
@@ -91,10 +90,24 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         String p2 = "&file2="+image2.getShpurl();
         String p3 = "&outfile="+ftpPt+ftpUrl+outUrl;
         String p4 = "&f=pjson";
-
-//        System.out.println(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4);
         HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4,null);
-        Thread.sleep(10000);
+
+
+        //判断FTP文件是否生成
+        boolean b = false;
+        for (int i = 1; i < 10 ; i++) {
+            Thread.sleep(4000);
+            int x = FTPUtil.isFile(ftpHost, ftpUserName, ftpPassword, ftpPort, outUrl);
+            if(12==x){
+                b = true;
+                break;
+            }
+        }
+        if(!b){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"SHP在FTP生成失败");
+        }
+//        System.out.println("FTP目录=="+ftpPt+ftpUrl+outUrl);
+
 
         //FTP将SHP复制到本地
         String ftpPath = outUrl; // 原ftp文件路径
@@ -112,8 +125,7 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         String res5 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, outUrl, filePath, fileName5);
         String res6 = FTPUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, outUrl, filePath, fileName6);
 
-//        String ftpPath2 = outUrl; // ftp文件存放物理路径
-//        String filePath2 = PATH+"/epr/FTP/"+outUrl+"/"; // 文件路径
+
         String fileName11 = "sub.shp";// 原ftp文件名称
         String fileName22 = "sub.dbf";// 原ftp文件名称
         String fileName33 = "sub.cpg";// 原ftp文件名称
@@ -156,10 +168,19 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
             String str1 = ShpUtil.readShapeFileToStr(filePath+fileName1,1)+"";
             String str2 = ShpUtil.readShapeFileToStr(filePath+fileName11,1)+"";
 
+
             //存表
             imageContrast.setData1(str1);
             imageContrast.setData2(str2);
-            int addres = imageContrastMapper.insertImageContrast(imageContrast);
+
+            int addres = 0;
+            if(null!=imageContrast.getId()){
+                //修改
+                addres = imageContrastMapper.updateImageContrast(imageContrast);
+            }else{
+                //添加
+                addres = imageContrastMapper.insertImageContrast(imageContrast);
+            }
             if(addres>0){
                 return ResultVOUtil.success(filePath);
             }
@@ -210,7 +231,7 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         List<ImageConfig> imageConfig3s = imageConfigMapper.getImageConfig3s();
 
         //各类型面积
-        Map map = new HashMap();
+//        Map map = new HashMap();
 
         //shp1汇总数据
         double num1s = 0;
@@ -219,7 +240,6 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
             JSONObject jsonObject = JSONObject.fromObject(ja);
             Object attributes = jsonObject.get("attributes");
             JSONObject jsonObject1 = JSONObject.fromObject(attributes);
-            map.put(jsonObject1.get("type"),jsonObject1.get("area"));
             if(null!=jsonObject1.get("area")){
                 for (ImageConfig imageConfig3 : imageConfig3s) {
                     if(null==imageConfig3.getNum1()){
@@ -228,6 +248,7 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
                     if(imageConfig3.getId().toString().equals(jsonObject1.get("type"))){
                         num1s += imageConfig3.getNum1()+Double.valueOf(jsonObject1.get("area")+"");
                         imageConfig3.setNum1(imageConfig3.getNum1()+Double.valueOf(jsonObject1.get("area")+""));
+//                        map.put(imageConfig3.getNum1(),jsonObject1.get("area"));
                     }
                 }
             }
@@ -241,7 +262,7 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
             JSONObject jsonObject = JSONObject.fromObject(ja);
             Object attributes = jsonObject.get("attributes");
             JSONObject jsonObject1 = JSONObject.fromObject(attributes);
-            map.put(jsonObject1.get("type"),jsonObject1.get("area"));
+//            map.put(jsonObject1.get("type"),jsonObject1.get("area"));
             if(null!=jsonObject1.get("area")){
                 for (ImageConfig imageConfig3 : imageConfig3s) {
                     if(null==imageConfig3.getNum2()){
@@ -265,14 +286,16 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
             if(null==imageConfig3.getNum1()){
                 imageConfig3.setNum1(0.0);
             }
-            Double num3 = imageConfig3.getNum2()-imageConfig3.getNum1();
+            Double num3 = 0.0;
+            if(null!=imageConfig3.getNum2()&&null!=imageConfig3.getNum1())
+                num3 = imageConfig3.getNum2()-imageConfig3.getNum1();
             num3s += num3;
             imageConfig3.setNum3(num3);
         }
 
 
         Map maps = new HashMap();
-        maps.put("area",map);
+//        maps.put("area",map);
         maps.put("num1s",num1s);
         maps.put("num2s",num2s);
         maps.put("num3s",num3s);

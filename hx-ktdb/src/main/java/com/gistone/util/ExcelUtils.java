@@ -43,29 +43,31 @@ public class ExcelUtils {
 		// 获取源文件夹当前下的文件或目录
 		File[] file = (new File(sourceDir)).listFiles();
 		String shpUrl = "";
-		for (int i = 0; i < file.length; i++) {
-			if (file[i].isFile()) {
-				// 源文件
-				File sourceFile=file[i];
-				// 目标文件
-				Date date = new Date();
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-				String newName =sdf.format(date)+file[i].getName();
-				String pre = file[i].getName().substring(file[i].getName().lastIndexOf(".")+1);
-				String uurl = new File(targetDir).getAbsolutePath()+File.separator+newName;
-				File targetFile=new File(uurl);
-				if("shp".equals(pre)){
-					shpUrl =uurl;
+		if(null!=file) {
+			for (int i = 0; i < file.length; i++) {
+				if (file[i].isFile()) {
+					// 源文件
+					File sourceFile = file[i];
+					// 目标文件
+					Date date = new Date();
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+					String newName = sdf.format(date) + file[i].getName();
+					String pre = file[i].getName().substring(file[i].getName().lastIndexOf(".") + 1);
+					String uurl = new File(targetDir).getAbsolutePath() + File.separator + newName;
+					File targetFile = new File(uurl);
+					if ("shp".equals(pre)) {
+						shpUrl = uurl;
+					}
+					copyFile(sourceFile, targetFile);
 				}
-				copyFile(sourceFile,targetFile);
-			}
-			if (file[i].isDirectory()) {
-				// 复制目录
-				String url1=sourceDir+File.separator+file[i].getName();
-				String url2=targetDir+File.separator+file[i].getName();
-				copyDirectiory(sourceDir, targetDir);
-			}
+				if (file[i].isDirectory()) {
+					// 复制目录
+					String url1 = sourceDir + File.separator + file[i].getName();
+					String url2 = targetDir + File.separator + file[i].getName();
+					copyDirectiory(sourceDir, targetDir);
+				}
 
+			}
 		}
 		return shpUrl;
 	}

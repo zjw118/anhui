@@ -20,7 +20,6 @@ import java.util.List;
 public class FTPUtil {
     /**
      * 获取FTPClient对象
-     *
      * @param ftpHost     FTP主机服务器
      * @param ftpPassword FTP 登录密码
      * @param ftpUserName FTP登录用户名

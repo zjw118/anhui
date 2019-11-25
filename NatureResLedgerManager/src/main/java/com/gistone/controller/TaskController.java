@@ -116,8 +116,11 @@ public class TaskController {
     public ResultVO ledgerSelect(@ApiParam(name="台账下拉多选接口", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
 
         ResultCp resultCp = new ResultCp();
+    QueryWrapper<RlhdGroup> rlhdGroupQueryWrapper = new QueryWrapper<>();
+        rlhdGroupQueryWrapper.eq("del_flag",1);
+    rlhdGroupQueryWrapper.orderByDesc("create_date");
+        List<RlhdGroup> coList = rlhdGroupService.list(rlhdGroupQueryWrapper);
 
-        List<RlhdGroup> coList = rlhdGroupService.list();
         resultCp.setData(coList);
         return ResultVOUtil.success(resultCp);
 

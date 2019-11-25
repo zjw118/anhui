@@ -1,24 +1,30 @@
 package com.gistone.controller;
 
-
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
 import com.gistone.entity.ImageConfig;
 import com.gistone.entity.ImageNumber;
+import com.gistone.entity.ImageTemp;
 import com.gistone.mapper.ImageConfigMapper;
 import com.gistone.mapper.ImageMapper;
 import com.gistone.mapper.ImageNumberMapper;
+import com.gistone.pkname.Swagger;
+import com.gistone.service.IImageTempService;
 import com.gistone.service.ILmPointService;
 import com.gistone.service.ImageConfigService;
 import com.gistone.service.ImageService;
 import com.gistone.util.*;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
+
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -30,8 +36,6 @@ import java.util.*;
  * @version v1.0
  * @since 2019-10-18
  */
-
-
 @RestController
 @RequestMapping("/api/ygjc/image")
 public class ImageController {
@@ -50,7 +54,8 @@ public class ImageController {
     @Autowired
     private ImageService imageService;
     @Autowired
-    private   ConfigUtils configUtils;
+    private IImageTempService iImageTempService;
+
 
     @Value("${ftp_host}")
     private String ftpHost;
@@ -64,7 +69,31 @@ public class ImageController {
     private String ftpPt;
     @Value("${ftp_url}")
     private String ftpUrl;
+    @ApiOperation(value = "image识别添加接口", notes = "此接口返回问题点批次数据", response = Result.class)
+    @PostMapping("/insertImagerTemp")
+    public ResultVO insertImagerTemp(@RequestBody @ApiParam(name = "任务批次添加接口", value = "json格式", required = true) Swagger<ImageTemp> data,
+                               HttpServletRequest request) {
+        ImageTemp it = data.getData();
+        if(!ObjectUtils.isNotNullAndEmpty(it.getName())){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "名称不能为空！");
+        }
+        if(!ObjectUtils.isNotNullAndEmpty(it.getZipUrl())){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "识别的url不能为空！");
+        }
+        it.setUpdateDate(LocalDateTime.now());
+        return ResultVOUtil.success(iImageTempService.save(it));
 
+    }
+    @ApiOperation(value = "image识别列表接口", notes = "此接口返回问题点批次数据", response = Result.class)
+    @PostMapping("/listImagerTemp")
+    public ResultVO listImagerTemp(@RequestBody @ApiParam(name = "任务批次添加接口", value = "json格式", required = true) Swagger<ImageTemp> data,
+                               HttpServletRequest request) {
+        ImageTemp param = data.getData();
+        if(!ObjectUtils.isNotNullAndEmpty(param.getPageNumber())||!ObjectUtils.isNotNullAndEmpty(param.getPageSize())){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "pageSize和pageNumber不能为空！");
+        }
+        return  iImageTempService.listImageTemp(param);
+    }
 
     /**
      * @param paramsMap
@@ -332,14 +361,12 @@ public class ImageController {
 //        List<Map<String, Object>> surveyList = totalService.getSurveyCount(codes, currentTime, beforeTime);
         result.put("markerCount", markerList);
         result.put("beforeMarkerCount", count);
-
         return ResultVOUtil.success(result);
     }
 
 
     /**
      * 添加配置
-     *
      * @param paramsMap
      * @return
      */
@@ -348,7 +375,6 @@ public class ImageController {
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
         if (params == null)
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
-
         Object name = params.get("name");
         Object parentid = params.get("parentid");
         Object type = params.get("type");
@@ -714,27 +740,7 @@ public class ImageController {
     }
 
 
-    /**
-     * 获取默认系数  （准备删除）
-     * @param paramsMap
-     * @return
-     */
-//    @RequestMapping(value = "/oldNumber", method = RequestMethod.POST)
-//    public ResultVO oldNumber(@RequestBody Map<String, Object> paramsMap) {
-//        try {
-//            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-//            if (params == null) {
-//                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
-//            }
-//            Object id = params.get("id");
-//            if (null==id) {
-//                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
-//            }
-//            return imageService.oldNumber(Integer.valueOf(id.toString()));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
-//    }
+
 
 
     /**

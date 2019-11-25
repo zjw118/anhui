@@ -10,6 +10,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -61,6 +62,8 @@ public class RlhdGroup extends Model<RlhdGroup> {
     private Integer sonCount;
     @TableField(exist = false)
     private Double sonArea;
+    @TableField(exist = false)
+private List<St4ScsCdVo> st4ScsCdList;
 
 
     @Override

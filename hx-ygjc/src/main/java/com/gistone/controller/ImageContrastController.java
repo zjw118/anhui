@@ -27,7 +27,6 @@ public class ImageContrastController {
     private String PATH;
 
 
-
     /**
      * 添加影像对比
      * @param request
@@ -49,12 +48,18 @@ public class ImageContrastController {
         ImageContrast imageContrast = new ImageContrast();
         imageContrast.setImage1Id(id1);
         imageContrast.setImage2Id(id2);
-        if(null!=params.get("name"))
-        imageContrast.setName(params.get("name")+"");
-        if(null!=params.get("remark"))
-        imageContrast.setRemark(params.get("remark")+"");
         imageContrast.setDate(new Date());
-        if(null!=user) imageContrast.setUserId(user.getId());
+        if(null!=params.get("id")) {
+            imageContrast.setId(Integer.valueOf(params.get("id").toString()));
+        }
+        if(null!=params.get("name")) {
+            imageContrast.setName(params.get("name")+"");
+        }
+        if(null!=params.get("remark")) {
+            imageContrast.setRemark(params.get("remark")+"");
+        }
+        if(null!=user)
+            imageContrast.setUserId(user.getId());
         return imageContrastService.add(imageContrast);
     }
 

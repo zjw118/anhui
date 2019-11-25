@@ -24,6 +24,7 @@
         <result column="SA019" property="sa019" jdbcType="VARCHAR" />
         <result column="SA020" property="sa020" jdbcType="INTEGER" />
         <result column="SG001" property="sg001" jdbcType="INTEGER" />
+        <result column="SD001" property="sd001" jdbcType="INTEGER" />
         <collection property="st4SysSc" ofType="com.gistone.entity.St4SysSc">
             <id column="SC001" jdbcType="INTEGER" property="sc001" />
             <result column="SC002" jdbcType="VARCHAR" property="sc002" />
@@ -63,11 +64,11 @@
     </resultMap>
     <sql id="Base_Column_List" >
     SA001, SA002, SA003, SA004, SA005, SA006, SA007, SA008, SA009, SA010, SA011, SA012,
-    SA013, SA014, SA015, SA016, SA017, SA018, SA019, SA020, SG001
+    SA013, SA014, SA015, SA016, SA017, SA018, SA019, SA020, SG001,SD001
   </sql>
     <sql id="Base_Column_List1" >
     sa.SA001, SA002, SA003, SA004, SA005, SA006, SA007, SA008, SA010, SA011, SA012,
-    SA013, SA014, SA015, SA016, SA017, SA018, SA019, SA020, SG001
+    SA013, SA014, SA015, SA016, SA017, SA018, SA019, SA020, SG001,SD001
   </sql>
 
     <select id="listPhoneUserToView" resultType="Map" parameterType="com.gistone.entity.St4SysSa" >

@@ -26,6 +26,17 @@
         <result column="rwcs" property="rwcs" />
         <result column="rwsc" property="rwsc" />
         <result column="uname" property="uname" />
+        <association property="st4ScsCd" javaType="com.gistone.entity.St4ScsCd">
+            <id column="CD001" property="cd001" />
+            <result column="CD002" property="cd002" />
+            <result column="CD003" property="cd003" />
+            <result column="CD004" property="cd004" />
+            <result column="checkNum" property="checkNum" />
+            <result column="uncheckNum" property="uncheckNum" />
+            <result column="checkedNum" property="checkedNum" />
+            <result column="totalCheckNum" property="totalCheckNum" />
+
+        </association>
         <association property="rlhdGroup" javaType="com.gistone.entity.RlhdGroup">
             <id column="id" property="id" />
             <result column="name" property="name" />
@@ -191,49 +202,53 @@
     </select>
 
     <select id="selectPoList" resultMap="BaseResultMap"   parameterType="com.gistone.entity.St4ScsCy">
-        <!-- 2019.11.19.15.59留存
-        SELECT-->
-        <!--cl.*,-->
-        <!--sa.SA019 uname,-->
-        <!--IFNULL(COUNT(*),0)    rwcs,-->
-        <!--IFNULL(SUM(cy.CY006),0)    gjlc,-->
-        <!--IFNULL(SUM(TIMESTAMPDIFF(HOUR,CY003,CY004)),0)    rwsc-->
-        <!--FROM st4_scs_cy cy-->
-        <!--LEFT JOIN st4_sys_sa sa-->
-        <!--ON cy.SA001=sa.SA001-->
-        <!--LEFT JOIN st4_scs_cl cl-->
-        <!--ON cl.CL003=cy.CL003-->
-        <!--WHERE cy.CY016 =1 and   sa.SA019 is not null-->
-        <!--<if test="uname!=null and uname  !=''">-->
-            <!--and sa.SA019 like '%${uname}%'-->
-        <!--</if>-->
-        <!--<if test="cl001!=null and cl001 !=''">-->
-            <!--and cl.CL001 = #{cl001}-->
-        <!--</if>-->
-        <!--GROUP BY  sa.SA001-->
-        <!--ORDER BY CONVERT(sa.SA019 USING GBK)-->
 
-        SELECT
-        com.PK_ID,com.COM_NAME,
-        sa.SA019 uname,sa.SA015,
-        IFNULL(COUNT(cy.CY001),0)    rwcs,
-        IFNULL(SUM(cy.CY006),0)    gjlc,
-        IFNULL(SUM(TIMESTAMPDIFF(HOUR,CY003,CY004)),0)    rwsc
+        SELECT PK_ID,
+        COM_NAME,
+        SA001,
+        SA015,
+        uname,totalCheckNum,checkNum,
+        (totalCheckNum - checkNum) AS uncheckNum  FROM (
+        select
+        com.PK_ID,
+        com.COM_NAME,
+        sa.SA001,
+        sa.SA015,
+        sa.SA019        uname,
+        COUNT(cd.CD001 IS NOT NULL)    totalCheckNum,
+
+        COUNT(ck.ck088=1)    checkNum
         FROM sys_company com
-        LEFT JOIN st4_scs_cd cd ON com.PK_ID = cd.SD001
-        LEFT JOIN st4_scs_cc cc ON cc.CD004 = cd.CD001
-        LEFT JOIN st4_scs_cy cy ON cc.CY017 = cy.CY017
+
         <choose>
             <when test="groupByName=='sa015' ">
-                RIGHT JOIN st4_sys_sa sa ON cy.SA001 = sa.SA001
+                RIGHT JOIN st4_sys_sa sa
+                ON sa.SD001 = com.COM_CODE
             </when>
             <otherwise>
-                left JOIN st4_sys_sa sa ON cy.SA001 = sa.SA001
+                LEFT JOIN st4_sys_sa sa
+                ON sa.SD001 = com.COM_CODE
             </otherwise>
         </choose>
-        WHERE 1=1
-        <if test="sysCompany.comFPkid!=null">
-            and com.COM_F_PKID = #{sysCompany.comFPkid}
+
+        LEFT JOIN st4_po_cd_sa cdsa
+        ON cdsa.SA001 = sa.SA001
+        LEFT JOIN st4_scs_cd cd
+        ON cdsa.cd001 = cd.cd001
+        LEFT JOIN (SELECT *
+        FROM (SELECT
+        MAX(CK001)    AS id
+        FROM st4_scs_ck
+        GROUP BY CD004) t
+        INNER JOIN st4_scs_ck k
+        ON t.id = k.CK001) ck
+        ON ck.CD004 = cd.cd001
+
+        WHERE 1=1 and  com.PK_ID!=1
+        <if test="sysCompany!=null">
+            <if test="sysCompany.comFPkid!=null">
+                and com.COM_F_PKID = #{sysCompany.comFPkid}
+            </if>
         </if>
         <if test="uname!=null and uname  !=''">
             and sa.SA019 like '%${uname}%'
@@ -253,7 +268,7 @@
         <if test="groupByName=='sf' ">
             group by com.PK_ID
         </if>
-
+        ) T GROUP BY PK_ID
     </select>
 
 

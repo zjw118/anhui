@@ -225,7 +225,7 @@ public class LoginController {
         mainMap.put("任务管理","main_001");
         mainMap.put("航迹管理","main_002");
         //mainMap.put("航点管理","main_003");
-        mainMap.put("问题斑块管理","main_004");
+        mainMap.put("人类活动斑块","main_004");
         //mainMap.put("红线边界管理","main_005");
        // mainMap.put("消息中心","main_007");
         St4SysSc sc = new St4SysSc();

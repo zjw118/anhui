@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
 import com.gistone.entity.ImageConfig;
 import com.gistone.entity.RlhdGroup;
@@ -13,6 +14,7 @@ import com.gistone.mapper.ImageMapper;
 import com.gistone.mapper.RlhdGroupMapper;
 import com.gistone.mapper.St4ScsCdMapper;
 import com.gistone.service.RlhdGroupService;
+import com.gistone.util.ResultVOUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,11 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
     @Autowired
     private ImageConfigMapper imageConfigMapper;
 
+    @Autowired
+    public ResultVO getLedgerUnbinded(){
+       return null;// ResultVOUtil.success(mapper.getLedgerUnbinded());
+    }
+
     public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName) {
 
         QueryWrapper<RlhdGroup> wrapper = new QueryWrapper<>();
@@ -84,19 +91,17 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
     }
 
     public void delete(List<Integer> ids) {
-
         //具体逻辑1.先删除台账信息。2.删除关联信息
         for (Integer id : ids) {
             RlhdGroup rlhdGroup = mapper.selectById(id);
             rlhdGroup.setDelFlag(0);
             mapper.updateById(rlhdGroup);
 
-            St4ScsCd iterpretation = iterpretationMapper.selectOne(new QueryWrapper<St4ScsCd>().eq("group_id",id));
-            if(iterpretation!=null){
-                iterpretation.setGroupId(0);
-                iterpretationMapper.updateById(iterpretation);
+            List<St4ScsCd> group_id = iterpretationMapper.selectList(new QueryWrapper<St4ScsCd>().eq("group_id", id));
+            for (St4ScsCd st4ScsCd : group_id) {
+                st4ScsCd.setGroupId(0);
+                iterpretationMapper.updateById(st4ScsCd);
             }
-
         }
 
     }
@@ -171,6 +176,13 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
             iterpretationMapper.updateById(iterpretation);
         }
     }
+
+    @Override
+    public ResultVO listLedger() {
+
+        return null;
+    }
+
 
 }
 

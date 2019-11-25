@@ -36,6 +36,7 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
         map.put("nr_point",config.getNr_point());
         map.put("nr_other",config.getNr_other());
         map.put("nr_decode",config.getNr_decode());
+        map.put("nr_temp",config.getNr_temp());
 
 
         return map;
@@ -110,7 +111,8 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                             // 显示路径
                             json.put("path", "/" +  dirId + "/" + baseDateDir +"/" + newUUID  + sufName);
 
-                        } else {
+                        }
+                        else {
                             path = config.getUpPath() + "/" +  dirId + "/" + baseDateDir + "/" + uuid   + sufName;
                             // 如果目录不存在则创建目录
                             File uploadFile = new File(path);
@@ -129,12 +131,13 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                         }
                         //如果上传的文件是解译数据，则解压到动态工作空间
                         String shpName = null;
-                        if("nr_decode".equals(dirId)){
+                        if("nr_temp".equals(dirId)){
                             if(".rar".equals(sufName.toLowerCase())){
-                                UnRARUtil.unRarByCmd(config.getUpPath() +"/" +  dirId + "/" + baseDateDir + "/" + uuid  + sufName,config.getUpPath() + "/dynamicLayerSpace");
+                                UnRARUtil.unRarByCmd(config.getUpPath() +"/" +  dirId + "/" + baseDateDir + "/" + newUUID  + sufName,config.getUpPath() + "/dynamicLayerSpace");
                                 //shpName = UnRARUtil.unRarArcGISFiles(config.getUpPath() +"/" +  dirId + "/" + baseDateDir + "/" + uuid  + sufName ,config.getUpPath() + "/dynamicLayerSpace",newUUID);
                             }else{
-                                shpName = ZipUtil.unZipArcGISFiles(config.getUpPath() +"/" +  dirId + "/" + baseDateDir + "/" + uuid  + sufName,config.getUpPath() + "/dynamicLayerSpace",newUUID);
+                                shpName = ZipUtil.unZipArcGISFiles(config.getUpPath() +"/" +  dirId + "/" + baseDateDir + "/" + newUUID  + sufName,config.getUpPath() + "/dynamicLayerSpace",newUUID);
+                                shpName=config.getUpPath() + "/dynamicLayerSpace//"+shpName;
                             }
                             json.put("path", shpName);
                             //解译结果，报告预览地址

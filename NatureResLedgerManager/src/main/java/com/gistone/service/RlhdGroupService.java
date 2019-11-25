@@ -1,6 +1,7 @@
 package com.gistone.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gistone.VO.ResultVO;
 import com.gistone.entity.RlhdGroup;
 
 import java.util.List;
@@ -30,4 +31,10 @@ public interface RlhdGroupService extends IService<RlhdGroup> {
     void addDataToGroup(Integer groupId, List<Integer> id);
 
     void deleteDataFromGroup(Integer groupId, List<Integer> ids);
+
+
+    ResultVO listLedger();
+
+    ResultVO getLedgerUnbinded();
+
 }
