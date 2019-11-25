@@ -35,4 +35,6 @@ public interface RlhdGroupService extends IService<RlhdGroup> {
 
     ResultVO listLedger();
 
+    ResultVO getLedgerUnbinded();
+
 }

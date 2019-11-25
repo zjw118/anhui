@@ -33,6 +33,7 @@
         <result column="checkNum" property="checkNum" />
         <result column="uncheckNum" property="uncheckNum" />
         <result column="checkedNum" property="checkedNum" />
+
         <result column="todayNum" property="todayNum" />
         <result column="sendStatus" property="sendStatus" />
         <association property="image" javaType="com.gistone.entity.Image">

@@ -56,7 +56,7 @@
     <sql id="Base_Column_List">
         id, name, create_by, create_date, update_by, update_date, remark, del_flag
     </sql>
-    <select id="getLedgerUnbinded" resultMap="BaseResultMap" parameterType="Integer">
+    <select id="getLedgerUnbinded" resultMap="BaseResultMap" >
                   SELECT *
         FROM rlhd_group rg
           LEFT JOIN st4_po_cl_co clco
