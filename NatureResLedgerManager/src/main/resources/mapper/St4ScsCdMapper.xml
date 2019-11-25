@@ -580,6 +580,9 @@ where cd.cd001 not in (select cd001 from st4_po_cd_sa )
     </select>
 
 
+    <select id="selectAll"  resultType="com.gistone.entity.St4ScsCd" parameterType="Integer">
+         SELECT * from st4_scs_cd where CD009 = 1 and image_id = #{image_id}
+    </select>
     <select id="select"  resultType="java.util.Map" parameterType="Integer">
         SELECT
         a.CD001,

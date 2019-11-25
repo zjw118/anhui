@@ -330,8 +330,12 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     @Override
     public ResultVO insert(List<Map<String, Object>> data, Integer imageId, Integer createBy){
         try {
-            //通过影像id先删除记录然后再插入,然后再写入shp文件，将地址更新到影像表中！
-            st4ScsCdMapper.delete(new QueryWrapper<St4ScsCd>().eq("image_id", imageId));
+//            st4ScsCdMapper.delete(new QueryWrapper<St4ScsCd>().eq("image_id", imageId));
+
+            //获取image_id下列表
+            List<St4ScsCd> list = st4ScsCdMapper.selectAll(imageId);
+
+
             //从data中构造属性
             int plaqueNumber = data.size(); //斑块数量
             double area = 0; //总面积
@@ -380,6 +384,8 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     //            if (null != attributes.get("remark")) {
     //                iterpretation.setCd012(attributes.get("remark") + "");
     //            }
+
+
                 Map<String, Object> rings = (Map<String, Object>) datum.get("geometry");
                 String geometry = rings.get("rings").toString();
                 iterpretation.setGeometry(geometry);
@@ -387,9 +393,29 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 iterpretation.setCd010(createBy);
                 iterpretation.setCd011(LocalDateTime.now());
                 iterpretation.setCd004(UUID.randomUUID().toString().replace("-", ""));
-//                iterpretation.setCd020(Integer.valueOf(attributes.get("cd020").toString()));
-                st4ScsCdMapper.insert(iterpretation);
+
+
+                if(list.size()==0){
+                    //原数据少，新增
+                    st4ScsCdMapper.insert(iterpretation);
+                }else{
+                    //原数据多，修改
+                    for (int i = 0; i < list.size(); i++) {
+                        iterpretation.setCd001(list.get(i).getCd001());
+                        list.remove(i);
+                        break;
+                    }
+                    st4ScsCdMapper.updateById(iterpretation);
+                }
             }
+            //删除多余原数据
+            if(list.size()>0){
+                for (int i = 0; i < list.size(); i++) {
+                    st4ScsCdMapper.delete(new QueryWrapper<St4ScsCd>().eq("cd001", list.get(i).getCd001()));
+                }
+            }
+
+
 
             //写入本地shp文件
             String url = PathUtile.getRandomPath(PATH+"/epr/image/","x.shp");

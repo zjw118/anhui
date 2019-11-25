@@ -97,6 +97,7 @@ public class IterpretationController {
 //            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "解译数据不能为空");
 //        }
 
+
         Integer imageId = (Integer) params.get("imageId");
         if (imageId == null || imageId <= 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "影像id不能为空");
