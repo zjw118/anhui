@@ -1850,7 +1850,10 @@
 
 
     <select id="selectSt4ScsCk" resultMap="BaseResultMap" resultType="com.gistone.entity.St4ScsCk">
-        SELECT   com.PK_ID,
+
+        SELECT *,(unEmaminedNum+emaminedNum+backNum) tzNum FROM
+        (
+        SELECT com.PK_ID,
         com.COM_NAME,
         ck.CK001,ck.ck067,ck.ck088,
         sa.SA001,
@@ -1859,7 +1862,6 @@
         sa.SA019,
         IFNULL(ck.CK016, '') AS ck010,
         IFNULL(ck.CK012, '') AS ck012,
-        IF(COUNT(*) IS NULL, 0, COUNT(*)) AS tzNum,
         IFNULL(SUM(ck046 = '是' OR ck046 = '已销号'), 0) AS xhNum,
         IFNULL(SUM(ck046 = '否' OR ck046 = '未销号'), 0) AS unxhNum,
         IF(COUNT(*) IS NULL, 0, COUNT(*)) AS tzCheckedNum,
@@ -1887,7 +1889,7 @@
         ON cdsa.cd001 = cd.cd001
         LEFT JOIN (SELECT *
         FROM (SELECT
-        MAX(CK001)    AS id
+        MAX(CK001) AS id
         FROM st4_scs_ck
         GROUP BY CD004) t
         INNER JOIN st4_scs_ck k
@@ -1900,7 +1902,7 @@
         ON clco.co001 = co.id
         LEFT JOIN st4_scs_cl cl
         ON cl.CL001 = clco.cl001
-        WHERE 1 = 1 and  com.PK_ID!=1
+        WHERE 1 = 1 and com.PK_ID!=1
         <!--年份、核查任务、时间区间、省份、保护地、巡查人员；!-->
         <if test="st4SysSa != null">
             <if test="st4SysSa.sa001!=null and st4SysSa.sa001  !=''">
@@ -1935,6 +1937,7 @@
         <if test="groupByName=='sd001'">
             GROUP BY com.PK_ID
         </if>
+        ) t GROUP BY PK_ID
         <!--<if test="groupByName=='ck067'">-->
             <!--GROUP BY ck.ck067-->
         <!--</if>-->

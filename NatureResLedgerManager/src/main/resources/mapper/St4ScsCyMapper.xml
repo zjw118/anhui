@@ -34,6 +34,8 @@
             <result column="checkNum" property="checkNum" />
             <result column="uncheckNum" property="uncheckNum" />
             <result column="checkedNum" property="checkedNum" />
+            <result column="totalCheckNum" property="totalCheckNum" />
+
         </association>
         <association property="rlhdGroup" javaType="com.gistone.entity.RlhdGroup">
             <id column="id" property="id" />
@@ -200,36 +202,22 @@
     </select>
 
     <select id="selectPoList" resultMap="BaseResultMap"   parameterType="com.gistone.entity.St4ScsCy">
-        <!-- 2019.11.19.15.59留存
-        SELECT-->
-        <!--cl.*,-->
-        <!--sa.SA019 uname,-->
-        <!--IFNULL(COUNT(*),0)    rwcs,-->
-        <!--IFNULL(SUM(cy.CY006),0)    gjlc,-->
-        <!--IFNULL(SUM(TIMESTAMPDIFF(HOUR,CY003,CY004)),0)    rwsc-->
-        <!--FROM st4_scs_cy cy-->
-        <!--LEFT JOIN st4_sys_sa sa-->
-        <!--ON cy.SA001=sa.SA001-->
-        <!--LEFT JOIN st4_scs_cl cl-->
-        <!--ON cl.CL003=cy.CL003-->
-        <!--WHERE cy.CY016 =1 and   sa.SA019 is not null-->
-        <!--<if test="uname!=null and uname  !=''">-->
-            <!--and sa.SA019 like '%${uname}%'-->
-        <!--</if>-->
-        <!--<if test="cl001!=null and cl001 !=''">-->
-            <!--and cl.CL001 = #{cl001}-->
-        <!--</if>-->
-        <!--GROUP BY  sa.SA001-->
-        <!--ORDER BY CONVERT(sa.SA019 USING GBK)-->
 
-        SELECT
+        SELECT PK_ID,
+        COM_NAME,
+        SA001,
+        SA015,
+        uname,totalCheckNum,checkNum,
+        (totalCheckNum - checkNum) AS uncheckNum  FROM (
+        select
         com.PK_ID,
         com.COM_NAME,
         sa.SA001,
         sa.SA015,
         sa.SA019        uname,
-        COUNT(ck.ck088=1)    checkNum,
-        COUNT(ck088!=1)    uncheckNum
+        COUNT(cd.CD001 IS NOT NULL)    totalCheckNum,
+
+        COUNT(ck.ck088=1)    checkNum
         FROM sys_company com
 
         <choose>
@@ -280,7 +268,7 @@
         <if test="groupByName=='sf' ">
             group by com.PK_ID
         </if>
-
+        ) T GROUP BY PK_ID
     </select>
 
 

@@ -14,6 +14,7 @@ import com.gistone.mapper.ImageMapper;
 import com.gistone.mapper.RlhdGroupMapper;
 import com.gistone.mapper.St4ScsCdMapper;
 import com.gistone.service.RlhdGroupService;
+import com.gistone.util.ResultVOUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +51,10 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
     @Autowired
     private ImageConfigMapper imageConfigMapper;
 
-
-
+    @Autowired
+    public ResultVO getLedgerUnbinded(){
+       return null;// ResultVOUtil.success(mapper.getLedgerUnbinded());
+    }
 
     public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName) {
 

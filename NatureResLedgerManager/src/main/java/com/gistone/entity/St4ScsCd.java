@@ -288,6 +288,10 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private Integer checkedNum;
 
+    @ApiModelProperty(name = "totalCheckNum", value = "核查总数", dataType = "{}", required = false, example = "")
+    @TableField(exist = false)
+    private Integer totalCheckNum;
+
     @ApiModelProperty(name = "todayNum", value = "当日核查数", dataType = "{}", required = false, example = "")
     @TableField(exist = false)
     private Integer todayNum;
