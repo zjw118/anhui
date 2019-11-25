@@ -1,5 +1,6 @@
 package com.gistone.entity;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -42,11 +43,13 @@ public class DataRedlineRegister extends Model<DataRedlineRegister> implements S
      * 编码
      */
     @TableField("srld_code")
+    @Excel(name = "红线编码",height = 11, width = 15)
     private String srldCode;
     /**
      * 名称
      */
     @TableField("srld_name")
+
     private String srldName;
     /**
      * 人口
@@ -72,11 +75,13 @@ public class DataRedlineRegister extends Model<DataRedlineRegister> implements S
      * 区域面积
      */
     @TableField("srld_area")
+    @Excel(name = "红线面积",height = 11, width = 15)
     private String srldArea;
     /**
      * 生态系统与植被类型
      */
     @TableField("srld_plant_type")
+    @Excel(name = "植被类型",height = 11, width = 15)
     private String srldPlantType;
     /**
      * 主要人为活动
@@ -88,7 +93,7 @@ public class DataRedlineRegister extends Model<DataRedlineRegister> implements S
      */
     @TableField("srld_problem")
     private String srldProblem;
-
+    @Excel(name = "红线名称",height = 11, width = 15)
     private String areaRedline;
     /**
      * 管控措施
@@ -99,6 +104,7 @@ public class DataRedlineRegister extends Model<DataRedlineRegister> implements S
      * 添加时间
      */
     @TableField("srld_add_time")
+    @Excel(name = "添加时间",height = 11, width = 15)
     private Date srldAddTime;
     /**
      * 添加人
@@ -114,6 +120,7 @@ public class DataRedlineRegister extends Model<DataRedlineRegister> implements S
     /**
      * 红线编号
      */
+    @Excel(name = "红线编号",height = 11, width = 15)
     private String srldNumber;
     /**
      * 红线功能用途

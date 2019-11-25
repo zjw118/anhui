@@ -168,7 +168,7 @@
         </if>
 
         <if test="param!=null and param !='' ">
-            and (c.srld_name=#{param} or a.jz_number = #{param})
+            and (c.srld_name=#{param} or a.jz_number  like concat( #{param}, '%'))
         </if>
 
         limit #{startNum},#{pageSize}
