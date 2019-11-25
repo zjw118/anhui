@@ -2,10 +2,7 @@ package com.gistone.service.impl;
 
 import com.gistone.entity.MessageProperties;
 import com.gistone.service.FileUpAndDownService;
-import com.gistone.util.FTPUtilUtil;
-import com.gistone.util.ResultMsg;
-import com.gistone.util.UnRARUtil;
-import com.gistone.util.ZipUtil;
+import com.gistone.util.*;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.tomcat.jni.Directory;
@@ -151,6 +148,7 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                         }
                         //如果上传的文件是解译数据，则解压到动态工作空间
                         String shpName = null;
+                        String ppath="";
                         if("nr_temp".equals(dirId)){
                             if(".rar".equals(sufName.toLowerCase())){
                                 UnRARUtil.unRarByCmd(config.getUpPath() +"/" +  dirId + "/" + baseDateDir + "/" + newUUID  + sufName,config.getUpPath() + "/dynamicLayerSpace");
@@ -176,6 +174,7 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                                 String fileName="";
                                 FileInputStream input=null;
                                 File saveDir = new File(savePath);
+
                                 if(saveDir.isDirectory()){
                                     File[] filess = saveDir.listFiles();
                                     for (File filesing:filess) {
@@ -189,28 +188,34 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                                         shpName=filesing.getName();
                                         if("img".equals(suf)){
                                             fileName = name+".img";
-                                            input = new FileInputStream(new File(url));
+                                           // input = new FileInputStream(new File(url));
                                         }else if("ddf".equals(suf)){
                                             fileName = name + ".ddf";
-                                            input = new FileInputStream(new File(url));
+                                           // input = new FileInputStream(new File(url));
                                         }
                                         else if("enp".equals(suf)){
                                             fileName = name + ".enp";
-                                            input = new FileInputStream(new File(url));
+                                          //  input = new FileInputStream(new File(url));
                                         }
                                         else if("xml".equals(suf)){
                                             fileName = name + ".xml";
-                                            input = new FileInputStream(new File(url));
+                                            //input = new FileInputStream(new File(url));
+                                        }else if("tif".equals(suf)){
+                                            fileName = name + ".tif";
+                                            //input = new FileInputStream(new File(url));
                                         }
-                                        if(input!=null){
-                                            FTPUtilUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName, input);
-                                        }
+                                            FtpUtils22 ftp = new FtpUtils22();
+                                            ftp.uploadFile1(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName, url);
+                                            if("tif".equals(suf)||"img".equals(suf)){
+                                                ppath = ftpPt+ftpUrl+ftpPath+fileName;
+                                            }
+
                                     }
                                 }
 
 
                             }
-                            json.put("path", shpName);
+                            json.put("path", ppath);
                             //解译结果，报告预览地址
                             json.put("cv010", "");
                         }
