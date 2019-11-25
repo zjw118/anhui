@@ -2,17 +2,20 @@ package com.gistone.service.impl;
 
 import com.gistone.entity.MessageProperties;
 import com.gistone.service.FileUpAndDownService;
+import com.gistone.util.FTPUtilUtil;
 import com.gistone.util.ResultMsg;
 import com.gistone.util.UnRARUtil;
 import com.gistone.util.ZipUtil;
-import net.coobird.thumbnailator.Thumbnails;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.tomcat.jni.Directory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,6 +27,23 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
 
     @Autowired
     private  MessageProperties config;
+    @Value("${PATH}")
+    private String PATH;
+
+
+
+    @Value("${ftp_host}")
+    private String ftpHost;
+    @Value("${ftp_port}")
+    private Integer ftpPort;
+    @Value("${ftp_username}")
+    private String ftpUserName;
+    @Value("${ftp_password}")
+    private String ftpPassword;
+    @Value("${ftp_pt}")
+    private String ftpPt;
+    @Value("${ftp_url}")
+    private String ftpUrl;
     //这里是供给所有的上传接口调用
     private static final Map<String,String> map = new HashMap<>();
 
@@ -136,8 +156,59 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                                 UnRARUtil.unRarByCmd(config.getUpPath() +"/" +  dirId + "/" + baseDateDir + "/" + newUUID  + sufName,config.getUpPath() + "/dynamicLayerSpace");
                                 //shpName = UnRARUtil.unRarArcGISFiles(config.getUpPath() +"/" +  dirId + "/" + baseDateDir + "/" + uuid  + sufName ,config.getUpPath() + "/dynamicLayerSpace",newUUID);
                             }else{
-                                shpName = ZipUtil.unZipArcGISFiles(config.getUpPath() +"/" +  dirId + "/" + baseDateDir + "/" + newUUID  + sufName,config.getUpPath() + "/dynamicLayerSpace",newUUID);
+                                Date nowDate = new Date();
+                                SimpleDateFormat sdf1 =  new SimpleDateFormat("yyyy-MM-dd-HH-mm");
+                                //在服务器上压缩后存储的路径
+                                String savePath = config.getUpPath() + "/dynamicLayerSpace/"+sdf1.format(nowDate);
+
+                                shpName = ZipUtil.unZipArcGISFiles(config.getUpPath() +"/" +  dirId + "/" + baseDateDir + "/" + newUUID  + sufName,savePath,newUUID);
+
                                 shpName=config.getUpPath() + "/dynamicLayerSpace//"+shpName;
+                                //下面是shp文件的在磁盘上的路径但是不是shp后缀的
+                                //String url = FTPUtilUtil.getRandomPath(PATH+"/epr/image/","x.shp");
+//                                String u = shpName.split("\\:")[1];
+//                                String ftpPath = u.split("\\.")[0];
+//                                ftpPath = ftpPath.substring(0,u.lastIndexOf("/"))+"/";
+//                                String name = u.substring(u.lastIndexOf("/")+1);
+//                                name = name.split("\\.")[0];
+
+
+                                String fileName="";
+                                FileInputStream input=null;
+                                File saveDir = new File(savePath);
+                                if(saveDir.isDirectory()){
+                                    File[] filess = saveDir.listFiles();
+                                    for (File filesing:filess) {
+                                        //SHP上传到GIS服务器
+                                        String url = filesing.getAbsolutePath();//D:\epr\UploadData\dynamicLayerSpace\1.img
+                                        String u = url.split("\\:")[1];//\epr\UploadData\dynamicLayerSpace\1.img
+                                        String ftpPath ="\\dynamicSpace\\";
+                                        String name = filesing.getName();
+                                        String suf  =filesing.getName().substring(filesing.getName().lastIndexOf(".")+1);
+//                                        name = filesing.getName();
+                                        shpName=filesing.getName();
+                                        if("img".equals(suf)){
+                                            fileName = name+".img";
+                                            input = new FileInputStream(new File(url));
+                                        }else if("ddf".equals(suf)){
+                                            fileName = name + ".ddf";
+                                            input = new FileInputStream(new File(url));
+                                        }
+                                        else if("enp".equals(suf)){
+                                            fileName = name + ".enp";
+                                            input = new FileInputStream(new File(url));
+                                        }
+                                        else if("xml".equals(suf)){
+                                            fileName = name + ".xml";
+                                            input = new FileInputStream(new File(url));
+                                        }
+                                        if(input!=null){
+                                            FTPUtilUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName, input);
+                                        }
+                                    }
+                                }
+
+
                             }
                             json.put("path", shpName);
                             //解译结果，报告预览地址
