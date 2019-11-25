@@ -36,6 +36,7 @@ public interface St4ScsCdMapper extends BaseMapper<St4ScsCd> {
     List<St4ScsCd> getStaticPoint(St4ScsCd data);
 
     List<Map> select(@Param("image_id")Integer image_id);
+    List<St4ScsCd> selectAll(@Param("image_id")Integer image_id);
 
 
 

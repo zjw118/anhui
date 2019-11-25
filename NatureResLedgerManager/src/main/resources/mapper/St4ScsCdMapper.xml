@@ -376,7 +376,7 @@ where cd.cd001 not in (select cd001 from st4_po_cd_sa )
     </select>
     <insert id="insertList" parameterType="com.gistone.entity.St4ScsCd" useGeneratedKeys="true" keyProperty="cd001" >
         insert into st4_scs_cd (
-        <include refid="Base_Column_List1" />
+        <include refid="Base_Column_List1" />l
         )
         values
         <foreach collection="list" item="item" index="index"  separator=",">
@@ -580,6 +580,9 @@ where cd.cd001 not in (select cd001 from st4_po_cd_sa )
     </select>
 
 
+    <select id="selectAll"  resultType="com.gistone.entity.St4ScsCd" parameterType="Integer">
+         SELECT * from st4_scs_cd where CD009 = 1 and image_id = #{image_id}
+    </select>
     <select id="select"  resultType="java.util.Map" parameterType="Integer">
         SELECT
         a.CD001,

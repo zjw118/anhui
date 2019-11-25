@@ -922,7 +922,7 @@
 
 
         left join  st4_sys_sa sa on sa.SA001= ck.CK049
-        where CK085 = 1
+        where CK085 = 1 and cd.CD001 is not null
         <if test="ck.tname != null">
             and cl.CL002 like '%${ck.tname}%'
         </if>
@@ -1225,7 +1225,7 @@
 
         )
 
-        ck left join st4_scs_cd cd on cd.CD004 = ck.CD004
+        ck inner  join st4_scs_cd cd on cd.CD004 = ck.CD004
         left join st4_scs_cac cac on cac.CK001= ck.CK001
         left join  st4_sys_sg sg on cd.SG001 = SG.sg001
         left join  st4_sys_sa sa on sa.SA001= ck.CK049
@@ -1860,7 +1860,7 @@
         cl.CL001,
         cl.CL002,
         sa.SA019,
-        IFNULL(ck.CK016, '') AS ck010,
+        IFNULL(SUBSTRING_INDEX(CK016,"-",-1), '') AS ck010,
         IFNULL(ck.CK012, '') AS ck012,
         IFNULL(SUM(ck046 = '是' OR ck046 = '已销号'), 0) AS xhNum,
         IFNULL(SUM(ck046 = '否' OR ck046 = '未销号'), 0) AS unxhNum,
@@ -1902,7 +1902,7 @@
         ON clco.co001 = co.id
         LEFT JOIN st4_scs_cl cl
         ON cl.CL001 = clco.cl001
-        WHERE 1 = 1 and com.PK_ID!=1
+        WHERE 1 = 1 and com.PK_ID!=1 and com.COM_LEVEL=2
         <!--年份、核查任务、时间区间、省份、保护地、巡查人员；!-->
         <if test="st4SysSa != null">
             <if test="st4SysSa.sa001!=null and st4SysSa.sa001  !=''">

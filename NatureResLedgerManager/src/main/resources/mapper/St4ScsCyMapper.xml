@@ -215,7 +215,7 @@
         sa.SA001,
         sa.SA015,
         sa.SA019        uname,
-        COUNT(cd.CD001 IS NOT NULL)    totalCheckNum,
+        SUM(IF(cd.cd001 IS NULL,0,1))   totalCheckNum,
 
         COUNT(ck.ck088=1)    checkNum
         FROM sys_company com
@@ -244,7 +244,7 @@
         ON t.id = k.CK001) ck
         ON ck.CD004 = cd.cd001
 
-        WHERE 1=1 and  com.PK_ID!=1
+        WHERE 1=1 and  com.PK_ID!=1 and com.COM_LEVEL=2
         <if test="sysCompany!=null">
             <if test="sysCompany.comFPkid!=null">
                 and com.COM_F_PKID = #{sysCompany.comFPkid}
