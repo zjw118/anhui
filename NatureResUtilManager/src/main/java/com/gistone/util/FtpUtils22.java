@@ -45,8 +45,12 @@ public class FtpUtils22 {
     public static void main(String[] args) {
         FtpUtils22 ftp = new FtpUtils22();
 
-        //ftp.uploadFile("\\dynamicSpace\\", "ca5d0a8a0378479e87f421b823e4c155_GF1B_PMS_E117.9_N31.3_20190907_L1A1227691115-PAN_ortho_fuse_clip.img", "D:\\epr\\UploadData\\dynamicLayerSpace\\2019-11-25-18-10\\59e91b0b38214b3fbf6969790bee2f91_GF1B_PMS_E117.9_N31.3_20190907_L1A1227691115-PAN_ortho_fuse_clip.img");
-      //  ftp.uploadFile("\\dynamicSpace\\", "ca5d0a8a0378479e87f421b823e4c155_GF1B_PMS_E117.9_N31.3_20190907_L1A1227691115-PAN_ortho_fuse_clip.rrd", "D:\\epr\\UploadData\\dynamicLayerSpace\\2019-11-25-18-10\\59e91b0b38214b3fbf6969790bee2f91_GF1B_PMS_E117.9_N31.3_20190907_L1A1227691115-PAN_ortho_fuse_clip.rrd");
+        ftp.uploadFile1("\\dynamicSpace\\123\\", "ca5d0a8a0378479e87f421b823e4c155_GF1B_PMS_E117.9_N31.3_20190907_L1A1227691115-PAN_ortho_fuse_clip.img", "D:\\epr\\UploadData\\dynamicLayerSpace\\2019-11-25-18-10\\59e91b0b38214b3fbf6969790bee2f91_GF1B_PMS_E117.9_N31.3_20190907_L1A1227691115-PAN_ortho_fuse_clip.img");
+        ftp.uploadFile1("\\dynamicSpace\\123\\", "ca5d0a8a0378479e87f421b823e4c155_GF1B_PMS_E117.9_N31.3_20190907_L1A1227691115-PAN_ortho_fuse_clip.rrd", "D:\\epr\\UploadData\\dynamicLayerSpace\\2019-11-25-18-10\\59e91b0b38214b3fbf6969790bee2f91_GF1B_PMS_E117.9_N31.3_20190907_L1A1227691115-PAN_ortho_fuse_clip.rrd");
+
+        ftp.uploadFile1("\\dynamicSpace\\123\\", "ca5d0a8a0378479e87f421b823e4c155_GF1B_PMS_E117.9_N31.3_20190907_L1A1227691115-PAN_ortho_fuse_clip.img.aux.xml", "D:\\epr\\UploadData\\dynamicLayerSpace\\2019-11-25-18-10\\59e91b0b38214b3fbf6969790bee2f91_GF1B_PMS_E117.9_N31.3_20190907_L1A1227691115-PAN_ortho_fuse_clip.img.aux.xml");
+        ftp.uploadFile1("\\dynamicSpace\\123\\", "ca5d0a8a0378479e87f421b823e4c155_GF1B_PMS_E117.9_N31.3_20190907_L1A1227691115-PAN_ortho_fuse_clip.img.enp", "D:\\epr\\UploadData\\dynamicLayerSpace\\2019-11-25-18-10\\59e91b0b38214b3fbf6969790bee2f91_GF1B_PMS_E117.9_N31.3_20190907_L1A1227691115-PAN_ortho_fuse_clip.img.enp");
+        ftp.uploadFile1("\\dynamicSpace\\123\\", "ca5d0a8a0378479e87f421b823e4c155_GF1B_PMS_E117.9_N31.3_20190907_L1A1227691115-PAN_ortho_fuse_clip.img.xml", "D:\\epr\\UploadData\\dynamicLayerSpace\\2019-11-25-18-10\\59e91b0b38214b3fbf6969790bee2f91_GF1B_PMS_E117.9_N31.3_20190907_L1A1227691115-PAN_ortho_fuse_clip.img.xml");
 //ftp.downloadFile("ftpFile/data", "123.docx", "F://");
 
 //ftp.deleteFile("ftpFile/data", "123.docx");
@@ -54,7 +58,7 @@ public class FtpUtils22 {
         System.out.println("okkkkkk");
 
     }
-    public  boolean uploadFileOrgin( String pathname, String fileName, String originfilename) {
+    public  boolean uploadFileOrgin( String ftpHost, String ftpUserName, String ftpPassword, int ftpPort,String pathname, String fileName, String originfilename) {
 
         boolean flag = false;
 
@@ -181,7 +185,7 @@ public class FtpUtils22 {
 
      */
 
-    public  boolean uploadFile1(String ftpHost, String ftpUserName, String ftpPassword, int ftpPort, String pathname, String fileName, String originfilename) {
+    public  boolean uploadFile1(String pathname, String fileName, String originfilename) {
 
         boolean flag = false;
 

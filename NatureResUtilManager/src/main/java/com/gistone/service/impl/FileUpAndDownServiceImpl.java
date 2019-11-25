@@ -181,31 +181,31 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                                         //SHP上传到GIS服务器
                                         String url = filesing.getAbsolutePath();//D:\epr\UploadData\dynamicLayerSpace\1.img
                                         String u = url.split("\\:")[1];//\epr\UploadData\dynamicLayerSpace\1.img
-                                        String ftpPath ="\\dynamicSpace\\";
+                                        String ftpPath ="/dynamicSpace/";
                                         String name = filesing.getName();
                                         String suf  =filesing.getName().substring(filesing.getName().lastIndexOf(".")+1);
 //                                        name = filesing.getName();
                                         shpName=filesing.getName();
                                         if("img".equals(suf)){
-                                            fileName = name+".img";
-                                           // input = new FileInputStream(new File(url));
-                                        }else if("ddf".equals(suf)){
-                                            fileName = name + ".ddf";
-                                           // input = new FileInputStream(new File(url));
+                                            fileName = name;
+                                            input = new FileInputStream(new File(url));
+                                        }else if("rrd".equals(suf)){
+                                            fileName = name ;
+                                            input = new FileInputStream(new File(url));
                                         }
                                         else if("enp".equals(suf)){
-                                            fileName = name + ".enp";
-                                          //  input = new FileInputStream(new File(url));
+                                            fileName = name ;
+                                            input = new FileInputStream(new File(url));
                                         }
                                         else if("xml".equals(suf)){
-                                            fileName = name + ".xml";
-                                            //input = new FileInputStream(new File(url));
+                                            fileName = name ;
+                                            input = new FileInputStream(new File(url));
                                         }else if("tif".equals(suf)){
-                                            fileName = name + ".tif";
-                                            //input = new FileInputStream(new File(url));
+                                            fileName = name ;
+                                            input = new FileInputStream(new File(url));
                                         }
-                                            FtpUtils22 ftp = new FtpUtils22();
-                                            ftp.uploadFile1(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName, url);
+                                            //FTPUtilUtil ftp = new FtpUtils22();
+                                        FTPUtilUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName, input);
                                             if("tif".equals(suf)||"img".equals(suf)){
                                                 ppath = ftpPt+ftpUrl+ftpPath+fileName;
                                             }
