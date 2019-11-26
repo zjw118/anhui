@@ -565,7 +565,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
 
 
 
-        FileUtil.writeInFile();
+//        FileUtil.writeInFile();
 
 
 
