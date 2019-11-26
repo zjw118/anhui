@@ -484,11 +484,15 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
                     String path1 = ftpPt+ftpUrl;
                     String path2 = "/grpoint/" + uuid + "/grpoint.shp";
                     FTPUtil.createDri(ftpHost, ftpUserName, ftpPassword, ftpPort,"/grpoint/"+uuid+"/");
-                    String url1 = GRPOINT+"/submitJob?容差="+jSONObject+"&parms="+path1+path2+"&redlineUrl="+ftpShpUrl+"&env%3AoutSR=&env%3AprocessSR=&returnZ=false&returnM=false&f=pjson";
+                    String url1 = GRPOINT+"/submitJob?%E5%AE%B9%E5%B7%AE=%7B%0D%0A+%22distance%22%3A+"+rc+"%2C%0D%0A+%22units%22%3A+%22esriMeters%22%0D%0A%7D&parms="+path1+path2+"&redlineUrl="+ftpShpUrl+"&env%3AoutSR=&env%3AprocessSR=&returnZ=false&returnM=false&f=pjson";
+//                    String url1 = GRPOINT+"/submitJob?容差="+"jSONObject"+"&parms="+path1+path2+"&redlineUrl="+ftpShpUrl+"&env%3AoutSR=&env%3AprocessSR=&returnZ=false&returnM=false&f=pjson";
+
+
                     String num = HttpUtil.GET(url1,null);
                     JSONObject jsonObject = JSONObject.fromObject(num);
                     Object jobId = jsonObject.get("jobId");
                     String url2 = GRPOINT+"/jobs/"+jobId;
+
 
                     boolean bb = false;
                     for (int i = 1; i <= 10; i++) {
@@ -595,6 +599,8 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         }else{
             strings = ShpUtil.readShapeFileToStr(grpoint+"grpoint.shp", 2);
         }
+
+//        System.out.println("strings==="+strings);
         return ResultVOUtil.success(strings);
     }
 
