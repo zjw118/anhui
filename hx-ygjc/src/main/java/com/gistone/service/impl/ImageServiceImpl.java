@@ -14,6 +14,7 @@ import com.gistone.mapper.ImageMapper;
 import com.gistone.mapper.ImageNumberMapper;
 import com.gistone.service.ImageService;
 import com.gistone.util.*;
+import javafx.collections.FXCollections;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -561,22 +562,20 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     @Override
     public ResultVO gdShp2(Object data) {
         String uuid = UUID.randomUUID().toString();
-        String filePath = PATH+"/epr/grpoint/"+uuid+"/";   // 本地路径
+        String filePath = PATH+"/epr/grpoint/"+uuid+"gd/";
+        File f1 = new File(filePath);
+        if(!f1.isDirectory()) f1.mkdirs();
 
-
-
-//        FileUtil.writeInFile();
-
-
-
-//        if("0".equals(res)){
+        com.alibaba.fastjson.JSONArray j = com.alibaba.fastjson.JSONArray.parseArray(JSONArray.fromObject(data).toString());
+        String res = ShpUtil.importPoint(j, filePath+"grpoint.shp");
+        if("0".equals(res)){
             //获取最新红线url
             ShpBatch shpBatch = shpBatchMapper.getNewShpBatch();
-            shpBatch.setGrpoint(filePath);
+            shpBatch.setGrpoint("/epr/grpoint/"+uuid+"gd/");
             int i = shpBatchMapper.updateGrpoint(shpBatch);
-            if(0>i){
+            if(0<i){
                 return ResultVOUtil.success();
-//            }
+            }
         }
         return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "上传失败");
     }
@@ -589,7 +588,13 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         if(StringUtils.isBlank(grpoint)){
             ResultVOUtil.success("");
         }
-        List<String> strings = ShpUtil.readShapeFileToStr(grpoint, 2);
+        List<String> strings = null;
+
+        if(-1<grpoint.indexOf("gd")){
+            strings = ShpUtil.pointToStr(grpoint+"grpoint.shp", 2);
+        }else{
+            strings = ShpUtil.readShapeFileToStr(grpoint+"grpoint.shp", 2);
+        }
         return ResultVOUtil.success(strings);
     }
 
@@ -617,7 +622,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
 //                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "下载失败");
 //            }
 //            return ResultVOUtil.success( "下载完成");
-            return ResultVOUtil.success(PATH+"/epr/grpoint/"+uuid+".zip");
+            return ResultVOUtil.success("/epr/grpoint/"+uuid+".zip");
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "下载失败");

@@ -42,10 +42,8 @@ import java.util.*;
 @Slf4j
 public class ShpUtil {
     public static void main(String[] args) {
-        String shpStr1 = ShpUtil.readShapeFileToStr("E:/epr/image/2019-11-22/3/5ea39139a1584bc18d40b8432c9fe701.shp", 1) + "";
-        String shpStr2 = ShpUtil.readShapeFileToStr("E:/epr/image/2019-11-24/13/c6e98c058fa343adabd8fadb81f5d315.shp", 1) + "";
-        System.out.println("1=="+shpStr1); //手动
-        System.out.println("2=="+shpStr2); //导入
+        String shpStr1 = ShpUtil.pointToStr("E:/epr/grpoint/ebd4036a-d3a2-4e4c-b959-f3cbf7fa9cde/", 2) + "";
+        System.out.println(shpStr1);
     }
 
     /**
@@ -118,6 +116,7 @@ public class ShpUtil {
                 JSONObject maps = (JSONObject) myjObject.get("geometry");
                 //获取坐标点
                 String arrayList = maps.get("coordinates").toString().substring(1, maps.get("coordinates").toString().length() - 1);
+
                 //封装数据
                 if (type.equals(1)) {
                     map2.put("type", "polygon");
@@ -149,7 +148,82 @@ public class ShpUtil {
             System.out.println(e.toString());
         }
         return list;
+    }
 
+    public static List<String> pointToStr(String filePath, Integer type) {
+        List<String> list = new ArrayList<>();
+        try {
+            FeatureJSON fjson = new FeatureJSON();
+            StringBuffer fsb = new StringBuffer();
+            JSONArray array = new JSONArray();
+
+            File file = new File(filePath);
+            fsb.append("{\"type\": \"FeatureCollection\",\"features\": ");
+            ShapefileDataStore shpDataStore = null;
+            shpDataStore = new ShapefileDataStore(file.toURI().toURL());
+            //设置字符编码
+            Charset charset = Charset.forName("UTF-8");
+            shpDataStore.setCharset(charset);
+            //获取图层名称
+            String typeName = shpDataStore.getTypeNames()[0];
+            //数据读取
+            SimpleFeatureSource featureSource;
+            featureSource = shpDataStore.getFeatureSource(typeName);
+            SimpleFeatureCollection sfc = featureSource.getFeatures();
+            SimpleFeatureIterator itertor = sfc.features();
+            while (itertor.hasNext()) {
+                SimpleFeature feature = itertor.next();
+                StringWriter writer = new StringWriter();
+                fjson.writeFeature(feature, writer);
+                JSONObject json = (JSONObject) JSONObject.parse(writer.toString());
+                array.add(json);
+            }
+            for (int i = 0; i < array.size(); i++) {
+                Map<String, String> map2 = new HashMap<>();
+                //获取每一个JsonObject对象
+                JSONObject myjObject = array.getJSONObject(i);
+                //获取geometry属性
+                JSONObject maps = (JSONObject) myjObject.get("geometry");
+                //获取坐标点
+
+                net.sf.json.JSONArray coordinates = net.sf.json.JSONArray.fromObject(maps.get("coordinates"));
+                net.sf.json.JSONArray coordinates2 = net.sf.json.JSONArray.fromObject(coordinates.get(0));
+                net.sf.json.JSONArray coordinates3 = net.sf.json.JSONArray.fromObject(coordinates2.get(0));
+                net.sf.json.JSONArray coordinates4 = net.sf.json.JSONArray.fromObject(coordinates3.get(0));
+
+                String arrayList = coordinates4.get(0)+","+coordinates4.get(1);
+
+                //封装数据
+                if (type.equals(1)) {
+                    map2.put("type", "polygon");
+                    JSONArray corarray = maps.getJSONArray("coordinates");
+                    JSONArray json = new JSONArray();
+                    if (corarray.size() > 1) {
+                        for (int j = 0; j < corarray.size(); j++) {
+                            json.add(corarray.getJSONArray(j).getJSONArray(0));
+                        }
+                        map2.put("rings", json.toJSONString());
+                    } else {
+                        map2.put("rings", arrayList);
+                    }
+                } else {
+                    map2.put("type", "point");
+                    map2.put("rings", arrayList);
+                }
+                //获取属性
+                Object map1 = myjObject.getJSONObject("properties");
+                Map<String, String> map11 = (Map) JSON.parse(((JSONObject) map1).toString());
+                //构建返回
+                Map<String, String> stringObjectMap = new HashMap<>();
+                stringObjectMap.put("attributes", net.sf.json.JSONObject.fromObject(map11) + "");
+                stringObjectMap.put("geometry", net.sf.json.JSONObject.fromObject(map2) + "");
+                list.add(net.sf.json.JSONObject.fromObject(stringObjectMap) + "");
+            }
+            itertor.close();
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return list;
     }
 
     public static void writePoint(List<Map<String, Object>> data, String filePath) {
@@ -657,42 +731,38 @@ public class ShpUtil {
 
     public static String importPoint(JSONArray array, String filePath) {
         try {
-            final SimpleFeatureType TYPE = createFeatureTypeForMarker();
+            final SimpleFeatureType TYPE = createFeatureTypeForMarker2();
             //在我们创建功能时收集功能的列表
             List<SimpleFeature> features = new ArrayList<>();
             //geometryFactory将用于创建每个要素的几何体属性，使用多边形对象作为位置。
             GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
 
+
             for (int i = 0; i < array.size(); i++) {
                 SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(TYPE);
                 JSONObject jobj = (JSONObject) array.get(i);
-//                JSONArray zhj = jobj.getJSONObject("geometry").getJSONArray("rings");
 
-
-                Coordinate coordinate = new Coordinate(jobj.getJSONObject("geometry").getDoubleValue("x"),jobj.getJSONObject("geometry").getDoubleValue("y"));
+                String string = jobj.getJSONObject("geometry").getString("rings");
+                String[] split = string.split(",");
+                Coordinate coordinate = new Coordinate(Double.valueOf(split[0]),Double.valueOf(split[1]));
                 Point point = geometryFactory.createPoint(coordinate);
                 featureBuilder.add(point);
 
                 //这里按顺序添加属性
-
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("area"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getString("ORIG_FID"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("active"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("type"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("control"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("pac"));
-////                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("problem"));
-//                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("redline"));
-//                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("plant"));
-//                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("name"));
-//                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("attribute"));
-//                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("Id"));
-//                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("hxcode"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getInteger("ORIG_FID"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("active"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("type"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("control"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("pac"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("problem"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("redline"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("plant"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("name"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("attribute"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getInteger("Id"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("hxcode"));
 
-//                featureBuilder.add(jobj.getJSONObject("attributes").getString("attribute"));
-                //featureBuilder.add(jobj.getJSONObject("attributes").getString("center"));
-//                featureBuilder.set("center",jobj.getJSONObject("attributes").getString("center"));
-//				featureBuilder.add(jobj.getJSONObject("attributes").getString("peopleNum"));
                 SimpleFeature feature = featureBuilder.buildFeature(null);
                 features.add(feature);
             }
@@ -700,14 +770,12 @@ public class ShpUtil {
 
             //创建shp文件并写入数据
             if (createSHP(TYPE, features, new File(filePath)).equals("0")) {
-//                System.out.println("文件保存成功");
+                System.out.println("文件保存成功");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("写入shp异常，异常信息为：", e.getMessage());
-            System.out.println("web传入来源数据处理错误");
-            System.out.println(e.getMessage());
+            log.error("写入shp异常，异常信息为：", e);
             return "1";
         }
         return "0";
@@ -953,6 +1021,32 @@ public class ShpUtil {
         builder.length(100).add("redline_id", Integer.class);
         builder.length(100).add("objectid", Integer.class);
 
+
+        // 生成类型
+        final SimpleFeatureType LOCATION = builder.buildFeatureType();
+        return LOCATION;
+    }
+
+    private static SimpleFeatureType createFeatureTypeForMarker2() {
+        SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
+        builder.setName("Location");
+        builder.setCRS(DefaultGeographicCRS.WGS84); // 坐标参考系
+        // 按顺序添加属性
+        builder.add("the_geom", MultiPolygon.class);
+
+        builder.length(100).add("area", String.class);
+        builder.length(100).add("ORIG_FID", Integer.class);
+        builder.length(100).add("active", String.class);
+        builder.length(100).add("type", String.class);
+        builder.length(100).add("control", String.class);
+        builder.length(100).add("pac", String.class);
+        builder.length(100).add("problem", String.class);
+        builder.length(100).add("redline", String.class);
+        builder.length(100).add("plant", String.class);
+        builder.length(100).add("name", String.class);
+        builder.length(100).add("attribute", String.class);
+        builder.length(100).add("Id", Integer.class);
+        builder.length(100).add("hxcode", String.class);
 
         // 生成类型
         final SimpleFeatureType LOCATION = builder.buildFeatureType();
