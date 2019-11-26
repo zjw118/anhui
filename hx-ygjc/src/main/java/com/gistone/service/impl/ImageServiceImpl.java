@@ -559,6 +559,41 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     }
 
     @Override
+    public ResultVO gdShp2(Object data) {
+        String uuid = UUID.randomUUID().toString();
+        String filePath = PATH+"/epr/grpoint/"+uuid+"/";   // 本地路径
+
+
+
+        FileUtil.writeInFile();
+
+
+
+//        if("0".equals(res)){
+            //获取最新红线url
+            ShpBatch shpBatch = shpBatchMapper.getNewShpBatch();
+            shpBatch.setGrpoint(filePath);
+            int i = shpBatchMapper.updateGrpoint(shpBatch);
+            if(0>i){
+                return ResultVOUtil.success();
+//            }
+        }
+        return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "上传失败");
+    }
+
+    @Override
+    public ResultVO getGdFile() {
+        //获取最新红线url
+        ShpBatch shpBatch = shpBatchMapper.getNewShpBatch();
+        String grpoint = shpBatch.getGrpoint();
+        if(StringUtils.isBlank(grpoint)){
+            ResultVOUtil.success("");
+        }
+        List<String> strings = ShpUtil.readShapeFileToStr(grpoint, 2);
+        return ResultVOUtil.success(strings);
+    }
+
+    @Override
     public ResultVO gdFile(HttpServletResponse response) {
         try {
             String uuid = UUID.randomUUID().toString();
@@ -574,14 +609,15 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             }
             boolean b = FileUtil.toZip(srcDir, new File(PATH + "/epr/grpoint/" + uuid + ".zip"), false);
             if(!b){
-                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "解压失败");
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "压缩失败");
             }
-            //下载
-            boolean b2 = FileUtil.downFile(response,PATH+"/epr/grpoint/"+uuid+".zip","grpoint.zip");
-            if(!b2){
-                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "下载失败");
-            }
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "下载完成");
+//            //下载
+//            boolean b2 = FileUtil.downFile(response,PATH+"/epr/grpoint/"+uuid+".zip","grpoint.zip");
+//            if(!b2){
+//                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "下载失败");
+//            }
+//            return ResultVOUtil.success( "下载完成");
+            return ResultVOUtil.success(PATH+"/epr/grpoint/"+uuid+".zip");
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "下载失败");

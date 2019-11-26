@@ -1,5 +1,6 @@
 package com.gistone.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
 import com.gistone.entity.ImageConfig;
@@ -16,6 +17,7 @@ import com.gistone.service.ImageService;
 import com.gistone.util.*;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -132,6 +135,7 @@ public class ImageController {
         entity.setList(mapper.selectISt4ScsCd(id));
         String shpStr = ShpUtil.readShapeFileToStr(entity.getShp(), 1) + "";
         entity.setShp(shpStr);
+
         return ResultVOUtil.success(entity);
     }
 
@@ -769,26 +773,55 @@ public class ImageController {
 
 
 
+    //拐点-生成最新拐点SHP
+    @RequestMapping(value = "/gdShp", method = RequestMethod.POST)
+    public ResultVO gdShp(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params == null) {
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            }
+            Object rc = params.get("rc");  //容差
+            if (null==rc) {
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "容差rc不能为空");
+            }
+            return service.gdShp(Double.valueOf(rc.toString()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
+        }
+    }
 
-//    //拐点-生成SHP
-//    @RequestMapping(value = "/gdShp", method = RequestMethod.POST)
-//    public ResultVO gdShp(@RequestBody Map<String, Object> paramsMap) {
-//        try {
-//            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-//            if (params == null) {
-//                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
-//            }
-//            Object rc = params.get("rc");  //容差
-//            if (null==rc) {
-//                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "容差rc不能为空");
-//            }
-//            return service.gdShp(Double.valueOf(rc.toString()));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
-//        }
-//    }
-//
+    //拐点-保存拐点数据
+    @RequestMapping(value = "/addGdShp", method = RequestMethod.POST)
+    public ResultVO addGdShp(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params == null) {
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            }
+            Object data = params.get("data");
+            if (null==data) {
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "拐点数据不能为空");
+            }
+            return service.gdShp2(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
+        }
+    }
+
+
+    //拐点-下载
+    @RequestMapping(value = "/gdFile")
+    public ResultVO gdFile(HttpServletResponse response) {
+        try {
+            return service.gdFile(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "下载失败");
+        }
+    }
 //    //拐点-下载
 //    @RequestMapping(value = "/gdFile")
 //    public void gdFile(HttpServletResponse response) {
@@ -798,6 +831,18 @@ public class ImageController {
 //            e.printStackTrace();
 //        }
 //    }
+
+    //拐点- 是否有最新拐点
+    @RequestMapping(value = "/getGdFile")
+    public ResultVO getGdFile(HttpServletResponse response) {
+        try {
+            return service.getGdFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
+        }
+    }
+
 
 
 
