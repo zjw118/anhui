@@ -1,5 +1,6 @@
 package com.gistone.entity;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -34,41 +35,49 @@ public class  SysLog extends Model<SysLog> {
     /**
      * 请求类型
      */
+    @Excel(name = "请求类型",height = 11, width = 15)
     private String type;
 
     /**
      * 日志标题
      */
+    @Excel(name = "日志标题",height = 11, width = 15)
     private String title;
 
     /**
      * 操作IP地址
      */
+    @Excel(name = "操作IP地址",height = 11, width = 15)
     private String remoteAddr;
 
     /**
      * 操作用户昵称
      */
+//    @Excel(name = "操作用户昵称",height = 11, width = 15)
     private String username;
 
     /**
      * 请求URI
      */
+    @Excel(name = "请求URI",height = 11, width = 15)
     private String requestUri;
 
     /**
      * 操作方式
      */
+    @Excel(name = "操作方式",height = 11, width = 15)
     private String httpMethod;
 
     /**
      * 请求类型.方法
      */
+    @Excel(name = "请求类型.方法",height = 11, width = 15)
     private String classMethod;
 
     /**
      * 操作提交的数据
      */
+    @Excel(name = "操作提交的数据",height = 11, width = 15)
     private String params;
 
     /**
@@ -79,16 +88,19 @@ public class  SysLog extends Model<SysLog> {
     /**
      * 返回内容
      */
+    @Excel(name = "返回内容",height = 11, width = 15)
     private String response;
 
     /**
      * 方法执行时间
      */
+    @Excel(name = "方法执行时间",height = 11, width = 15)
     private Long useTime;
 
     /**
      * 浏览器信息
      */
+    @Excel(name = "浏览器信息",height = 11, width = 15)
     private String browser;
 
     /**
@@ -114,6 +126,7 @@ public class  SysLog extends Model<SysLog> {
     /**
      * 异常信息
      */
+    @Excel(name = "异常信息",height = 11, width = 15)
     private String exception;
 
     /**
@@ -124,6 +137,7 @@ public class  SysLog extends Model<SysLog> {
     /**
      * 创建时间
      */
+    @Excel(name = "创建时间",height = 11, width = 15)
     private Date createDate;
 
     private Long updateBy;
