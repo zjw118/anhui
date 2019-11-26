@@ -822,15 +822,7 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "下载失败");
         }
     }
-//    //拐点-下载
-//    @RequestMapping(value = "/gdFile")
-//    public void gdFile(HttpServletResponse response) {
-//        try {
-//            service.gdFile(response);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+
 
     //拐点- 是否有最新拐点
     @RequestMapping(value = "/getGdFile")

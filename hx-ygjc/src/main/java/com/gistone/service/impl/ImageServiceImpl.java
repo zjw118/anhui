@@ -14,6 +14,7 @@ import com.gistone.mapper.ImageMapper;
 import com.gistone.mapper.ImageNumberMapper;
 import com.gistone.service.ImageService;
 import com.gistone.util.*;
+import javafx.collections.FXCollections;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -483,11 +484,15 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
                     String path1 = ftpPt+ftpUrl;
                     String path2 = "/grpoint/" + uuid + "/grpoint.shp";
                     FTPUtil.createDri(ftpHost, ftpUserName, ftpPassword, ftpPort,"/grpoint/"+uuid+"/");
-                    String url1 = GRPOINT+"/submitJob?容差="+jSONObject+"&parms="+path1+path2+"&redlineUrl="+ftpShpUrl+"&env%3AoutSR=&env%3AprocessSR=&returnZ=false&returnM=false&f=pjson";
+                    String url1 = GRPOINT+"/submitJob?%E5%AE%B9%E5%B7%AE=%7B%0D%0A+%22distance%22%3A+"+rc+"%2C%0D%0A+%22units%22%3A+%22esriMeters%22%0D%0A%7D&parms="+path1+path2+"&redlineUrl="+ftpShpUrl+"&env%3AoutSR=&env%3AprocessSR=&returnZ=false&returnM=false&f=pjson";
+//                    String url1 = GRPOINT+"/submitJob?容差="+"jSONObject"+"&parms="+path1+path2+"&redlineUrl="+ftpShpUrl+"&env%3AoutSR=&env%3AprocessSR=&returnZ=false&returnM=false&f=pjson";
+
+
                     String num = HttpUtil.GET(url1,null);
                     JSONObject jsonObject = JSONObject.fromObject(num);
                     Object jobId = jsonObject.get("jobId");
                     String url2 = GRPOINT+"/jobs/"+jobId;
+
 
                     boolean bb = false;
                     for (int i = 1; i <= 10; i++) {
@@ -561,22 +566,20 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     @Override
     public ResultVO gdShp2(Object data) {
         String uuid = UUID.randomUUID().toString();
-        String filePath = PATH+"/epr/grpoint/"+uuid+"/";   // 本地路径
+        String filePath = PATH+"/epr/grpoint/"+uuid+"gd/";
+        File f1 = new File(filePath);
+        if(!f1.isDirectory()) f1.mkdirs();
 
-
-
-//        FileUtil.writeInFile();
-
-
-
-//        if("0".equals(res)){
+        com.alibaba.fastjson.JSONArray j = com.alibaba.fastjson.JSONArray.parseArray(JSONArray.fromObject(data).toString());
+        String res = ShpUtil.importPoint(j, filePath+"grpoint.shp");
+        if("0".equals(res)){
             //获取最新红线url
             ShpBatch shpBatch = shpBatchMapper.getNewShpBatch();
-            shpBatch.setGrpoint(filePath);
+            shpBatch.setGrpoint("/epr/grpoint/"+uuid+"gd/");
             int i = shpBatchMapper.updateGrpoint(shpBatch);
-            if(0>i){
+            if(0<i){
                 return ResultVOUtil.success();
-//            }
+            }
         }
         return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "上传失败");
     }
@@ -589,7 +592,15 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         if(StringUtils.isBlank(grpoint)){
             ResultVOUtil.success("");
         }
-        List<String> strings = ShpUtil.readShapeFileToStr(grpoint, 2);
+        List<String> strings = null;
+
+        if(-1<grpoint.indexOf("gd")){
+            strings = ShpUtil.pointToStr(grpoint+"grpoint.shp", 2);
+        }else{
+            strings = ShpUtil.readShapeFileToStr(grpoint+"grpoint.shp", 2);
+        }
+
+//        System.out.println("strings==="+strings);
         return ResultVOUtil.success(strings);
     }
 
@@ -617,7 +628,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
 //                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "下载失败");
 //            }
 //            return ResultVOUtil.success( "下载完成");
-            return ResultVOUtil.success(PATH+"/epr/grpoint/"+uuid+".zip");
+            return ResultVOUtil.success("/epr/grpoint/"+uuid+".zip");
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "下载失败");
