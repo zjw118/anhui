@@ -138,7 +138,6 @@ public class ProjectAdmissionController {
     }
 
 
-
     @PostMapping(value = "/getFeature")
     public ResultVO getFeature(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
@@ -151,10 +150,10 @@ public class ProjectAdmissionController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
         ProjectAdmission projectAdmission = projectAdmissionMapper.get(id);
-        if(null!=projectAdmission){
+        if (null != projectAdmission) {
             String featurePath = projectAdmission.getFeaturePath();
-            if(StringUtils.isNotBlank(featurePath)){
-                return ResultVOUtil.success(FileUtil.readFromTextFile(PATH+featurePath));
+            if (StringUtils.isNotBlank(featurePath)) {
+                return ResultVOUtil.success(FileUtil.readFromTextFile(PATH + featurePath));
             }
         }
         return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "查询失败");
@@ -443,9 +442,6 @@ public class ProjectAdmissionController {
     }
 
 
-
-
-
     /**
      * @return
      * @description: 导入excel并返回坐标数据
@@ -516,6 +512,29 @@ public class ProjectAdmissionController {
         map1.put("excelPath", filepath.substring(2));
 
         return ResultVOUtil.success(map1);
+    }
+    /**
+     * @description:替换现有模板
+     * @param file
+      * @return com.gistone.VO.ResultVO
+     * @author zf1017@foxmail.com
+     * @motto: Talk is cheap,show me the code
+     * @date 2019/11/26 0026 17:48
+     */
+    @PostMapping("/importMode")
+    public ResultVO importMode(MultipartFile file) {
+        if (file == null) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "文件不能为空");
+        }
+
+        String path = System.getProperty("user.dir") + "/hx-ktdb/src/main/resources/word/export.docx";
+        PictureUtils.uploadFile(path, file);
+
+        return ResultVOUtil.success();
+    }
+
+    public static void main(String[] args) {
+        System.out.println("用户的当前工作目录:" + System.getProperty("user.dir") + "/hx-ktdb/src/main/resources/word");
     }
 
 

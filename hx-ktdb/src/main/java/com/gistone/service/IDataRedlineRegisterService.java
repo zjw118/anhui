@@ -1,6 +1,7 @@
 package com.gistone.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gistone.VO.DataRedlineRegisterVO;
 import com.gistone.entity.DataRedlineRegister;
 
 import java.util.List;
@@ -25,4 +26,5 @@ public interface IDataRedlineRegisterService extends IService<DataRedlineRegiste
 
 	Map<String, Object> getRedLineList(String redLineName,String code,Integer pageNum,Integer pageSize);
 
+	List<DataRedlineRegisterVO> getList();
 }

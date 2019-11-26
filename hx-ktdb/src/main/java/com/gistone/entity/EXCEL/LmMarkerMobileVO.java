@@ -14,7 +14,6 @@ public class LmMarkerMobileVO {
     /**
      * id
      */
-    @Excel(name = "id",height = 11, width = 15)
     private String id;
 
 
@@ -43,30 +42,25 @@ public class LmMarkerMobileVO {
     /**
      * 界桩地貌
      */
-    @Excel(name = "界桩地貌",height = 11, width = 15)
     private String landform;
 
     /**
      * 校对经度
      */
-    @Excel(name = "校对经度",height = 11, width = 15)
     private String proofLon;
 
     /**
      * 校对纬度
      */
-    @Excel(name = "校对纬度",height = 11, width = 15)
     private String proofLat;
     /**
      * 经度
      */
-    @Excel(name = "经度",height = 11, width = 15)
     private String longitude;
 
     /**
      * 纬度
      */
-    @Excel(name = "纬度",height = 11, width = 15)
     private String latitude;
     /**
      * 所在红线区
@@ -83,7 +77,6 @@ public class LmMarkerMobileVO {
     /**
      * 备注
      */
-    @Excel(name = "备注",height = 11, width = 15)
     private String remark;
 
 
@@ -96,19 +89,16 @@ public class LmMarkerMobileVO {
     /**
      * 审核人
      */
-    @Excel(name = "审核人",height = 11, width = 15)
     private String verifyPerson;
 
     /**
      * 审核时间
      */
-    @Excel(name = "审核时间",height = 11, width = 15)
     private Date verifyTime;
 
     /**
      * 数据入库时间
      */
-    @Excel(name = "数据上传时间",height = 11, width = 15)
     private String saveTime;
 
 
@@ -120,13 +110,11 @@ public class LmMarkerMobileVO {
     /**
      * 创建人
      */
-    @Excel(name = "创建人",height = 11, width = 15)
     private String createUserName;
 
     /**
      * 创建时间
      */
-    @Excel(name = "创建时间",height = 11, width = 15)
     private String createTime;
 
     /**

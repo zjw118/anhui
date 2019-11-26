@@ -1,8 +1,8 @@
 package com.gistone.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.gistone.VO.DataRedlineRegisterVO;
 import com.gistone.entity.DataRedlineRegister;
-
 import io.lettuce.core.dynamic.annotation.Param;
 
 import java.util.List;
@@ -28,5 +28,6 @@ public interface DataRedlineRegisterMapper extends BaseMapper<DataRedlineRegiste
 	void updateTarget(@Param("id") Integer id,@Param("target") String target);
 
 	void updateBy(DataRedlineRegister data);
+	List<DataRedlineRegisterVO> getList();
 
 }

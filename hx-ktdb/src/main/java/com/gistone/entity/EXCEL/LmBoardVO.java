@@ -20,18 +20,20 @@ public class LmBoardVO{
      * 红线编码
      */
     @Excel(name = "红线编码",height = 11, width = 15)
-    private String redlineNum;
+    private String redlineName;
+
+
 
     /**
      * 行政区划编码
      */
-    @Excel(name = "行政区划编码",height = 11, width = 15)
+//    @Excel(name = "行政区划编码",height = 11, width = 15)
     private String code;
 
     /**
      * 所在行政区划名称
      */
-    @Excel(name = "所在行政区划名称",height = 11, width = 15)
+//    @Excel(name = "所在行政区划名称",height = 11, width = 15)
     private String placeName;
 
 //    /**
@@ -44,7 +46,7 @@ public class LmBoardVO{
     /**
      * 标识牌内容
      */
-    @Excel(name = "标识牌内容",height = 11, width = 15)
+//    @Excel(name = "标识牌内容",height = 11, width = 15)
     private String content;
 
     /**
@@ -56,13 +58,13 @@ public class LmBoardVO{
     /**
      * 校正经度
      */
-    @Excel(name = "校正经度",height = 11, width = 15)
+//    @Excel(name = "校正经度",height = 11, width = 15)
     private String proofLon;
 
     /**
      * 校正纬度
      */
-    @Excel(name = "校正纬度",height = 11, width = 15)
+//    @Excel(name = "校正纬度",height = 11, width = 15)
     private String proofLat;
 
     /**
@@ -80,13 +82,13 @@ public class LmBoardVO{
     /**
      * 0预置数据，1采集数据
      */
-    @Excel(name = "记录类型",replace = {"预置数据_0", "采集数据_1"},height = 11, width = 15)
+//    @Excel(name = "记录类型",replace = {"预置数据_0", "采集数据_1"},height = 11, width = 15)
     private Integer type;
 
     /**
      * 标识牌树立时间
      */
-    @Excel(name = "标识牌树立时间",height = 11, width = 15)
+//    @Excel(name = "标识牌树立时间",height = 11, width = 15)
     private String createDate;
 
     /**
@@ -97,13 +99,13 @@ public class LmBoardVO{
     /**
      * 数据上传时间
      */
-    @Excel(name = "数据上传时间",height = 11, width = 15)
+//    @Excel(name = "数据上传时间",height = 11, width = 15)
     private String saveDate;
 
     /**
      * 创建人
      */
-    @Excel(name = "创建人",height = 11, width = 15)
+//    @Excel(name = "创建人",height = 11, width = 15)
     private String createUser;
 
     /**
@@ -126,7 +128,7 @@ public class LmBoardVO{
     /**
      * 备注
      */
-    @Excel(name = "备注",height = 11, width = 15)
+//    @Excel(name = "备注",height = 11, width = 15)
     private String remarks;
 
     /**
@@ -157,10 +159,10 @@ public class LmBoardVO{
     @Excel(name = "审核日期",height = 11, width = 15)
     private Date verifyDate;*/
 
-    @Excel(name = "审核人",height = 11, width = 15)
+//    @Excel(name = "审核人",height = 11, width = 15)
     private String verifyPerson;
 
-    @Excel(name = "审核日期",height = 11, width = 15)
+//    @Excel(name = "审核日期",height = 11, width = 15)
     private Date verifyDate;
 
 

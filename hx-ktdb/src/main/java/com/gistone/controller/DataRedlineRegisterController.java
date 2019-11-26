@@ -2,6 +2,7 @@ package com.gistone.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.gistone.VO.DataRedlineRegisterVO;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.DataRedlineRegister;
 import com.gistone.service.IDataRedlineRegisterService;
@@ -298,6 +299,15 @@ public class DataRedlineRegisterController {
         map1.put("filepath", filepath.substring(2));
         return ResultVOUtil.success(map1);
     }
+
+    @PostMapping("/exportredlineExcel")
+    public ResultVO exportredlineExcel(HttpServletResponse response){
+        List<DataRedlineRegisterVO> list = dataRedlineRegisterService.getList();
+        String filepath = ExcelUtil.toXls("预设红线斑块", list, configUtils.getExcel_PATH(), DataRedlineRegisterVO.class, response);
+        Map map1 = new HashMap();
+        map1.put("filepath", filepath.substring(2));
+        return ResultVOUtil.success(map1);
+     }
 
 
 

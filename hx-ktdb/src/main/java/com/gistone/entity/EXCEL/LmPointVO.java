@@ -11,7 +11,7 @@ import java.util.Date;
 public class LmPointVO {
 
 
-    @Excel(name = "id",height = 11, width = 15)
+//    @Excel(name = "id",height = 11, width = 15)
     private Integer lpId;
     /**
      * 编号
@@ -21,7 +21,7 @@ public class LmPointVO {
     /**
      * 红线台账id
      */
-    @Excel(name = "红线台账id",height = 11, width = 15)
+//    @Excel(name = "红线台账id",height = 11, width = 15)
     private Integer lpSrldId;
     /**
      * 经度
@@ -40,14 +40,14 @@ public class LmPointVO {
     /**
      * 采集时间
      */
-    @Excel(name = "采集时间",height = 11, width = 15)
+//    @Excel(name = "采集时间",height = 11, width = 15)
     private Date lpGettime;
     /**
      * 创建人
      */
 //    @Excel(name = "添加人",height = 11, width = 15)
 //    private String createUser;
-    @Excel(name = "添加时间",height = 11, width = 15)
+//    @Excel(name = "添加时间",height = 11, width = 15)
     private String lpAddTime;
 
     /**
@@ -55,7 +55,7 @@ public class LmPointVO {
      */
 //    @Excel(name = "修改人",height = 11, width = 15)
 //    private String updateUser;
-    @Excel(name = "修改时间",height = 11, width = 15)
+//    @Excel(name = "修改时间",height = 11, width = 15)
     private String lpUpdTime;
 
 

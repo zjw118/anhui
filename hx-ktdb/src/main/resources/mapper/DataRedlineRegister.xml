@@ -68,4 +68,14 @@
             srld_id = #{srldId}
     </update>
 
+    <select id="getList" resultType="com.gistone.VO.DataRedlineRegisterVO">
+        SELECT
+            srld_number AS redlineCode,
+            srld_area AS area,
+            srld_plant_type AS plant,
+            area_redline AS redlineName
+        FROM
+            data_redline_register
+    </select>
+
 </mapper>

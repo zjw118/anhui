@@ -46,7 +46,6 @@
     <select id="selectPreBoardListForAll" resultType="com.gistone.entity.EXCEL.LmBoardVO">
             SELECT
                 a.id,
-                redline_num,
                 c.COM_NAME AS CODE,
                 redline_id,
                 content,

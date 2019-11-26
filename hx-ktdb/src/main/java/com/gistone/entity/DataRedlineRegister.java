@@ -104,7 +104,6 @@ public class DataRedlineRegister extends Model<DataRedlineRegister> implements S
      * 添加时间
      */
     @TableField("srld_add_time")
-    @Excel(name = "添加时间",height = 11, width = 15)
     private Date srldAddTime;
     /**
      * 添加人

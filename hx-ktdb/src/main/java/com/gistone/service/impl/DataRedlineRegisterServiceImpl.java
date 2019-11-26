@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gistone.VO.DataRedlineRegisterVO;
 import com.gistone.entity.DataRedlineRegister;
 import com.gistone.mapper.DataRedlineRegisterMapper;
 import com.gistone.service.IDataRedlineRegisterService;
@@ -74,6 +75,12 @@ public class DataRedlineRegisterServiceImpl extends ServiceImpl<DataRedlineRegis
 		result.put("rows", IPage.getRecords());
 		result.put("total", IPage.getTotal());
 		return result;
+	}
+
+	@Override
+	public List<DataRedlineRegisterVO> getList() {
+		List<DataRedlineRegisterVO> list = 	dataRedlineRegisterMapper.getList();
+		return list;
 	}
 
 }
