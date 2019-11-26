@@ -155,7 +155,7 @@ public class ShpUtil {
     public static void writePoint(List<Map<String, Object>> data, String filePath) {
         try {
             Map<String, Object> map1 = data.get(0);
-            Map<String, Object> attributes = (Map<String, Object>) map1.get("attributes");
+            Map<String, Object> attributes = (Map<String, Object>) net.sf.json.JSONObject.fromObject(map1.get("attributes"));
 
             Set<Map.Entry<String, Object>> entries = attributes.entrySet();
             StringBuilder stringBuilder = new StringBuilder("");
@@ -282,7 +282,6 @@ public class ShpUtil {
                 //获取
                 Map<String, Object> geometry = (Map<String, Object>) datum.get("geometry");
                 List<List<List<BigDecimal>>> lists = (List<List<List<BigDecimal>>>) geometry.get("rings");
-                System.out.println(lists.size());
                 List<Polygon> polygonList = new ArrayList<>();
                 Polygon polygon = null;
                 Coordinate[] coordinatesArray = null;
@@ -590,49 +589,105 @@ public class ShpUtil {
                 JSONObject jobj = (JSONObject) array.get(i);
                 JSONArray zhj = jobj.getJSONObject("geometry").getJSONArray("rings");
                 if(zhj!=null){
-
-
-                if (zhj.size() > 1) {
-                    //大于1说明在一条记录中有两个面，需要进行判断
-                    //根据面的数量先创建数组，用于最终比较
-                    List<Coordinate[]> coords = new ArrayList<>();
-                    for (int j = 0; j < zhj.size(); j++) {
-                        Coordinate[] coor = new Coordinate[zhj.getJSONArray(j).size()];
-                        for (int k = 0; k < zhj.getJSONArray(j).size(); k++) {
-                            coor[k] = new Coordinate(zhj.getJSONArray(j).getJSONArray(k).getDouble(0), zhj.getJSONArray(j).getJSONArray(k).getDouble(1));
+                    if (zhj.size() > 1) {
+                        //大于1说明在一条记录中有两个面，需要进行判断
+                        //根据面的数量先创建数组，用于最终比较
+                        List<Coordinate[]> coords = new ArrayList<>();
+                        for (int j = 0; j < zhj.size(); j++) {
+                            Coordinate[] coor = new Coordinate[zhj.getJSONArray(j).size()];
+                            for (int k = 0; k < zhj.getJSONArray(j).size(); k++) {
+                                coor[k] = new Coordinate(zhj.getJSONArray(j).getJSONArray(k).getDouble(0), zhj.getJSONArray(j).getJSONArray(k).getDouble(1));
+                            }
+                            coords.add(coor);
                         }
-                        coords.add(coor);
+                        Polygon[] polygon = new Polygon[coords.size()];
+                        for (int j = 0; j < coords.size(); j++) {
+                            polygon[j] = geometryFactory.createPolygon(coords.get(j));
+                        }
+                            MultiPolygon mp = geometryFactory.createMultiPolygon(polygon);
+                            featureBuilder.add(mp);
+                        } else {
+                            //根据实际坐标的多少创建数组
+                            Coordinate[] coords = new Coordinate[zhj.getJSONArray(0).size()];
+                            //跳一级循环，直接获取最终的坐标数组
+                            for (int k = 0; k < zhj.getJSONArray(0).size(); k++) {
+                                coords[k] = new Coordinate(zhj.getJSONArray(0).getJSONArray(k).getDouble(0), zhj.getJSONArray(0).getJSONArray(k).getDouble(1));
+                            }
+                            //构造具有给定外部边界的多边形
+                            Polygon polygon = geometryFactory.createPolygon(coords);
+                            featureBuilder.add(polygon);
+                        }
+                    }else{
+                        Coordinate coordinate = new Coordinate(jobj.getJSONObject("geometry").getDoubleValue("X"),jobj.getJSONObject("geometry").getDoubleValue("Y"));
+                        Point point = geometryFactory.createPoint(coordinate);
+                        featureBuilder.add(point);
                     }
-                    Polygon[] polygon = new Polygon[coords.size()];
-                    for (int j = 0; j < coords.size(); j++) {
-                        polygon[j] = geometryFactory.createPolygon(coords.get(j));
-                    }
-                    MultiPolygon mp = geometryFactory.createMultiPolygon(polygon);
-                    featureBuilder.add(mp);
-                } else {
-                    //根据实际坐标的多少创建数组
-                    Coordinate[] coords = new Coordinate[zhj.getJSONArray(0).size()];
-                    //跳一级循环，直接获取最终的坐标数组
-                    for (int k = 0; k < zhj.getJSONArray(0).size(); k++) {
-                        coords[k] = new Coordinate(zhj.getJSONArray(0).getJSONArray(k).getDouble(0), zhj.getJSONArray(0).getJSONArray(k).getDouble(1));
-                    }
-                    //构造具有给定外部边界的多边形
-                    Polygon polygon = geometryFactory.createPolygon(coords);
-                    featureBuilder.add(polygon);
-                }
-                }else{
-                    Coordinate coordinate = new Coordinate(jobj.getJSONObject("geometry").getDoubleValue("X"),jobj.getJSONObject("geometry").getDoubleValue("Y"));
-                    Point point = geometryFactory.createPoint(coordinate);
-                    featureBuilder.add(point);
-                }
+                    //这里按顺序添加属性
+
+                    featureBuilder.add(jobj.getJSONObject("attributes").getString("编号"));
+                    featureBuilder.add(jobj.getJSONObject("attributes").getString("pac"));
+                    featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("X坐标"));
+                    featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("Y坐标"));
+                    featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("redline_id"));
+                    featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("OBJECTID_1"));
+
+//                featureBuilder.add(jobj.getJSONObject("attributes").getString("attribute"));
+                //featureBuilder.add(jobj.getJSONObject("attributes").getString("center"));
+//                featureBuilder.set("center",jobj.getJSONObject("attributes").getString("center"));
+//				featureBuilder.add(jobj.getJSONObject("attributes").getString("peopleNum"));
+                SimpleFeature feature = featureBuilder.buildFeature(null);
+                features.add(feature);
+            }
+
+
+            //创建shp文件并写入数据
+            if (createSHP(TYPE, features, new File(filePath)).equals("0")) {
+//                System.out.println("文件保存成功");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("写入shp异常，异常信息为：", e.getMessage());
+            System.out.println("web传入来源数据处理错误");
+            System.out.println(e.getMessage());
+            return "1";
+        }
+        return "0";
+    }
+
+    public static String importPoint(JSONArray array, String filePath) {
+        try {
+            final SimpleFeatureType TYPE = createFeatureTypeForMarker();
+            //在我们创建功能时收集功能的列表
+            List<SimpleFeature> features = new ArrayList<>();
+            //geometryFactory将用于创建每个要素的几何体属性，使用多边形对象作为位置。
+            GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
+
+            for (int i = 0; i < array.size(); i++) {
+                SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(TYPE);
+                JSONObject jobj = (JSONObject) array.get(i);
+//                JSONArray zhj = jobj.getJSONObject("geometry").getJSONArray("rings");
+
+
+                Coordinate coordinate = new Coordinate(jobj.getJSONObject("geometry").getDoubleValue("x"),jobj.getJSONObject("geometry").getDoubleValue("y"));
+                Point point = geometryFactory.createPoint(coordinate);
+                featureBuilder.add(point);
+
                 //这里按顺序添加属性
 
-                featureBuilder.add(jobj.getJSONObject("attributes").getString("编号"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getString("pac"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("X坐标"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("Y坐标"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("redline_id"));
-                featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("OBJECTID_1"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("area"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("ORIG_FID"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("active"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("type"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("control"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("pac"));
+////                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("problem"));
+//                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("redline"));
+//                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("plant"));
+//                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("name"));
+//                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("attribute"));
+//                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("Id"));
+//                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("hxcode"));
 
 //                featureBuilder.add(jobj.getJSONObject("attributes").getString("attribute"));
                 //featureBuilder.add(jobj.getJSONObject("attributes").getString("center"));
@@ -796,8 +851,7 @@ public class ShpUtil {
             }
 
         } catch (Exception e) {
-            System.out.println("文件生成报错");
-            System.out.println(e.getMessage());
+            System.out.println(e.toString());
             return "1";
         }
         return "0";

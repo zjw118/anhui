@@ -4,6 +4,7 @@ package com.gistone.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.Image;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
@@ -57,6 +58,8 @@ public interface ImageService extends IService<Image> {
      * @return
      */
     ResultVO gdShp(double rc);
+    ResultVO gdShp2(Object data);
+    ResultVO getGdFile();
 
     /**
      * 下载最新拐点
