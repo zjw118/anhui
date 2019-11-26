@@ -1394,7 +1394,7 @@ public class LmMarkerMobileController {
                 codes = code;
             }
         }
-        List<LmMarkerMobileVO> lmMarkerMobileList = lmMarkerMobileService.selectPreMarkerListForAll(codes, param);
+        List<LmMarkerMobileVO> lmMarkerMobileList = lmMarkerMobileService.selectPreMarkerListForAll(null, null);
         String filepath = ExcelUtil.toXls("预设界桩", lmMarkerMobileList, configUtils.getExcel_PATH(), LmMarkerMobileVO.class, response);
         Map map1 = new HashMap();
         map1.put("filepath", filepath.substring(2));
