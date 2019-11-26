@@ -837,6 +837,36 @@ public class ImageController {
 
 
 
+    /**
+     * 导出人类活动专题统计模板报告
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/exportZTTJ")
+    public ResultVO exportZTTJ(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+
+            Object data1 = params.get("data1");//人类活动类型统计量柱状图
+            Object data2 = params.get("data2");//人类活动类型统计面积占比饼状图
+            Object data3 = params.get("data3");//人类活动解译批次任务数量统计柱状图
+            Object data4 = params.get("data4");//人类活动解译批次面积统计柱状图
+
+            if(null==data1)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data1不能为空！");
+            if(null==data2)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data2不能为空！");
+            if(null==data3)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data3不能为空！");
+            if(null==data4)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data4不能为空！");
+
+            return service.exportZTTJ(data1.toString(),data2.toString(),data3.toString(),data4.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "报告导出失败");
+        }
+    }
+
+
+
 
 
 

@@ -15,4 +15,11 @@
         id, name, url, type
     </sql>
 
+    <select id="getLsProjectModelByType"  parameterType="java.lang.Integer" resultType="com.gistone.entity.LsProjectModel">
+        SELECT * from ls_project_model where type = #{type}  and del_flag = 1 limit 1
+    </select>
+
+
+
+
 </mapper>

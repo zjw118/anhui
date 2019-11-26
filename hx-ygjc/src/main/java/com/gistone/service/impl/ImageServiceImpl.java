@@ -5,13 +5,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.Image;
-import com.gistone.entity.ImageConfig;
-import com.gistone.entity.ImageNumber;
-import com.gistone.entity.ShpBatch;
+import com.gistone.entity.*;
 import com.gistone.mapper.ImageConfigMapper;
 import com.gistone.mapper.ImageMapper;
 import com.gistone.mapper.ImageNumberMapper;
+import com.gistone.mapper.LsProjectModelMapper;
 import com.gistone.service.ImageService;
 import com.gistone.util.*;
 import javafx.collections.FXCollections;
@@ -25,6 +23,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -51,6 +50,8 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     private ImageNumberMapper imageNumberMapper;
     @Autowired
     private ImageMapper imageMapper;
+    @Autowired
+    private LsProjectModelMapper lsProjectModelMapper;
 
 
     @Value("${ftp_host}")
@@ -600,9 +601,41 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             strings = ShpUtil.readShapeFileToStr(grpoint+"grpoint.shp", 2);
         }
 
-//        System.out.println("strings==="+strings);
         return ResultVOUtil.success(strings);
     }
+
+    @Override
+    public ResultVO exportZTTJ(String data1, String data2, String data3, String data4) {
+        //获取模板
+        LsProjectModel lsProjectModelByType = lsProjectModelMapper.getLsProjectModelByType(2);
+        String path = lsProjectModelByType.getUrl();
+//        String path = "C:\\Users\\KING\\Desktop\\人类活动专题统计模板.docx";
+
+        //生成图片
+        String path1 = pictureUtil.generate(PATH + "/epr/ZTTJ", data1);
+        String path2 = pictureUtil.generate(PATH + "/epr/ZTTJ", data2);
+        String path3 = pictureUtil.generate(PATH + "/epr/ZTTJ", data3);
+        String path4 = pictureUtil.generate(PATH + "/epr/ZTTJ", data4);
+
+        //生成word
+        String uuid = UUID.randomUUID().toString();
+        String docxPath = PATH+"/epr/ZTTJ/";
+        Map<String,Object> params = new HashMap<>();
+        Map<String,String> pictureMap = new HashMap<>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String date = simpleDateFormat.format(new Date());
+        params.put("date",date);
+        pictureMap.put("image1",path1);
+        pictureMap.put("image2",path2);
+        pictureMap.put("image3",path3);
+        pictureMap.put("image4",path4);
+        boolean b = WordUtil.exportWord(path, docxPath,uuid+".docx", params, pictureMap);
+        if(b){
+            return ResultVOUtil.success("/epr/ZTTJ/"+uuid+".docx");
+        }
+        return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "生成报告失败");
+    }
+
 
     @Override
     public ResultVO gdFile(HttpServletResponse response) {

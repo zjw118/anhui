@@ -150,23 +150,23 @@ public class RlhdGroupController {
         if (params == null) {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
         }
-
         String name = (String) params.get("name");
         if (StringUtils.isBlank(name)) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "台账名称不能为空");
         }
         List<Integer> ids = (List<Integer>) params.get("id");
-
-
         Integer createBy = (Integer) params.get("createBy");
         if (createBy == null || createBy <= 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "创建人id不能为空");
         }
-
+        Object type = params.get("type");
+        if(null==type){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "type不能为空");
+        }
         String remark = (String) params.get("remark");
 
 
-        service.insert(name, createBy, remark, ids);
+        service.insert(name, createBy, remark, ids,Integer.valueOf(type.toString()));
         return ResultVOUtil.success();
     }
 
