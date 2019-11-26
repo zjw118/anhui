@@ -182,6 +182,7 @@
             <result column="CD020" property="cd020" />
             <result column="image_id" property="imageId" />
             <result column="active_name" property="activeName" />
+            <result column="activityName" property="activityName" />
             <result column="active_type" property="activeType" />
             <result column="area" property="area" />
             <result column="descri" property="descri" />
@@ -890,8 +891,9 @@
             <!--AND ck.CD004 = #{cd004} order by CK001 DESC limit 1)-->
         <!--UNION-->
         SELECT
-        ck.*,ce.*,cd.*,cn.*,sa.SA019 as uname
+        ck.*,ce.*,cd.*,cn.*,sa.SA019 as uname,ic.name as activityName
         FROM st4_scs_ck ck INNER JOIN st4_scs_cd cd ON cd.CD001=ck.CD004
+        left join image_config ic on ic.id = cd.active_type
         left join st4_scs_cn cn on cn.CK001=ck.CK001
         LEFT JOIN st4_scs_cc cc ON cc.CC002 = ck.CC002
         LEFT JOIN st4_scs_ce ce ON ce.CE002 = cc.CC002

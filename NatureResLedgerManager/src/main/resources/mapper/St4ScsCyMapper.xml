@@ -203,11 +203,12 @@
 
     <select id="selectPoList" resultMap="BaseResultMap"   parameterType="com.gistone.entity.St4ScsCy">
 
+
         SELECT PK_ID,
         COM_NAME,
         SA001,
         SA015,
-        uname,totalCheckNum,checkNum,
+        uname,totalCheckNum,checkNum,rwcs,gjlc,rwsc,
         (totalCheckNum - checkNum) AS uncheckNum  FROM (
         select
         com.PK_ID,
@@ -215,6 +216,9 @@
         sa.SA001,
         sa.SA015,
         sa.SA019        uname,
+        IFNULL(COUNT(cy.CY001),0)    rwcs,
+        IFNULL(SUM(cy.CY006),0)    gjlc,
+        IFNULL(SUM(TIMESTAMPDIFF(HOUR,CY003,CY004)),0)    rwsc,
         SUM(IF(cd.cd001 IS NULL,0,1))   totalCheckNum,
 
         COUNT(ck.ck088=1)    checkNum
@@ -243,7 +247,8 @@
         INNER JOIN st4_scs_ck k
         ON t.id = k.CK001) ck
         ON ck.CD004 = cd.cd001
-
+        LEFT JOIN st4_scs_cc cc ON cc.CD004 = cd.CD001
+        LEFT JOIN st4_scs_cy cy ON cc.CY017 = cy.CY017
         WHERE 1=1 and  com.PK_ID!=1 and com.COM_LEVEL=2
         <if test="sysCompany!=null">
             <if test="sysCompany.comFPkid!=null">
