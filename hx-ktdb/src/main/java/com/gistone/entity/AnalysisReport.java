@@ -31,7 +31,7 @@ public class AnalysisReport implements Serializable {
     /**
      * 红线id
      */
-    private Integer redlineId;
+    private String redlineId;
 
     /**
      * 相交面积

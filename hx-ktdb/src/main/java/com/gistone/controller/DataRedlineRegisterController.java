@@ -285,6 +285,10 @@ public class DataRedlineRegisterController {
         if(StringUtils.isNotBlank(control)){
             dataRedline.setSrldControl(control);
         }
+        String areaRedline = (String) params.get("areaRedline");
+        if(StringUtils.isNotBlank(areaRedline)){
+            dataRedline.setAreaRedline(areaRedline);
+        }
 
 //判断更新人加人是否为空
         dataRedlineRegisterService.updateBy(dataRedline);

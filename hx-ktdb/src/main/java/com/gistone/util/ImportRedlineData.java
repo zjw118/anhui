@@ -85,10 +85,10 @@ public class ImportRedlineData {
                 //property数据与实体类对应
 //                double b= Double.parseDouble(property.getValue().toString());
 //                int a = (int) b;
-                if(property.getName().toString().equals("Id")){
+              /*  if(property.getName().toString().equals("Id")){
 
                     model.setSrldId(Integer.parseInt(property.getValue().toString()));
-                }
+                }*/
                 if(property.getName().toString().equals("pac")){
                     model.setSrldCode(property.getValue().toString());
                 }
