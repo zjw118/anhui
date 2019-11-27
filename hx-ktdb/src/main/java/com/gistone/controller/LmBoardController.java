@@ -915,7 +915,7 @@ public class LmBoardController {
                 codes = code;
             }
         }
-        List<LmBoardVO> lmBoardVOList = lmBoardService.selectPreBoardListForAll(null, null);
+        List<LmBoardVO> lmBoardVOList = lmBoardService.selectPreBoardListForAll(boardNum, codes);
         String filepath = ExcelUtil.toXls("预设标识牌", lmBoardVOList, configUtils.getExcel_PATH(), LmBoardVO.class, response);
         Map map1 = new HashMap();
         map1.put("filepath", filepath.substring(2));

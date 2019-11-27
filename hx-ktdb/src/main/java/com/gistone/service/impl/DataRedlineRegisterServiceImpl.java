@@ -46,7 +46,7 @@ public class DataRedlineRegisterServiceImpl extends ServiceImpl<DataRedlineRegis
 
 	@Override
 	public void updateBy(DataRedlineRegister data) {
-		dataRedlineRegisterMapper.updateBy(data);
+		dataRedlineRegisterMapper.updateById(data);
 	}
 
 	@Override

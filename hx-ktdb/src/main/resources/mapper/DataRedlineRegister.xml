@@ -63,7 +63,7 @@
     <!--更新红线数据-->
     <update id="updateBy" parameterType="com.gistone.entity.DataRedlineRegister">
         update data_redline_register
-        set srld_number = #{srldNumber},srld_code = #{srldCode},srld_type = #{srldType},target= #{target},srld_area = #{srldArea}
+        set srld_number = #{srldNumber},srld_code = #{srldCode},srld_type = #{srldType},target= #{target},srld_area = #{srldArea},srld_plant_type={srldPlantType}, srld_active =#{srldActive},srld_problem= #{srldProblem},srld_control =#{srldControl},area_redline=#{areaRedline}
         where
             srld_id = #{srldId}
     </update>

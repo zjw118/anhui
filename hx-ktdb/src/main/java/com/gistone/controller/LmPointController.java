@@ -442,7 +442,7 @@ public class LmPointController {
                 codes = code;
             }
         }
-        List<LmPointVO> lmPointVOList = iLmPointService.selectPointListForAll(null, null, null);
+        List<LmPointVO> lmPointVOList = iLmPointService.selectPointListForAll(codes, param, redlineId);
         String filepath = ExcelUtil.toXls("拐点坐标", lmPointVOList, configUtils.getExcel_PATH(), LmPointVO.class, response);
         Map map1 = new HashMap();
         map1.put("filepath", filepath.substring(2));

@@ -8,11 +8,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.VO.CoordinateVO;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.AnalysisReport;
+import com.gistone.entity.LsProjectModel;
 import com.gistone.entity.ProjectAdmission;
 import com.gistone.exception.ProjectException;
 import com.gistone.mapper.ProjectAdmissionMapper;
 import com.gistone.service.IAnalysisReportService;
 import com.gistone.service.IProjectAdmissionService;
+import com.gistone.service.LsProjectModelService;
 import com.gistone.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -28,10 +30,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sun.misc.BASE64Decoder;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -60,6 +63,9 @@ public class ProjectAdmissionController {
     private IProjectAdmissionService projectAdmissionService;
     @Autowired
     private ProjectAdmissionMapper projectAdmissionMapper;
+
+    @Autowired
+    private LsProjectModelService service;
 
     @Autowired
     private IAnalysisReportService analysisReportService;
@@ -289,6 +295,7 @@ public class ProjectAdmissionController {
         }
 
         String proportion = (String) dataParam.get("proportion");
+        projectAdmission.setImageProportion(proportion);
         if (StringUtils.isBlank(proportion)) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "图片比例不能为空");
         }
@@ -308,6 +315,30 @@ public class ProjectAdmissionController {
             e.printStackTrace();
         }
 
+        OutputStream os = null;
+        String key = UUID.randomUUID().toString().replaceAll("-", "");
+        String path = PATH + "/epr/attached/" + key + ".png";
+        try {
+            os = new FileOutputStream(path);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            os.write(bytes1, 0, bytes1.length);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            os.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        projectAdmission.setImageUrl(path.substring(2));
         ImageEntity image = new ImageEntity();
         double d = Double.parseDouble(proportion) * 500;
         int height = (int) d;
@@ -343,7 +374,7 @@ public class ProjectAdmissionController {
                 /*if (redlineId == null || redlineId <= 0) {
                     throw new ProjectException(ResultEnum.REDLINEID_EMPTY);
                 }*/
-                analysisReport.setRedlineId(1111);
+                analysisReport.setRedlineId((String) detailInfo.get("redineId"));
 
                 String intersectArea = (String) detailInfo.get("intersectArea");
                 if (intersectArea == null) {
@@ -362,6 +393,7 @@ public class ProjectAdmissionController {
 
         //导出word并把路径放到projectAdmission对象属性中
         try {
+
             if (analysisReports.size() > 0) {
                 XWPFDocument doc = WordExportUtil.exportWord07(
                         "word/export.docx", params);
@@ -372,6 +404,14 @@ public class ProjectAdmissionController {
                 doc.write(fos);
                 fos.close();
             } else {
+                //TODO
+               /* String wordPath = "";
+                LsProjectModel one = service.getOne(new QueryWrapper<LsProjectModel>().eq("type", 1).eq("flag", 1));
+                if (one == null) {
+                    wordPath = "word/export1.docx";
+                }else{
+                    wordPath = PATH+one.getUrl();
+                }*/
                 XWPFDocument doc = WordExportUtil.exportWord07(
                         "word/export1.docx", params);
                 String fileName = projectName + "分析报告";
@@ -425,9 +465,11 @@ public class ProjectAdmissionController {
                 if (analysisReports != null && analysisReports.size() > 0) {
                     for (AnalysisReport analysisReport : analysisReports) {
                         analysisReport.setProjectId(projectAdmission.getId());
+                        analysisReportService.remove(new QueryWrapper<AnalysisReport>().eq("project_id",projectAdmission.getId()));
                     }
+
                     for (AnalysisReport analysisReport : analysisReports) {
-                        analysisReportService.update(analysisReport, new QueryWrapper<AnalysisReport>().eq("project_id", projectAdmission.getId()));
+                        analysisReportService.save(analysisReport);
                     }
                 }
             }
@@ -442,6 +484,106 @@ public class ProjectAdmissionController {
         return ResultVOUtil.success(result1);
     }
 
+
+    @PostMapping("/exportWord")
+    public ResultVO exportWord(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
+        if (dataParam == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+
+        Integer id = (Integer) dataParam.get("id");
+
+        if (id == null) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+        }
+
+        ProjectAdmission projectAdmission = projectAdmissionService.getById(id);
+        if(projectAdmission==null){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"无效id");
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", projectAdmission.getName());
+        params.put("radius", projectAdmission.getRadius());
+        params.put("result", projectAdmission.getResult());
+        params.put("bufferRange", projectAdmission.getBufferRange());
+
+        String proportion = projectAdmission.getImageProportion();
+        double d = Double.parseDouble(proportion) * 500;
+        int height = (int) d;
+        ImageEntity image = getImageEntity(height,projectAdmission.getImageUrl());
+        params.put("image", image);
+
+        List<AnalysisReport> analysisReports = analysisReportService.list(new QueryWrapper<AnalysisReport>().eq("project_id", projectAdmission.getId()));
+        if(analysisReports!=null&&analysisReports.size()>0){
+            for (AnalysisReport analysisReport : analysisReports) {
+                String area = new BigDecimal(analysisReport.getIntersectArea().toString()).toString();
+                analysisReport.setArea(area);
+            }
+        }
+        params.put("list", analysisReports);
+
+
+        try {
+            //TODO
+                String wordPath = "";
+                LsProjectModel one = service.getOne(new QueryWrapper<LsProjectModel>().eq("type", 1).eq("flag", 1));
+                if (one == null) {
+                    wordPath = "word/export1.docx";
+                }else{
+                    wordPath = PATH+one.getUrl();
+                }
+
+            if (analysisReports.size() > 0) {
+                XWPFDocument doc = WordExportUtil.exportWord07(
+                        wordPath, params);
+                String fileName = projectAdmission.getName() + "分析报告";
+                String lastName = WORD_PATH + fileName + ".docx";
+                projectAdmission.setFileUrl(lastName.substring(2));
+                FileOutputStream fos = new FileOutputStream(lastName);
+                doc.write(fos);
+                fos.close();
+            } else {
+              
+                XWPFDocument doc = WordExportUtil.exportWord07(
+                        "word/export1.docx", params);
+                String fileName = projectAdmission.getName() + "分析报告";
+                String lastName = WORD_PATH + fileName + KeyUtil.genUniqueKey() + ".docx";
+                projectAdmission.setFileUrl(lastName.substring(2));
+                FileOutputStream fos = new FileOutputStream(lastName);
+                doc.write(fos);
+                fos.close();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return ResultVOUtil.success(projectAdmission.getFileUrl());
+    }
+
+    public ImageEntity getImageEntity(int height,String url) {
+        ImageEntity image = new ImageEntity();
+
+        //拿到图片，并且获取图片大小
+
+        File picture = new File(url);
+        try {
+            BufferedImage sourceImg = ImageIO.read(new FileInputStream(picture));
+            float proportion = (float) sourceImg.getHeight() / sourceImg.getWidth();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        image.setHeight((int) height);
+        image.setWidth(500);
+        image.setUrl(url);
+        image.setType(ImageEntity.URL);
+        return image;
+    }
 
     /**
      * @return
@@ -491,7 +633,6 @@ public class ProjectAdmissionController {
     }
 
     /**
-     * @param response
      * @return com.gistone.VO.ResultVO
      * @description:导出项目准入任务列表
      * @author zf1017@foxmail.com
@@ -499,8 +640,79 @@ public class ProjectAdmissionController {
      * @date 2019/11/18 0018 14:40
      */
     @RequestMapping("/exportExcel")
-    public ResultVO exportAllExcel(HttpServletResponse response) {
-        List<ProjectAdmission> list = projectAdmissionService.list();
+    public ResultVO exportAllExcel(@RequestBody Map<String, Object> paramsMap, HttpServletResponse response) {
+
+        //项目名称、位置形状、创建时间范围
+        //请求参数格式校验
+        Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
+        if (dataParam == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+
+
+        String projectName = (String) dataParam.get("projectName");
+        String shape = (String) dataParam.get("shape");
+
+        String startTime = (String) dataParam.get("startTime");
+        String endTime = (String) dataParam.get("endTime");
+
+        String type = (String) dataParam.get("type");
+        String attribute = (String) dataParam.get("attribute");
+        String time = (String) dataParam.get("time");
+
+        QueryWrapper<ProjectAdmission> wrapper = new QueryWrapper<>();
+
+        if (StringUtils.isNotBlank(projectName)) {
+            wrapper.likeRight("name", projectName);
+        }
+
+        if (StringUtils.isNotBlank(shape)) {
+            wrapper.likeRight("shape", shape);
+        }
+
+        if (StringUtils.isNotBlank(startTime)) {
+            DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+            Date date2 = null;
+
+            try {
+                date2 = format2.parse(startTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Date date = DateUtils.addDateDays(date2, 1);
+            wrapper.ge("time", date);
+        }
+
+        if (StringUtils.isNotBlank(endTime)) {
+            DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+            Date date2 = null;
+
+            try {
+                date2 = format2.parse(endTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Date date = DateUtils.addDateDays(date2, 1);
+            wrapper.le("time", date);
+        }
+
+        if (StringUtils.isNotBlank(type)) {
+            wrapper.likeRight("type", type);
+        }
+
+        if (StringUtils.isNotBlank(attribute)) {
+            wrapper.likeRight("attribute", attribute);
+        }
+
+        if (StringUtils.isNotBlank(time)) {
+            Date endDate = DateUtils.stringToDate(time, DateUtils.DATE_TIME_PATTERN);
+            wrapper.eq("time", endDate);
+        }
+
+        wrapper.eq("del_flag", 1);
+
+
+        List<ProjectAdmission> list = projectAdmissionService.list(wrapper);
 
         if (list != null && list.size() > 0) {
             for (ProjectAdmission projectAdmission : list) {
@@ -514,10 +726,11 @@ public class ProjectAdmissionController {
 
         return ResultVOUtil.success(map1);
     }
+
     /**
-     * @description:替换现有模板
      * @param file
-      * @return com.gistone.VO.ResultVO
+     * @return com.gistone.VO.ResultVO
+     * @description:替换现有模板
      * @author zf1017@foxmail.com
      * @motto: Talk is cheap,show me the code
      * @date 2019/11/26 0026 17:48

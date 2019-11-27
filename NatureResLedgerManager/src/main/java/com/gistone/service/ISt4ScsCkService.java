@@ -109,5 +109,10 @@ public interface ISt4ScsCkService extends IService<St4ScsCk> {
      */
     void doExcel(St4ScsCk ck,HttpServletResponse response);
 
+    /**
+     *统计核查审核的质量评估
+     * @return
+     */
+    ResultVO examineQuality();
 
 }

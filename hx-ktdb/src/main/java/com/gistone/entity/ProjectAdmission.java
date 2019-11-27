@@ -80,6 +80,8 @@ public class ProjectAdmission implements Serializable {
 
     private Date createDate;
 
+    private String imageProportion;
+
     @TableField(exist = false)
     @Excel(name = "创建日期",height = 11, width = 15)
     private String createTime;
@@ -114,6 +116,8 @@ public class ProjectAdmission implements Serializable {
      */
     @TableField(exist = false)
     private List<AnalysisReport> analysisReports;
+
+    private String imageUrl;
 
     /**
      * 缓冲区图形坐标
