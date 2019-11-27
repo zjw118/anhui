@@ -102,6 +102,7 @@
         <result column="isPunishNum" property="isPunishNum" />
         <result column="isNotPunishNum" property="isNotPunishNum" />
 
+        <result column="passRate" property="passRate" />
         <result column="farmNum" property="farmNum" />
         <result column="residentNum" property="residentNum" />
         <result column="industrialNum" property="industrialNum" />
@@ -1846,14 +1847,110 @@
         where CK001 = #{ck001}
 
     </update>-->
+    <select id="examineQuality" resultMap="BaseResultMap" resultType="com.gistone.entity.St4ScsCk">
 
 
+            SELECT
+      *,
+      (unEmaminedNum+emaminedNum+backNum)    tzNum  ,IFNULL(emaminedNum/(unEmaminedNum+emaminedNum+backNum)  ,0) passRate,uname
+    FROM (SELECT
+            com.PK_ID,
+            com.COM_NAME,
+            ck.CK001,
+            ck.ck067,
+            ck.ck088,
+            sa.SA001,
+            cl.CL001,
+            cl.CL002,
+            sa.SA019 uname,
+            IFNULL(SUBSTRING_INDEX(CK016,"-",-1), '') AS ck010,
+            IFNULL(ck.CK012, '') AS ck012,
 
+            IF(COUNT(*) IS NULL, 0, COUNT(*)) AS tzCheckedNum,
+            IFNULL(SUM(ck088 = 0 OR ck088 IS NULL), 0) AS tzUncheckedNum,
+
+            IFNULL(SUM(ck067 = 0 ), 0) AS unEmaminedNum,
+            IFNULL(SUM(ck067 = 1), 0) AS emaminedNum,
+            IFNULL(SUM(ck067 = 2), 0) AS backNum
+          FROM st4_sys_sa sa
+            LEFT JOIN sys_company com
+              ON sa.SD001 = com.COM_CODE
+            LEFT JOIN st4_po_cd_sa cdsa
+              ON cdsa.SA001 = sa.SA001
+            LEFT JOIN st4_scs_cd cd
+              ON cdsa.cd001 = cd.cd001
+            LEFT JOIN (SELECT *
+                       FROM (SELECT
+                               MAX(CK001)    AS id
+                             FROM st4_scs_ck
+                             GROUP BY CD004) t
+                         INNER JOIN st4_scs_ck k
+                           ON t.id = k.CK001) ck
+              ON ck.CD004 = cd.cd001
+            LEFT JOIN rlhd_group co
+              ON cd.group_id = co.id
+            LEFT JOIN st4_po_cl_co clco
+              ON clco.co001 = co.id
+            LEFT JOIN st4_scs_cl cl
+              ON cl.CL001 = clco.cl001
+          WHERE 1 = 1 AND sa.SA019 IS NOT NULL AND sa.SA019 !=''
+          GROUP BY sa.sa001 ) t
+    </select>
+<!--easyPoi审核结果导出!-->
+    <select id="examineQualityEasyPoi" resultType="Map" parameterType="com.gistone.entity.St4ScsCk">
+
+
+            SELECT
+unEmaminedNum,emaminedNum,backNum,
+      (unEmaminedNum+emaminedNum+backNum)    tzNum  ,CONCAT(100*IFNULL(emaminedNum/(unEmaminedNum+emaminedNum+backNum)  ,0),'%') passRate,uname
+    FROM (SELECT
+            com.PK_ID,
+            com.COM_NAME,
+            ck.CK001,
+            ck.ck067,
+            ck.ck088,
+            sa.SA001,
+            cl.CL001,
+            cl.CL002,
+            sa.SA019 uname,
+            IFNULL(SUBSTRING_INDEX(CK016,"-",-1), '') AS ck010,
+            IFNULL(ck.CK012, '') AS ck012,
+
+            IF(COUNT(*) IS NULL, 0, COUNT(*)) AS tzCheckedNum,
+            IFNULL(SUM(ck088 = 0 OR ck088 IS NULL), 0) AS tzUncheckedNum,
+
+            IFNULL(SUM(ck067 = 0 ), 0) AS unEmaminedNum,
+            IFNULL(SUM(ck067 = 1), 0) AS emaminedNum,
+            IFNULL(SUM(ck067 = 2), 0) AS backNum
+          FROM st4_sys_sa sa
+            LEFT JOIN sys_company com
+              ON sa.SD001 = com.COM_CODE
+            LEFT JOIN st4_po_cd_sa cdsa
+              ON cdsa.SA001 = sa.SA001
+            LEFT JOIN st4_scs_cd cd
+              ON cdsa.cd001 = cd.cd001
+            LEFT JOIN (SELECT *
+                       FROM (SELECT
+                               MAX(CK001)    AS id
+                             FROM st4_scs_ck
+                             GROUP BY CD004) t
+                         INNER JOIN st4_scs_ck k
+                           ON t.id = k.CK001) ck
+              ON ck.CD004 = cd.cd001
+            LEFT JOIN rlhd_group co
+              ON cd.group_id = co.id
+            LEFT JOIN st4_po_cl_co clco
+              ON clco.co001 = co.id
+            LEFT JOIN st4_scs_cl cl
+              ON cl.CL001 = clco.cl001
+          WHERE 1 = 1 AND sa.SA019 IS NOT NULL AND sa.SA019 !=''
+          GROUP BY sa.sa001 ) t
+    </select>
 
 
     <select id="selectSt4ScsCk" resultMap="BaseResultMap" resultType="com.gistone.entity.St4ScsCk">
 
-        SELECT *,(unEmaminedNum+emaminedNum+backNum) tzNum FROM
+        SELECT *,(unEmaminedNum+emaminedNum+backNum) tzNum,emaminedNum/(unEmaminedNum+emaminedNum+backNum) passRate FROM
         (
         SELECT com.PK_ID,
         com.COM_NAME,

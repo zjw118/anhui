@@ -2,12 +2,11 @@ package com.gistone.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.St4ScsCc;
-import com.gistone.entity.St4ScsCd;
-import com.gistone.entity.St4ScsCk;
-import com.gistone.entity.St4ScsCy;
+import com.gistone.entity.*;
 import com.gistone.swagger.StaticSwagger;
 import com.gistone.util.Result;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -92,4 +91,20 @@ public interface StatisService extends IService<St4ScsCy> {
     Result statisZw(St4ScsCc data);
 
     ResultVO pointStatistics(StaticSwagger ss);
+
+    /**
+     * cl
+     * 导出质量控制侧重审核
+     * @return
+     */
+    ResultVO examineQualityExport(St4ScsCl cl, HttpServletResponse response);
+
+    /**
+     * 核查质量评估侧重核查情况
+     * @param cl
+     * @param response
+     * @return
+     */
+    ResultVO pointQualityExport(RlhdGroup cl, HttpServletResponse response);
+
 }

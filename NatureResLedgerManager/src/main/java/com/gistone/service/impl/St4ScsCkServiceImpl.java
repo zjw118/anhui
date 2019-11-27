@@ -1849,5 +1849,11 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
 
     }
 
+    @Override
+    public ResultVO examineQuality() {
+        List<St4ScsCk> map =checkLedgerMapper.examineQuality();
+        return ResultVOUtil.success(map);
+    }
+
 
 }

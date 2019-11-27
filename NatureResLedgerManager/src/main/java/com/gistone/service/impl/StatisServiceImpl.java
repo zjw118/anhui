@@ -4,23 +4,29 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.*;
+import com.gistone.entity.EXCEL.LmPointVO;
+import com.gistone.entity.excel.ActivityVo;
+import com.gistone.entity.excel.ExamineVo;
 import com.gistone.mapper.St4ScsCcMapper;
 import com.gistone.mapper.St4ScsCdMapper;
 import com.gistone.mapper.St4ScsCkMapper;
 import com.gistone.mapper.St4ScsCyMapper;
+import com.gistone.service.ISt4ScsCkService;
 import com.gistone.service.StatisService;
 import com.gistone.swagger.StaticSwagger;
-import com.gistone.util.ObjectUtils;
-import com.gistone.util.Result;
-import com.gistone.util.ResultVOUtil;
+import com.gistone.util.*;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +49,72 @@ public class StatisServiceImpl extends ServiceImpl<St4ScsCyMapper, St4ScsCy> imp
     private St4ScsCkMapper st4ScsCkMapper;
     @Autowired
     private St4ScsCcMapper st4ScsCcMapper;
+    @Autowired
+    private ConfigUtils configUtils;
+
+    @Override
+    public  ResultVO examineQualityExport(St4ScsCl cl, HttpServletResponse response){
+        List<Map> data = st4ScsCkMapper.examineQualityEasyPoi();
+        List<ExamineVo> voList = new ArrayList<>();
+        ExamineVo ev = null;
+        for (Map map:data) {
+            ev = new ExamineVo();
+            ev.setUname(map.get("uname").toString());
+            ev.setUnEmaminedNum(map.get("unEmaminedNum").toString());
+            ev.setEmaminedNum(map.get("emaminedNum").toString());
+            ev.setBackNum(map.get("backNum").toString());
+            ev.setTzNum(map.get("tzNum").toString());
+            ev.setPassRate(map.get("passRate").toString());
+            voList.add(ev);
+        }
+        String filepath = ExcelUtil.toXls("问题斑块审核统计表", voList, configUtils.getExcel_PATH(), ExamineVo.class, response);
+        Map map1 = new HashMap();
+        map1.put("filepath", filepath.substring(2));
+        return ResultVOUtil.success(map1);
+    }
+
+    @Override
+    public ResultVO pointQualityExport(RlhdGroup cl, HttpServletResponse response) {
+        List<Map> mapOrign = st4ScsCdMapper.pointQualityOrginExport(cl);
+        List<Map> mapNow = st4ScsCdMapper.pointQualityNowExport(cl);
+        List<ActivityVo> voList = new ArrayList<>();
+        ActivityVo vo = null;
+        if(mapOrign!=null&&mapOrign.size()>0){
+            for (Map map:mapOrign) {
+                vo = new ActivityVo();
+                String orgin = map.get("orign")==null?"":map.get("orign").toString();
+                vo.setOrign(orgin);
+                vo.setOrignCount(map.get("orignCount").toString());
+                vo.setNows("");
+                vo.setNowsCount("0");
+                if(mapNow!=null&&mapNow.size()>0){
+                    for (Map map1:mapNow) {
+                        String now = map1.get("nows")==null?"":map1.get("nows").toString();
+                        if(ObjectUtils.isNotNullAndEmpty(orgin)&&ObjectUtils.isNotNullAndEmpty(now)){
+                            if(orgin.equals(now)){
+                                vo.setNows(now);
+                                vo.setNowsCount(map1.get("nowsCount").toString());
+                            }
+                        }else {
+                            vo.setNows("");
+                            vo.setNowsCount("0");
+                        }
+                    }
+
+                }else {
+                    vo.setNows("");
+                    vo.setNowsCount("0");
+                }
+                voList.add(vo);
+            }
+
+        }
+        String filepath = ExcelUtil.toXls("人类活动巡查结果质量评估统计表", voList, configUtils.getExcel_PATH(), ActivityVo.class, response);
+        Map map1 = new HashMap();
+        map1.put("filepath", filepath.substring(2));
+        return ResultVOUtil.success(map1);
+    }
+
     @Override
     public ResultVO exportRecordStatic(St4ScsCy cy){
 

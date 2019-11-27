@@ -622,6 +622,11 @@ public class St4ScsCk extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private String backNum;
 
+    @ApiModelProperty(example="44",value="通过率")
+    @TableField(exist = false)
+    private String passRate;
+
+
     @Ignore
     @TableField(exist = false)
     @ApiModelProperty(value="权限用不用管",example = "")
