@@ -510,7 +510,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             //上传
             String[] arr = {"zip","ZIP"};
             String path = FileUtil.getPath(PATH+"/epr/image/");
-            Map resMap = FileUtil.uploadFile(request, path, arr, 30000000l);  //限制30MB
+            Map resMap = FileUtil.uploadFile(request, path, arr, 3000000000l);  //限制3000MB
             if(null!=resMap.get("error")){
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(),resMap.get("error")+"");
             }
