@@ -24,7 +24,7 @@ import java.util.Map;
  */
 
 @RestController
-@RequestMapping("/lsTool")
+@RequestMapping("/api/ktdb/lsTool")
 public class LsToolController {
     @Autowired
     private LsToolService service;
@@ -64,7 +64,7 @@ public class LsToolController {
 
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResultVO add(@RequestBody LsTool entity, BindingResult bindingResult) {
+    public ResultVO add(LsTool entity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
@@ -91,7 +91,7 @@ public class LsToolController {
 
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResultVO update(@RequestBody LsTool entity, BindingResult bindingResult) {
+    public ResultVO update( LsTool entity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
         }

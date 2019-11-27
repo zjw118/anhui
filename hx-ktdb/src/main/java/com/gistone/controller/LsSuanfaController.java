@@ -24,7 +24,7 @@ import java.util.Map;
  */
 
 @RestController
-@RequestMapping("/lsSuanfa")
+@RequestMapping("/api/ktdb/lsSuanfa")
 public class LsSuanfaController {
     @Autowired
     private LsSuanfaService service;
@@ -92,7 +92,7 @@ public class LsSuanfaController {
 
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResultVO update(@RequestBody LsSuanfa entity, BindingResult bindingResult) {
+    public ResultVO update(LsSuanfa entity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
         }

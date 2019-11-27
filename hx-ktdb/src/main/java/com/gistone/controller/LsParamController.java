@@ -24,7 +24,7 @@ import java.util.Map;
  */
 
 @RestController
-@RequestMapping("/lsParam")
+@RequestMapping("/api/ktdb/lsParam")
 public class LsParamController {
     @Autowired
     private LsParamService service;
@@ -65,7 +65,7 @@ public class LsParamController {
 
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResultVO add(@RequestBody LsParam entity, BindingResult bindingResult) {
+    public ResultVO add(LsParam entity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
@@ -93,7 +93,7 @@ public class LsParamController {
 
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResultVO update(@RequestBody LsParam entity, BindingResult bindingResult) {
+    public ResultVO update( LsParam entity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
         }

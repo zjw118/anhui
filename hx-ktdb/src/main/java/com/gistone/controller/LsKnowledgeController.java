@@ -24,7 +24,7 @@ import java.util.Map;
  */
 
 @RestController
-@RequestMapping("/lsKnowledge")
+@RequestMapping("/api/ktdb/lsKnowledge")
 public class LsKnowledgeController {
     @Autowired
     private LsKnowledgeService service;
@@ -64,7 +64,7 @@ public class LsKnowledgeController {
 
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResultVO add(@RequestBody LsKnowledge entity, BindingResult bindingResult) {
+    public ResultVO add( LsKnowledge entity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
@@ -91,7 +91,7 @@ public class LsKnowledgeController {
 
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResultVO update(@RequestBody LsKnowledge entity, BindingResult bindingResult) {
+    public ResultVO update(LsKnowledge entity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
