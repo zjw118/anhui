@@ -43,10 +43,6 @@ public interface ImageService extends IService<Image> {
 
     List<Map<String, Object>> getAreaChange();
 
-    ResultVO getAudit(Integer id);
-
-    ResultVO addAudit(Integer id, JSONObject json);
-
     ResultVO audit(Image image);
 
     ResultVO gdShp(double rc);
@@ -59,6 +55,11 @@ public interface ImageService extends IService<Image> {
 
     ResultVO gdFile(HttpServletResponse response);
 
+    ResultVO getAudit(Integer id);
+    ResultVO addAudit(Integer id, JSONObject json);
+
+    ResultVO getAudit2(Integer id);
+    ResultVO addAudit2(Integer id, JSONObject json);
 
 
 

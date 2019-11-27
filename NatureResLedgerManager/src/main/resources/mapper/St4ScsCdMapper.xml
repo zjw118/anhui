@@ -322,38 +322,89 @@
 
 
     <select id="pointQualityOrgin" resultType="Map"  parameterType="com.gistone.entity.RlhdGroup">
-                     SELECT orign,COUNT(orign) orignCount FROM (
+
+        SELECT  name,orign,IFNULL(orignCount,0) orignCount  FROM
+        image_config conf LEFT JOIN
+
+         (
+
+         SELECT orign,COUNT(orign) orignCount FROM (
+                SELECT
+
+                  cd.CD001,cd.active_type  ,IFNULL(SUBSTRING_INDEX(CK016,"-",-1), '') AS nows,cof.name orign,co.id
+                FROM
+                 st4_scs_cd cd
+                LEFT JOIN  image_config cof
+                 ON cof.id = cd.active_type
+
+                  LEFT JOIN rlhd_group co
+                    ON co.id = cd.group_id
+                    LEFT JOIN
+
+                    (
+                                SELECT *
+                                FROM (
+                                    SELECT MAX(CK001) AS id
+                                    FROM st4_scs_ck
+                                    GROUP BY CD004
+                                ) t
+                                    INNER JOIN st4_scs_ck k ON t.id = k.CK001
+                            ) ck
+                            ON ck.cd004 = cd.CD001
+                  WHERE 1=1
+        <if test="id!=null  and id!='' ">
+            and co.id=#{id}
+        </if>
+                GROUP BY cof.id ) t   GROUP BY orign ) aa ON aa.orign = conf.name
+
+    </select>
+    <select id="pointQualityOrginExport" resultType="Map"  parameterType="com.gistone.entity.RlhdGroup">
+
+        SELECT  IFNULL(orign,'') orign,IFNULL(orignCount,0) orignCount  FROM
+        image_config conf LEFT JOIN
+
+        (
+
+        SELECT orign,COUNT(orign) orignCount FROM (
         SELECT
 
-          cd.CD001,cd.active_type  ,IFNULL(SUBSTRING_INDEX(CK016,"-",-1), '') AS nows,cof.name orign,co.id
+        cd.CD001,cd.active_type  ,IFNULL(SUBSTRING_INDEX(CK016,"-",-1), '') AS nows,cof.name orign,co.id
         FROM
-         st4_scs_cd cd
+        st4_scs_cd cd
         LEFT JOIN  image_config cof
-         ON cof.id = cd.active_type
+        ON cof.id = cd.active_type
 
-          LEFT JOIN rlhd_group co
-            ON co.id = cd.group_id
-            LEFT JOIN
+        LEFT JOIN rlhd_group co
+        ON co.id = cd.group_id
+        LEFT JOIN
 
-            (
-                        SELECT *
-                        FROM (
-                            SELECT MAX(CK001) AS id
-                            FROM st4_scs_ck
-                            GROUP BY CD004
-                        ) t
-                            INNER JOIN st4_scs_ck k ON t.id = k.CK001
-                    ) ck
-                    ON ck.cd004 = cd.CD001
-          WHERE  co.id=#{id}
-        GROUP BY cof.id ) t  GROUP BY orign
+        (
+        SELECT *
+        FROM (
+        SELECT MAX(CK001) AS id
+        FROM st4_scs_ck
+        GROUP BY CD004
+        ) t
+        INNER JOIN st4_scs_ck k ON t.id = k.CK001
+        ) ck
+        ON ck.cd004 = cd.CD001
+        WHERE 1=1
+        <if test="id!=null  and id!='' ">
+            and co.id=#{id}
+        </if>
+        GROUP BY cof.id ) t   GROUP BY orign ) aa ON aa.orign = conf.name WHERE orign != ''
 
     </select>
     <select id="pointQualityNow" resultType="Map"   parameterType="com.gistone.entity.RlhdGroup">
-                       SELECT nows,COUNT(nows) nowsCount FROM (
+
+        SELECT  name,nows,IFNULL(nowsCount,0) nowsCount  FROM
+        image_config conf LEFT JOIN
+
+         (
+        SELECT cofid,nows,COUNT(nows) nowsCount FROM (
         SELECT
 
-          cd.CD001,cd.active_type  ,IFNULL(SUBSTRING_INDEX(CK016,"-",-1), '') AS nows,cof.name orign,co.id
+          cd.CD001,cd.active_type  ,IFNULL(SUBSTRING_INDEX(CK016,"-",-1), '') AS nows,cof.name orign,co.id,cof.id cofid
         FROM
          st4_scs_cd cd
         LEFT JOIN  image_config cof
@@ -373,8 +424,48 @@
                             INNER JOIN st4_scs_ck k ON t.id = k.CK001
                     ) ck
                     ON ck.cd004 = cd.CD001
-          WHERE  co.id=#{id}
-        GROUP BY cof.id ) t  GROUP BY nows
+        WHERE 1=1
+        <if test="id!=null  and id!='' ">
+          and  co.id=#{id}
+        </if>
+        GROUP BY cof.id ) t  WHERE nows IS NOT NULL AND nows != '' GROUP BY nows   ) aa ON aa.nows = conf.name
+
+    </select>
+
+    <select id="pointQualityNowExport" resultType="Map"   parameterType="com.gistone.entity.RlhdGroup">
+
+        SELECT   IFNULL(nows,'') nows ,IFNULL(nowsCount,0) nowsCount  FROM
+        image_config conf LEFT JOIN
+
+        (
+        SELECT cofid,nows,COUNT(nows) nowsCount FROM (
+        SELECT
+
+        cd.CD001,cd.active_type  ,IFNULL(SUBSTRING_INDEX(CK016,"-",-1), '') AS nows,cof.name orign,co.id,cof.id cofid
+        FROM
+        st4_scs_cd cd
+        LEFT JOIN  image_config cof
+        ON cof.id = cd.active_type
+
+        LEFT JOIN rlhd_group co
+        ON co.id = cd.group_id
+        LEFT JOIN
+
+        (
+        SELECT *
+        FROM (
+        SELECT MAX(CK001) AS id
+        FROM st4_scs_ck
+        GROUP BY CD004
+        ) t
+        INNER JOIN st4_scs_ck k ON t.id = k.CK001
+        ) ck
+        ON ck.cd004 = cd.CD001
+        WHERE 1=1
+        <if test="id!=null  and id!='' ">
+            and  co.id=#{id}
+        </if>
+        GROUP BY cof.id ) t  WHERE nows IS NOT NULL AND nows != '' GROUP BY nows   ) aa ON aa.nows = conf.name WHERE nows != ''
 
     </select>
     <select id="listStaticPoint" resultMap="BaseResultMap"  parameterType="com.gistone.entity.St4ScsCl">

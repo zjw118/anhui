@@ -35,20 +35,38 @@ public class StatisController {
 	private ISt4ScsCdService st4ScsCdservice;
 	@Autowired
 	private ISt4ScsCbdService iSt4ScsCbdService;
+	@ApiOperation(value = "(安徽用)统计核查审核的质量评估导出", notes = "", response = Result.class)
+	@PostMapping("/examineQualityExport")
+	public ResultVO examineQualityExport(@RequestBody Swagger<St4ScsCl> requestData, HttpServletRequest request, HttpServletResponse response){
+		St4ScsCl cl = requestData.getData();
+		return statisService.examineQualityExport(cl,response);
+	}
 
-	@ApiOperation(value = "(安徽用)人类活动巡查结果质量评估得传递所属监管台账的id", notes = "巡查-统计列表", response = Result.class)
+	@ApiOperation(value = "(安徽用)统计核查审核的质量评估", notes = "", response = Result.class)
+	@PostMapping("/examineQuality")
+	public ResultVO examineQuality(@RequestBody Swagger<RlhdGroup> requestData, HttpServletRequest request, HttpServletResponse response){
+		return st4ScsCkservice.examineQuality();
+	}
+	@ApiOperation(value = "(安徽用)人类活动巡查结果质量评估导出", notes = "", response = Result.class)
+	@PostMapping("/pointQualityExport")
+	public ResultVO pointQualityExport(@RequestBody Swagger<RlhdGroup> requestData, HttpServletResponse response){
+		RlhdGroup cl = requestData.getData();
+		return statisService.pointQualityExport(cl,response);
+	}
+
+	@ApiOperation(value = "(安徽用)人类活动巡查结果质量评估得传递所属监管台账的id", notes = "", response = Result.class)
 	@PostMapping("/pointQuality")
 	public ResultVO pointQuality(@RequestBody Swagger<RlhdGroup> requestData, HttpServletRequest request, HttpServletResponse response){
 		RlhdGroup rg = requestData.getData();
 		return st4ScsCdservice.pointQuality(rg);
 	}
 
-	@ApiOperation(value = "(安徽用)核查统计分析处展示问题斑块任务名称cl002任务年份:cl010,行政区划:adminRegionId", notes = "巡查-统计列表", response = Result.class)
+	@ApiOperation(value = "(安徽用)核查统计分析处展示问题斑块任务名称cl002任务年份:cl010,行政区划:adminRegionId", notes = "", response = Result.class)
 	@PostMapping("/staticPoint")
 	public ResultVO staticPoint(@RequestBody Swagger<St4ScsCl> requestData, HttpServletRequest request, HttpServletResponse response){
 		return st4ScsCdservice.listStaticPoint(requestData.getData());
 	}
-	@ApiOperation(value = "(安徽用)首页进来的邮件提示列表展示前五条数据", notes = "巡查-统计列表", response = Result.class)
+	@ApiOperation(value = "(安徽用)首页进来的邮件提示列表展示前五条数据", notes = "", response = Result.class)
 	@PostMapping("/listCheckMsg")
 	public ResultVO listCheckMsg(@RequestBody Swagger<St4ScsCl> requestData, HttpServletRequest request, HttpServletResponse response){
 		St4ScsCl cl = requestData.getData();

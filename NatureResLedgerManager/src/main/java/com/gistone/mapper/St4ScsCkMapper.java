@@ -116,4 +116,17 @@ public interface St4ScsCkMapper extends BaseMapper<St4ScsCk> {
      * @return
      */
     St4ScsCk getLastLedgerHky(St4ScsCk ck);
+
+    /**
+     * 统计核查审核的质量评估
+     * @return
+     */
+    List<St4ScsCk> examineQuality();
+
+    /**
+     * 导出execl的采用easypoi
+     * @return
+     */
+    List<Map> examineQualityEasyPoi();
+
 }

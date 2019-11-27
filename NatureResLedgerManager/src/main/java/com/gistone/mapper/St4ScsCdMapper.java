@@ -77,4 +77,8 @@ public interface St4ScsCdMapper extends BaseMapper<St4ScsCd> {
      * @return
      */
     List<Map> pointQualityNow(RlhdGroup rl);
+
+    List<Map> pointQualityOrginExport(RlhdGroup rl);
+
+    List<Map> pointQualityNowExport(RlhdGroup rl);
 }

@@ -15,8 +15,7 @@ import org.apache.ibatis.annotations.Param;
 public interface LsProjectModelMapper extends BaseMapper<LsProjectModel> {
 
     LsProjectModel getLsProjectModelByType(@Param(value="type")Integer type);
-
-
-
+    int updateFlag1(LsProjectModel lsProjectModel);
+    int updateFlag2(LsProjectModel lsProjectModel);
 
 }
