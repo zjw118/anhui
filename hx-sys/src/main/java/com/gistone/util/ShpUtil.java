@@ -319,6 +319,7 @@ public class ShpUtil {
 
     public static void writeAfterRead(List<Map<String, Object>> data, String filePath) {
 //        String filepath = "D:/DevelopTools/sheapf.shp";
+
         try {
 
           /*  SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
@@ -570,7 +571,6 @@ public class ShpUtil {
             List<SimpleFeature> features = new ArrayList<>();
             //geometryFactory将用于创建每个要素的几何体属性，使用多边形对象作为位置。
             GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
-
             for (int i = 0; i < array.size(); i++) {
                 SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(TYPE);
                 JSONObject jobj = (JSONObject) array.get(i);
@@ -694,19 +694,19 @@ public class ShpUtil {
                             Polygon polygon = geometryFactory.createPolygon(coords);
                             featureBuilder.add(polygon);
                         }
-                    }else{
-                        Coordinate coordinate = new Coordinate(jobj.getJSONObject("geometry").getDoubleValue("X"),jobj.getJSONObject("geometry").getDoubleValue("Y"));
-                        Point point = geometryFactory.createPoint(coordinate);
-                        featureBuilder.add(point);
-                    }
-                    //这里按顺序添加属性
+                }else{
+                    Coordinate coordinate = new Coordinate(jobj.getJSONObject("geometry").getDoubleValue("X"),jobj.getJSONObject("geometry").getDoubleValue("Y"));
+                    Point point = geometryFactory.createPoint(coordinate);
+                    featureBuilder.add(point);
+                }
+                //这里按顺序添加属性
 
-                    featureBuilder.add(jobj.getJSONObject("attributes").getString("编号"));
-                    featureBuilder.add(jobj.getJSONObject("attributes").getString("pac"));
-                    featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("X坐标"));
-                    featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("Y坐标"));
-                    featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("redline_id"));
-                    featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("OBJECTID_1"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("编号"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("pac"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("X坐标"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getDoubleValue("Y坐标"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("redline_id"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getIntValue("OBJECTID_1"));
 
 //                featureBuilder.add(jobj.getJSONObject("attributes").getString("attribute"));
                 //featureBuilder.add(jobj.getJSONObject("attributes").getString("center"));
@@ -866,6 +866,8 @@ public class ShpUtil {
         }
         return "0";
     }
+
+
     /**
      * 创建shp文件并写入数据
      *

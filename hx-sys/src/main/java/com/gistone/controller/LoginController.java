@@ -345,7 +345,6 @@ public class LoginController {
 
     @RequestMapping(value = "/logout")
     public ResultVO logout(@RequestBody LoginParameter login, HttpServletRequest request) {
-
         try {
             String ipAdress = GetIpUtil.getIpAddress(request);
             if (login.getAccessToken().equals("")) {
@@ -380,7 +379,6 @@ public class LoginController {
         } catch (Exception e) {
             log.error("登出失败,异常信息：{}", e.getMessage());
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "登出异常");
-
         }
         return ResultVOUtil.success();
     }

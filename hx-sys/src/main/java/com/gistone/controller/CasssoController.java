@@ -21,7 +21,13 @@ public class CasssoController {
     @Autowired
     private SysUserMapper sysUserMapper;
 
-
+    /**
+     * 单点登陆对外接口
+     * @param request
+     * @param response
+     * @param accessToken
+     * @throws Exception
+     */
     @RequestMapping(value = "/getuseraccount", method = RequestMethod.GET)
     public void getVerificationCode(HttpServletRequest request, HttpServletResponse response, String accessToken) throws Exception {
         PrintWriter pw = response.getWriter();
