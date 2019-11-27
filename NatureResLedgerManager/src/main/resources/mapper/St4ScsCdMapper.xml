@@ -321,7 +321,7 @@
     </sql>
 
 
-    <select id="pointQualityOrgin" resultMap="BaseResultMap"  parameterType="com.gistone.entity.RlhdGroup">
+    <select id="pointQualityOrgin" resultType="Map"  parameterType="com.gistone.entity.RlhdGroup">
                      SELECT orign,COUNT(orign) orignCount FROM (
         SELECT
 
@@ -349,7 +349,7 @@
         GROUP BY cof.id ) t  GROUP BY orign
 
     </select>
-    <select id="pointQualityNow" resultMap="BaseResultMap"  parameterType="com.gistone.entity.RlhdGroup">
+    <select id="pointQualityNow" resultType="Map"   parameterType="com.gistone.entity.RlhdGroup">
                        SELECT nows,COUNT(nows) nowsCount FROM (
         SELECT
 

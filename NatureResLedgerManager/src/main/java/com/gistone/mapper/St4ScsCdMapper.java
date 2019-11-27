@@ -69,12 +69,12 @@ public interface St4ScsCdMapper extends BaseMapper<St4ScsCd> {
      * @param rl
      * @return
      */
-    List<ActivityStatic> pointQualityOrgin(RlhdGroup rl);
+    List<Map> pointQualityOrgin(RlhdGroup rl);
 
     /**
      * 统计当前任务下现在的活动设施类型及类型数
      * @param rl
      * @return
      */
-    List<ActivityStatic> pointQualityNow(RlhdGroup rl);
+    List<Map> pointQualityNow(RlhdGroup rl);
 }
