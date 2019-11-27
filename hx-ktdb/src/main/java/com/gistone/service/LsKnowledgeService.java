@@ -1,9 +1,11 @@
 package com.gistone.service;
 
-    import com.gistone.entity.LsKnowledge;
-    import com.baomidou.mybatisplus.extension.service.IService;
-    import java.util.List;
-    import java.util.Map;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.gistone.entity.LsKnowledge;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Map;
 
     /**
     * <p>
@@ -20,7 +22,7 @@ package com.gistone.service;
 
     void delete(List<Integer> id);
 
-    void insert(LsKnowledge entity);
+    void insert(LsKnowledge entity, MultipartFile file);
 
-    void edit(LsKnowledge entity);
+    void edit(LsKnowledge entity,MultipartFile file);
     }

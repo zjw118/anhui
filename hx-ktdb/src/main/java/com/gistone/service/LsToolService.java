@@ -1,9 +1,11 @@
 package com.gistone.service;
 
-    import com.gistone.entity.LsTool;
-    import com.baomidou.mybatisplus.extension.service.IService;
-    import java.util.List;
-    import java.util.Map;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.gistone.entity.LsTool;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Map;
 
     /**
     * <p>
@@ -20,7 +22,7 @@ package com.gistone.service;
 
     void delete(List<Integer> id);
 
-    void insert(LsTool entity);
+    void insert(LsTool entity, MultipartFile file);
 
-    void edit(LsTool entity);
+    void edit(LsTool entity, MultipartFile file);
     }

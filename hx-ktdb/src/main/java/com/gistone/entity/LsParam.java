@@ -36,6 +36,8 @@ public class LsParam extends Model<LsParam> {
     private Integer delFlag;
 
     private LocalDateTime createTime;
+    private String remark;
+    private String url;
 
 
     @Override

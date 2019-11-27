@@ -1,13 +1,11 @@
 package com.gistone.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -53,7 +51,7 @@ public class LsProjectModel extends Model<LsProjectModel> {
 
     private Integer delFlag;
 
-
+    private String remark;
 
 
     @Override

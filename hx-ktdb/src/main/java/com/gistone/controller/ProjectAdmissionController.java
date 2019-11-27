@@ -241,6 +241,7 @@ public class ProjectAdmissionController {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        System.out.println(time);
         //时间加一天
         Date date = DateUtils.addDateDays(date2, 1);
         projectAdmission.setTime(date);

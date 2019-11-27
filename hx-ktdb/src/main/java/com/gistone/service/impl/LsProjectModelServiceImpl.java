@@ -73,7 +73,7 @@ public class LsProjectModelServiceImpl extends ServiceImpl<LsProjectModelMapper,
     @Override
     public void insert(LsProjectModel entity, MultipartFile file) {
         //上传文件返回地址
-        String path = PATH+"/epr/word/"+entity.getName()+"-"+entity.getType()+".docx";
+        String path = "/epr/word/"+entity.getName()+"-"+entity.getType()+".docx";
         PictureUtils.uploadFile(path, file);
         entity.setUrl(path);
         mapper.insert(entity);

@@ -9,6 +9,7 @@ import com.gistone.util.ResultVOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -64,12 +65,15 @@ public class LsKnowledgeController {
 
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResultVO add( LsKnowledge entity, BindingResult bindingResult) {
+    public ResultVO add(LsKnowledge entity, BindingResult bindingResult, @RequestParam MultipartFile file) {
         if (bindingResult.hasErrors()) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
         //判断添加人是否为空
-        service.insert(entity);
+        if(file==null){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"文件不能为空");
+        }
+        service.insert(entity,file);
         return ResultVOUtil.success();
     }
 
@@ -91,7 +95,7 @@ public class LsKnowledgeController {
 
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResultVO update(LsKnowledge entity, BindingResult bindingResult) {
+    public ResultVO update(LsKnowledge entity, BindingResult bindingResult,MultipartFile file) {
         if (bindingResult.hasErrors()) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
@@ -99,7 +103,7 @@ public class LsKnowledgeController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"id不能为空");
         }
 //判断更新人加人是否为空
-        service.edit(entity);
+        service.edit(entity,file);
         return ResultVOUtil.success();
     }
 
