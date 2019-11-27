@@ -9,10 +9,14 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-//@Configuration
+
+@Configuration
 public class WebConfigurer implements WebMvcConfigurer {
+
+
 
 //    /**
 //     * 该过滤器用于实现单点登出功能，可选配置
@@ -74,23 +78,26 @@ public class WebConfigurer implements WebMvcConfigurer {
  //---------------------------------------------------------------------
 
 
-//    /**
-//     * 自己定义的拦截器类
-//     * @return
-//     */
-//    @Bean
-//    SysUserLoginInterceptor sysUserLoginInterceptor() {
-//        return new SysUserLoginInterceptor();
-//    }
-//    /**
-//     * 添加拦截器
-//     * @param registry
-//     */
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(sysUserLoginInterceptor()).addPathPatterns("/**")
-//                .excludePathPatterns("/cassso/getuseraccount")
-//
-//                ;
-//    }
+
+    /**
+     * 自定义拦截器
+     * @return
+     */
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new SysUserLoginInterceptor()).addPathPatterns("/**")
+                .excludePathPatterns("/fonts/**","/img/**","/css/**","/js/**")
+                .excludePathPatterns("/index.html")
+                .excludePathPatterns("/api/sys/login/check") //登陆接口
+                .excludePathPatterns("/api/sys/login/logout") //登出接口
+
+        ;
+
+    }
+
+
+
+
+
+
 
 }

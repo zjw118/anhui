@@ -7,10 +7,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.entity.LsSuanfa;
 import com.gistone.mapper.LsSuanfaMapper;
 import com.gistone.service.LsSuanfaService;
+import com.gistone.util.PictureUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -33,6 +36,9 @@ import java.util.Map;
 
     @Autowired
     private LsSuanfaMapper mapper;
+
+    @Value("${PATH}")
+    private String PATH;
     @Override
     public Map<String, Object> list(Integer pageNum, Integer pageSize,String userName) {
 
@@ -63,8 +69,10 @@ import java.util.Map;
         }
 
     @Override
-    public void insert(LsSuanfa entity) {
-        entity.setCreateTime(LocalDateTime.now());
+    public void insert(LsSuanfa entity, MultipartFile file) {
+        String path = PATH+"/epr/attached/";
+        String picturePath = PictureUtils.getPicturePath(path, file);
+        entity.setCreateTime(LocalDateTime.now()).setUrl(picturePath);
         mapper.insert(entity);
     //具体逻辑
 
@@ -73,8 +81,13 @@ import java.util.Map;
 
 
     @Override
-    public void edit(LsSuanfa entity) {
+    public void edit(LsSuanfa entity,MultipartFile file) {
         //具体逻辑
+        if(file!=null){
+            String path = PATH+"/epr/attached/";
+            String picturePath = PictureUtils.getPicturePath(path, file);
+            entity.setUrl(picturePath);
+        }
         mapper.updateById(entity);
     }
 

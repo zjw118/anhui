@@ -20,6 +20,20 @@
     </select>
 
 
+    <update id="updateFlag1" parameterType="Object" >
+        update ls_project_model
+        set flag = 1
+        where id = #{id}
+        and type = #{type}
+    </update>
+    <update id="updateFlag2" parameterType="Object" >
+        update ls_project_model
+        set flag = 0
+        where id != #{id}
+        and type = #{type}
+    </update>
+
+
 
 
 </mapper>

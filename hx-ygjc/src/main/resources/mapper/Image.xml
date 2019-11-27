@@ -213,6 +213,9 @@
             <if test="null!=auditPath">
                 audit_path=#{auditPath},
             </if>
+            <if test="null!=auditPath2">
+                audit_path2=#{auditPath2},
+            </if>
             <if test="null!=area">
                 area=#{area},
             </if>

@@ -73,7 +73,7 @@ public class LsProjectModelServiceImpl extends ServiceImpl<LsProjectModelMapper,
     @Override
     public void insert(LsProjectModel entity, MultipartFile file) {
         //上传文件返回地址
-        String path = PATH+"/epr/word/"+entity.getName()+"-"+entity.getType()+".docx";
+        String path = "/epr/word/"+entity.getName()+"-"+entity.getType()+".docx";
         PictureUtils.uploadFile(path, file);
         entity.setUrl(path);
         mapper.insert(entity);
@@ -83,13 +83,12 @@ public class LsProjectModelServiceImpl extends ServiceImpl<LsProjectModelMapper,
 
     @Override
     public void edit(LsProjectModel entity,MultipartFile file) {
-
-        //具体逻辑
         if(file!=null){
             String path = PATH+"/epr/word/"+entity.getName()+"-"+entity.getType()+".docx";
             PictureUtils.uploadFile(path, file);
         }
-        mapper.updateById(entity);
+        mapper.updateFlag1(entity);
+        mapper.updateFlag2(entity);
     }
 
 }

@@ -48,6 +48,9 @@ public class LsSuanfa extends Model<LsSuanfa> {
 
     private LocalDateTime createTime;
 
+    private String remark;
+    private String url;
+
 
     @Override
     protected Serializable pkVal() {

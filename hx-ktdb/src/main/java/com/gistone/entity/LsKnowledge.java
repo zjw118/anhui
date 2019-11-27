@@ -36,7 +36,8 @@ public class LsKnowledge extends Model<LsKnowledge> {
     private Integer delFlag;
 
     private LocalDateTime createTime;
-
+    private String remark;
+    private String url;
 
     @Override
     protected Serializable pkVal() {

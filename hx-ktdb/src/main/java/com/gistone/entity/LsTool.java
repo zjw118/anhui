@@ -36,6 +36,10 @@ public class LsTool extends Model<LsTool> {
 
     private LocalDateTime createTime;
 
+    private String remark;
+
+    private String url;
+
 
     @Override
     protected Serializable pkVal() {

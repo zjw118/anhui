@@ -51,6 +51,8 @@ public class Image extends Model<Image> {
     private String shp;
     @TableId(value = "contrast_red")
     private String contrastRed;
+    @TableId(value = "contrast_red2")
+    private String contrastRed2;
     @TableId(value = "sign")
     private Integer sign;
     @TableId(value = "evaluation")
@@ -61,6 +63,8 @@ public class Image extends Model<Image> {
     private String countryBorder;
     @TableId(value = "audit_path")
     private String auditPath;
+    @TableId(value = "audit_path2")
+    private String auditPath2;
     @TableId(value = "area")
     private Double area;
     @TableId(value = "plaque_number")

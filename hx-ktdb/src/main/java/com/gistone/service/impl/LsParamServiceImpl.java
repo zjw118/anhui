@@ -7,10 +7,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.entity.LsParam;
 import com.gistone.mapper.LsParamMapper;
 import com.gistone.service.LsParamService;
+import com.gistone.util.PictureUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -33,6 +36,9 @@ public class LsParamServiceImpl extends ServiceImpl<LsParamMapper, LsParam> impl
 
     @Autowired
     private LsParamMapper mapper;
+
+    @Value("${PATH}")
+    private String PATH;
 
     @Override
     public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName) {
@@ -65,16 +71,23 @@ public class LsParamServiceImpl extends ServiceImpl<LsParamMapper, LsParam> impl
     }
 
     @Override
-    public void insert(LsParam entity) {
+    public void insert(LsParam entity, MultipartFile file) {
         //具体逻辑
-        entity.setCreateTime(LocalDateTime.now());
+        String path = PATH+"/epr/attached/";
+        String picturePath = PictureUtils.getPicturePath(path, file);
+        entity.setCreateTime(LocalDateTime.now()).setUrl(picturePath);
         mapper.insert(entity);
     }
 
 
     @Override
-    public void edit(LsParam entity) {
+    public void edit(LsParam entity,MultipartFile file) {
         //具体逻辑
+        if(file!=null){
+            String path = PATH+"/epr/attached/";
+            String picturePath = PictureUtils.getPicturePath(path, file);
+            entity.setUrl(picturePath);
+        }
         mapper.updateById(entity);
     }
 

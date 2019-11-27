@@ -104,9 +104,15 @@ public class LsProjectModelController {
         if(entity.getId()==null){
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"id不能为空");
         }
-//判断更新人加人是否为空
+        if(entity.getType()==null){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"type不能为空");
+        }
         service.edit(entity,file);
         return ResultVOUtil.success();
     }
+
+
+
+
 
 }

@@ -485,9 +485,11 @@ public class ImageController {
     }
 
 
+
+
+
     /**
-     * 审核详情
-     *
+     * 审核详情1
      * @param paramsMap
      * @return
      */
@@ -503,11 +505,8 @@ public class ImageController {
         }
         return service.getAudit(Integer.valueOf(id+""));
     }
-
-
     /**
-     * 审核计算
-     *
+     * 审核计算1
      * @param paramsMap
      * @return
      */
@@ -527,8 +526,53 @@ public class ImageController {
         }
         JSONObject job = JSONObject.fromObject(json);
         return service.addAudit(Integer.valueOf(id),job);
-
     }
+
+
+
+    /**
+     * 审核详情2
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/getAudit2", method = RequestMethod.POST)
+    public ResultVO getAudit2(@RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        Object id =  params.get("id");
+        if (null==id) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "影像主键id不能为空");
+        }
+        return service.getAudit2(Integer.valueOf(id+""));
+    }
+    /**
+     * 审核计算2
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/addAudit2", method = RequestMethod.POST)
+    public ResultVO addAudit2(@RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        String id = (String) params.get("id");
+        if (StringUtils.isBlank(id)) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "主键id不能为空");
+        }
+        Object json = params.get("json");
+        if (null==json) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "系数json不能为空");
+        }
+        JSONObject job = JSONObject.fromObject(json);
+        return service.addAudit2(Integer.valueOf(id),job);
+    }
+
+
+
+
 
 
 

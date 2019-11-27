@@ -283,6 +283,8 @@ public class LoginController {
         map.put("pType", appPType);//巡查类型
 
 
+        HttpSession session = request.getSession();
+        session.setAttribute("user",sysUser);
 
         return ResultCp.build(1000, "登录成功", map);
     }
