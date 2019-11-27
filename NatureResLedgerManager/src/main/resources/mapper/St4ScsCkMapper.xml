@@ -1868,7 +1868,7 @@
         IFNULL(SUM(ck046 = '否' OR ck046 = '未销号'), 0) AS unxhNum,
         IF(COUNT(*) IS NULL, 0, COUNT(*)) AS tzCheckedNum,
         IFNULL(SUM(ck088 = 0 OR ck088 IS NULL), 0) AS tzUncheckedNum,
-        IFNULL(SUM(ck016 = '农业用地'), 0) AS farmNum,
+         IFNULL(SUM(ck016 = '农业用地'), 0) AS farmNum,
         IFNULL(SUM(ck016 = '居民点'), 0) AS residentNum,
         IFNULL(SUM(ck016 = '工矿用地'), 0) AS industrialNum,
         IFNULL(SUM(ck016 = '采石场'), 0) AS quarryNum,
@@ -1910,10 +1910,14 @@
             <if test="st4SysSa.sa001!=null and st4SysSa.sa001  !=''">
                 and sa.SA001 =#{st4SysSa.sa001}
             </if>
+
+            <if test="st4SysSa.sd001!=null and st4SysSa.sd001  !=''">
+                and sa.SD001 =#{st4SysSa.sd001}
+            </if>
         </if>
         <if test="st4ScsCl != null">
-            <if test="st4ScsCl.cl001!=null and st4ScsCl.cl001 !=''">
-                and cl.CL001 =#{st4ScsCl.cl001}
+            <if test="st4ScsCl.cl002!=null and st4ScsCl.cl002 !=''">
+                and cl.CL002 like '${st4ScsCl.cl002}'
             </if>
         </if>
 

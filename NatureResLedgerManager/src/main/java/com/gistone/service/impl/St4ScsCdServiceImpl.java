@@ -76,13 +76,26 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     private String ftpPt;
     @Value("${ftp_url}")
     private String ftpUrl;
+    @Override
+    public ResultVO pointQuality(RlhdGroup rl) {
+        List<St4ScsCd> cds = st4ScsCdMapper.pointQualityOrgin(rl);
 
+        return ResultVOUtil.success(cds);
+    }
 
     @Override
     public ResultVO getPointFromStage(Integer rlGroupID) {
 
         return ResultVOUtil.success(rlhdGroupMapper.getPointFromStage(rlGroupID));
     }
+
+    @Override
+    public ResultVO listStaticPoint(St4ScsCl cl) {
+
+        return ResultVOUtil.success(st4ScsCdMapper.listStaticPoint(cl));
+    }
+
+
 
     @Override
     public ResultVO deletePersonAndPoint(Integer uid, List<Integer> points) {

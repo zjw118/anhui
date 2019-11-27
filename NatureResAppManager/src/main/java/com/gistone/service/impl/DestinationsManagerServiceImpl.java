@@ -3,6 +3,7 @@ package com.gistone.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.entity.*;
 
+import com.gistone.mapper.St4ScsCbdMapper;
 import com.gistone.mapper.St4ScsCeMapper;
 import com.gistone.service.*;
 import com.gistone.util.FileUtil;
@@ -14,10 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -56,6 +56,8 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
 
     @Autowired
     private  MessageProperties config;
+    @Autowired
+    private ISt4ScsCbdService iSt4ScsCbdService;
 //    @Autowired
 //    private Config
 
@@ -83,6 +85,21 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
         }
         Boolean ck = ckService.saveBatch(ckList);
 
+        //这里是新加的需求
+        //移动端提交上来之后要往cbd里面插入数据
+        Set<String> cbds = new HashSet<>();
+        cbds = ckList.stream().map(St4ScsCk::getCd004).collect(Collectors.toSet());
+        List<St4ScsCbd> cbdList = new ArrayList<>();
+        St4ScsCbd cbd=null;
+
+        for (St4ScsCk ck1:ckList) {
+            cbd = new St4ScsCbd();
+            cbd.setCbd002(ck1.getCk049());
+            cbd.setCbd004(Integer.valueOf(ck1.getCd004()));
+            cbd.setCbd003(LocalDateTime.now());
+            cbd.setCbd005("提交了关于“");
+            cbd.setCbd006("”问题斑块的核查信息");
+        }
         if (!ck) {
             new RuntimeException("插入数据库航点信息错误");
         }else {
@@ -139,6 +156,7 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
         if (!ce) {
             new RuntimeException("插入数据库航点信息错误");
         }
+
         return ResultCp.build(1000, "添加成功");
     }
 

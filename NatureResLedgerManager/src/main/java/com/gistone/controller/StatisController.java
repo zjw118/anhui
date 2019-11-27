@@ -1,14 +1,13 @@
 package com.gistone.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.VO.ResultVO;
 import com.gistone.annotation.PassToken;
-import com.gistone.entity.St4ScsCc;
-import com.gistone.entity.St4ScsCd;
-import com.gistone.entity.St4ScsCk;
-import com.gistone.entity.St4ScsCy;
+import com.gistone.entity.*;
 import com.gistone.pkname.Swagger;
+import com.gistone.service.ISt4ScsCbdService;
+import com.gistone.service.ISt4ScsCdService;
 import com.gistone.service.ISt4ScsCkService;
-import com.gistone.service.ISt4ScsClService;
 import com.gistone.service.StatisService;
 import com.gistone.swagger.StaticSwagger;
 import com.gistone.util.Result;
@@ -32,7 +31,33 @@ public class StatisController {
 	private StatisService statisService;
 	@Autowired
 	private ISt4ScsCkService st4ScsCkservice;
+	@Autowired
+	private ISt4ScsCdService st4ScsCdservice;
+	@Autowired
+	private ISt4ScsCbdService iSt4ScsCbdService;
 
+	@ApiOperation(value = "(安徽用)人类活动巡查结果质量评估得传递所属监管台账的id", notes = "巡查-统计列表", response = Result.class)
+	@PostMapping("/pointQuality")
+	public ResultVO pointQuality(@RequestBody Swagger<RlhdGroup> requestData, HttpServletRequest request, HttpServletResponse response){
+		RlhdGroup rg = requestData.getData();
+		return st4ScsCdservice.pointQuality(rg);
+	}
+
+	@ApiOperation(value = "(安徽用)核查统计分析处展示问题斑块任务名称cl002任务年份:cl010,行政区划:adminRegionId", notes = "巡查-统计列表", response = Result.class)
+	@PostMapping("/staticPoint")
+	public ResultVO staticPoint(@RequestBody Swagger<St4ScsCl> requestData, HttpServletRequest request, HttpServletResponse response){
+		return st4ScsCdservice.listStaticPoint(requestData.getData());
+	}
+	@ApiOperation(value = "(安徽用)首页进来的邮件提示列表展示前五条数据", notes = "巡查-统计列表", response = Result.class)
+	@PostMapping("/listCheckMsg")
+	public ResultVO listCheckMsg(@RequestBody Swagger<St4ScsCl> requestData, HttpServletRequest request, HttpServletResponse response){
+		St4ScsCl cl = requestData.getData();
+		QueryWrapper<St4ScsCbd> cbdQueryWrapper = new QueryWrapper<>();
+		cbdQueryWrapper.orderByDesc("CBD003");
+		cbdQueryWrapper.last("limit 5");
+
+		return ResultVOUtil.success(ResultVOUtil.success(iSt4ScsCbdService.list(cbdQueryWrapper)));
+	}
 	/**
 	 * 分页
 	 * @param requestData
@@ -129,7 +154,7 @@ public class StatisController {
 	 * @param response
 	 * @return
 	 */
-	@ApiOperation(value = "(安徽用)台账记录统计接口年份查询传递参数名称taskYear(年份)返回的参数是 sd001(行政区)  ck010(活动设施名称) ck067(审核状态0未审核1已审核2审核不通过)", notes = "台账记录统计接口", response = Result.class)
+	@ApiOperation(value = "(安徽用)问题斑块记录统计接口年份查询传递参数名称taskYear(年份)返回的参数是 sd001(行政区)  ck010(活动设施名称) ck067(审核状态0未审核1已审核2审核不通过)", notes = "台账记录统计接口", response = Result.class)
 	@PostMapping("/listLedger")
 	@PassToken
 	public ResultVO listLedger(@RequestBody Swagger<St4ScsCk> requestData, HttpServletRequest request, HttpServletResponse response){

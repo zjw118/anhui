@@ -122,6 +122,10 @@ public class St4ScsCl extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private String ledgerId;
 
+    @ApiModelProperty(name="adminRegionId",value="行政区ID",dataType = "String",required = false,example="")
+    @TableField(exist = false)
+    private String adminRegionId;
+
 
     public static void main(String[] args) {
         String aa= "D:\\epr\\UploadData/dynamicLayerSpace//75822b253252477dbe15aa1c94603b2e_GF1B_PMS_E117.9_N31.3_20190907_L1A1227691115-PAN_ortho_fuse_clip.img";

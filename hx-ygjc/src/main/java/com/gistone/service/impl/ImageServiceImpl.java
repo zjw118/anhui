@@ -12,7 +12,6 @@ import com.gistone.mapper.ImageNumberMapper;
 import com.gistone.mapper.LsProjectModelMapper;
 import com.gistone.service.ImageService;
 import com.gistone.util.*;
-import javafx.collections.FXCollections;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -418,54 +417,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "审核失败");
     }
 
-//    @Override
-//    public ResultVO oldNumber(Integer id) {
-//        Image image = imageMapper.getImageById(id);
-//        List<ImageConfig> imageConfig3 = imageConfigMapper.getImageConfig3();
-//        boolean bb = false;
-//        if(null!=image){
-//            String score = image.getScore();
-//            if(StringUtils.isNotBlank(score)){
-//                JSONObject jsonObject = JSONObject.fromObject(score);
-//                for (ImageConfig imageConfig : imageConfig3) {
-//                    boolean b = false;
-//                    for (Object o : jsonObject.keySet()) {
-//                        if(imageConfig.getId()==Integer.valueOf(o.toString())){
-//                            imageConfig.setNum(Double.valueOf(jsonObject.get(o).toString()));
-//                            b = true;
-//                            bb = true;
-//                        }
-//                    }
-//                    if(!b){
-//                        imageConfig.setNum(0.0);
-//                    }
-//                }
-//                JSONObject jSONObject = new JSONObject();
-//                jSONObject.put("list",imageConfig3);
-//                if(bb){
-//                    jSONObject.put("sign","0");// 有默认数据
-//                }else{
-//                    jSONObject.put("sign","1");//无默认数据
-//                }
-//                return ResultVOUtil.success(jSONObject);
-//            }else{
-//                JSONObject jSONObject = new JSONObject();
-//                jSONObject.put("sign","1");//无默认数据
-//                return ResultVOUtil.success(jSONObject);
-//            }
-//        }
-//        return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "查询失败");
-//    }
-
-    @Override
-    public ResultVO defaultNumber(String name) {
-        int res1 = imageConfigMapper.defaultNumber1(name);
-        int res2 = imageConfigMapper.defaultNumber2(name);
-        if(0<res1&&0<res2){
-            return ResultVOUtil.success();
-        }
-        return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
-    }
 
     @Override
     public ResultVO gdShp(double rc) {

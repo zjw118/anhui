@@ -32,6 +32,7 @@ import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -60,6 +61,8 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
     @Autowired
     private St4PoClCoMapper st4PoClCoMapper;
     private ExcelStyleTools tools;
+    @Autowired
+    private ConfigUtils configUtils;
     @Override
     public ResultVO getTaskDetail(St4ScsCl data) {
 
@@ -195,6 +198,7 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
                     cl.setCl002(taskName==null?"":taskName.toString());
                     cl.setCl009(taskDescri==null?"":taskDescri.toString());
                     cl.setCl010(taskYear==null?"":taskYear.toString());
+                    cl.setCl014(LocalDateTime.now());
                     if(ObjectUtils.isNotNullAndEmpty(taskLedger)){
                         if(ObjectUtils.isNotNullAndEmpty(map.get(taskLedger.toString().trim()))){
                             cl.setLedgerId(map.get(taskLedger.toString()).toString());
@@ -226,13 +230,13 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
         return ResultVOUtil.error("1444","服务器未读取到数据，请确认所上传excel是否有信息");
     }
     @Override
-    public ResultVO exportTask(List<Integer> ids) {
+    public ResultVO exportTask(St4ScsCl data) {
 
-        List<St4ScsCl> clsData = st4ScsClMapper.getExportData(ids);
+        List<St4ScsCl> clsData = st4ScsClMapper.getExportData(data);
 
 
         JSONObject json = new JSONObject();
-        String path = ExportExcel(clsData);
+        String path = ExportExcel(clsData);/**/
         if(ObjectUtils.isNotNullAndEmpty(path)){
             json.put("excelPath", path);
             return ResultVOUtil.success(json);
@@ -241,12 +245,14 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
         }
 
     }
+
+
     public String ExportExcel(List<St4ScsCl> clsData){
         LocalDateTime time = LocalDateTime.now();
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMdd");
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String fileName = df.format(time)+"任务信息.xls";
-        String dir = "D:\\checkTask\\";
-        String fileFinalPath=dir+fileName;
+        String dir = configUtils.getExcel_PATH();
+        String fileFinalPath=dir.substring(dir.indexOf(":")+1)+fileName;
         File file = new File(fileFinalPath);
         if(!file.exists()){
             File parent = file.getParentFile();
@@ -371,7 +377,16 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
             // cell.setCellStyle(ustyle);
 
             cell = row.createCell(3);
-            cell.setCellValue(cl.getRlhdGroupList()==null?"":cl.getRlhdGroupList().get(0).getName());// 任务台账
+            if(cl.getRlhdGroupList()!=null&&cl.getRlhdGroupList().size()>0){
+                List<RlhdGroup> lists = cl.getRlhdGroupList();
+                String value ="" ;
+                List<String> rls = lists.stream().map(RlhdGroup::getName).collect(Collectors.toList());
+                value+=rls;
+                cell.setCellValue(value);
+            }else{
+                cell.setCellValue("");
+            }
+            //cell.setCellValue(cl.getRlhdGroupList()==null?"":cl.getRlhdGroupList().get(0).getName());// 任务台账
             //cell.setCellStyle(ustyle);
 
             i++;

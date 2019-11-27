@@ -8,6 +8,7 @@ import com.gistone.entity.ImageNumber;
 import com.gistone.entity.ImageTemp;
 import com.gistone.mapper.ImageConfigMapper;
 import com.gistone.mapper.ImageMapper;
+import com.gistone.mapper.ImageNumber2Mapper;
 import com.gistone.mapper.ImageNumberMapper;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.IImageTempService;
@@ -55,7 +56,7 @@ public class ImageController {
     @Autowired
     private ImageNumberMapper imageNumberMapper;
     @Autowired
-    private ImageService imageService;
+    private ImageNumber2Mapper imageNumber2Mapper;
     @Autowired
     private IImageTempService iImageTempService;
 
@@ -529,33 +530,7 @@ public class ImageController {
 
     }
 
-    /**
-     * 开始审核
-     *
-     * @param paramsMap
-     * @return
-     */
-//    @RequestMapping(value = "/audit", method = RequestMethod.POST)
-//    public ResultVO audit(@RequestBody Map<String, Object> paramsMap) {
-//        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-//        if (params == null) {
-//            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
-//        }
-//        Image image = new Image();
-//        String id = (String) params.get("id");
-//        if (StringUtils.isBlank(id)) {
-//            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "影像主键id不能为空");
-//        }
-//        if (null != params.get("evaluation")) {
-//            image.setEvaluation(params.get("evaluation") + "");
-//        }
-//        if (null != params.get("sign")) {
-//            image.setSign(Integer.valueOf(params.get("sign") + ""));
-//        }
-//        image.setId(Integer.valueOf(id));
-//        image.setAuditDate(new Date());
-//        return service.audit(image);
-//    }
+
 
 
 
@@ -576,7 +551,12 @@ public class ImageController {
     }
 
 
-    //系数批次名列表
+
+
+//    ______________________________________系数___________________________________________
+
+
+    //系数1-系数批次名列表
     @RequestMapping(value = "/getNumberNames", method = RequestMethod.POST)
     public ResultVO getNumberNames(@RequestBody Map<String, Object> paramsMap) {
         try {
@@ -586,8 +566,7 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
         }
     }
-
-    //系数批次名查询列表
+    //系数1-系数批次名查询列表
     @RequestMapping(value = "/getNumberByName", method = RequestMethod.POST)
     public ResultVO getNumberByName(@RequestBody Map<String, Object> paramsMap) {
         try {
@@ -618,13 +597,7 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
         }
     }
-
-
-    /**
-     * 修改
-     * @param paramsMap
-     * @return
-     */
+//    系数1-修改
     @RequestMapping(value = "/updateNumber", method = RequestMethod.POST)
     public ResultVO updateNumber(@RequestBody Map<String, Object> paramsMap) {
         try {
@@ -650,13 +623,7 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
         }
     }
-
-
-    /**
-     * 修改批次名
-     * @param paramsMap
-     * @return
-     */
+//    系数1-修改批次名
     @RequestMapping(value = "/updateNume", method = RequestMethod.POST)
     public ResultVO updateNume(@RequestBody Map<String, Object> paramsMap) {
         try {
@@ -670,14 +637,11 @@ public class ImageController {
             Object data = params.get("data");
             if(null==data)
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "新名称data不能为空！");
-
-
             //判断名称是否重复
             List list = imageNumberMapper.selectImageNumber2(data.toString());
             if(0<list.size()){
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "名称已存在！");
             }
-
             ImageNumber imageNumber = new ImageNumber();
             imageNumber.setName(name.toString());
             imageNumber.setData(data.toString());
@@ -691,13 +655,7 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
         }
     }
-
-
-    /**
-     * 创建系数批次
-     * @param paramsMap
-     * @return
-     */
+//    系数1-创建批次
     @RequestMapping(value = "/addNumber", method = RequestMethod.POST)
     public ResultVO addNumber(@RequestBody Map<String, Object> paramsMap) {
         try {
@@ -713,7 +671,6 @@ public class ImageController {
             if(0<list.size()){
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "批次名已存在！");
             }
-
             ImageNumber imageNumber = new ImageNumber();
             imageNumber.setName(params.get("name").toString());
             return ResultVOUtil.success(imageNumberMapper.insertImageNumber(imageNumber));
@@ -722,9 +679,7 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "添加失败");
         }
     }
-
-
-    //删除系数
+    //系数1-删除系数
     @RequestMapping(value = "/deleteNumber", method = RequestMethod.POST)
     public ResultVO deleteNumber(@RequestBody Map<String, Object> paramsMap) {
         try {
@@ -742,16 +697,7 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "删除失败");
         }
     }
-
-
-
-
-
-    /**
-     * 选择默认系数
-     * @param paramsMap
-     * @return
-     */
+//    系数1-设置默认系数
     @RequestMapping(value = "/defaultNumber", method = RequestMethod.POST)
     public ResultVO defaultNumber(@RequestBody Map<String, Object> paramsMap) {
         try {
@@ -763,7 +709,12 @@ public class ImageController {
             if (null==name) {
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
             }
-            return imageService.defaultNumber(name.toString());
+            int res1 = imageNumberMapper.defaultNumber1(name.toString());
+            int res2 = imageNumberMapper.defaultNumber2(name.toString());
+            if(0<res1&&0<res2){
+                return ResultVOUtil.success();
+            }
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
@@ -771,6 +722,178 @@ public class ImageController {
     }
 
 
+//---------------------------------
+
+
+    //系数2-系数批次名列表
+    @RequestMapping(value = "/getNumberNames2", method = RequestMethod.POST)
+    public ResultVO getNumberNames2(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            return ResultVOUtil.success(imageNumber2Mapper.selectName2());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
+        }
+    }
+    //系数2-系数批次名查询列表
+    @RequestMapping(value = "/getNumberByName2", method = RequestMethod.POST)
+    public ResultVO getNumberByName2(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params == null) {
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            }
+            Object name = params.get("name");
+            if (null==name) {
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
+            }
+            ImageNumber imageNumber = new ImageNumber();
+            imageNumber.setName(name.toString());
+            List<ImageNumber> imageNumbers = imageNumber2Mapper.selectImageNumber(imageNumber);
+            //判断是否需要新增
+            for (ImageNumber number : imageNumbers) {
+                if(null==number.getId()){
+                    ImageNumber add = new ImageNumber();
+                    add.setImage_config_id(number.getImageConfigId());
+                    add.setName(name.toString());
+                    add.setNumber(0.0);
+                    imageNumber2Mapper.insertImageNumber(add);
+                }
+            }
+            return ResultVOUtil.success(imageNumber2Mapper.selectImageNumber(imageNumber));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
+        }
+    }
+    //系数2-修改
+    @RequestMapping(value = "/updateNumber2", method = RequestMethod.POST)
+    public ResultVO updateNumber2(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params == null) {
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            }
+            Object json = params.get("json");
+            if(null==json)
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "json不能为空！");
+            JSONObject jsonObject = JSONObject.fromObject(json);
+
+            for (Object o : jsonObject.keySet()){
+                ImageNumber imageNumber = new ImageNumber();
+                imageNumber.setId(Integer.valueOf(o.toString()));
+                imageNumber.setNumber(Double.valueOf(jsonObject.get(o)+""));
+                imageNumber2Mapper.updateImageNumber(imageNumber);
+                imageNumber = null;
+            }
+            return ResultVOUtil.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
+        }
+    }
+    //系数2-修改批次名
+    @RequestMapping(value = "/updateNume2", method = RequestMethod.POST)
+    public ResultVO updateNume2(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params == null) {
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            }
+            Object name = params.get("name");
+            if(null==name)
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "原名称name不能为空！");
+            Object data = params.get("data");
+            if(null==data)
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "新名称data不能为空！");
+            //判断名称是否重复
+            List list = imageNumber2Mapper.selectImageNumber2(data.toString());
+            if(0<list.size()){
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "名称已存在！");
+            }
+            ImageNumber imageNumber = new ImageNumber();
+            imageNumber.setName(name.toString());
+            imageNumber.setData(data.toString());
+            int res = imageNumber2Mapper.updateNum(imageNumber);
+            if(0>res){
+                return ResultVOUtil.success();
+            }
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
+        }
+    }
+    //系数2-创建批次
+    @RequestMapping(value = "/addNumber2", method = RequestMethod.POST)
+    public ResultVO addNumber2(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params == null) {
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            }
+            if(null==params.get("name")){
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "name不能为空！");
+            }
+            //判断名称是否重复
+            List list = imageNumber2Mapper.selectImageNumber2(params.get("name").toString());
+            if(0<list.size()){
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "批次名已存在！");
+            }
+            ImageNumber imageNumber = new ImageNumber();
+            imageNumber.setName(params.get("name").toString());
+            return ResultVOUtil.success(imageNumber2Mapper.insertImageNumber(imageNumber));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "添加失败");
+        }
+    }
+    //系数2-删除系数
+    @RequestMapping(value = "/deleteNumber2", method = RequestMethod.POST)
+    public ResultVO deleteNumber2(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params == null) {
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            }
+            String name = (String) params.get("name");
+            if (StringUtils.isBlank(name)) {
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
+            }
+            return ResultVOUtil.success(imageNumber2Mapper.deleteImageName(name));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "删除失败");
+        }
+    }
+    //系数2-设置默认系数
+    @RequestMapping(value = "/defaultNumber2", method = RequestMethod.POST)
+    public ResultVO defaultNumber2(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params == null) {
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            }
+            Object name = params.get("name");
+            if (null==name) {
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
+            }
+            int res1 = imageNumber2Mapper.defaultNumber1(name.toString());
+            int res2 = imageNumber2Mapper.defaultNumber2(name.toString());
+            if(0<res1&&0<res2){
+                return ResultVOUtil.success();
+            }
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
+        }
+    }
+
+
+
+
+//    ______________________________________________________________________________
 
 
     //拐点-生成最新拐点SHP
