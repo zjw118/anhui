@@ -49,8 +49,6 @@ public interface ImageService extends IService<Image> {
 
     ResultVO audit(Image image);
 
-    ResultVO defaultNumber(String name);
-
     ResultVO gdShp(double rc);
 
     ResultVO gdShp2(Object data);

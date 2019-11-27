@@ -1,36 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gistone.mapper.ImageNumberMapper">
-
+<mapper namespace="com.gistone.mapper.ImageNumber2Mapper">
 
     <select id="selectName"  resultType="java.lang.String">
-        SELECT name from image_number
+        SELECT name from image_number2
         GROUP BY name
 	</select>
     <select id="selectName2"  resultType="com.gistone.entity.ImageNumber">
-        SELECT name,sign from image_number
+        SELECT name,sign from image_number2
         GROUP BY name
 	</select>
-
     <select id="selectImageNumber2"  resultType="com.gistone.entity.ImageNumber" parameterType="java.lang.String">
-        SELECT * from image_number
+        SELECT * from image_number2
         WHERE name = #{name}
 	</select>
-
     <select id="selectImageNumber"  parameterType="com.gistone.entity.ImageNumber" resultType="com.gistone.entity.ImageNumber">
         SELECT a.id,COALESCE(a.number,0)number,a.name,b.name data,b.id imageConfigId,b.parentid,
         (SELECT name from image_config where id = b.parentid)parentName
         from
-        (SELECT * from image_number
+        (SELECT * from image_number2
         where name = #{name})a
         INNER JOIN image_config b
         on a.image_config_id = b.id
         where b.type = 3
         ORDER BY b.id
 	</select>
-
     <insert id="insertImageNumber" parameterType="com.gistone.entity.ImageNumber">
-        INSERT INTO image_number(
+        INSERT INTO image_number2(
             image_config_id,
             number,
             name
@@ -40,16 +36,14 @@
             #{name}
         )
     </insert>
-
     <delete id="deleteImageNumber" parameterType="java.lang.Integer">
-		delete from image_number where id = #{id}
+		delete from image_number2 where id = #{id}
 	</delete>
     <delete id="deleteImageName" parameterType="java.lang.String">
-		delete from image_number where name = #{name}
+		delete from image_number2 where name = #{name}
 	</delete>
-
     <update id="updateImageNumber" parameterType="com.gistone.entity.ImageNumber" >
-        update image_number
+        update image_number2
         <set>
             <if test="null!= image_config_id">
                 image_config_id = #{image_config_id},
@@ -63,9 +57,8 @@
         </set>
         where id=#{id}
     </update>
-
     <update id="updateNum" parameterType="Object" >
-        update image_number
+        update image_number2
         <set>
             <if test="null!= name and ''!= name">
                 name = #{data},
@@ -73,14 +66,13 @@
         </set>
         where name = #{name}
     </update>
-
     <update id="defaultNumber1" parameterType="java.lang.String" >
-        update image_number
+        update image_number2
         set sign = 1
         where name = #{name}
     </update>
     <update id="defaultNumber2" parameterType="java.lang.String" >
-        update image_number
+        update image_number2
         set sign = 0
         where name != #{name}
     </update>
