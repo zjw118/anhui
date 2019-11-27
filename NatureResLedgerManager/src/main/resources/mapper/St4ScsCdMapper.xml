@@ -355,7 +355,7 @@
         <if test="id!=null  and id!='' ">
             and co.id=#{id}
         </if>
-                GROUP BY cof.id ) t   GROUP BY orign ) aa ON aa.orign = conf.name
+                GROUP BY cof.id ) t   GROUP BY orign ) aa ON aa.orign = conf.name WHERE orign IS NOT NULL
 
     </select>
     <select id="pointQualityOrginExport" resultType="Map"  parameterType="com.gistone.entity.RlhdGroup">
@@ -428,7 +428,7 @@
         <if test="id!=null  and id!='' ">
           and  co.id=#{id}
         </if>
-        GROUP BY cof.id ) t  WHERE nows IS NOT NULL AND nows != '' GROUP BY nows   ) aa ON aa.nows = conf.name
+        GROUP BY cof.id ) t  WHERE nows IS NOT NULL AND nows != '' GROUP BY nows   ) aa ON aa.nows = conf.name WHERE nows IS NOT null
 
     </select>
 

@@ -539,7 +539,9 @@ public class St4ScsCk extends BaseEntity implements Serializable {
     @TableField(exist = false)
     @ApiModelProperty(value="行政区名称",example = "北京")
     private String SD008;
-
+    @TableField(exist = false)
+    @ApiModelProperty(value="行政区代码",example = "北京")
+    private String code;
 
 
 

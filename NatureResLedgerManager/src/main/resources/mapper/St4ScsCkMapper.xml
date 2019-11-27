@@ -277,6 +277,7 @@
         </association>
         <association property="st4SysSa" javaType="com.gistone.entity.St4SysSa">
             <id column="SA001" property="sa001" />
+            <id column="SA012" property="sa012" />
             <result column="SA019" property="sa019" />
         </association>
         <collection property="st4ScsCnList" ofType="com.gistone.entity.St4ScsCn">
@@ -1965,17 +1966,8 @@ unEmaminedNum,emaminedNum,backNum,
         IFNULL(SUM(ck046 = '否' OR ck046 = '未销号'), 0) AS unxhNum,
         IF(COUNT(*) IS NULL, 0, COUNT(*)) AS tzCheckedNum,
         IFNULL(SUM(ck088 = 0 OR ck088 IS NULL), 0) AS tzUncheckedNum,
-         IFNULL(SUM(ck016 = '农业用地'), 0) AS farmNum,
-        IFNULL(SUM(ck016 = '居民点'), 0) AS residentNum,
-        IFNULL(SUM(ck016 = '工矿用地'), 0) AS industrialNum,
-        IFNULL(SUM(ck016 = '采石场'), 0) AS quarryNum,
-        IFNULL(SUM(ck016 = '能源设施'), 0) AS EnergyNum,
-        IFNULL(SUM(ck016 = '旅游设施'), 0) AS journeyNum,
-        IFNULL(SUM(ck016 = '交通设施'), 0) AS trafficNum,
-        IFNULL(SUM(ck016 = '养殖场'), 0) AS feetNum,
-        IFNULL(SUM(ck016 = '道路'), 0) AS roadNum,
-        IFNULL(SUM(ck016 = '水电设施'), 0) AS waterElectricityNum,
-        IFNULL(SUM(ck067 = 0), 0) AS unEmaminedNum,
+
+        IFNULL(SUM(ck067 = 0  ), 0) AS unEmaminedNum,
         IFNULL(SUM(ck067 = 1), 0) AS emaminedNum,
         IFNULL(SUM(ck067 = 2), 0) AS backNum
         FROM sys_company com
@@ -2012,18 +2004,15 @@ unEmaminedNum,emaminedNum,backNum,
                 and sa.SD001 =#{st4SysSa.sd001}
             </if>
         </if>
-        <if test="st4ScsCl != null">
-            <if test="st4ScsCl.cl002!=null and st4ScsCl.cl002 !=''">
-                and cl.CL002 like '${st4ScsCl.cl002}'
-            </if>
+        <if test="cl001!=null and cl001!=''">
+                and cl.CL001 = #{cl001}
         </if>
-
         <if test="taskYear!=null and taskYear!=''">
             and cl.CL010 =#{taskYear}
         </if>
-        <!--<if test="sd001!=null and sd001!=''">-->
-            <!--and cd.sd001 =#{sd001}-->
-        <!--</if>-->
+        <if test="code!=null and code!=''">
+            and sa.sd001 =#{code}
+        </if>
         <!--这里时间传递进来时间之后传递大于2019-08-25 00:00:00和2019-08-20 00:00:00前者记录居然不包含后者!-->
         <if test="strTime!=null and strTime!='' ">
             and ck.CK048 <![CDATA[ >= ]]> #{strTime}
@@ -2040,7 +2029,16 @@ unEmaminedNum,emaminedNum,backNum,
         <if test="groupByName=='sd001'">
             GROUP BY com.PK_ID
         </if>
-        ) t GROUP BY PK_ID
+        ) t
+        <if test="groupByName==null or groupByName=='' ">
+              GROUP BY ck010
+        </if>
+        <if test="groupByName=='ck010' ">
+            GROUP BY ck010
+        </if>
+        <if test="groupByName=='sd001'">
+            GROUP BY PK_ID
+        </if>
         <!--<if test="groupByName=='ck067'">-->
             <!--GROUP BY ck.ck067-->
         <!--</if>-->

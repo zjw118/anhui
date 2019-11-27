@@ -1384,9 +1384,10 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                 }catch (Exception e){
                     e.printStackTrace();
                     return ResultVOUtil.success();
-                }finally {
-                    return ResultVOUtil.success();
                 }
+//                finally {
+//                    return ResultVOUtil.success();
+//                }
             }else if(ck.getCk067()==1){
                 try{
                     String pushMsg ="您提交的在“"+ckk.getSt4ScsCl().getCl002()+"”任务的下“"
@@ -1396,9 +1397,10 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                 }catch (Exception e){
                     e.printStackTrace();
 
-                }finally {
-                    return ResultVOUtil.success();
                 }
+//                finally {
+//                    return ResultVOUtil.success();
+//                }
             }
             return ResultVOUtil.success();
         }

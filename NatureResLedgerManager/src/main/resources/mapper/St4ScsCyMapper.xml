@@ -258,6 +258,11 @@
         <if test="uname!=null and uname  !=''">
             and sa.SA019 like '%${uname}%'
         </if>
+
+
+        <if test="deptName!=null and deptName  !=''">
+            and sa.SA015 like '%${deptName}%'
+        </if>
         <if test="st4ScsCl!=null">
             <if test="st4ScsCl.cl002!=null and st4ScsCl.cl002 !=''">
                 and cl.CL002 like  '%${st4ScsCl.cl002}%'
