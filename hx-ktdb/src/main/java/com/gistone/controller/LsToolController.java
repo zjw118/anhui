@@ -2,14 +2,13 @@ package com.gistone.controller;
 
 
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.LsProjectModel;
-import com.gistone.service.LsProjectModelService;
+import com.gistone.entity.LsTool;
+import com.gistone.service.LsToolService;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultVOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -25,22 +24,21 @@ import java.util.Map;
  */
 
 @RestController
-@RequestMapping("/api/ktdb/lsProjectModel")
-public class LsProjectModelController {
+@RequestMapping("/lsTool")
+public class LsToolController {
     @Autowired
-    private LsProjectModelService service;
+    private LsToolService service;
 
     @PostMapping("/list")
     public ResultVO getList(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
-        Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
-        if (dataParam == null) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "请求数据data不能为空！");
         }
-        Integer pageNum = (Integer) dataParam.get("pageNum");
-        Integer pageSize = (Integer) dataParam.get("pageSize");
-        String name = (String) dataParam.get("name");
-        Integer type = (Integer) dataParam.get("type");
+        Integer pageNum = (Integer) params.get("pageNum");
+        Integer pageSize = (Integer) params.get("pageSize");
+        String name = (String) params.get("name");
         if (pageNum == null) {
             pageNum = 1;
         }
@@ -49,7 +47,7 @@ public class LsProjectModelController {
             pageSize = 10;
         }
 
-        Map<String, Object> result = service.list(pageNum, pageSize, name,type);
+        Map<String, Object> result = service.list(pageNum, pageSize, name);
         return ResultVOUtil.success(result);
     }
 
@@ -60,22 +58,18 @@ public class LsProjectModelController {
         if (id == null || id < 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
-        LsProjectModel entity = service.getById(id);
+        LsTool entity = service.getById(id);
         return ResultVOUtil.success(entity);
     }
 
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResultVO add(LsProjectModel entity, BindingResult bindingResult,
-                        @RequestParam MultipartFile file) {
+    public ResultVO add(@RequestBody LsTool entity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
-        if (file == null) {
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "文件不能为空");
-        }
         //判断添加人是否为空
-        service.insert(entity, file);
+        service.insert(entity);
         return ResultVOUtil.success();
     }
 
@@ -83,12 +77,12 @@ public class LsProjectModelController {
     @RequestMapping(value = "/delete")
     public ResultVO delete(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
-        Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
-        if (dataParam == null) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "请求数据data不能为空！");
         }
-        List<Integer> id = (List<Integer>) dataParam.get("id");
-        if (id == null ||id.size() <0) {
+        List<Integer> id = (List<Integer>) params.get("id");
+        if (id == null && id.size() <= 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
         service.delete(id);
@@ -97,15 +91,15 @@ public class LsProjectModelController {
 
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResultVO update(LsProjectModel entity, BindingResult bindingResult,MultipartFile file) {
+    public ResultVO update(@RequestBody LsTool entity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
-        if(entity.getId()==null){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"id不能为空");
+        if (entity.getId() == null) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
 //判断更新人加人是否为空
-        service.edit(entity,file);
+        service.edit(entity);
         return ResultVOUtil.success();
     }
 

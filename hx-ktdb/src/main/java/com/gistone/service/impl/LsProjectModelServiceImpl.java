@@ -39,11 +39,14 @@ public class LsProjectModelServiceImpl extends ServiceImpl<LsProjectModelMapper,
     private String PATH;
 
     @Override
-    public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName) {
+    public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName,Integer type) {
 
         QueryWrapper<LsProjectModel> wrapper = new QueryWrapper<>();
         if (StringUtils.isNotBlank(userName)) {
             wrapper.likeRight("name",userName);
+        }
+        if(type!=null){
+            wrapper.eq("type",type);
         }
          wrapper.eq("del_flag",1);
         //wrapper.orderByDesc("SA003");

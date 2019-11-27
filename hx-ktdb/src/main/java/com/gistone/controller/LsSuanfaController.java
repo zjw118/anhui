@@ -97,9 +97,9 @@ public class LsSuanfaController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
         if(entity.getId()==null){
-            return ResultVOUtil.
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"id不能为空");
         }
-//判断更新人加人是否为空
+        //判断更新人加人是否为空
         service.edit(entity);
         return ResultVOUtil.success();
     }

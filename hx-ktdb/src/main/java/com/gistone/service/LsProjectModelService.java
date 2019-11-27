@@ -18,7 +18,7 @@ import java.util.Map;
     public interface LsProjectModelService extends IService<LsProjectModel> {
 
 
-    Map<String, Object> list(Integer pageNum,Integer pageSize,String Name);
+    Map<String, Object> list(Integer pageNum,Integer pageSize,String Name,Integer type);
 
     void delete(List<Integer> id);
 
