@@ -797,7 +797,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         pictureMap.put("image2",path2);
         pictureMap.put("image3",path3);
         pictureMap.put("image4",path4);
-        boolean b = WordUtil.exportWord(path, docxPath,uuid+".docx", params, pictureMap);
+        boolean b = WordUtil.exportWord(PATH+path, docxPath,uuid+".docx", params, pictureMap);
         if(b){
             return ResultVOUtil.success("/epr/ZTTJ/"+uuid+".docx");
         }
