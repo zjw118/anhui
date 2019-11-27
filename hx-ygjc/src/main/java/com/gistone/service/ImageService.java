@@ -20,6 +20,7 @@ import java.util.Map;
 * @since 2019-10-18
 */
 public interface ImageService extends IService<Image> {
+
     Map<String, Object> list(Integer pageNum, Integer pageSize, String Name);
 
     void delete(List<Integer> id);
@@ -48,24 +49,19 @@ public interface ImageService extends IService<Image> {
 
     ResultVO audit(Image image);
 
-//    ResultVO oldNumber(Integer id);
-
     ResultVO defaultNumber(String name);
 
-    /**
-     * 获取拐点shp
-     * @param rc
-     * @return
-     */
     ResultVO gdShp(double rc);
+
     ResultVO gdShp2(Object data);
+
     ResultVO getGdFile();
 
-    /**
-     * 下载最新拐点
-     * @return
-     */
+    ResultVO exportZTTJ(String data1,String data2,String data3,String data4);
+
     ResultVO gdFile(HttpServletResponse response);
+
+
 
 
 }

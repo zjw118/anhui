@@ -22,7 +22,7 @@ public interface RlhdGroupService extends IService<RlhdGroup> {
 
     void delete(List<Integer> id);
 
-    void insert(String name, Integer createBy, String remark, List<Integer> ids);
+    void insert(String name, Integer createBy, String remark, List<Integer> ids,Integer type);
 
     void edit(RlhdGroup entity);
 

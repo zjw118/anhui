@@ -41,8 +41,11 @@ import java.util.*;
  */
 @Slf4j
 public class ShpUtil {
+
+
+
     public static void main(String[] args) {
-        String shpStr1 = ShpUtil.pointToStr("E:/epr/grpoint/ebd4036a-d3a2-4e4c-b959-f3cbf7fa9cde/", 2) + "";
+        String shpStr1 = ShpUtil.readShapeFileToStr("E:\\epr\\image\\2019-11-10\\3\\5deda7e4ecfe4eb9ae2b62b5415ad884.shp", 1) + "";
         System.out.println(shpStr1);
     }
 
