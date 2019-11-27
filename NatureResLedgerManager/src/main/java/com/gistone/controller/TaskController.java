@@ -251,7 +251,7 @@ public class TaskController {
                     //检查临时目录是否存在，不存在则创建
                     dirFile.mkdirs();
                 }
-                String aaa =PictureUtils.getDiyTempFilePath(temp_savepath, file);
+                String aaa =PictureUtilsCh.getDiyTempFilePath(temp_savepath, file);
                 try{
                     return iSt4ScsClService.readExcel(aaa);
                 }catch (Exception e){
@@ -271,10 +271,8 @@ public class TaskController {
     public ResultVO exportTask(@RequestBody @ApiParam(name = "任务批次单个详情接口", value = "json格式", required = true) Swagger<St4ScsCl> data,
                                HttpServletResponse response) {
             St4ScsCl cl = data.getData();
-            if(cl.getClIds()==null||cl.getClIds().size()<1){
-                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请至少选择一条要导出的任务数据！");
-            }
-            return iSt4ScsClService.exportTask(cl.getClIds());
+
+            return iSt4ScsClService.exportTask(cl);
     }
         /**
          * 新建巡护小组

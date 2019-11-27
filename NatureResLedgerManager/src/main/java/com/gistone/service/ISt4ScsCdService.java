@@ -2,9 +2,7 @@ package com.gistone.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.Image;
-import com.gistone.entity.St4ScsCd;
-import com.gistone.entity.St4SysSa;
+import com.gistone.entity.*;
 import com.gistone.util.Result;
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,4 +68,18 @@ public interface ISt4ScsCdService extends IService<St4ScsCd> {
      * @return
      */
     ResultVO getPointFromStage(Integer rlGroupID);
+
+    /**
+     * 在核查统计分析处展示
+     * @param cl
+     * @return
+     */
+    ResultVO listStaticPoint(St4ScsCl cl);
+
+    /**
+     *人类活动巡查结果质量评估得传递所属监管台账的id
+     * @param rl
+     * @return
+     */
+    ResultVO pointQuality(RlhdGroup rl);
 }

@@ -28,7 +28,7 @@ public class JPushUtil {
 
     //masterSecret和appKey在极光推送官网后台管理获取
     private static String masterSecret = "bd765a179f5aefb97a7bbac7";
-    private static String appKey = "d1b1b5320aaed3c2bd57a4fb";
+    private static String appKey = "726adce8073c23d1153ba5d6";
 
     /**
      * 极光推送

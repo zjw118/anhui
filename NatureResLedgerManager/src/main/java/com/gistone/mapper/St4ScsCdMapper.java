@@ -1,8 +1,11 @@
 package com.gistone.mapper;
 
+import com.gistone.entity.RlhdGroup;
 import com.gistone.entity.St4ScsCd;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.gistone.entity.St4ScsCl;
 import com.gistone.entity.St4SysSa;
+import com.gistone.swagger.ActivityStatic;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 import java.util.Map;
@@ -54,5 +57,24 @@ public interface St4ScsCdMapper extends BaseMapper<St4ScsCd> {
      */
     List<St4SysSa> getPersonAndPoint(Integer uid);
 
+    /**
+     * 核查结果统计分析斑块地图展示接口
+     * @param cl
+     * @return
+     */
+    List<St4ScsCd> listStaticPoint(St4ScsCl cl);
 
+    /**
+     * 统计当前任务下原来来的活动设施类型及类型数
+     * @param rl
+     * @return
+     */
+    List<ActivityStatic> pointQualityOrgin(RlhdGroup rl);
+
+    /**
+     * 统计当前任务下现在的活动设施类型及类型数
+     * @param rl
+     * @return
+     */
+    List<ActivityStatic> pointQualityNow(RlhdGroup rl);
 }

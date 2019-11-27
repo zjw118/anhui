@@ -67,6 +67,6 @@ public interface ISt4ScsClService extends IService<St4ScsCl> {
      * 任务表导出
      * @return
      */
-    ResultVO exportTask(List<Integer> ids);
+    ResultVO exportTask(St4ScsCl data);
 
 }
