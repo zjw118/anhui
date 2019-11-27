@@ -1,65 +1,50 @@
 package com.gistone.interceptor;
 
 import cn.hutool.json.JSONObject;
-import com.gistone.entity.SysRole;
-import com.gistone.mapper.SysUserMapper;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import com.gistone.entity.SysUser;
+import com.gistone.util.HttpClientPostFs;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+@Component
 public class SysUserLoginInterceptor implements HandlerInterceptor {
 
-    @Autowired
-    private StringRedisTemplate redisTemplate;
-
-
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-            throws Exception {
-
-        String uri = request.getRequestURI();
-//        System.out.println("=>"+uri);
-
-
-//        Object accessToken = getCookieByName(request, "token") != null ? getCookieByName(request, "token").getValue() : null;
-//        Object idKey = getCookieByName(request, "uuid") != null ? getCookieByName(request, "uuid").getValue() : null;
-//        if(accessToken==null){
-//            returnJson(response, "token为空");
-//            return false;
-//        }
-//        if(idKey==null){
-//            returnJson(response, "id为空");
-//            return false;
-//        }
-//        String values =redisTemplate.opsForValue().get(idKey);
-//        if(!accessToken.equals(values)){
-//            returnJson(response, "无效token");
-//            return  false;
-//        }
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        HttpSession session = request.getSession();
+        SysUser sysUser = (SysUser) session.getAttribute("user");
+        if(null==sysUser){
+//            System.out.println("拦截============>"+request.getRequestURI());
+            returnJson(response, "用户过期，请重新登陆。");
+            return false;
+        }
+//        System.out.println("放行============>"+request.getRequestURI());
         return true;
     }
 
     @Override
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o,
                            ModelAndView modelAndView) throws Exception {
-
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-                                Object o, Exception e) throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
+                                Object handler, Exception e) throws Exception {
+        HandlerInterceptor.super.afterCompletion(request, response, handler, e);
 
     }
+
+
+
 
     /**
      * 根据名字获取cookie
@@ -104,16 +89,12 @@ public class SysUserLoginInterceptor implements HandlerInterceptor {
      */
     private void returnJson(HttpServletResponse response, String json) throws Exception{
         PrintWriter writer = null;
-//        response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=utf-8");
         try {
             writer = response.getWriter();
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 211);
             jsonObject.put("msg",json);
-            /*Map<String, Object> map = new HashMap<>();
-            map.put("status", 0);
-            map.put("mesg",json);*/
             writer.print(jsonObject);
         } catch (IOException e) {
             e.printStackTrace();
