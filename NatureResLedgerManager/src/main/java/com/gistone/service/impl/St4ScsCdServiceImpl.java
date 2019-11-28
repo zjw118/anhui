@@ -115,7 +115,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     @Override
     public ResultVO getPersonAndPoint(Integer data) {
        // List<St4SysSa
-        List<St4SysSa> list = st4ScsCdMapper.getPersonAndPoint(0);
+        List<St4SysSa> list = st4ScsCdMapper.getPersonAndPoint(data);
 //        List<String> sa001List = null;
 //        for (Map<String,Object> map:list) {
 //            sa001List.add(map.get("cd001").toString());
@@ -123,7 +123,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
 //        List<Map<String,Object>> listR = new ArrayList<>();/listReserveData
 //        Map<String,Object> mapr = new HashMap<>();getPersonAndPoint
 //        for (Map<String,Object> map:list) {
-//            String cdid = map.get("cd001").toString();
+//            String cdid = map.get("cd001").to/getStageDetailString();
 //            if(ObjectUtils.isNotNullAndEmpty(map.get("cd001"))){
 //                if(sa001List!=null&&sa001List.contains(map.get("cd001").toString())){
 //                    mapr.
