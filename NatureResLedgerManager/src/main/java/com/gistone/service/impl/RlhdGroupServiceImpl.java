@@ -60,7 +60,7 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
 
         QueryWrapper<RlhdGroup> wrapper = new QueryWrapper<>();
         if (StringUtils.isNotBlank(userName)) {
-            wrapper.likeRight("name",userName);
+            wrapper.like("name",userName);
         }
          wrapper.eq("del_flag",1);
         wrapper.orderByDesc("create_date");

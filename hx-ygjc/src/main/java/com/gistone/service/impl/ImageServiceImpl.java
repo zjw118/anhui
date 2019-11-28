@@ -763,10 +763,12 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         }
         List<String> strings = null;
 
-        if(-1<grpoint.indexOf("gd")){
-            strings = ShpUtil.pointToStr(grpoint+"grpoint.shp", 2);
-        }else{
-            strings = ShpUtil.readShapeFileToStr(grpoint+"grpoint.shp", 2);
+        if(StringUtils.isNotBlank(grpoint)){
+            if(-1<grpoint.indexOf("gd")){
+                strings = ShpUtil.pointToStr(grpoint+"grpoint.shp", 2);
+            }else{
+                strings = ShpUtil.readShapeFileToStr(grpoint+"grpoint.shp", 2);
+            }
         }
 
         return ResultVOUtil.success(strings);
