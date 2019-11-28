@@ -470,7 +470,7 @@
     </select>
     <select id="listStaticPoint" resultMap="BaseResultMap"  parameterType="com.gistone.entity.St4ScsCl">
         SELECT sa.SD001,cd.*,ck.ck001 FROM  st4_scs_cd cd
-        LEFT JOIN
+        inner JOIN
 
         (
         SELECT *  FROM (
@@ -488,8 +488,8 @@
         <if test="cl001!=null  and cl001!='' ">
             and cl.CL001 = #{cl001}
         </if>
-        <if test="cl002!=null  and cl002!='' ">
-            and cl.CL002 like '%${cl002}%'
+        <if test="cl010!=null  and cl010!='' ">
+            and cl.CL010 like '%${cl010}%'
         </if>
         <if test="adminRegionId!=null  and adminRegionId!='' ">
             and  sa.sd001 = #{adminRegionId}
@@ -506,7 +506,7 @@
         left join st4_po_cl_co clco on clco.co001 = co.id
         left join st4_scs_cl cl on cl.cl001 = clco.cl001
 
-        WHERE cdsa.sa001 IS NOT NULL
+        WHERE cdsa.sa001 IS NOT NULL and cl.cl001=#{id}
 
     </select>
 

@@ -121,7 +121,7 @@ public class St4ScsCk extends BaseEntity implements Serializable {
     //@DateTimeFormat(pattern = "yyyy-MM-dd")
     private String ck020;
 
-    @ApiModelProperty(value = "有无环评手续(1是 0无)",dataType = "Integer",example = "1")
+    @ApiModelProperty(value = "有无环评手续(1是 0无)",dataType = "String",example = "1")
     @TableField("CK021")
     private String ck021;
 
