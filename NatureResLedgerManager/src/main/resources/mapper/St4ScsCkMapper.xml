@@ -1961,12 +1961,6 @@ unEmaminedNum,emaminedNum,backNum,
         cl.CL002,
         sa.SA019,
         IFNULL(SUBSTRING_INDEX(CK016,"-",-1), '') AS ck010,
-        IFNULL(ck.CK012, '') AS ck012,
-        IFNULL(SUM(ck046 = '是' OR ck046 = '已销号'), 0) AS xhNum,
-        IFNULL(SUM(ck046 = '否' OR ck046 = '未销号'), 0) AS unxhNum,
-        IF(COUNT(*) IS NULL, 0, COUNT(*)) AS tzCheckedNum,
-        IFNULL(SUM(ck088 = 0 OR ck088 IS NULL), 0) AS tzUncheckedNum,
-
         IFNULL(SUM(ck067 = 0  ), 0) AS unEmaminedNum,
         IFNULL(SUM(ck067 = 1), 0) AS emaminedNum,
         IFNULL(SUM(ck067 = 2), 0) AS backNum
@@ -1978,7 +1972,17 @@ unEmaminedNum,emaminedNum,backNum,
         ON cdsa.SA001 = sa.SA001
         LEFT JOIN st4_scs_cd cd
         ON cdsa.cd001 = cd.cd001
-        LEFT JOIN (SELECT *
+
+        <if test="groupByName=='ck010' ">
+            right
+        </if>
+        <if test="groupByName=='sd001'">
+            left
+        </if>
+
+
+        JOIN
+        (SELECT *
         FROM (SELECT
         MAX(CK001) AS id
         FROM st4_scs_ck
