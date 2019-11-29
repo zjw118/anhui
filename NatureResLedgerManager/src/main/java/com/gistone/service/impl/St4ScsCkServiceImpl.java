@@ -1041,8 +1041,6 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
     }
     @Override
     public Result sysPointData(Integer uid) {
-//        List<ImageConfig> icList = imageConfigMapper.getImageConfig();
-//        List<ImageConfig> icListtree = buildTree(icList,-1);
 
         Map<String,String> checkChangeTypeMap = new HashMap<>();
         QueryWrapper<St4ScsCm> checkChangeTypeWrapper = new QueryWrapper<>();
@@ -1055,16 +1053,13 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
          * 这里必须先去拿点再去拿台账信息 因为越到后面很大程度上点可能不在一个任务下所以台账中要核查的字段都不一样
          *
          */
-        List<St4ScsCd> cdList =new ArrayList<>();
-        cdList = checkPointMapper.getPointBySa001(uid);
+        List<St4ScsCd> cdList =checkPointMapper.getPointBySa001(uid);
         if(cdList==null||cdList.size()<1){
             return Result.build(1003, "暂无斑块信息");
         }
         //这里准备打算得到存放任务和台账字段信息的map
         List<String> taskSigns = new ArrayList<>();
         //这个首先是要获取到点的任务的的标识供下面使用 对于安徽红线来说任务id必须得依靠groupid才能取到
-        List<St4ScsCl> clList = new ArrayList<>();
-        List<Integer> pointIds = cdList.stream().map(St4ScsCd::getCd001).collect(Collectors.toList());
         List<Integer> groupIds = cdList.stream().map(St4ScsCd::getGroupId).collect(Collectors.toList());
 
         QueryWrapper<St4PoClCo> clcoWrapper = new QueryWrapper<>();
@@ -1080,7 +1075,6 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
         QueryWrapper<St4ScsCp> wrapper = new QueryWrapper<>();
         wrapper.in("CP003",taskSigns);
         List<St4ScsCp> list = st4ScsCpMapper.selectList(wrapper);
-        St4ScsCp cp = null;
 
         JSONArray jarr = new JSONArray();
 
@@ -1093,7 +1087,6 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
 
 
             JSONObject newDataJson =null;
-            JSONObject json = new JSONObject();
             JSONObject newDataLedger =null;
 
             JSONObject newDataLedgerJson = new JSONObject();
@@ -1200,7 +1193,6 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                         cd.setReserveName(ck.getSt4SysSg()==null?"":ck.getSt4SysSg().getSg008());
                         cd.setAdminRegionName(ck.getSysCompany()==null?"":ck.getSysCompany().getComName());
                         newDataJson.put("point",BeanUtils.describe(cd));
-                        //newDataJson.put("tree",icListtree );
 
                         jarr.add(newDataJson);
                     }
