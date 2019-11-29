@@ -25,6 +25,12 @@
         <result column="SA020" property="sa020" jdbcType="INTEGER" />
         <result column="SG001" property="sg001" jdbcType="INTEGER" />
         <result column="SD001" property="sd001" jdbcType="INTEGER" />
+        <association property="sysCompany" javaType="com.gistone.entity.SysCompany">
+            <id column="PK_ID" property="pkId" />
+            <result column="COM_NAME" property="comName" />
+            <result column="COM_CODE" property="comCode" />
+        </association>
+
         <collection property="st4SysSc" ofType="com.gistone.entity.St4SysSc">
             <id column="SC001" jdbcType="INTEGER" property="sc001" />
             <result column="SC002" jdbcType="VARCHAR" property="sc002" />
@@ -121,8 +127,9 @@
   </delete>
     <select id="listUser" resultMap="BaseResultMap" >
         select
-        <include refid="Base_Column_List1" />
-        from  st4_sys_sa sa
+        <include refid="Base_Column_List1" />,com.*
+        from  st4_sys_sa sa left join sys_company com
+        ON sa.SD001 = com.COM_CODE
         where SA007 = 1
         <if test="sa.sa012!=null and sa.sa012!='' ">
             and sa.SA012 like '%${sa.sa012}%'

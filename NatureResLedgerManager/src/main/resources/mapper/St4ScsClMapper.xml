@@ -19,17 +19,17 @@
         <result column="CL013" property="cl013" />
         <result column="CL014" property="cl014" />
         <result column="CL015" property="cl015" />
-        <!--<association property="rlhdGroup" javaType="com.gistone.entity.RlhdGroup">-->
-            <!--<id column="id" property="id" />-->
-            <!--<result column="name" property="name" />-->
-            <!--<result column="create_by" property="createBy" />-->
-            <!--<result column="create_date" property="createDate" />-->
-            <!--<result column="update_by" property="updateBy" />-->
-            <!--<result column="update_date" property="updateDate" />-->
-            <!--<result column="remark" property="remark" />-->
-            <!--<result column="del_flag" property="delFlag" />-->
-            <!--<result column="son_count" property="sonCount" />-->
-        <!--</association>-->
+        <result column="CL016" property="cl016" />
+        <association property="sysCompany" javaType="com.gistone.entity.SysCompany">
+            <id column="PK_ID" property="pkId" />
+            <result column="COM_NAME" property="comName" />
+            <result column="COM_CODE" property="comCode" />
+            <result column="COM_LEVEL" property="comLevel" />
+            <result column="COM_F_CODE" property="comFCode" />
+            <result column="COM_F_PKID" property="comFPkid" />
+            <result column="LAT" property="lat" />
+            <result column="LON" property="lon" />
+        </association>
         <collection property="rlhdGroupList" ofType="com.gistone.entity.RlhdGroup">
             <id column="id" property="id" />
             <result column="name" property="name" />
@@ -45,7 +45,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        CL001, CL002, CL003, CL004, CL005, CL006, CL007, CL008, CL009, CL010, CL011, CL012, CL013, CL014, CL015
+        CL001, CL002, CL003, CL004, CL005, CL006, CL007, CL008, CL009, CL010, CL011, CL012, CL013, CL014, CL015,CL016
     </sql>
     <select id="listCdByTask" resultType="Map" parameterType="com.gistone.entity.St4ScsCl">
         SELECT cl.*,co.*,cd.* FROM st4_scs_cl cl
@@ -63,7 +63,7 @@
 
     </select>
     <select id="listTask" resultMap="BaseResultMap" >
-        select cl.*,co.*,sa.* from (select cl.* from st4_scs_cl cl
+        select com.COM_NAME,cl.*,co.*,sa.* from (select cl.* from st4_scs_cl cl
         WHERE cl.CL012=1
 
         <if test="cl.cl004!=null ">
@@ -85,7 +85,12 @@
         left join  st4_po_cl_co clco on cl.cl001 = clco.cl001
         left join rlhd_group co on co.id=clco.co001
         left join sys_user sa on cl.CL013 = sa.id
-
+        left join sys_company com on cl.cl016 = com.COM_CODE
+        <if test="cl.cl016!=null and cl.cl016!='' and  cl.cl016!='34' ">
+        where
+            com.COM_CODE = #{cl.cl016}
+            or com.COM_F_CODE = #{cl.cl016}
+        </if>
         order by cl.CL014 DESC
     </select>
 

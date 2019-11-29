@@ -171,6 +171,8 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
         St4PoClCo clCo = null;
         List<St4ScsCl> list = new ArrayList<St4ScsCl>();
         List<St4PoClCo> clColist = new ArrayList<St4PoClCo>();
+        boolean flag = true;
+        int i=0;
         // 循环工作表Sheet
         for (int numSheet = 0; numSheet <hssfWorkbook.getNumberOfSheets(); numSheet++) {
             //HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
@@ -184,18 +186,24 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
                 Row hssfRow = hssfSheet.getRow(rowNum);
                 if (hssfRow != null) {
                     cl = new St4ScsCl();
-                    cl.setCl012(1);
-                    cl.setCl003("1");//todo 这里写死成1原因是目前没有没有对任务进行核查字段不同情况的处理
-                    cl.setCl015(0);//因为是导入所以默认是系统创建
                     //HSSFCell name = hssfRow.getCell(0);
                     //HSSFCell pwd = hssfRow.getCell(1);
                     Cell taskName = hssfRow.getCell(0);  //任务批次名称
                     Cell taskDescri = hssfRow.getCell(1);//任务描述
                     Cell taskYear = hssfRow.getCell(2);//任务年份
                     Cell taskLedger = hssfRow.getCell(3);//任务台账
+                    cl.setCl012(1);
+                    cl.setCl003("1");//todo 这里写死成1原因是目前没有没有对任务进行核查字段不同情况的处理
+                    cl.setCl015(0);//因为是导入所以默认是系统创建
 
                     //这里是自己的逻辑
-                    cl.setCl002(taskName==null?"":taskName.toString());
+                    String ttName = taskName==null?"":taskName.toString();
+                    if("".equals(ttName.trim())){
+                        flag=false;
+                        i=rowNum;
+                        break;
+                    }
+                    cl.setCl002(ttName);
                     cl.setCl009(taskDescri==null?"":taskDescri.toString());
                     cl.setCl010(taskYear==null?"":taskYear.toString());
                     cl.setCl014(LocalDateTime.now());
@@ -207,6 +215,9 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
                     list.add(cl);
                 }
             }
+        }
+        if(!flag){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "第"+i+"行任务名称不能为空，导入失败!");
         }
         if(list!=null&&list.size()>0){
             if(st4ScsClService.saveBatch(list)){
@@ -463,9 +474,13 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
             QueryWrapper<St4PoClCo> clCoQueryWrapper = new QueryWrapper<>();
             //这里把之前绑定的旧的台账删除，然后把新的在赋上
             clCoQueryWrapper.eq("cl001",data.getCl001());
-            if(st4PoClCoMapper.delete(clCoQueryWrapper)<1){
-                return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "服务器异常！");
+            List<St4PoClCo> list = st4PoClCoMapper.selectList(clCoQueryWrapper);
+            if(list!=null&&list.size()>0){
+                if(st4PoClCoMapper.delete(clCoQueryWrapper)<1){
+                    return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "服务器异常！");
+                }
             }
+
             List<Integer> ledgerIdList = data.getLedgerIdList();
 
             List<St4PoClCo> clcoList = new ArrayList<>();
@@ -494,9 +509,13 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
             QueryWrapper<St4PoClCo> clCoQueryWrapper = new QueryWrapper<>();
             //这里把之前绑定的旧的台账删除，然后把新的在赋上
             clCoQueryWrapper.eq("cl001",data.getCl001());
-            if(st4PoClCoMapper.delete(clCoQueryWrapper)<1){
-                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "服务器异常！");
+            List<St4PoClCo> clCos = st4PoClCoMapper.selectList(clCoQueryWrapper);
+            if(clCos!=null&&clCos.size()>0){
+                if(st4PoClCoMapper.delete(clCoQueryWrapper)<1){
+                    return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "服务器异常！");
+                }
             }
+
             return ResultVOUtil.success();
         }else{
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "服务器异常！");

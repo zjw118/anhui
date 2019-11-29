@@ -629,6 +629,7 @@ public class St4ScsCk extends BaseEntity implements Serializable {
     private String passRate;
 
 
+
     @Ignore
     @TableField(exist = false)
     @ApiModelProperty(value="权限用不用管",example = "")

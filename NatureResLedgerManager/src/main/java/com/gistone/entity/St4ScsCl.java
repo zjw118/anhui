@@ -1,5 +1,6 @@
 package com.gistone.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -36,15 +37,15 @@ public class St4ScsCl extends BaseEntity implements Serializable {
     private Integer cl001;
 
     @ApiModelProperty(name="cl002",value="任务批次任务名称(必传)",dataType = "String",required = false,example="")
-    @TableField("CL002")
+    @TableField(value ="CL002" ,fill = FieldFill.UPDATE)
     private String cl002;
 
     @ApiModelProperty(name="cl003",value="任务唯一标识",dataType = "String",required = false,example="")
-    @TableField("CL003")
+    @TableField(value ="CL003",fill = FieldFill.UPDATE)
     private String cl003;
 
     @ApiModelProperty(name="cl004",value="任务类型(0巡护 1核查)",dataType = "Integer",required = false,example="")
-    @TableField("CL004")
+    @TableField(value ="CL004",fill = FieldFill.UPDATE)
     private Integer cl004;
 
 
@@ -52,37 +53,37 @@ public class St4ScsCl extends BaseEntity implements Serializable {
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(name="cl005",value="任务结束时间")
-    @TableField("CL005")
+    @TableField(value ="CL005",fill = FieldFill.UPDATE)
     private LocalDateTime cl005;
 
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(name="cl006",value="任务开始时间")
-    @TableField("CL006")
+    @TableField(value ="CL006",fill = FieldFill.UPDATE)
     private LocalDateTime cl006;
 
     @ApiModelProperty(name="cl007",value="任务坐标(参考路线)",dataType = "String",required = false,example="")
-    @TableField("CL007")
+    @TableField(value ="CL007",fill = FieldFill.UPDATE)
     private String cl007;
 
     @ApiModelProperty(name="cl008",value="点位类型(1点 2线)",dataType = "String",required = false,example="")
-    @TableField("CL008")
+    @TableField(value ="CL008",fill = FieldFill.UPDATE)
     private Integer cl008;
 
     @ApiModelProperty(name="cl009",value="任务描述",dataType = "String",required = false,example="")
-    @TableField("CL009")
+    @TableField(value ="CL009",fill = FieldFill.UPDATE)
     private String cl009;
 
     @ApiModelProperty(name="cl010",value="批次年份",dataType = "String",required = false,example="")
-    @TableField("CL010")
+    @TableField(value ="CL010",fill = FieldFill.UPDATE)
     private String cl010;
 
     @ApiModelProperty(name="cl011",value="1国家级  2市级",dataType = "String",required = false,example="")
-    @TableField("CL011")
+    @TableField(value ="CL011",fill = FieldFill.UPDATE)
     private Integer cl011;
 
     @ApiModelProperty(name="cl012",value="0已删除 1未删除 默认未删除1",dataType = "String",required = false,example="")
-    @TableField("CL012")
+    @TableField(value ="CL012")
     private Integer cl012;
 
     @ApiModelProperty(name="cl013",value="任务创建人ID",dataType = "String",required = false,example="")
@@ -97,6 +98,11 @@ public class St4ScsCl extends BaseEntity implements Serializable {
     @ApiModelProperty(name="cl015",value="任务创建形式 0 系统创建   1移动端创建",dataType = "String",required = false,example="")
     @TableField("CL015")
     private Integer cl015;
+
+    @ApiModelProperty(name="cl016",value="所属行政区划代码",dataType = "String",required = false,example="")
+    @TableField(value ="CL016",fill = FieldFill.UPDATE)
+    private Integer cl016;
+
     @ApiModelProperty(name="uidList",value="绑定用户的id集合",dataType = "String",required = false,example="")
     @TableField(exist = false)
     private List<Integer> uidList;
@@ -125,7 +131,9 @@ public class St4ScsCl extends BaseEntity implements Serializable {
     @ApiModelProperty(name="adminRegionId",value="行政区ID",dataType = "String",required = false,example="")
     @TableField(exist = false)
     private String adminRegionId;
-
+    @ApiModelProperty(name="adminRegionId",value="行政区",dataType = "String",required = false,example="")
+    @TableField(exist = false)
+    private SysCompany sysCompany;
 
     public static void main(String[] args) {
         String aa= "D:\\epr\\UploadData/dynamicLayerSpace//75822b253252477dbe15aa1c94603b2e_GF1B_PMS_E117.9_N31.3_20190907_L1A1227691115-PAN_ortho_fuse_clip.img";

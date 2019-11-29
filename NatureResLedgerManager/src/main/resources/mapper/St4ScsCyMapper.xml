@@ -249,12 +249,17 @@
         ON ck.CD004 = cd.cd001
         LEFT JOIN st4_scs_cc cc ON cc.CD004 = cd.CD001
         LEFT JOIN st4_scs_cy cy ON cc.CY017 = cy.CY017
-        WHERE 1=1 and  com.PK_ID!=1 and com.COM_LEVEL=2
-        <if test="sysCompany!=null">
-            <if test="sysCompany.comFPkid!=null">
-                and com.COM_F_PKID = #{sysCompany.comFPkid}
-            </if>
-        </if>
+        WHERE 1=1 and  com.PK_ID!=1
+
+            <choose>
+                <when test="code != null and code!= '' and code != '34' ">
+                    and com.COM_F_CODE=#{code} or com.com_code = #{code}
+                </when>
+                <otherwise>
+                    and com.COM_LEVEL=2
+                </otherwise>
+            </choose>
+
         <if test="uname!=null and uname  !=''">
             and sa.SA019 like '%${uname}%'
         </if>
@@ -281,7 +286,25 @@
         <if test="groupByName=='sf' ">
             group by com.PK_ID
         </if>
-        ) T GROUP BY PK_ID
+       
+        ) T
+
+
+        <if test="groupByName==null or groupByName=='' ">
+            group by PK_ID
+        </if>
+        <if test="groupByName=='sa015'">
+            group by sa015
+        </if>
+        <if test="groupByName=='sf' ">
+            group by PK_ID
+        </if>
+        <if test="groupByName=='uname' ">
+            WHERE uname IS NOT NULL     group by uname
+        </if>
+
+
+
     </select>
 
 

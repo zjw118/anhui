@@ -1949,7 +1949,7 @@ unEmaminedNum,emaminedNum,backNum,
     </select>
 
 
-    <select id="selectSt4ScsCk" resultMap="BaseResultMap" resultType="com.gistone.entity.St4ScsCk">
+    <select id="selectSt4ScsCk" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCk">
 
         SELECT *,(unEmaminedNum+emaminedNum+backNum) tzNum,emaminedNum/(unEmaminedNum+emaminedNum+backNum) passRate FROM
         (
@@ -1993,7 +1993,20 @@ unEmaminedNum,emaminedNum,backNum,
         ON clco.co001 = co.id
         LEFT JOIN st4_scs_cl cl
         ON cl.CL001 = clco.cl001
-        WHERE 1 = 1 and com.PK_ID!=1 and com.COM_LEVEL=2
+        WHERE 1 = 1
+
+
+        <choose>
+            <when test="code != null and code != '' and code != '34' ">
+                and com.COM_F_CODE=#{code} or com.com_code = #{code}
+
+            </when>
+            <otherwise>
+                and com.COM_LEVEL=2
+            </otherwise>
+        </choose>
+
+
         <!--年份、核查任务、时间区间、省份、保护地、巡查人员；!-->
         <if test="st4SysSa != null">
             <if test="st4SysSa.sa001!=null and st4SysSa.sa001  !=''">
@@ -2010,9 +2023,7 @@ unEmaminedNum,emaminedNum,backNum,
         <if test="taskYear!=null and taskYear!=''">
             and cl.CL010 =#{taskYear}
         </if>
-        <if test="code!=null and code!=''">
-            and sa.sd001 =#{code}
-        </if>
+
         <!--这里时间传递进来时间之后传递大于2019-08-25 00:00:00和2019-08-20 00:00:00前者记录居然不包含后者!-->
         <if test="strTime!=null and strTime!='' ">
             and ck.CK048 <![CDATA[ >= ]]> #{strTime}

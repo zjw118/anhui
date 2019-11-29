@@ -117,9 +117,14 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
                 QueryWrapper<St4SysSa> wrapper = new QueryWrapper<>();
                 wrapper.in("sa001",uids);
                 List<St4SysSa> saList = st4SysSaMapper.selectList(wrapper);
-                /*for (SysUser saa:saList) {
-                    JPushUtil.jiGuangPush(saa.getSa012(), "您有新的问题点需要接收！","1");
-                }*/
+                for (St4SysSa saa:saList) {
+                    try{
+                        JPushUtil.jiGuangPush(saa.getSa012(), "您有新的问题斑块点需要接收！","1");
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                }
 
             return ResultVOUtil.success();
         }else {
