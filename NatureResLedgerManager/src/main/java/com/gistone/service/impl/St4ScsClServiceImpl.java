@@ -507,7 +507,7 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
 
         if(st4ScsClService.updateById(data)){
             QueryWrapper<St4PoClCo> clCoQueryWrapper = new QueryWrapper<>();
-            //这里把之前绑定的旧的台账删除，然后把新的在赋上
+            //这里把之前绑定的旧的台账删除
             clCoQueryWrapper.eq("cl001",data.getCl001());
             List<St4PoClCo> clCos = st4PoClCoMapper.selectList(clCoQueryWrapper);
             if(clCos!=null&&clCos.size()>0){
