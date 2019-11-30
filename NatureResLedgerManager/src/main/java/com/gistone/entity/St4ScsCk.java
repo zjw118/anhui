@@ -121,7 +121,7 @@ public class St4ScsCk extends BaseEntity implements Serializable {
     //@DateTimeFormat(pattern = "yyyy-MM-dd")
     private String ck020;
 
-    @ApiModelProperty(value = "有无环评手续(1是 0无)",dataType = "Integer",example = "1")
+    @ApiModelProperty(value = "有无环评手续(1是 0无)",dataType = "String",example = "1")
     @TableField("CK021")
     private String ck021;
 
@@ -539,7 +539,9 @@ public class St4ScsCk extends BaseEntity implements Serializable {
     @TableField(exist = false)
     @ApiModelProperty(value="行政区名称",example = "北京")
     private String SD008;
-
+    @TableField(exist = false)
+    @ApiModelProperty(value="行政区代码",example = "北京")
+    private String code;
 
 
 
@@ -625,6 +627,7 @@ public class St4ScsCk extends BaseEntity implements Serializable {
     @ApiModelProperty(example="44",value="通过率")
     @TableField(exist = false)
     private String passRate;
+
 
 
     @Ignore

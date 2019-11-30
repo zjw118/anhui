@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
-@Configuration
+//@Configuration
 public class WebConfigurer implements WebMvcConfigurer {
 
 
@@ -89,6 +89,7 @@ public class WebConfigurer implements WebMvcConfigurer {
                 .excludePathPatterns("/index.html")
                 .excludePathPatterns("/api/sys/login/check") //登陆接口
                 .excludePathPatterns("/api/sys/login/logout") //登出接口
+                .excludePathPatterns("/cassso/getuseraccount") //单点登录
 
         ;
 

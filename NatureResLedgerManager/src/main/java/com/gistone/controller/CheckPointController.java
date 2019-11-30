@@ -23,7 +23,7 @@ import java.util.List;
 
 /**
  * <p>
- * 问题点表 前端控制器
+ * 问题斑块表 前端控制器
  * </p>
  *
  * @author LiuXiong
@@ -31,7 +31,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/checkPoint")
-@Api(value = "API-UserManage", tags = "问题点位管理接口", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@Api(value = "API-UserManage", tags = "问题斑块位管理接口", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class CheckPointController {
 
     @Autowired
@@ -54,12 +54,12 @@ public class CheckPointController {
     @Autowired
     private ISt4PoClCoService st4PoClCoService;
     /**
-     * 一张图展示，问题点按保护地查询
+     * 一张图展示，问题斑块按保护地查询
      * @param
      * @return
      */
 
-    @ApiOperation(value = "一张图展示，问题点按保护地查询", notes = "此接口返回问题点数据数据", response = Result.class)
+    @ApiOperation(value = "一张图展示，问题斑块按保护地查询", notes = "此接口返回问题斑块数据数据", response = Result.class)
     @PostMapping("/listCheckPointToView")
     public Result listCheckPointToView(@RequestBody @ApiParam(name = "保护地id", value = "json格式", required = true) Swagger<St4ScsCd> data) {
         St4ScsCd param = data.getData();
@@ -69,12 +69,12 @@ public class CheckPointController {
 
 
     /**
-     * 问题点列表
+     * 问题斑块列表
      * @param
      * @return
      */
     @PassToken
-    @ApiOperation(value = "问题点列表", notes = "问题点列表", response = Result.class)
+    @ApiOperation(value = "问题斑块列表", notes = "问题斑块列表", response = Result.class)
     @PostMapping("/listCheckPoint")
     public Result listCheckPoint(@RequestBody @ApiParam(name = "", value = "json格式", required = true) Swagger<St4ScsCd> data, HttpServletRequest request) {
         St4ScsCd param = data.getData();
@@ -89,12 +89,12 @@ public class CheckPointController {
     }
 
     /**
-     * 问题点修改接口
+     * 问题斑块修改接口
      * @param
      * @return
      */
     @PassToken
-    @ApiOperation(value = "问题点修改接口", notes = "问题点修改接口", response = Result.class)
+    @ApiOperation(value = "问题斑块修改接口", notes = "问题斑块修改接口", response = Result.class)
     @PostMapping("/updateCheckPoint")
     public Result updateCheckPoint(@RequestBody @ApiParam(name = "", value = "json格式", required = true) Swagger<St4ScsCd> data) {
         St4ScsCd param = data.getData();
@@ -108,12 +108,12 @@ public class CheckPointController {
     }
 
     /**
-     * 问题点删除接口
+     * 问题斑块删除接口
      * @param
      * @return
      */
     @PassToken
-    @ApiOperation(value = "问题点删除接口", notes = "问题点删除接口", response = Result.class)
+    @ApiOperation(value = "问题斑块删除接口", notes = "问题斑块删除接口", response = Result.class)
     @PostMapping("/deleteCheckPoint")
     public Result deleteCheckPoint(@RequestBody @ApiParam(name = "", value = "json格式", required = true) Swagger<St4ScsCd> data) {
         St4ScsCd param = data.getData();
@@ -128,12 +128,12 @@ public class CheckPointController {
     }
 
     /**
-     * 问题点添加接口
+     * 问题斑块添加接口
      * @param
      * @return
      */
     @PassToken
-    @ApiOperation(value = "问题点添加接口", notes = "问题点添加接口", response = Result.class)
+    @ApiOperation(value = "问题斑块添加接口", notes = "问题斑块添加接口", response = Result.class)
     @PostMapping("/insertCheckPoint")
     public Result insertCheckPoint( @RequestBody @ApiParam(name = "", value = "json格式", required = true) @Valid Swagger<St4ScsCd> data
             , HttpServletRequest request) {
@@ -146,19 +146,19 @@ public class CheckPointController {
         return  iSt4ScsCdService.insertCheckPoint(param);
     }
     /**
-     * 问题点详情接口
+     * 问题斑块详情接口
      * @param
      * @return
      */
     @PassToken
-    @ApiOperation(value = "问题点详情接口", notes = "问题点详情接口", response = Result.class)
+    @ApiOperation(value = "问题斑块详情接口", notes = "问题斑块详情接口", response = Result.class)
     @PostMapping("/getCheckPointById")
     public Result getCheckPointById( @RequestBody @ApiParam(name = "", value = "json格式", required = true)  Swagger<St4ScsCd> data
             ) {
 
         St4ScsCd param = data.getData();
         if(!ObjectUtils.isNotNullAndEmpty(param.getCd001())){
-            return Result.build(1001,"问题点cd001"+ResultMsg.MSG_1001);
+            return Result.build(1001,"问题斑块cd001"+ResultMsg.MSG_1001);
         }
         param = iSt4ScsCdService.getById(param.getCd001());
         Result res = new Result();
@@ -181,13 +181,13 @@ public class CheckPointController {
     }
 
     /**
-     * 下发问题点
+     * 下发问题斑块
      * @param spSwagger
      * @return
      */
-    @ApiOperation(value="下发问题点",notes = "下发问题点",response = St4PoCdSa.class)
+    @ApiOperation(value="下发问题斑块",notes = "下发问题斑块",response = St4PoCdSa.class)
     @RequestMapping(value="/sharePoint",method = RequestMethod.POST)
-    public ResultVO sharePoint(@ApiParam(name="下发问题点", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
+    public ResultVO sharePoint(@ApiParam(name="下发问题斑块", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
         /**
          * 这里的业务逻辑是这样的:
          * 1.拿到传递过来的任务id去找到对应的台账(可能是多个)
@@ -199,7 +199,7 @@ public class CheckPointController {
         List<Integer> pointList = sp.getPointIdList();
         List<Integer> uids = sp.getUidList();
         if(!ObjectUtils.isNotNullAndEmpty(pointList)){
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "问题点不能为空！");
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "问题斑块不能为空！");
         }
         if(uids==null||uids.size()<1){
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "下发人员不能为空！");
@@ -208,7 +208,26 @@ public class CheckPointController {
         return checkUserRelavantService.givePoint(uids,pointList);
 
     }
+    @ApiOperation(value="下发问题斑块一个点可以按照任务下发给不同的人",notes = "下发问题斑块",response = St4PoCdSa.class)
+    @RequestMapping(value="/sharePointNew",method = RequestMethod.POST)
+    public ResultVO sharePointNew(@ApiParam(name="下发问题斑块", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
+        /**
+         * 这里的业务逻辑是这样的:
+         * 传递过来的任务id要往
+         */
+        SharePoint sp = spSwagger.getData();
 
+        List<Integer> pointList = sp.getPointIdList();
+        List<Integer> uids = sp.getUidList();
+        if(!ObjectUtils.isNotNullAndEmpty(pointList)){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "问题斑块不能为空！");
+        }
+        if(uids==null||uids.size()<1){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "下发人员不能为空！");
+        }
+
+        return checkUserRelavantService.givePoint(uids,pointList);
+    }
 
 
 

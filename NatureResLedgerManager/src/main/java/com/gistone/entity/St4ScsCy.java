@@ -183,4 +183,9 @@ public class St4ScsCy extends BaseEntity  implements Serializable {
     private String deptName;
 
 
+    @ApiModelProperty(value = "行政区划代码")
+    @TableField(exist = false)
+    private String code;
+
+
 }

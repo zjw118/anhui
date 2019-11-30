@@ -151,7 +151,9 @@ public class St4SysSa extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "详情接口返回参数，前台不必传")
     @TableField(exist = false)
     private List<St4SysSj> sjList;
-
+    @ApiModelProperty(value = "行政区划信息")
+    @TableField(exist = false)
+    private SysCompany sysCompany;
 
 
     @Ignore

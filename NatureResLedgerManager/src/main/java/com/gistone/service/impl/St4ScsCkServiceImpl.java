@@ -1041,8 +1041,6 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
     }
     @Override
     public Result sysPointData(Integer uid) {
-//        List<ImageConfig> icList = imageConfigMapper.getImageConfig();
-//        List<ImageConfig> icListtree = buildTree(icList,-1);
 
         Map<String,String> checkChangeTypeMap = new HashMap<>();
         QueryWrapper<St4ScsCm> checkChangeTypeWrapper = new QueryWrapper<>();
@@ -1055,35 +1053,35 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
          * 这里必须先去拿点再去拿台账信息 因为越到后面很大程度上点可能不在一个任务下所以台账中要核查的字段都不一样
          *
          */
-        List<St4ScsCd> cdList =new ArrayList<>();
-        cdList = checkPointMapper.getPointBySa001(uid);
+        List<St4ScsCd> cdList =checkPointMapper.getPointBySa001(uid);
         if(cdList==null||cdList.size()<1){
             return Result.build(1003, "暂无斑块信息");
         }
         //这里准备打算得到存放任务和台账字段信息的map
         List<String> taskSigns = new ArrayList<>();
-        //这个首先是要获取到点的任务的的标识供下面使用 对于安徽红线来说任务id必须得依靠groupid才能取到
-        List<St4ScsCl> clList = new ArrayList<>();
-        List<Integer> pointIds = cdList.stream().map(St4ScsCd::getCd001).collect(Collectors.toList());
+        //这个首先是要获取到点的任务的的标识供下面使用 对于安徽红线来说任务id必须得依靠groupid才能取到   11.11.12.10
         List<Integer> groupIds = cdList.stream().map(St4ScsCd::getGroupId).collect(Collectors.toList());
 
         QueryWrapper<St4PoClCo> clcoWrapper = new QueryWrapper<>();
         clcoWrapper.in("CO001",groupIds);
+        //这里是拿到这个人的问题斑块所绑定的监管台账
         List<St4PoClCo> clcoList = st4PoClCoMapper.selectList(clcoWrapper);
+        //这里是拿到这个人的问题斑块所在的核查任务的对应的集合
         List<Integer> clIds = clcoList.stream().map(St4PoClCo::getCl001).collect(Collectors.toList());
+
         QueryWrapper<St4ScsCl> clWrapper = new QueryWrapper<>();
         clWrapper.in("CL001",clIds);
         List<St4ScsCl> clsList = st4ScsClMapper.selectList(clWrapper);
+        //拿到任务的唯一标识 这里拿到的都是“1”，因为对于目前的业务需求还没有能够要动态的改变核查信息的采集内容，等后面用户提出这个需求之后这里就更方便了
         taskSigns = clsList.stream().map(St4ScsCl::getCl003).collect(Collectors.toList());
 
-
+        //这里是根据任务id去cp表中拿到动态配置的核查信息
         QueryWrapper<St4ScsCp> wrapper = new QueryWrapper<>();
         wrapper.in("CP003",taskSigns);
         List<St4ScsCp> list = st4ScsCpMapper.selectList(wrapper);
-        St4ScsCp cp = null;
 
         JSONArray jarr = new JSONArray();
-
+        //这里的
         List<St4ScsCk> ckList = checkLedgerMapper.sysPointAndLedgerData(uid,taskSigns);//最新台账
 
         List<St4ScsCk> ckHistoryList = checkLedgerMapper.sysPointAndLedgerDataOrign(uid,taskSigns);//历史台账
@@ -1093,7 +1091,6 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
 
 
             JSONObject newDataJson =null;
-            JSONObject json = new JSONObject();
             JSONObject newDataLedger =null;
 
             JSONObject newDataLedgerJson = new JSONObject();
@@ -1108,7 +1105,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                 List dataList=null;
                 for (St4ScsCk ck:ckList) {
                     //这里是拿到当前任务下的要核查的台账字段的信息
-                    //获取到任务唯一标识这里得动态的获取data值因为是一个任务标识对应一个data
+                    //获取到任务唯一标识这里得动态的获取data值因为是一个任务标识对应一个data同时也对应一套核查的字段
                     String data = ck.getSt4ScsCp().getCp002();
                     Map<String,Object> dataMap = new net.sf.json.JSONObject().fromObject(data);
                     dataList = (List) dataMap.get("data");
@@ -1200,7 +1197,6 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                         cd.setReserveName(ck.getSt4SysSg()==null?"":ck.getSt4SysSg().getSg008());
                         cd.setAdminRegionName(ck.getSysCompany()==null?"":ck.getSysCompany().getComName());
                         newDataJson.put("point",BeanUtils.describe(cd));
-                        //newDataJson.put("tree",icListtree );
 
                         jarr.add(newDataJson);
                     }
@@ -1384,9 +1380,10 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                 }catch (Exception e){
                     e.printStackTrace();
                     return ResultVOUtil.success();
-                }finally {
-                    return ResultVOUtil.success();
                 }
+//                finally {
+//                    return ResultVOUtil.success();
+//                }
             }else if(ck.getCk067()==1){
                 try{
                     String pushMsg ="您提交的在“"+ckk.getSt4ScsCl().getCl002()+"”任务的下“"
@@ -1396,9 +1393,10 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                 }catch (Exception e){
                     e.printStackTrace();
 
-                }finally {
-                    return ResultVOUtil.success();
                 }
+//                finally {
+//                    return ResultVOUtil.success();
+//                }
             }
             return ResultVOUtil.success();
         }

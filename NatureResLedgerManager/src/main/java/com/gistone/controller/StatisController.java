@@ -5,10 +5,7 @@ import com.gistone.VO.ResultVO;
 import com.gistone.annotation.PassToken;
 import com.gistone.entity.*;
 import com.gistone.pkname.Swagger;
-import com.gistone.service.ISt4ScsCbdService;
-import com.gistone.service.ISt4ScsCdService;
-import com.gistone.service.ISt4ScsCkService;
-import com.gistone.service.StatisService;
+import com.gistone.service.*;
 import com.gistone.swagger.StaticSwagger;
 import com.gistone.util.Result;
 import com.gistone.util.ResultEnum;
@@ -35,6 +32,21 @@ public class StatisController {
 	private ISt4ScsCdService st4ScsCdservice;
 	@Autowired
 	private ISt4ScsCbdService iSt4ScsCbdService;
+	@Autowired
+	private IDirTempService iDirTempService;
+
+	@ApiOperation(value = "(安徽用)临时文件夹存储", notes = "", response = Result.class)
+	@PostMapping("/insertDirTemp")
+	public ResultVO insertDirTemp(@RequestBody Swagger<DirTemp> requestData, HttpServletRequest request, HttpServletResponse response){
+		DirTemp dt = requestData.getData();
+		if(iDirTempService.save(dt)){
+			return ResultVOUtil.success();
+		}
+		return ResultVOUtil.success();
+
+	}
+
+
 	@ApiOperation(value = "(安徽用)统计核查审核的质量评估导出", notes = "", response = Result.class)
 	@PostMapping("/examineQualityExport")
 	public ResultVO examineQualityExport(@RequestBody Swagger<St4ScsCl> requestData, HttpServletRequest request, HttpServletResponse response){

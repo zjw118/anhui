@@ -27,7 +27,7 @@ public class JPushUtil {
     private static final Logger log = LoggerFactory.getLogger(JPushUtil.class);
 
     //masterSecret和appKey在极光推送官网后台管理获取
-    private static String masterSecret = "bd765a179f5aefb97a7bbac7";
+    private static String masterSecret = "0f2ee22cc29249c074eabab5";
     private static String appKey = "726adce8073c23d1153ba5d6";
 
     /**
@@ -117,7 +117,7 @@ public class JPushUtil {
                                         .setAlert(alert).build())	//设置通知的内容 alert
 
                         .addPlatformNotification(
-                                IosNotification.newBuilder().setSound("default")		//ios
+                                IosNotification.newBuilder()		//ios .setSound("default")这个加上安卓就收不到了，奇怪
                                         .addExtra("type", "infomation")
                                         .addExtra("flag", flag)
                                         .setAlert(alert).build())   //设置通知的内容 alert
