@@ -22,6 +22,7 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -465,7 +466,7 @@ public class ProjectAdmissionController {
                 if (analysisReports != null && analysisReports.size() > 0) {
                     for (AnalysisReport analysisReport : analysisReports) {
                         analysisReport.setProjectId(projectAdmission.getId());
-                        analysisReportService.remove(new QueryWrapper<AnalysisReport>().eq("project_id",projectAdmission.getId()));
+                        analysisReportService.remove(new QueryWrapper<AnalysisReport>().eq("project_id", projectAdmission.getId()));
                     }
 
                     for (AnalysisReport analysisReport : analysisReports) {
@@ -500,8 +501,8 @@ public class ProjectAdmissionController {
         }
 
         ProjectAdmission projectAdmission = projectAdmissionService.getById(id);
-        if(projectAdmission==null){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"无效id");
+        if (projectAdmission == null) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "无效id");
         }
         Map<String, Object> params = new HashMap<>();
         params.put("name", projectAdmission.getName());
@@ -512,11 +513,11 @@ public class ProjectAdmissionController {
         String proportion = projectAdmission.getImageProportion();
         double d = Double.parseDouble(proportion) * 500;
         int height = (int) d;
-        ImageEntity image = getImageEntity(height,projectAdmission.getImageUrl());
+        ImageEntity image = getImageEntity(height, projectAdmission.getImageUrl());
         params.put("image", image);
 
         List<AnalysisReport> analysisReports = analysisReportService.list(new QueryWrapper<AnalysisReport>().eq("project_id", projectAdmission.getId()));
-        if(analysisReports!=null&&analysisReports.size()>0){
+        if (analysisReports != null && analysisReports.size() > 0) {
             for (AnalysisReport analysisReport : analysisReports) {
                 String area = new BigDecimal(analysisReport.getIntersectArea().toString()).toString();
                 analysisReport.setArea(area);
@@ -527,13 +528,13 @@ public class ProjectAdmissionController {
 
         try {
             //TODO
-                String wordPath = "";
-                LsProjectModel one = service.getOne(new QueryWrapper<LsProjectModel>().eq("type", 1).eq("flag", 1));
-                if (one == null) {
-                    wordPath = "word/export1.docx";
-                }else{
-                    wordPath = PATH+one.getUrl();
-                }
+            String wordPath = "";
+            LsProjectModel one = service.getOne(new QueryWrapper<LsProjectModel>().eq("type", 1).eq("flag", 1));
+            if (one == null) {
+                wordPath = "word/export1.docx";
+            } else {
+                wordPath = PATH + one.getUrl();
+            }
 
             if (analysisReports.size() > 0) {
                 XWPFDocument doc = WordExportUtil.exportWord07(
@@ -545,7 +546,7 @@ public class ProjectAdmissionController {
                 doc.write(fos);
                 fos.close();
             } else {
-              
+
                 XWPFDocument doc = WordExportUtil.exportWord07(
                         "word/export1.docx", params);
                 String fileName = projectAdmission.getName() + "分析报告";
@@ -560,11 +561,15 @@ public class ProjectAdmissionController {
             e.printStackTrace();
         }
 
+        ExcelToPdf.doc2pdf(projectAdmission.getFileUrl(),configUtils.getExcel_PATH() + "项目准入分析报告.pdf");
 
-        return ResultVOUtil.success(projectAdmission.getFileUrl());
+        Map<String,Object> result = new HashMap<>();
+        result.put("wordPath",projectAdmission.getFileUrl());
+        result.put("pdfPath",configUtils.getExcel_PATH() + "项目准入分析报告.pdf");
+        return ResultVOUtil.success(result);
     }
 
-    public ImageEntity getImageEntity(int height,String url) {
+    public ImageEntity getImageEntity(int height, String url) {
         ImageEntity image = new ImageEntity();
 
         //拿到图片，并且获取图片大小
@@ -640,7 +645,7 @@ public class ProjectAdmissionController {
      * @date 2019/11/18 0018 14:40
      */
     @RequestMapping("/exportExcel")
-    public ResultVO exportAllExcel(@RequestBody Map<String, Object> paramsMap, HttpServletResponse response) {
+    public ResultVO exportAllExcel(@RequestBody Map<String, Object> paramsMap, HttpServletResponse response, ModelMap map) {
 
         //项目名称、位置形状、创建时间范围
         //请求参数格式校验
@@ -724,8 +729,109 @@ public class ProjectAdmissionController {
         Map map1 = new HashMap();
         map1.put("excelPath", filepath.substring(2));
 
+
+        ExcelToPdf.excel2pdf(filepath, configUtils.getExcel_PATH() + "项目准入.pdf");
+        map1.put("pdfPath", configUtils.getExcel_PATH() + "项目准入.pdf");
+
+
         return ResultVOUtil.success(map1);
     }
+/*
+
+    @RequestMapping("/exportPDF")
+    public ResultVO exportPDF(HttpServletRequest request, HttpServletResponse response, ModelMap map) {
+        //项目名称、位置形状、创建时间范围
+        //请求参数格式校验
+        Map<String, Object> dataParam = new HashMap<>();
+        if (dataParam == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+
+
+        String projectName = (String) dataParam.get("projectName");
+        String shape = (String) dataParam.get("shape");
+
+        String startTime = (String) dataParam.get("startTime");
+        String endTime = (String) dataParam.get("endTime");
+
+        String type = (String) dataParam.get("type");
+        String attribute = (String) dataParam.get("attribute");
+        String time = (String) dataParam.get("time");
+
+        QueryWrapper<ProjectAdmission> wrapper = new QueryWrapper<>();
+
+        if (StringUtils.isNotBlank(projectName)) {
+            wrapper.likeRight("name", projectName);
+        }
+
+        if (StringUtils.isNotBlank(shape)) {
+            wrapper.likeRight("shape", shape);
+        }
+
+        if (StringUtils.isNotBlank(startTime)) {
+            DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+            Date date2 = null;
+
+            try {
+                date2 = format2.parse(startTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Date date = DateUtils.addDateDays(date2, 1);
+            wrapper.ge("time", date);
+        }
+
+        if (StringUtils.isNotBlank(endTime)) {
+            DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+            Date date2 = null;
+
+            try {
+                date2 = format2.parse(endTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Date date = DateUtils.addDateDays(date2, 1);
+            wrapper.le("time", date);
+        }
+
+        if (StringUtils.isNotBlank(type)) {
+            wrapper.likeRight("type", type);
+        }
+
+        if (StringUtils.isNotBlank(attribute)) {
+            wrapper.likeRight("attribute", attribute);
+        }
+
+        if (StringUtils.isNotBlank(time)) {
+            Date endDate = DateUtils.stringToDate(time, DateUtils.DATE_TIME_PATTERN);
+            wrapper.eq("time", endDate);
+        }
+
+        wrapper.eq("del_flag", 1);
+
+
+        List<ProjectAdmission> list = projectAdmissionService.list(wrapper);
+
+        if (list != null && list.size() > 0) {
+            for (ProjectAdmission projectAdmission : list) {
+                projectAdmission.setCreateTime(DateUtil.DATEtoString(projectAdmission.getCreateDate(), "yyyy-MM-dd"));
+                projectAdmission.setTimeString(DateUtil.DATEtoString(projectAdmission.getTime(), "yyyy-MM-dd"));
+            }
+        }
+//        String filepath = ExcelUtil.toXls("项目准入任务列表", list, configUtils.getExcel_PATH(), ProjectAdmission.class, response);
+        Map map1 = new HashMap();
+//        map1.put("excelPath", filepath.substring(2));
+
+        ExportParams params = new ExportParams("2412312", "测试", ExcelType.XSSF);
+        params.setFreezeCol(2);
+        map.put(NormalExcelConstants.DATA_LIST, list);
+        map.put(NormalExcelConstants.CLASS, ProjectAdmission.class);
+        map.put(NormalExcelConstants.PARAMS, params);
+        PoiBaseView.render(map, request, response, NormalExcelConstants.EASYPOI_EXCEL_VIEW);
+
+        return ResultVOUtil.success();
+    }
+*/
 
     /**
      * @param file

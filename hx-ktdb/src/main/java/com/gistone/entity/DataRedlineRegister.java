@@ -1,9 +1,7 @@
 package com.gistone.entity;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
@@ -29,7 +27,7 @@ public class DataRedlineRegister extends Model<DataRedlineRegister> implements S
     /**
      * 唯一主键
      */
-    @TableId(value = "srld_id", type = IdType.AUTO)
+//    @TableId(value = "srld_id", type = IdType.AUTO)
     private Integer srldId;
     /**
      * 市级行政区划
@@ -96,6 +94,7 @@ public class DataRedlineRegister extends Model<DataRedlineRegister> implements S
     @TableField("srld_problem")
     private String srldProblem;
     @Excel(name = "红线名称",height = 11, width = 15)
+    @TableField("area_redline")
     private String areaRedline;
     /**
      * 管控措施
