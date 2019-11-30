@@ -20,16 +20,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 
 @Service
@@ -272,7 +271,6 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
                         num2s += imageConfig3.getNum2()+Double.valueOf(jsonObject1.get("area")+"");
                         imageConfig3.setNum2(imageConfig3.getNum2()+Double.valueOf(jsonObject1.get("area")+""));
                     }
-
                 }
             }
         }
@@ -285,6 +283,9 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
             }
             if(null==imageConfig3.getNum1()){
                 imageConfig3.setNum1(0.0);
+            }
+            if(null==imageConfig3.getNum2()){
+                imageConfig3.setNum2(0.0);
             }
             Double num3 = 0.0;
             if(null!=imageConfig3.getNum2()&&null!=imageConfig3.getNum1())
@@ -304,6 +305,94 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         maps.put("image2",entity2);
         maps.put("imageConfig",imageConfig3s);
         return ResultVOUtil.success(maps);
+    }
+
+    @Override
+    public ResultVO exportExcel(Integer id) {
+        ImageContrast ic = new ImageContrast().setId(id);
+        ImageContrast imageContrast = imageContrastMapper.getImageContrast(ic);
+        QueryWrapper<Image> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id",imageContrast.getImage1Id());
+        Image entity1 = imageService.getOne(queryWrapper);
+        QueryWrapper<Image> queryWrapper2 = new QueryWrapper<>();
+        queryWrapper2.eq("id",imageContrast.getImage2Id());
+        Image entity2 = imageService.getOne(queryWrapper2);
+        //获取影像shp数据
+        String shp1 = ShpUtil.readShapeFileToStr(entity1.getShp(),1)+"";
+        String shp2 = ShpUtil.readShapeFileToStr(entity2.getShp(),1)+"";
+        List<ImageConfig> imageConfig3s = imageConfigMapper.getImageConfig3s();
+        //shp1汇总数据  Num1
+        JSONArray jsonArray = JSONArray.fromObject(shp1);
+        for (Object ja : jsonArray) {
+            JSONObject jsonObject = JSONObject.fromObject(ja);
+            Object attributes = jsonObject.get("attributes");
+            JSONObject jsonObject1 = JSONObject.fromObject(attributes);
+            if(null!=jsonObject1.get("area")){
+                for (ImageConfig imageConfig3 : imageConfig3s) {
+                    if(null==imageConfig3.getNum1()){
+                        imageConfig3.setNum1(0.0);
+                    }
+                    if(imageConfig3.getId().toString().equals(jsonObject1.get("type"))){
+                        imageConfig3.setNum1(imageConfig3.getNum1()+Double.valueOf(jsonObject1.get("area")+""));
+                    }
+                }
+            }
+        }
+        //shp2汇总数据  Num2
+        JSONArray jsonArray2 = JSONArray.fromObject(shp2);
+        for (Object ja : jsonArray2) {
+            JSONObject jsonObject = JSONObject.fromObject(ja);
+            Object attributes = jsonObject.get("attributes");
+            JSONObject jsonObject1 = JSONObject.fromObject(attributes);
+            if(null!=jsonObject1.get("area")){
+                for (ImageConfig imageConfig3 : imageConfig3s) {
+                    if(null==imageConfig3.getNum2())
+                        imageConfig3.setNum2(0.0);
+                    if(imageConfig3.getId().toString().equals(jsonObject1.get("type"))){
+                        imageConfig3.setNum2(imageConfig3.getNum2()+Double.valueOf(jsonObject1.get("area")+""));
+                    }
+                }
+            }
+        }
+        //对比数据  num3
+        for (ImageConfig imageConfig3 : imageConfig3s) {
+            if(null==imageConfig3.getNum3()){
+                imageConfig3.setNum3(0.0);
+            }
+            if(null==imageConfig3.getNum2()){
+                imageConfig3.setNum2(0.0);
+            }
+            if(null==imageConfig3.getNum1()){
+                imageConfig3.setNum1(0.0);
+            }
+            Double num3 = 0.0;
+            if(null!=imageConfig3.getNum2()&&null!=imageConfig3.getNum1())
+                num3 = imageConfig3.getNum2()-imageConfig3.getNum1();
+            imageConfig3.setNum3(num3);
+        }
+        //导出
+        List<Map<String, Object>> list = new ArrayList();
+        int i = 1;
+        for (ImageConfig i3 : imageConfig3s) {
+            Map<String,Object> map = new HashMap();
+            map.put("data0",i);
+            map.put("data1",i3.getName1());
+            map.put("data2",i3.getName2());
+            map.put("data3",i3.getName());
+            map.put("data4",i3.getNum1());
+            map.put("data5",i3.getNum2());
+            map.put("data6",i3.getNum3());
+            list.add(map);
+            i++;
+        }
+        String mburl = PATH+"/epr/imageContrastExc/人类活动变化检测报告.xlsx";
+        List<Map<String, Object>> listMap = list;
+        String sign = "maplist";
+        HttpServletResponse response = null;
+        String name = null;
+        String path = PATH+"/epr/imageContrastExc/";
+        String url = ExcUtil.exportExcel(mburl, listMap, sign, response, name, path);
+        return ResultVOUtil.success(url);
     }
 
 

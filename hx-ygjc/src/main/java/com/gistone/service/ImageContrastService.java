@@ -12,5 +12,6 @@ public interface ImageContrastService extends IService<ImageContrast> {
     ResultVO like(String name);
     ResultVO delete(Integer id);
     ResultVO get(Map<String, Object> params);
+    ResultVO exportExcel(Integer id);
 
 }
