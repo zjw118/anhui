@@ -85,10 +85,10 @@ public class ImportRedlineData {
                 //property数据与实体类对应
 //                double b= Double.parseDouble(property.getValue().toString());
 //                int a = (int) b;
-              /*  if(property.getName().toString().equals("Id")){
+                if(property.getName().toString().equals("Id")){
 
                     model.setSrldId(Integer.parseInt(property.getValue().toString()));
-                }*/
+                }
                 if(property.getName().toString().equals("pac")){
                     model.setSrldCode(property.getValue().toString());
                 }
@@ -107,6 +107,10 @@ public class ImportRedlineData {
 
                 if(property.getName().toString().equals("redline")){
                     model.setAreaRedline(property.getValue().toString());
+                }
+
+                if(property.getName().toString().equals("name")){
+                    model.setSrldName(property.getValue().toString());
                 }
                 if(property.getName().toString().equals("plant")){
                     model.setSrldPlantType(property.getValue().toString());

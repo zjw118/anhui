@@ -9,7 +9,6 @@ import com.gistone.mapper.SysRoleMapper;
 import com.gistone.mapper.SysRoleResourcesMapper;
 import com.gistone.mapper.SysUserMapper;
 import com.gistone.service.ISysRoleService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,11 +49,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public Map<String, Object> getRoleList(String name, Integer pageNum, Integer pageSize) {
 
-        QueryWrapper<SysRole> sysRoleQueryWrapper = new QueryWrapper<>();
+      /*  QueryWrapper<SysRole> sysRoleQueryWrapper = new QueryWrapper<>();
         sysRoleQueryWrapper.eq("del_flag", 1);
         if (StringUtils.isNotBlank(name)) {
             sysRoleQueryWrapper.like("name", name);
-        }
+        }*/
         /*IPage<SysRole> roleIPage = sysRoleMapper.selectPage(new Page<>(pageNum, pageSize), sysRoleQueryWrapper);
         List<SysRole> roleList = setUserNameToRole(roleIPage.getRecords());*/
 

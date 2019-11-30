@@ -23,19 +23,16 @@
         select
           a.*,
           b.username as createUser,
-          c.username as updateUser
+          b.username as updateUser
          from
             sys_role a
          left join sys_user b on a.create_by = b.id
-         left join sys_user c on a.update_by = b.id
-
          where
-          1= 1
+          a.del_flag = 1
         <if test="name!=null and name !='' ">
             and a.name like concat( #{name}, '%')
         </if>
         limit #{startNum},#{pageSize}
-
     </select>
 
     <select id="selectRoleListCount" resultType="java.lang.Integer">
