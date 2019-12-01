@@ -4,15 +4,18 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author zjw
@@ -39,6 +42,8 @@ public class Process implements Serializable {
     @ApiModelProperty(value = "流程定义者")
     private String pPersion;
 
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "流程添加时间")
     private LocalDateTime pAddTime;
 
@@ -50,6 +55,9 @@ public class Process implements Serializable {
 
     @ApiModelProperty(value = "添加人id")
     private Integer pAddUid;
+
+    @ApiModelProperty(value = "逻辑删除，0删除，1未删除")
+    private Integer pDelFlag;
 
 
 }
