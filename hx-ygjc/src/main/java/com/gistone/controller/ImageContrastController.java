@@ -112,7 +112,7 @@ public class ImageContrastController {
 
 
     /**
-     * 获取
+     * 获取对比结果
      * @param request
      * @param paramsMap
      * @return
@@ -123,6 +123,21 @@ public class ImageContrastController {
         if (params==null) return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"data结构");
         if (null==params.get("id"))return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"id不能为空");
         return imageContrastService.get(params);
+    }
+
+    /**
+     * 导出对比结果
+     * @param request
+     * @param paramsMap
+     * @return
+     */
+    @PostMapping("/exportExcel")
+    public ResultVO exportExcel(HttpServletRequest request, @RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params==null) return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"data结构");
+        Object id = params.get("id");
+        if (null==id)return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"id不能为空");
+        return imageContrastService.exportExcel(Integer.valueOf(id.toString()));
     }
 
 

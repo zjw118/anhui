@@ -1,10 +1,15 @@
 package com.gistone.util;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
-
+import org.apache.poi.ss.usermodel.Workbook;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -304,327 +309,66 @@ public class ExcUtil {
     }
 
 
-		/*public static void exportExcel(List<Map> list, String name ,List<String> order,List<String> orderName) {
-			  //创建工作簿
-	        HSSFWorkbook workBook = new HSSFWorkbook();
-	        //创建工作表
-	        HSSFSheet sheet = workBook.createSheet("数据");
-	        HSSFRow row = sheet.createRow(0);
-	        HSSFCell cell = null;
-	        //遍历插入标题
-	        for(int k = 0 ; k < order.size() ; k ++){
-	        	cell = row.createCell(k);
-	        	 cell.setCellValue(orderName.get(k));
-	        }
-	        //声明开始行
-	        int i = 0;
-	        for (Map<String,Object> data : list) {
-				i++;
-				//创建一行
-				row = sheet.createRow(i);
-				for(int j =0  ; j < order.size() ; j++){
-					//获取列
-					cell = row.createCell(j);
-					//遍历行数据
-					 for (Object k : data.keySet())
-				      {
-						 if(k.equals(order.get(j)) || k == order.get(j)){
-							 //给列赋值
-							 String k23 = (String)k;
-							 if(k23.equals("ssd_weather")){
-								 int jk = 4;
-								 System.err.println(jk);
-							 }
-							 cell.setCellValue(data.get(k).toString());
-						 }
-				      }
-				}
 
-			}
-	        //创建本地文件
-	        File file =new File("C://" +name+".xls");
-	        try {
-	        	if(!file.exists()){	//判断该文件是否存在
-     				file.createNewFile();		//如果不存在该文件，则使用file.createNewFile()创建该文件
-     			}
-				workBook.write(new File(file.toString()));
-				workBook.close();//最后记得关闭工作簿
-
-				//返回前台
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		*/
-
-		/*public static void exportExcelFile(List<Map> list, String name ,List<String> order,List<String> orderName,HttpServletRequest request,HttpServletResponse response) throws Exception{
-			//创建工作簿
-	        HSSFWorkbook workBook = new HSSFWorkbook();
-	        //创建工作表
-	        HSSFSheet sheet = workBook.createSheet("数据");
-	        HSSFRow row = sheet.createRow(0);
-	        HSSFCell cell = null;
-	        //遍历插入标题
-	        for(int k = 0 ; k < order.size() ; k ++){
-	        	cell = row.createCell(k);
-	        	 cell.setCellValue(orderName.get(k));
-	        }
-	        //声明开始行
-	        int i = 0;
-	        for (Map<String,Object> data : list) {
-				i++;
-				//创建一行
-				row = sheet.createRow(i);
-				for(int j =0  ; j < order.size() ; j++){
-					//获取列
-					cell = row.createCell(j);
-					//遍历行数据
-					 for (Object k : data.keySet())
-				      {
-						 if(k.equals(order.get(j)) || k == order.get(j)){
-							 //给列赋值
-							 String k23 = (String)k;
-							 if(k23.equals("ssd_weather")){
-								 int jk = 4;
-								 System.err.println(jk);
-							 }
-							 cell.setCellValue(data.get(k).toString());
-						 }
-				      }
-				}
-
-			}
-	        //创建本地文件
-
-        	name =name+".xls";
-			//第一步：设置响应类型
-			response.setContentType(request.getServletContext().getMimeType(name));//应用程序强制下载
-		    //设置响应头，对文件进行url编码
-		    name = URLEncoder.encode(name, "UTF-8");
-		    response.setHeader("Content-Disposition", "attachment;filename="+name);
-
-		    //第三步：老套路，开始copy
-		    OutputStream out = response.getOutputStream();
-
-			workBook.write(out);
-			workBook.close();//最后记得关闭工作簿
-
-			out.flush();
-		    out.close();
-
-			//返文件对象
-
-		}*/
-
-		/*//导出统计图数据
-		public static void exportEChartExcel(HttpServletRequest request , HttpServletResponse response , String [] xlist,String [] yList, String name ,String type) throws IOException {
-			  //创建工作簿
-	        HSSFWorkbook workBook = new HSSFWorkbook();
-	        //创建工作表
-	        HSSFSheet sheet = workBook.createSheet(type);
-	        HSSFRow row = sheet.createRow(0);
-	        HSSFCell cell = null;
-	        //遍历插入标题
-	        for(int k = 0 ; k < xlist.length ; k ++){
-	        	cell = row.createCell(k+1);
-	        	 cell.setCellValue(xlist[k]);
-	        }
-	        int i = 0 ;
-	        for(int j = 0 ; j < yList.length ; j++){
-	        	i++;
-	        	row = sheet.createRow(i);
-	        	for(int k = 0 ; k < yList[j].split(",").length ; k++){
-	        		String y[] = yList[j].split(",");
-	        		cell = row.createCell(k);
-	        		cell.setCellValue(y[k]);
-
-	        	}
-	        }
-	        name =name+".xls";
-	        //第一步：设置响应类型
-			response.setContentType(request.getServletContext().getMimeType(name));//应用程序强制下载
-		    //设置响应头，对文件进行url编码
-		    try {
-				name = URLEncoder.encode(name, "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		    response.setHeader("Content-Disposition", "attachment;filename="+name);
-
-		    //第三步：老套路，开始copy
-		    OutputStream out = response.getOutputStream();
-
-			workBook.write(out);
-			workBook.close();//最后记得关闭工作簿
-
-			out.flush();
-		    out.close();
-
-		}*/
-    //导出样线监测数据统计图数据,数据存储在session中
-				/*public static void exportEChartSimplineExcel(HttpServletRequest request , HttpServletResponse response ) throws IOException {
-
-					HttpSession session = request.getSession();
-//					String[] xlist = (String[]) session.getAttribute("x");
-//					String[] yList = (String[]) session.getAttribute("y");
-					JSONArray ylist = (JSONArray) session.getAttribute("y");
-					JSONArray xlist = (JSONArray) session.getAttribute("x");
-//					List<JSONArray> ylist = new ArrayList();
-//					ylist.add(y);
-					String name =  session.getAttribute("name").toString();
-					String type =  session.getAttribute("type").toString();
-					//创建工作簿
-			        HSSFWorkbook workBook = new HSSFWorkbook();
-			        //创建工作表
-			        HSSFSheet sheet = workBook.createSheet(type);
-			        HSSFRow row = sheet.createRow(0);
-			        HSSFCell cell = null;
-			        //遍历插入标题
-			        for(int k = 0 ; k < xlist.size() ; k ++){
-			        	cell = row.createCell(k+1);
-			        	 cell.setCellValue(xlist.get(k).toString());
-			        }
-			        int i = 0 ;
-			        for(int j = 0 ; j < ylist.size() ; j++){
-			        	i++;
-			        	row = sheet.createRow(i);
-			        		System.err.println(ylist.get(j));
-			        	for(int k = 0 ; k < ylist.get(j).toString().split(",").length ; k++){
-			        		cell = row.createCell(k);
-			        		cell.setCellValue(ylist.get(j).toString().substring(1, ylist.get(j).toString().length()-1).split(",")[k]);
-
-			        	}
-			        }
-			        name =name+".xls";
-			        //第一步：设置响应类型
-					response.setContentType(request.getServletContext().getMimeType(name));//应用程序强制下载
-				    //设置响应头，对文件进行url编码
-				    try {
-						name = URLEncoder.encode(name, "UTF-8");
-					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				    response.setHeader("Content-Disposition", "attachment;filename="+name);
-
-				    //第三步：老套路，开始copy
-				    OutputStream out = response.getOutputStream();
-
-					workBook.write(out);
-					workBook.close();//最后记得关闭工作簿
-
-					out.flush();
-				    out.close();
-
-				}*/
-		/*public static void exportExcels(List<Map> list, String name ,List<String> order,List<String> orderName) {
-			  //创建工作簿
-	        HSSFWorkbook workBook = new HSSFWorkbook();
-	        //创建工作表
-	        HSSFSheet sheet = workBook.createSheet("数据");
-	        HSSFRow row = sheet.createRow(0);
-	        HSSFCell cell = null;
-	        //遍历插入标题
-	        for(int k = 0 ; k < order.size() ; k ++){
-	        	cell = row.createCell(k);
-	        	 cell.setCellValue(orderName.get(k));
-	        }
-	        //声明开始行
-	        int i = 0;
-	        for (Map data : list) {
-				i++;
-				//创建一行
-				row = sheet.createRow(i);
-				for(int j =0  ; j < order.size() ; j++){
-					//获取列
-					cell = row.createCell(j);
-					//遍历行数据
-					 for (Object k : data.keySet())
-				      {
-						 if(k.equals(order.get(j)) || k == order.get(j)){
-							 //给列赋值
-							 cell.setCellValue(data.get(k).toString());
-						 }
-				      }
-				}
-
-			}
-	        //创建本地文件
-	        File file =new File("C://" +name+".xls");
-	        try {
-	        	if(!file.exists()){	//判断该文件是否存在
- 				file.createNewFile();		//如果不存在该文件，则使用file.createNewFile()创建该文件
- 			}
-				workBook.write(new File(file.toString()));
-				workBook.close();//最后记得关闭工作簿
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}*/
     /**
-     * 文件输出到流
-     * @author luowenbin
-     * @date 2018年3月29日
+     * 导出Excel
+     * 注意：模板行下新增一空行，并设置内外边框。
+     * API:http://poi.apache.org/apidocs/dev/org/apache/poi/ss/usermodel/Row.html
+     * easyexcel  直接生成Excel
+     * https://blog.csdn.net/jianggujin/article/details/80200400
+     * @param mburl         模板路径   D:/xx/xx.xlsx
+     * @param listMap       替换数据    List<Map<String, Object>>   {{$fe:maplist t.data1|t.data2|...|t.dataN}}
+     * @param sign          模板行标识    传maplist    与{{$fe:maplist t.data1|t.data2|...|t.dataN}}其中对应
+     * @param response      下载到客户端      允许为null
+     * @param name          下载附件名称      允许为null    xx.xlsx
+     * @param path          导出到本地目录    允许为null    D:/xx
+     * @return              下载返回附件名、生成本地返回全路径名
      */
-		/*public static void exportExcelsToStream(List<Map> list, String name ,List<String> order,List<String> orderName,HttpServletRequest request,HttpServletResponse response)throws Exception{
-			//创建工作簿
-			HSSFWorkbook workBook = new HSSFWorkbook();
-			//创建工作表
-			HSSFSheet sheet = workBook.createSheet("数据");
-			HSSFRow row = sheet.createRow(0);
-			HSSFCell cell = null;
-			//遍历插入标题
-			for(int k = 0 ; k < order.size() ; k ++){
-				cell = row.createCell(k);
-				cell.setCellValue(orderName.get(k));
-			}
-			//声明开始行
-			int i = 0;
-			for (Map data : list) {
-				i++;
-				//创建一行
-				row = sheet.createRow(i);
-				for(int j =0  ; j < order.size() ; j++){
-					//获取列
-					cell = row.createCell(j);
-					//遍历行数据
-					for (Object k : data.keySet())
-					{
-						if(k.equals(order.get(j)) || k == order.get(j)){
-							//给列赋值
-							cell.setCellValue(data.get(k).toString());
-						}
-					}
-				}
+    public static String exportExcel(String mburl, List<Map<String, Object>> listMap, String sign, HttpServletResponse response, String name, String path){
+        OutputStream out = null;
+        String url = null;
+        try{
+            TemplateExportParams params = new TemplateExportParams(mburl);
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put(sign,listMap);
+            Workbook workbook = ExcelExportUtil.exportExcel(params,map);
+            if(StringUtils.isNotBlank(path)){
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                if (!path.endsWith("/")) path = path + "/";
+                path = path + simpleDateFormat.format(new Date());
+                File dir = new File(path);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                path =  path+"/"+UUID.randomUUID()+mburl.substring(mburl.lastIndexOf("."));
+                FileOutputStream fos = new FileOutputStream(path);
+                workbook.write(fos);
+                url = path.split(":")[1];
+            }
+            //下载Word到客户端
+            if(null!=response){
+//                response.setCharacterEncoding("UTF-8");
+                response.setContentType("multipart/form-data;charset=UTF-8");
+                response.addHeader("Content-Disposition", "attachment;fileName="+ URLEncoder.encode(name,"UTF-8"));
+                out = response.getOutputStream();
+                workbook.write(out);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (out != null) {
+                try{
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return url;
+        }
+    }
 
-			}
-			//创建本地文件
-			*//*
-			File file =new File("C://" +name+".xls");
-				if(!file.exists()){	//判断该文件是否存在
-					file.createNewFile();		//如果不存在该文件，则使用file.createNewFile()创建该文件
-				}
-				workBook.write(new File(file.toString()));
-				workBook.close();//最后记得关闭工作簿
-			*//*
 
-			name =name+".xls";
-			//第一步：设置响应类型
-			response.setContentType(request.getServletContext().getMimeType(name));//应用程序强制下载
-		    //设置响应头，对文件进行url编码
-		    name = URLEncoder.encode(name, "UTF-8");
-		    response.setHeader("Content-Disposition", "attachment;filename="+name);
 
-		    //第三步：老套路，开始copy
-		    OutputStream out = response.getOutputStream();
 
-			workBook.write(out);
-			workBook.close();//最后记得关闭工作簿
 
-			out.flush();
-		    out.close();
-
-		}*/
 }

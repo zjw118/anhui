@@ -12,11 +12,18 @@
         <result column="p_introduce" property="pIntroduce" />
         <result column="p_content" property="pContent" />
         <result column="p_add_uid" property="pAddUid" />
+        <result column="p_del_flag" property="pDelFlag" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        p_id, p_name, p_unit, p_persion, p_add_time, p_introduce, p_content, p_add_uid
+        p_id, p_name, p_unit, p_persion, p_add_time, p_introduce, p_content, p_add_uid,p_del_flag
     </sql>
 
+        <select id="list" resultMap="BaseResultMap" parameterType="com.gistone.entity.Process">
+            select * from process where p_del_flag = 1
+            <if test="pName != null" >
+               and p_name = #{pName}
+            </if>
+        </select>
 </mapper>
