@@ -561,11 +561,11 @@ public class ProjectAdmissionController {
             e.printStackTrace();
         }
 
-        ExcelToPdf.doc2pdf(projectAdmission.getFileUrl(),configUtils.getExcel_PATH() + "项目准入分析报告.pdf");
+        ExcelToPdf.doc2pdf(projectAdmission.getFileUrl(),configUtils.getExcel_PATH() + projectAdmission.getName()+"分析报告.pdf");
 
         Map<String,Object> result = new HashMap<>();
         result.put("wordPath",projectAdmission.getFileUrl());
-        result.put("pdfPath",configUtils.getExcel_PATH() + "项目准入分析报告.pdf");
+        result.put("pdfPath",(configUtils.getExcel_PATH() + projectAdmission.getName()+"分析报告.pdf").substring(2));
         return ResultVOUtil.success(result);
     }
 
@@ -731,7 +731,7 @@ public class ProjectAdmissionController {
 
 
         ExcelToPdf.excel2pdf(filepath, configUtils.getExcel_PATH() + "项目准入.pdf");
-        map1.put("pdfPath", configUtils.getExcel_PATH() + "项目准入.pdf");
+        map1.put("pdfPath", (configUtils.getExcel_PATH() + "项目准入.pdf").substring(2));
 
 
         return ResultVOUtil.success(map1);

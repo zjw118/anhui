@@ -35,4 +35,28 @@
         id, type, title, remote_addr, username, request_uri, http_method, class_method, params, session_id, response, use_time, browser, area, province, city, isp, exception, create_by, create_date, update_by, update_date, remarks, del_flag
     </sql>
 
+    <select id="getTotal" resultType="java.util.Map">
+            SELECT
+                COUNT(*) AS sum ,
+                substring(create_date, 6, 5) AS date
+            FROM
+                sys_log a
+            WHERE
+
+              a.create_date &lt;= #{currentTime}
+            AND  a.create_date &gt;= #{beforeTime}
+            GROUP BY
+            LEFT (create_date, 10)
+    </select>
+
+    <select id="getBeforeCount" resultType="java.lang.Integer">
+
+        SELECT
+              COUNT(*)
+        FROM
+              sys_log
+        WHERE
+              create_date &lt;= #{beforeTime}
+    </select>
+
 </mapper>

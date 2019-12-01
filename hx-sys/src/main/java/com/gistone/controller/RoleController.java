@@ -40,7 +40,7 @@ public class RoleController {
      * @author zf1017@foxmail.com
      * @date 2019/4/26 0026 13:41
      */
-    @RequestMapping(value = "/list",method = RequestMethod.POST)
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
     public ResultVO roleList(@RequestBody Map<String, Object> paramsMap) {
         Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
         if (dataParam == null) {
@@ -69,7 +69,7 @@ public class RoleController {
      * @author zf1017@foxmail.com
      * @date 2019/4/29 0029 9:22
      */
-    @RequestMapping(value = "/add",method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResultVO addRole(@RequestBody Map<String, Object> paramsMap) {
         SysRole role = new SysRole();
 
@@ -90,7 +90,7 @@ public class RoleController {
         List<Integer> resourceIds = (List<Integer>) dataParam.get("resourceIds");
 
         String remark = (String) dataParam.get("remarks");
-        if(StringUtils.isNotBlank(remark)){
+        if (StringUtils.isNotBlank(remark)) {
             role.setRemarks(remark);
         }
 
@@ -98,7 +98,7 @@ public class RoleController {
         try {
             SysRole sysRole = roleService.selectByName(name);
 
-            if (sysRole!=null) {
+            if (sysRole != null) {
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "角色名称已经存在");
             }
 
@@ -190,6 +190,10 @@ public class RoleController {
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "角色名称已经存在");
             }*/
             SysRole sysRoleParam = new SysRole();
+            String remarks = (String) dataParam.get("remarks");
+
+            sysRoleParam.setRemarks(remarks);
+
             sysRoleParam.setId(id);
             sysRoleParam.setName(name);
             sysRoleParam.setUpdateBy(updateBy);
@@ -208,14 +212,14 @@ public class RoleController {
 
 
     /**
+     * @return
      * @description: 编辑用角色权限
      * @param:
-     * @return
      * @author zf1017@foxmail.com
      * @date 2019/4/29 0029 13:28
      */
     @PostMapping(value = "/editRoleResoure")
-    public ResultVO editRoleResource(@RequestBody Map<String, Object> paramsMap){
+    public ResultVO editRoleResource(@RequestBody Map<String, Object> paramsMap) {
         Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
         if (dataParam == null) {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
@@ -224,21 +228,20 @@ public class RoleController {
 
         Integer roleId = (Integer) dataParam.get("roleId");
         List<Integer> sysResources = (List<Integer>) dataParam.get("resourcesIds");
-        if(roleId==null ||roleId<=0){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"角色id不能为空");
+        if (roleId == null || roleId <= 0) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "角色id不能为空");
         }
 
-        if(sysResources==null ||sysResources.size()<=0){
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"无要添加的权限");
+        if (sysResources == null || sysResources.size() <= 0) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "无要添加的权限");
         }
 
 
-       roleService.saveRoleResource(roleId,sysResources);
+        roleService.saveRoleResource(roleId, sysResources);
 
         return ResultVOUtil.success();
 
     }
-
 
 
 }
