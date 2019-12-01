@@ -1,10 +1,10 @@
 package com.gistone.interceptor;
 
 import cn.hutool.json.JSONObject;
+import com.gistone.entity.SysUser;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,12 +20,12 @@ public class SysUserLoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
-       /* SysUser sysUser = (SysUser) session.getAttribute("user");
+        SysUser sysUser = (SysUser) session.getAttribute("user");
         if(null==sysUser){
 //            System.out.println("拦截============>"+request.getRequestURI());
             returnJson(response, "用户过期，请重新登陆。");
             return false;
-        }*/
+        }
 //        System.out.println("放行============>"+request.getRequestURI());
         return true;
     }
