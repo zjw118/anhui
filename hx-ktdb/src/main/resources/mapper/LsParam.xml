@@ -15,5 +15,9 @@
     <sql id="Base_Column_List">
         id, name, type, del_flag, create_time
     </sql>
+    <update id="updateFlag">
+        UPDATE ls_param
+        SET flag = 0
+    </update>
 
 </mapper>

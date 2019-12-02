@@ -12,5 +12,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2019-11-26
  */
 public interface LsToolMapper extends BaseMapper<LsTool> {
+    int updateFlag();
 
 }

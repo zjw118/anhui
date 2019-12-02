@@ -39,6 +39,8 @@ public class LsParam extends Model<LsParam> {
     private String remark;
     private String url;
 
+    private Integer flag;
+
 
     @Override
     protected Serializable pkVal() {

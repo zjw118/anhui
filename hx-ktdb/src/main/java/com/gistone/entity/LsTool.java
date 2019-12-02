@@ -40,6 +40,8 @@ public class LsTool extends Model<LsTool> {
 
     private String url;
 
+    private Integer flag;
+
 
     @Override
     protected Serializable pkVal() {
