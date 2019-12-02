@@ -32,7 +32,6 @@
 
 
 
-
     <properties>
         <java.version>1.8</java.version>
         <swagger_version>2.7.0</swagger_version>
@@ -62,7 +61,6 @@
         <jackson_vsrsion>2.9.7</jackson_vsrsion>
         <joda-time_version>2.10.1</joda-time_version>
         <mybatis-plus-boot-starter>3.1.0</mybatis-plus-boot-starter>
-        <commons-lang3>3.3.2</commons-lang3>
         <commons-codec>1.11</commons-codec>
         <javaee-api>8.0</javaee-api>
         <druid>1.1.11</druid>
@@ -71,7 +69,6 @@
         <gt-swing>17.0</gt-swing>
         <gt-shapefile>17.0</gt-shapefile>
         <gt-opengis>10.0</gt-opengis>
-    <!--    <gt-opengis>17.0</gt-opengis>-->
         <hutool-all>3.3.0</hutool-all>
         <thumbnailator>0.4.8</thumbnailator>
         <json-lib>2.4</json-lib>
@@ -93,11 +90,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
- <!--       <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>-->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
@@ -124,7 +117,6 @@
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
-
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
@@ -135,11 +127,6 @@
             <artifactId>opencsv</artifactId>
             <version>${opencsv}</version>
         </dependency>
-
-
-
-
-
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-swing</artifactId>
@@ -160,14 +147,10 @@
             <artifactId>gt-geojson</artifactId>
             <version>${gt-opengis}</version>
         </dependency>
-
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
         </dependency>
-
-
         <dependency>
             <groupId>com.xiaoleilu</groupId>
             <artifactId>hutool-all</artifactId>
@@ -177,11 +160,6 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
             <version>${druid}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${commons-lang3}</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
@@ -203,8 +181,6 @@
             <artifactId>mybatis-plus-generator</artifactId>
             <version>${mybatis_plus_version}</version>
         </dependency>
-
-
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
@@ -250,10 +226,6 @@
             <artifactId>freemarker</artifactId>
             <version>${freemarker_version}</version>
         </dependency>
-
-
-
-
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity-engine-core</artifactId>
@@ -324,24 +296,6 @@
             <artifactId>zip4j</artifactId>
             <version>1.3.2</version>
         </dependency>
-
-
-        <!-- easypoi -->
-        <!--<dependency>-->
-            <!--<groupId>cn.afterturn</groupId>-->
-            <!--<artifactId>easypoi-base</artifactId>-->
-            <!--<version>4.0.0</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>cn.afterturn</groupId>-->
-            <!--<artifactId>easypoi-web</artifactId>-->
-            <!--<version>4.0.0</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>cn.afterturn</groupId>-->
-            <!--<artifactId>easypoi-annotation</artifactId>-->
-            <!--<version>4.0.0</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>cn.afterturn</groupId>
             <artifactId>easypoi-base</artifactId>
@@ -405,8 +359,6 @@
         <finalName>gistone</finalName>
         <pluginManagement>
             <plugins>
-
-
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
@@ -447,8 +399,6 @@
                         </execution>
                     </executions>
                 </plugin>
-
-
             </plugins>
         </pluginManagement>
     </build>
