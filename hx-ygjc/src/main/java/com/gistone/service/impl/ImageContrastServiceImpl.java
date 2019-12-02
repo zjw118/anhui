@@ -385,7 +385,7 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
             list.add(map);
             i++;
         }
-        String mburl = PATH+"/epr/imageContrastExc/人类活动变化检测报告.xlsx";
+        String mburl = "人类活动变化检测报告.xlsx";
         List<Map<String, Object>> listMap = list;
         String sign = "maplist";
         HttpServletResponse response = null;
