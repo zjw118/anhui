@@ -85,4 +85,15 @@
         where name != #{name}
     </update>
 
+    <update id="updateLinshi" parameterType="java.lang.String" >
+        UPDATE linshi set data = #{data}
+    </update>
+    <select id="getLinshi"  resultType="java.lang.String" >
+        select data from linshi limit 1
+	</select>
+
+
+
+
+
 </mapper>

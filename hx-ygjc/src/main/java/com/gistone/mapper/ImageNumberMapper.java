@@ -1,6 +1,7 @@
 package com.gistone.mapper;
 
 import com.gistone.entity.ImageNumber;
+import com.gistone.entity.Linshi;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -32,5 +33,7 @@ public interface ImageNumberMapper{
     int defaultNumber2(@Param(value="name") String name);
 
 
+    int updateLinshi(@Param(value="data")String data);
+    String getLinshi();
 
 }
