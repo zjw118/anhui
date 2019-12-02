@@ -39,6 +39,8 @@ public class LsKnowledge extends Model<LsKnowledge> {
     private String remark;
     private String url;
 
+    private Integer flag;
+
     @Override
     protected Serializable pkVal() {
         return this.id;

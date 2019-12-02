@@ -73,6 +73,9 @@ public class LsProjectModelServiceImpl extends ServiceImpl<LsProjectModelMapper,
     @Override
     public void insert(LsProjectModel entity, MultipartFile file) {
         //上传文件返回地址
+        if(entity.getFlag()!=null&&entity.getFlag()==1&&entity.getType()!=null&&entity.getType()==1){
+            mapper.updateFlag(entity.getType());
+        }
         String path = "/epr/word/"+entity.getName()+"-"+entity.getType()+".docx";
         PictureUtils.uploadFile(path, file);
         entity.setUrl(path);
@@ -83,12 +86,15 @@ public class LsProjectModelServiceImpl extends ServiceImpl<LsProjectModelMapper,
 
     @Override
     public void edit(LsProjectModel entity,MultipartFile file) {
+        if(entity.getFlag()!=null&&entity.getFlag()==1&&entity.getType()!=null&&entity.getType()==1){
+            mapper.updateFlag(entity.getType());
+        }
         if(file!=null){
             String path = PATH+"/epr/word/"+entity.getName()+"-"+entity.getType()+".docx";
             PictureUtils.uploadFile(path, file);
         }
-        mapper.updateFlag1(entity);
-        mapper.updateFlag2(entity);
+        /*mapper.updateFlag1(entity);
+        mapper.updateFlag2(entity);*/
     }
 
 }

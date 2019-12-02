@@ -73,6 +73,10 @@ public class LsParamServiceImpl extends ServiceImpl<LsParamMapper, LsParam> impl
     @Override
     public void insert(LsParam entity, MultipartFile file) {
         //具体逻辑
+
+        if(entity.getFlag()!=null&&entity.getFlag()==1){
+            mapper.updateFlag();
+        }
         String path = PATH+"/epr/attached/";
         String picturePath = PictureUtils.getPicturePath(path, file);
         entity.setCreateTime(LocalDateTime.now()).setUrl(picturePath);
@@ -82,6 +86,10 @@ public class LsParamServiceImpl extends ServiceImpl<LsParamMapper, LsParam> impl
 
     @Override
     public void edit(LsParam entity,MultipartFile file) {
+
+        if(entity.getFlag()!=null&&entity.getFlag()==1){
+            mapper.updateFlag();
+        }
         //具体逻辑
         if(file!=null){
             String path = PATH+"/epr/attached/";

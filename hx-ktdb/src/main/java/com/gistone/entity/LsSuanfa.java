@@ -51,6 +51,8 @@ public class LsSuanfa extends Model<LsSuanfa> {
     private String remark;
     private String url;
 
+    private Integer flag;
+
 
     @Override
     protected Serializable pkVal() {

@@ -16,4 +16,9 @@
         id, name, type, del_flag, create_time
     </sql>
 
+    <update id="updateFlag">
+        update ls_knowledge
+        set flag = 0
+    </update>
+
 </mapper>

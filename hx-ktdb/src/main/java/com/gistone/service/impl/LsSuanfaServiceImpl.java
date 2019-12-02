@@ -70,6 +70,10 @@ import java.util.Map;
 
     @Override
     public void insert(LsSuanfa entity, MultipartFile file) {
+
+        if(entity.getFlag()!=null&&entity.getFlag()==1){
+            mapper.updateFlag();
+        }
         String path = PATH+"/epr/attached/";
         String picturePath = PictureUtils.getPicturePath(path, file);
         entity.setCreateTime(LocalDateTime.now()).setUrl(picturePath);
@@ -83,6 +87,10 @@ import java.util.Map;
     @Override
     public void edit(LsSuanfa entity,MultipartFile file) {
         //具体逻辑
+
+        if(entity.getFlag()!=null&&entity.getFlag()==1){
+            mapper.updateFlag();
+        }
         if(file!=null){
             String path = PATH+"/epr/attached/";
             String picturePath = PictureUtils.getPicturePath(path, file);

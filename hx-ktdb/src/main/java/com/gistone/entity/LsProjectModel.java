@@ -54,6 +54,8 @@ public class LsProjectModel extends Model<LsProjectModel> {
     private String remark;
 
 
+
+
     @Override
     protected Serializable pkVal() {
         return this.id;
