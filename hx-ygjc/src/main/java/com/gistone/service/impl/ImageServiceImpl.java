@@ -775,7 +775,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     }
 
     @Override
-    public ResultVO exportZTTJ(String data1, String data2, String data3, String data4) {
+    public ResultVO exportZTTJ(String data1, String data2, String data3) {
         //获取模板
         LsProjectModel lsProjectModelByType = lsProjectModelMapper.getLsProjectModelByType(2);
         String path = lsProjectModelByType.getUrl();
@@ -785,7 +785,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         String path1 = pictureUtil.generate(PATH + "/epr/ZTTJ", data1);
         String path2 = pictureUtil.generate(PATH + "/epr/ZTTJ", data2);
         String path3 = pictureUtil.generate(PATH + "/epr/ZTTJ", data3);
-        String path4 = pictureUtil.generate(PATH + "/epr/ZTTJ", data4);
 
         //生成word
         String uuid = UUID.randomUUID().toString();
@@ -798,7 +797,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         pictureMap.put("image1",path1);
         pictureMap.put("image2",path2);
         pictureMap.put("image3",path3);
-        pictureMap.put("image4",path4);
         boolean b = WordUtil.exportWord(PATH+path, docxPath,uuid+".docx", params, pictureMap);
         if(b){
             return ResultVOUtil.success("/epr/ZTTJ/"+uuid+".docx");

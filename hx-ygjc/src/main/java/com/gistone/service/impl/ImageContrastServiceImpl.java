@@ -29,6 +29,8 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @Service
@@ -379,9 +381,9 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
             map.put("data1",i3.getName1());
             map.put("data2",i3.getName2());
             map.put("data3",i3.getName());
-            map.put("data4",i3.getNum1());
-            map.put("data5",i3.getNum2());
-            map.put("data6",i3.getNum3());
+            map.put("data4",NonScientificNotation(i3.getNum1().toString()));
+            map.put("data5",NonScientificNotation(i3.getNum2().toString()));
+            map.put("data6",NonScientificNotation(i3.getNum3().toString()));
             list.add(map);
             i++;
         }
@@ -396,7 +398,18 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
     }
 
 
-
+    public static String NonScientificNotation(String num)
+    {
+        Pattern pattern = Pattern.compile("-?[0-9]*.[0-9]*E[0-9]*");
+        Matcher match   = null;
+        match = pattern.matcher(num);
+        if(match.matches())
+        {
+            BigDecimal decimal = new BigDecimal(num);
+            num = decimal.toPlainString();
+        }
+        return num;
+    }
 
 
 

@@ -51,7 +51,7 @@ public interface ImageService extends IService<Image> {
 
     ResultVO getGdFile();
 
-    ResultVO exportZTTJ(String data1,String data2,String data3,String data4);
+    ResultVO exportZTTJ(String data1,String data2,String data3);
 
     ResultVO gdFile(HttpServletResponse response);
 

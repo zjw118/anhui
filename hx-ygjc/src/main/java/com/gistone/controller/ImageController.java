@@ -1039,9 +1039,8 @@ public class ImageController {
             if(null==data1)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data1不能为空！");
             if(null==data2)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data2不能为空！");
             if(null==data3)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data3不能为空！");
-            if(null==data4)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data4不能为空！");
 
-            return service.exportZTTJ(data1.toString(),data2.toString(),data3.toString(),data4.toString());
+            return service.exportZTTJ(data1.toString(),data2.toString(),data3.toString());
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "报告导出失败");
