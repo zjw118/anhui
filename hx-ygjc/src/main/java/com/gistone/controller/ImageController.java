@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -73,10 +74,14 @@ public class ImageController {
     private String ftpPt;
     @Value("${ftp_url}")
     private String ftpUrl;
+    @Value("${dynamic_path}")
+    private String dynamicPath;//动态工作空间路径
+    @Value("${JYResult_PATH}")
+    private String jYResultPATH;//解疑结果存储路径
     @ApiOperation(value = "image识别添加接口", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/insertImagerTemp")
     public ResultVO insertImagerTemp(@RequestBody @ApiParam(name = "任务批次添加接口", value = "json格式", required = true) Swagger<ImageTemp> data,
-                               HttpServletRequest request) {
+                               HttpServletRequest request) throws FileNotFoundException {
         ImageTemp it = data.getData();
         if(!ObjectUtils.isNotNullAndEmpty(it.getName())){
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "名称不能为空！");
@@ -85,6 +90,17 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "识别的url不能为空！");
         }
         it.setUpdateDate(LocalDateTime.now());
+        String type[] = {"shp","dbf","prj","sbn","sbx","shx"};
+        String fileName  = it.getShpurl().substring(it.getShpurl().lastIndexOf("/") + 1 ,it.getShpurl().length());
+        String fileUUid = fileName.substring(0,32);
+        //循环遍历将解译结果下载至服务器
+        for(String ty : type){
+            FTPUtilUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, dynamicPath  , jYResultPATH+ fileUUid, it.getShpurl().substring(it.getShpurl().lastIndexOf("/") + 1 ,it.getShpurl().length()).substring(0,it.getShpurl().substring(it.getShpurl().lastIndexOf("/"),it.getShpurl().length()).lastIndexOf(".")) + ty);
+        }
+        //将解译结果压缩
+        ZipUtil.toZip(jYResultPATH+ fileUUid , jYResultPATH  , jYResultPATH+ fileUUid + ".zip"   , true);
+        //解译结果下载路径存入数据库
+        it.setResultUrl(jYResultPATH + fileUUid + ".zip");
         return ResultVOUtil.success(iImageTempService.save(it));
 
     }

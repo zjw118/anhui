@@ -79,6 +79,15 @@ public class FTPUtilUtil {
         }
     }
 
+    public static void main(String[] args){
+        String fileName = "E:/FTP/dynamicSpace/51c37b794be64b67b43f602a703090f3_transparent_chishui_mosaic_group1.shp";
+        fileName = fileName.substring(fileName.lastIndexOf("/") + 1 ,fileName.length());
+        downloadFile("10.34.100.135","135","123456",21,"/dynamicSpace/" + fileName.substring(0,32),"D:/epr/JYResult/",fileName);
+       /* File newFile = new File("D:/epr/JYResult/");
+        if(newFile.exists()==false){
+            newFile.mkdirs();
+        }*/
+    }
     /**
      * 下载文件
      *
@@ -102,14 +111,15 @@ public class FTPUtilUtil {
             ftpPath = new String(ftpPath.getBytes("GBK"),"iso-8859-1");
             ftpClient.changeWorkingDirectory(ftpPath);// 转移到FTP服务器目录
             FTPFile[] fs = ftpClient.listFiles();
+            //如果下载路径不存在，则创建
+            File newFile = new File(localPath );
+            if(newFile.exists()==false){
+                newFile.mkdirs();
+            }
             for (FTPFile ff : fs) {
                 String fname = new String(ff.getName().getBytes("iso-8859-1"), "gbk");
                 if (fname.equals(fileName)) {
-                    File newFile = new File(localPath);
-                    if(newFile.exists()==false){
-                        newFile.mkdirs();
-                    }
-                    File localFile = new File(localPath + File.separatorChar + fileName);
+                    File localFile = new File(localPath + File.separatorChar + ff.getName());
                     OutputStream os = new FileOutputStream(localFile);
                     ftpClient.retrieveFile(ff.getName(), os);
                     os.close();
@@ -130,7 +140,7 @@ public class FTPUtilUtil {
             isItDone = "文件读取错误。";
             e.printStackTrace();
         }
-        return isItDone;
+        return "isItDone";
     }
 
 
@@ -364,13 +374,13 @@ public class FTPUtilUtil {
         FTPClient ftp = new FTPClient();
         try {
             int reply;
-            // 连接FTP服务器  
+            // 连接FTP服务器
             if (port > -1) {
                 ftp.connect(url, port);
             } else {
                 ftp.connect(url);
             }
-            // 登录  
+            // 登录
             ftp.login(username, password);
             ftp.setControlEncoding("GBK");
             reply = ftp.getReplyCode();
@@ -378,7 +388,7 @@ public class FTPUtilUtil {
                 ftp.disconnect();
                 return success;
             }
-            // 转移到FTP服务器目录  
+            // 转移到FTP服务器目录
             remotePath = new String(remotePath.getBytes("GBK"), "iso-8859-1");
             ftp.changeWorkingDirectory(remotePath);
             fileName = new String(fileName.getBytes("GBK"), "iso-8859-1");
