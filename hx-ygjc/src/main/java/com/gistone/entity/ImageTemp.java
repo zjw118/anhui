@@ -93,5 +93,8 @@ public class ImageTemp extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "遥感影像数据URL")
     private String zipUrl;
 
+    @ApiModelProperty(value = "解译结果下载URL")
+    private String resultUrl;
+
 
 }

@@ -12,6 +12,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
+import static com.gistone.util.FileUtil.compress;
+
 
 public class ZipUtil {
 
@@ -52,7 +54,7 @@ public class ZipUtil {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         File zipfile=new File("C:\\Users\\EDZ\\Desktop\\安徽红线\\前端李帅\\yss_dist.zip");
 //        srcfile.add(new File("e:\\2.xls"));
 //        srcfile.add(new File("e:\\3.xls"));
@@ -60,7 +62,7 @@ public class ZipUtil {
 //        srcfile.add(new File("e:\\5.xls"));
 
         String dirfile = "D:\\1jieya";
-        ZipUtil.unZipFiles( zipfile,dirfile);
+        ZipUtil.toZip( "D:\\epr\\JYResult\\f5d97097c39345519137ac21f1abd0fc","D:\\epr\\JYResult" , "D:\\epr\\JYResult\\f5d97097c39345519137ac21f1abd0fc.zip",true);
     }
     /**
      * 解压缩
@@ -148,6 +150,74 @@ public class ZipUtil {
        }
 		return fileUrl;
 
+    }
+    /**
+     * 压缩成ZIP 方法1
+     * @param srcDir 压缩文件夹路径
+     * @param  outFile 压缩输出文件路径
+     * @param KeepDirStructure  是否保留原来的目录结构,true:保留目录结构;
+     *                          false:所有文件跑到压缩包根目录下(注意：不保留目录结构可能会出现同名文件,会压缩失败)
+     * @throws RuntimeException 压缩失败会抛出运行时异常
+     */
+    public static void toZip(String srcDir, String outDir, String outFile , boolean KeepDirStructure)
+            throws RuntimeException, FileNotFoundException {
+        long start = System.currentTimeMillis();
+        File fi = new File(outFile);
+        OutputStream out = new FileOutputStream(fi);
+        ZipOutputStream zos = null ;
+        try {
+            zos = new ZipOutputStream(out);
+            File sourceFile = new File(srcDir);
+            compress(sourceFile,zos,sourceFile.getName(),KeepDirStructure);
+            long end = System.currentTimeMillis();
+            System.out.println("压缩完成，耗时：" + (end - start) +" ms");
+        } catch (Exception e) {
+            throw new RuntimeException("zip error from ZipUtils",e);
+        }finally{
+            if(zos != null){
+                try {
+                    zos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+        /**
+         * 压缩成ZIP 方法2
+         * @param srcFiles 需要压缩的文件列表
+         * @param out           压缩文件输出流
+         * @throws RuntimeException 压缩失败会抛出运行时异常
+         */
+    public static void toZip(List<File> srcFiles , OutputStream out)throws RuntimeException {
+        long start = System.currentTimeMillis();
+        ZipOutputStream zos = null ;
+        try {
+            zos = new ZipOutputStream(out);
+            for (File srcFile : srcFiles) {
+                byte[] buf = new byte[1024];
+                zos.putNextEntry(new ZipEntry(srcFile.getName()));
+                int len;
+                FileInputStream in = new FileInputStream(srcFile);
+                while ((len = in.read(buf)) != -1){
+                    zos.write(buf, 0, len);
+                }
+                zos.closeEntry();
+                in.close();
+            }
+            long end = System.currentTimeMillis();
+            System.out.println("压缩完成，耗时：" + (end - start) +" ms");
+        } catch (Exception e) {
+            throw new RuntimeException("zip error from ZipUtils",e);
+        }finally{
+            if(zos != null){
+                try {
+                    zos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 //
     /**

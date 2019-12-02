@@ -481,7 +481,7 @@ public class FileUtil {
         }
         return isItDone;
     }
-    private static void compress(File sourceFile, ZipOutputStream zos, String name, boolean KeepDirStructure) throws Exception {
+    static void compress(File sourceFile, ZipOutputStream zos, String name, boolean KeepDirStructure) throws Exception {
         byte[] buf = new byte[2048];
         if (sourceFile.isFile()) {
             // 向zip输出流中添加一个zip实体，构造器中name为zip实体的文件的名字
