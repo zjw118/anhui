@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +75,23 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
     @Override
     public void edit(SysLog entity) {
         //具体逻辑
+    }
+
+    @Override
+    public Map<String, Object> getTotal() {
+
+        //获取当前日期和前十五天日期
+        LocalDate currentTime = LocalDate.now();
+        LocalDate beforeTime = currentTime.minusDays(14);
+        List<Map<String, Object>> total = mapper.getTotal(currentTime, beforeTime);
+        int count = mapper.getBeforeCount( beforeTime);
+
+        Map<String,Object> result = new HashMap<>();
+        result.put("data",total);
+        result.put("beforeTotal",count);
+
+
+        return result;
     }
 
 }

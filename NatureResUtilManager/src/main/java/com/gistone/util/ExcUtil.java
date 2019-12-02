@@ -7,7 +7,6 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Workbook;
-
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
@@ -327,34 +326,32 @@ public class ExcUtil {
      */
     public static String exportExcel(String mburl, List<Map<String, Object>> listMap, String sign, HttpServletResponse response, String name, String path){
         OutputStream out = null;
+        String url = null;
         try{
             TemplateExportParams params = new TemplateExportParams(mburl);
             Map<String, Object> map = new HashMap<String, Object>();
             map.put(sign,listMap);
             Workbook workbook = ExcelExportUtil.exportExcel(params,map);
-
             if(StringUtils.isNotBlank(path)){
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                if (!path.endsWith("/")) path = path + File.separator;
+                if (!path.endsWith("/")) path = path + "/";
                 path = path + simpleDateFormat.format(new Date());
                 File dir = new File(path);
                 if (!dir.exists()) {
                     dir.mkdirs();
                 }
-                Date date = new Date();
-                path =  path+File.separator+date.getTime()+mburl.substring(mburl.lastIndexOf("."));
+                path =  path+"/"+UUID.randomUUID()+mburl.substring(mburl.lastIndexOf("."));
                 FileOutputStream fos = new FileOutputStream(path);
                 workbook.write(fos);
-                return path;
+                url = path.split(":")[1];
             }
             //下载Word到客户端
             if(null!=response){
 //                response.setCharacterEncoding("UTF-8");
-                response.setContentType("multipart/form-data");
+                response.setContentType("multipart/form-data;charset=UTF-8");
                 response.addHeader("Content-Disposition", "attachment;fileName="+ URLEncoder.encode(name,"UTF-8"));
                 out = response.getOutputStream();
                 workbook.write(out);
-                return name;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -366,8 +363,8 @@ public class ExcUtil {
                     e.printStackTrace();
                 }
             }
+            return url;
         }
-        return null;
     }
 
 

@@ -23,4 +23,6 @@ package com.gistone.service;
     void insert(SysLog entity);
 
     void edit(SysLog entity);
+
+   Map<String,Object> getTotal();
     }

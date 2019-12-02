@@ -361,10 +361,6 @@
 
     </dependencies>
 
-
-
-
-
     <repositories>
         <repository>
             <id>maven-ali</id>
@@ -405,12 +401,12 @@
 
 
     </repositories>
-
-
     <build>
         <finalName>gistone</finalName>
         <pluginManagement>
             <plugins>
+
+
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
@@ -433,10 +429,6 @@
                         </webResources>
                     </configuration>
                 </plugin>
-
-
-
-                <!-- 外部jar包集成到打包环境 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
@@ -455,6 +447,8 @@
                         </execution>
                     </executions>
                 </plugin>
+
+
             </plugins>
         </pluginManagement>
     </build>

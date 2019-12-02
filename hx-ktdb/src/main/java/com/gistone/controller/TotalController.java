@@ -309,10 +309,10 @@ public class TotalController {
                 codes = code;
             }
         }
+
         //获取当前日期和前十五天日期
         LocalDate currentTime = LocalDate.now();
         LocalDate beforeTime = currentTime.minusDays(14);
-
         Map<String, Object> result = totalService.getSurveySum(codes, currentTime, beforeTime);
 
         return ResultVOUtil.success(result);
