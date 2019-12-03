@@ -98,7 +98,7 @@
 
 <!--    增-->
     <insert id="zAdd" parameterType="com.gistone.entity.Linshi2">
-        INSERT INTO lishi2
+        INSERT INTO linshi2
         (
             name
         )
@@ -106,11 +106,11 @@
     </insert>
 <!--    删-->
     <delete id="zDelete" parameterType="java.lang.Integer">
-		delete from lishi2 where id = #{id}
+		delete from linshi2 where id = #{id}
 	</delete>
 <!--    改-->
     <update id="zUpdate" parameterType="com.gistone.entity.Linshi2" >
-        update lishi2
+        update linshi2
         <set>
             <if test="null!=name and ''!=name">
                 name=#{name},
@@ -120,17 +120,17 @@
     </update>
 <!--    查-->
     <select id="getPoSum"  resultType="java.lang.Integer" parameterType="com.gistone.util.PageBean">
-        SELECT count(*) from lishi2
+        SELECT count(*) from linshi2
         where 1=1
         <if test="str1!=null and str1!=''">
-            and str1 like '%${str1}%'
+            and name like '%${str1}%'
         </if>
     </select>
     <select id="selectPoList"  resultType ="java.util.Map" parameterType="com.gistone.util.PageBean">
-        SELECT * from lishi2
+        SELECT * from linshi2
         where 1=1
         <if test="str1!=null and str1!=''">
-            and str1 like '%${str1}%'
+            and name like '%${str1}%'
         </if>
         LIMIT #{firstLimit},#{pageSize}
     </select>
