@@ -2,10 +2,7 @@ package com.gistone.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.Image;
-import com.gistone.entity.ImageConfig;
-import com.gistone.entity.ImageNumber;
-import com.gistone.entity.ImageTemp;
+import com.gistone.entity.*;
 import com.gistone.mapper.ImageConfigMapper;
 import com.gistone.mapper.ImageMapper;
 import com.gistone.mapper.ImageNumber2Mapper;
@@ -1063,6 +1060,75 @@ public class ImageController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "添加失败");
+        }
+    }
+
+
+    //台账组-添加
+    @RequestMapping(value = "/zAdd")
+    public ResultVO zAdd(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params==null)
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            Object name = params.get("name");
+            if(null==name)
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
+            Linshi2 Linshi2 = new Linshi2();
+            Linshi2.setName(name.toString());
+            imageNumberMapper.zAdd(Linshi2);
+            return ResultVOUtil.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "添加失败");
+        }
+    }
+    //台账组-删除
+    @RequestMapping(value = "/zDelete")
+    public ResultVO zDelete(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            Object id = params.get("id");
+            if(null==id)
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+            imageNumberMapper.zDelete(Integer.valueOf(id.toString()));
+            return ResultVOUtil.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "删除失败");
+        }
+    }
+    //台账组-修改
+    @RequestMapping(value = "/zUpdate")
+    public ResultVO zUpdate(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            Object name = params.get("name");
+            if(null==name)
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
+            Object id = params.get("id");
+            if(null==id)
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+            Linshi2 Linshi2 = new Linshi2();
+            Linshi2.setName(name.toString());
+            Linshi2.setId(Integer.valueOf(id.toString()));
+            imageNumberMapper.zUpdate(Linshi2);
+            return ResultVOUtil.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
+        }
+    }
+    //台账组-查看
+    @RequestMapping(value = "/zSelect")
+    public ResultVO zSelect(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            return ResultVOUtil.success(imageNumberMapper.zSelect());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "查找失败");
         }
     }
 

@@ -96,4 +96,33 @@
 
 
 
+<!--    增-->
+    <insert id="zAdd" parameterType="com.gistone.entity.Linshi2">
+        INSERT INTO lishi2
+        (
+            name
+        )
+        VALUES(#{name},)
+    </insert>
+<!--    删-->
+    <delete id="zDelete" parameterType="java.lang.Integer">
+		delete from lishi2 where id = #{id}
+	</delete>
+<!--    改-->
+    <update id="zUpdate" parameterType="com.gistone.entity.Linshi2" >
+        update lishi2
+        <set>
+            <if test="null!=name and ''!=name">
+                name=#{name},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+<!--    查-->
+    <select id="zSelect" resultType="com.gistone.entity.Linshi2">
+		SELECT * from linshi2
+	</select>
+
+
+
 </mapper>
