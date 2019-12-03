@@ -346,7 +346,8 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     @Override
     public ResultVO insert(List<Map<String, Object>> data, Integer imageId, Integer createBy){
         try {
-//            st4ScsCdMapper.delete(new QueryWrapper<St4ScsCd>().eq("image_id", imageId));
+            //删除原版块
+            st4ScsCdMapper.delete(new QueryWrapper<St4ScsCd>().eq("image_id", imageId));
 
             //获取image_id下列表
             List<St4ScsCd> list = st4ScsCdMapper.selectAll(imageId);
@@ -411,25 +412,26 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 iterpretation.setCd004(UUID.randomUUID().toString().replace("-", ""));
 
 
-                if(list.size()==0){
-                    //原数据少，新增
-                    st4ScsCdMapper.insert(iterpretation);
-                }else{
-                    //原数据多，修改
-                    for (int i = 0; i < list.size(); i++) {
-                        iterpretation.setCd001(list.get(i).getCd001());
-                        list.remove(i);
-                        break;
-                    }
-                    st4ScsCdMapper.updateById(iterpretation);
-                }
+                st4ScsCdMapper.insert(iterpretation);
+//                if(list.size()==0){
+//                    //原数据少，新增
+//                    st4ScsCdMapper.insert(iterpretation);
+//                }else{
+//                    //原数据多，修改
+//                    for (int i = 0; i < list.size(); i++) {
+//                        iterpretation.setCd001(list.get(i).getCd001());
+//                        list.remove(i);
+//                        break;
+//                    }
+//                    st4ScsCdMapper.updateById(iterpretation);
+//                }
             }
             //删除多余原数据
-            if(list.size()>0){
-                for (int i = 0; i < list.size(); i++) {
-                    st4ScsCdMapper.delete(new QueryWrapper<St4ScsCd>().eq("cd001", list.get(i).getCd001()));
-                }
-            }
+//            if(list.size()>0){
+//                for (int i = 0; i < list.size(); i++) {
+//                    st4ScsCdMapper.delete(new QueryWrapper<St4ScsCd>().eq("cd001", list.get(i).getCd001()));
+//                }
+//            }
 
 
 
