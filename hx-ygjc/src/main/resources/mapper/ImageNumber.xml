@@ -102,7 +102,7 @@
         (
             name
         )
-        VALUES(#{name},)
+        VALUES(#{name})
     </insert>
 <!--    删-->
     <delete id="zDelete" parameterType="java.lang.Integer">
@@ -113,7 +113,7 @@
         update linshi2
         <set>
             <if test="null!=name and ''!=name">
-                name=#{name},
+                name=#{name}
             </if>
         </set>
         where id=#{id}
