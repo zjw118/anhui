@@ -610,13 +610,13 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             String fileName1 = uuid+".shp";
             String fileName2 = uuid+".dbf";
             String fileName3 = uuid+".prj";
-            String fileName4 = uuid+".sbn";
-            String fileName5 = uuid+".sbx";
+            String fileName4 = uuid+".fix";
+            String fileName5 = uuid+".shx";
 
             FileInputStream input1 = new FileInputStream(new File(url.split("\\.")[0]+".shp"));
             FileInputStream input2 = new FileInputStream(new File(url.split("\\.")[0]+".dbf"));
-            FileInputStream input3 = new FileInputStream(new File(url.split("\\.")[0]+".fix"));
-            FileInputStream input4 = new FileInputStream(new File(url.split("\\.")[0]+".prj"));
+            FileInputStream input3 = new FileInputStream(new File(url.split("\\.")[0]+".prj"));
+            FileInputStream input4 = new FileInputStream(new File(url.split("\\.")[0]+".fix"));
             FileInputStream input5 = new FileInputStream(new File(url.split("\\.")[0]+".shx"));
 
             FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName1, input1);
