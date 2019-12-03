@@ -1121,11 +1121,25 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
         }
     }
-    //台账组-查看
+    //台账组-分页条件列表
     @RequestMapping(value = "/zSelect")
     public ResultVO zSelect(@RequestBody Map<String, Object> paramsMap) {
         try {
-            return ResultVOUtil.success(imageNumberMapper.zSelect());
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            Object pageIndex = params.get("pageIndex");
+                if (pageIndex==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "当前页不能为空！");
+            Object pageSize = params.get("pageSize");
+               if (pageSize==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "每页条数不能为空！");
+            Object name = params.get("name");
+            PageBean pageBean = new PageBean();
+            if (name!=null)
+                pageBean.setStr1(name.toString());
+            pageBean.setPageIndex(Integer.valueOf(pageIndex.toString()));
+            pageBean.setPageSize(Integer.valueOf(pageSize.toString()));
+            pageBean.setPoSum(imageNumberMapper.getPoSum(pageBean));
+            pageBean.setPoList(imageNumberMapper.selectPoList(pageBean));
+            return ResultVOUtil.success(pageBean);
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "查找失败");

@@ -119,9 +119,21 @@
         where id=#{id}
     </update>
 <!--    查-->
-    <select id="zSelect" resultType="com.gistone.entity.Linshi2">
-		SELECT * from linshi2
-	</select>
+    <select id="getPoSum"  resultType="java.lang.Integer" parameterType="com.gistone.util.PageBean">
+        SELECT count(*) from lishi2
+        where 1=1
+        <if test="str1!=null and str1!=''">
+            and str1 like '%${str1}%'
+        </if>
+    </select>
+    <select id="selectPoList"  resultType ="java.util.Map" parameterType="com.gistone.util.PageBean">
+        SELECT * from lishi2
+        where 1=1
+        <if test="str1!=null and str1!=''">
+            and str1 like '%${str1}%'
+        </if>
+        LIMIT #{firstLimit},#{pageSize}
+    </select>
 
 
 
