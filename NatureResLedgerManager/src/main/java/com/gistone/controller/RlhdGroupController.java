@@ -166,7 +166,7 @@ public class RlhdGroupController {
 //        }
 
         String remark = (String) params.get("remark");
-        service.insert(name, createBy, remark, ids,Integer.valueOf(type.toString()));
+        service.insert(name, createBy, remark, ids,type.toString());
         return ResultVOUtil.success();
     }
 

@@ -106,7 +106,7 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
 
     }
 
-    public void insert(String name, Integer createBy, String remark, List<Integer> ids,Integer type) {
+    public void insert(String name, Integer createBy, String remark, List<Integer> ids,String type) {
         //1.首先插入台账信息
         RlhdGroup rlhdGroup = new RlhdGroup().setName(name).setCreateBy(createBy).setCreateDate(LocalDateTime.now()).setType(type);
         if(StringUtils.isNotBlank(remark)){
