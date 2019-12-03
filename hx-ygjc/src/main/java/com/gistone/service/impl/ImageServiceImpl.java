@@ -366,21 +366,23 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
 
             //变化量
             Image image2 = imageMapper.getImage2(id);
-            String contrastRed = image2.getContrastRed();
-            if(null!=contrastRed){
-                JSONObject jsonObject1 = JSONObject.fromObject(contrastRed);
-                Object mj1 = jsonObject1.get("mj");
-                JSONObject jsonObject2 = JSONObject.fromObject(mj1);
-                for (Object o1 : jsonObject2.keySet()) {
-                    for (Object o2 : mj.keySet()) {
-                        if(Integer.valueOf(o1+"")==Integer.valueOf(o2+"")){
-                            double bn = Double.valueOf(mj.get(o2)+"")-Double.valueOf(jsonObject2.get(o1)+"");
-                            bhl.put(o1+"",bn);
+            if(null!=image2){
+                String contrastRed = image2.getContrastRed();
+                if(null!=contrastRed){
+                    JSONObject jsonObject1 = JSONObject.fromObject(contrastRed);
+                    Object mj1 = jsonObject1.get("mj");
+                    JSONObject jsonObject2 = JSONObject.fromObject(mj1);
+                    for (Object o1 : jsonObject2.keySet()) {
+                        for (Object o2 : mj.keySet()) {
+                            if(Integer.valueOf(o1.toString())==Integer.valueOf(o2.toString())){
+                                double bn = Double.valueOf(mj.get(o2)+"")-Double.valueOf(jsonObject2.get(o1)+"");
+                                bhl.put(o1.toString(),bn);
+                            }
                         }
                     }
                 }
-                jSONObject.put("bhl",bhl);
             }
+            jSONObject.put("bhl",bhl);
 
             //更新数据
             image.setContrastRed(jSONObject+"");
