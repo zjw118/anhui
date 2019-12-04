@@ -36,6 +36,10 @@ public class St4PoCdSa implements Serializable {
     @TableField("CDSA001")
     private Integer cdsa001;
 
+    @ApiModelProperty(value = "所属核查任务ID")
+    @TableField("CL001")
+    private Integer cl001;
+
     @ApiModelProperty(value = "名字")
     @TableField(exist = false)
     private String sa019;

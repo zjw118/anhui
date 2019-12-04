@@ -204,30 +204,14 @@ public class CheckPointController {
         if(uids==null||uids.size()<1){
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "下发人员不能为空！");
         }
-
-        return checkUserRelavantService.givePoint(uids,pointList);
+        Integer taskId = sp.getTaskId();
+        if(!ObjectUtils.isNotNullAndEmpty(taskId)||0==taskId){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "所属任务ID不能为空！");
+        }
+        return checkUserRelavantService.givePoint(uids,pointList,taskId);
 
     }
-    @ApiOperation(value="下发问题斑块一个点可以按照任务下发给不同的人",notes = "下发问题斑块",response = St4PoCdSa.class)
-    @RequestMapping(value="/sharePointNew",method = RequestMethod.POST)
-    public ResultVO sharePointNew(@ApiParam(name="下发问题斑块", value="json格式", required=true)@RequestBody Swagger<SharePoint> spSwagger) {
-        /**
-         * 这里的业务逻辑是这样的:
-         * 传递过来的任务id要往
-         */
-        SharePoint sp = spSwagger.getData();
-
-        List<Integer> pointList = sp.getPointIdList();
-        List<Integer> uids = sp.getUidList();
-        if(!ObjectUtils.isNotNullAndEmpty(pointList)){
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "问题斑块不能为空！");
-        }
-        if(uids==null||uids.size()<1){
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "下发人员不能为空！");
-        }
-
-        return checkUserRelavantService.givePoint(uids,pointList);
-    }
+    
 
 
 

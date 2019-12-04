@@ -17,8 +17,15 @@ import java.util.List;
  * @since 2019-08-17
  */
 public interface St4ScsCyMapper extends BaseMapper<St4ScsCy> {
-    //查询列表
+    //考勤统计
     List<St4ScsCy> selectPoList(St4ScsCy st4ScsCy);
+
+    /**
+     * 修改后的考勤一个斑块在不同的任务下可以下发给不同的人
+     * @param st4ScsCy
+     * @return
+     */
+    List<St4ScsCy> selectPoListNew(St4ScsCy st4ScsCy);
 
     //分页查询-获取总数量
     int getPoSum2(St4ScsCy st4ScsCy);

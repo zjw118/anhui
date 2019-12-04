@@ -107,4 +107,12 @@ public interface StatisService extends IService<St4ScsCy> {
      */
     ResultVO pointQualityExport(RlhdGroup cl, HttpServletResponse response);
 
+    /**
+     * 生成生态保护红线核查监管报告
+     * @param sc
+     * @param response
+     * @return
+     */
+    ResultVO redLineReportExport(SysCompany sc, HttpServletResponse response);
+
 }

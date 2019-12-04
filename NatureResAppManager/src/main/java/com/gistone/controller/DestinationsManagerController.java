@@ -51,7 +51,6 @@ public class DestinationsManagerController {
     private ISysCompanyService sysCompanyService;
 
     /**
-     * todo NPM航点是否能重复提交
      * @param request
      * @param data
      * @return
@@ -179,6 +178,7 @@ public class DestinationsManagerController {
                     scsCk.setCn010(ck.getCn010());
                     scsCk.setCn004(ck.getCn004());
                     scsCk.setCk049(ck.getCk049());
+                    scsCk.setCk091(ck.getCk091());
                     scsCk.setCk086(date);
                     scsCk.setCk087(userId);
                     scsCk.setCk088(1);//这里又提交的记录代表已经不是原始台账了所以要设置为1
@@ -367,6 +367,7 @@ public class DestinationsManagerController {
                         scsCk.setCd004(ck.getCd004());
                         scsCk.setCn004(ck.getCn004());
                         scsCk.setCk049(ck.getCk049());
+                        scsCk.setCk091(ck.getCk091());
                         scsCk.setCn010(ck.getCn010());
                         scsCk.setCk086(date);
                         scsCk.setCk087(userId);

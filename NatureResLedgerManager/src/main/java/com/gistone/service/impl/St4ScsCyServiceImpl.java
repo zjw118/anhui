@@ -132,7 +132,7 @@ public class St4ScsCyServiceImpl extends ServiceImpl<St4ScsCyMapper, St4ScsCy> i
         int poSum = st4ScsCyMapper.getPoSum2(st4ScsCy); 		//总量
         int zys = (poSum+pageSize-1)/pageSize;	 			//总页数     （总条数+每页条数-1）/每页条数
         st4ScsCy.setPageNumber((pageNumber-1)*pageSize); 	//开始索引    (当前页-1)*每页数量
-        List list = st4ScsCyMapper.selectPoList2(st4ScsCy);
+        List list = st4ScsCyMapper.selectPoList(st4ScsCy);
 
         Result result = new Result();
         result.setRows(list);

@@ -32,60 +32,61 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
     @Autowired
     private St4SysSaMapper st4SysSaMapper;
     @Autowired
-    private St4ScsCdMapper iterpretationMapper;
+    private St4ScsCdMapper st4ScsCdMapper;
 
 
     @Override
-    public ResultVO givePoint(List<Integer> uids, List<Integer> pointList) {
+    public ResultVO givePoint(List<Integer> uids, List<Integer> pointList,Integer taskId) {
         /**
          * 这里的业务逻辑是这样的:
-         * 1.拿到传递过来的任务id去找到对应的台账(可能是多个)
-         * 2.在拿每一个台账的id去拿斑点的的id
-         * 3.最终是把斑点下发到人员
-         */
-        /**
-         * 这里逻辑改变因为cd表中有groupId做关联所以之前的关联表cd_co没有用了
+         * 这里是按照任务走的，一个人对于同样一个斑块是可以下发两次的，app端也是可以同步到2个的因为是不同的任务下
          *
-         */
+         *
+         * **/
 
-//        List<St4ScsCd> cds= iterpretationMapper.getSpotByTaskId(taskId);
-//        if(cds==null||cds.size()<1){
-//            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "由于此任务下的台账无绑定的斑点信息,下发失败！");
-//        }
-//
-//        List<Integer> pointList = cds.stream().map(St4ScsCd::getCd001).collect(Collectors.toList());
+      //  List<St4ScsCd> cds= st4ScsCdMapper.getSpotByTaskId(taskId);
+
         List<St4PoCdSa> existsaList = null;
         St4PoCdSa saSg=null;
         boolean flag=true;
         //准备判断这个点是否被重新复下发给同一个人
+        QueryWrapper<St4PoCdSa> sasgWrapper=null;
         for (Integer rid:pointList) {
             List<St4PoCdSa> list = new ArrayList<>();
             existsaList = new ArrayList<>();
-            QueryWrapper<St4PoCdSa> sasgWrapper = new QueryWrapper<>();  //关联表
+            sasgWrapper = new QueryWrapper<>();  //关联表
             sasgWrapper.eq("CD001",rid);
+            sasgWrapper.eq("CL001",taskId);
+            //查询到这个点下发了没，及已经下发给了谁
             existsaList = st4PoCdSaMapper.selectList(sasgWrapper);
             List<Integer> ridExist=null;
             if(existsaList!=null&&existsaList.size()>0){
                 ridExist = new ArrayList<>();
-
+                //要得到已经拿到了这个点的人的集合
                 if(existsaList.size()>0){
                     for (St4PoCdSa sasg:existsaList) {
                         ridExist.add(sasg.getSa001());
                     }
                 }
+                //
                 if(ridExist!=null&&ridExist.size()>0){
                     for (Integer reid:uids) {
+                        //如果人的集合里面没有包含传递进来的人就把这个人加进去 就得到了最新的应该拿到这个点的人的集合
                         if(!ridExist.contains(reid)){
                             ridExist.add(reid);
                         }
                     }
                 }
+                sasgWrapper = new QueryWrapper<>();  //关联表
+                sasgWrapper.eq("CL001",taskId);
+                //删除这个点原来的下发信息 准备进行最新一批人下发当前点的操作
                 if(st4PoCdSaMapper.delete(sasgWrapper)>0){
                     if(ridExist!=null&&ridExist.size()>0){
                         for (Integer rids:ridExist) {
                             saSg = new St4PoCdSa();
                             saSg.setSa001(rids);
                             saSg.setCd001(rid);
+                            saSg.setCl001(taskId);
                             list.add(saSg);
                         }
                     }
@@ -95,11 +96,13 @@ public class St4PoCdSaServiceImpl extends ServiceImpl<St4PoCdSaMapper, St4PoCdSa
                     }
                 }
             }else {
+                //说明这个点还没有被下发过 就可以直接进行分配下发操作即可
                 if(uids!=null&&uids.size()>0){
                     for (Integer uid:uids) {
                         saSg = new St4PoCdSa();
                         saSg.setSa001(uid);
                         saSg.setCd001(rid);
+                        saSg.setCl001(taskId);
                         list.add(saSg);
                     }
                 }
