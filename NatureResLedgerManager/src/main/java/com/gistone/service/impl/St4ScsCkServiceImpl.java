@@ -1191,6 +1191,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                                 .replaceAll("\\]\\/]\\]","" )
                                 .replaceAll("\\]\\,\\ \\[", "##").replaceAll("\\]\\,\\[", "##");
                         cd.setGeometry(geometry);
+                        cd.setCl001(cl.getCl001());
                         cd.setTaskName(cl==null?"":cl.getCl002());
                         cd.setTaskSign(cl==null?"":cl.getCl003());
                         cd.setYear(cl==null?"":cl.getCl010());

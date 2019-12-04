@@ -84,34 +84,7 @@ public class IterpretationController {
     }
 
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResultVO add(@RequestBody Map<String, Object> paramsMap, HttpServletRequest request) throws Exception {
-        //请求参数格式校验
-        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-        if (params == null) {
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
-        }
-        List<Map<String,Object>> data = (List<Map<String, Object>>) params.get("jsondata");
 
-//        if (data == null || data.size() <= 0) {
-//            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "解译数据不能为空");
-//        }
-
-
-        Integer imageId = (Integer) params.get("imageId");
-        if (imageId == null || imageId <= 0) {
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "影像id不能为空");
-        }
-        Integer createBy = (Integer) params.get("createBy");
-        if(createBy==null||createBy<=0){
-            HttpSession session = request.getSession();
-            SysUser user = (SysUser) session.getAttribute("user");
-            if(user!=null){
-                createBy = user.getId();
-            }
-        }
-        return service.insert(data,imageId,createBy);
-    }
 
 
     @RequestMapping(value = "/delete")
@@ -135,8 +108,35 @@ public class IterpretationController {
         return ResultVOUtil.success();
     }
 
-
-
+    /**
+     * 标绘
+     * @param paramsMap
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public ResultVO add(@RequestBody Map<String, Object> paramsMap, HttpServletRequest request) throws Exception {
+        //请求参数格式校验
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        List<Map<String,Object>> data = (List<Map<String, Object>>) params.get("jsondata");
+        Integer imageId = (Integer) params.get("imageId");
+        if (imageId == null || imageId <= 0) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "影像id不能为空");
+        }
+        Integer createBy = (Integer) params.get("createBy");
+        if(createBy==null||createBy<=0){
+            HttpSession session = request.getSession();
+            SysUser user = (SysUser) session.getAttribute("user");
+            if(user!=null){
+                createBy = user.getId();
+            }
+        }
+        return service.insert(data,imageId,createBy);
+    }
     /**
      * 导入影像
      * @param request

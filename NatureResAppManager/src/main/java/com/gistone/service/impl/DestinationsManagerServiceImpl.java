@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 /**
  * @ClassName DestinationsManagerService
- * @Description TODO
  * @Author xxh
  * @Date 2019/8/15 9:09
  * @Version 1.0

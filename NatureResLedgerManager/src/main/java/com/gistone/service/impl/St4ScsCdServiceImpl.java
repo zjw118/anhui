@@ -346,7 +346,8 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     @Override
     public ResultVO insert(List<Map<String, Object>> data, Integer imageId, Integer createBy){
         try {
-//            st4ScsCdMapper.delete(new QueryWrapper<St4ScsCd>().eq("image_id", imageId));
+            //删除原版块
+            st4ScsCdMapper.delete(new QueryWrapper<St4ScsCd>().eq("image_id", imageId));
 
             //获取image_id下列表
             List<St4ScsCd> list = st4ScsCdMapper.selectAll(imageId);
@@ -411,25 +412,26 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 iterpretation.setCd004(UUID.randomUUID().toString().replace("-", ""));
 
 
-                if(list.size()==0){
-                    //原数据少，新增
-                    st4ScsCdMapper.insert(iterpretation);
-                }else{
-                    //原数据多，修改
-                    for (int i = 0; i < list.size(); i++) {
-                        iterpretation.setCd001(list.get(i).getCd001());
-                        list.remove(i);
-                        break;
-                    }
-                    st4ScsCdMapper.updateById(iterpretation);
-                }
+                st4ScsCdMapper.insert(iterpretation);
+//                if(list.size()==0){
+//                    //原数据少，新增
+//                    st4ScsCdMapper.insert(iterpretation);
+//                }else{
+//                    //原数据多，修改
+//                    for (int i = 0; i < list.size(); i++) {
+//                        iterpretation.setCd001(list.get(i).getCd001());
+//                        list.remove(i);
+//                        break;
+//                    }
+//                    st4ScsCdMapper.updateById(iterpretation);
+//                }
             }
             //删除多余原数据
-            if(list.size()>0){
-                for (int i = 0; i < list.size(); i++) {
-                    st4ScsCdMapper.delete(new QueryWrapper<St4ScsCd>().eq("cd001", list.get(i).getCd001()));
-                }
-            }
+//            if(list.size()>0){
+//                for (int i = 0; i < list.size(); i++) {
+//                    st4ScsCdMapper.delete(new QueryWrapper<St4ScsCd>().eq("cd001", list.get(i).getCd001()));
+//                }
+//            }
 
 
 
@@ -608,13 +610,13 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             String fileName1 = uuid+".shp";
             String fileName2 = uuid+".dbf";
             String fileName3 = uuid+".prj";
-            String fileName4 = uuid+".sbn";
-            String fileName5 = uuid+".sbx";
+            String fileName4 = uuid+".fix";
+            String fileName5 = uuid+".shx";
 
             FileInputStream input1 = new FileInputStream(new File(url.split("\\.")[0]+".shp"));
             FileInputStream input2 = new FileInputStream(new File(url.split("\\.")[0]+".dbf"));
-            FileInputStream input3 = new FileInputStream(new File(url.split("\\.")[0]+".fix"));
-            FileInputStream input4 = new FileInputStream(new File(url.split("\\.")[0]+".prj"));
+            FileInputStream input3 = new FileInputStream(new File(url.split("\\.")[0]+".prj"));
+            FileInputStream input4 = new FileInputStream(new File(url.split("\\.")[0]+".fix"));
             FileInputStream input5 = new FileInputStream(new File(url.split("\\.")[0]+".shx"));
 
             FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName1, input1);

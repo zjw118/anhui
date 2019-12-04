@@ -2,6 +2,8 @@ package com.gistone.mapper;
 
 import com.gistone.entity.ImageNumber;
 import com.gistone.entity.Linshi;
+import com.gistone.entity.Linshi2;
+import com.gistone.util.PageBean;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -33,7 +35,20 @@ public interface ImageNumberMapper{
     int defaultNumber2(@Param(value="name") String name);
 
 
+    //临时1
     int updateLinshi(@Param(value="data")String data);
+    //临时2
     String getLinshi();
+    //临时-增
+    int zAdd(Linshi2 Linshi2);
+    //临时-删
+    int zDelete(@Param(value="id")Integer id);
+    //临时-改
+    int zUpdate(Linshi2 Linshi2);
+    //临时-分页查询-获取总条量
+    int getPoSum(PageBean pageBean);
+    //临时-分页查询-获取数据
+    List<Object> selectPoList(PageBean pageBean);
+
 
 }

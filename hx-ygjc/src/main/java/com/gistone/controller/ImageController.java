@@ -5,6 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.*;
 import com.gistone.mapper.*;
+import com.gistone.mapper.ImageConfigMapper;
+import com.gistone.mapper.ImageMapper;
+import com.gistone.mapper.ImageNumber2Mapper;
+import com.gistone.mapper.ImageNumberMapper;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.IImageTempService;
 import com.gistone.service.ILmPointService;
@@ -1021,6 +1025,89 @@ public class ImageController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "添加失败");
+        }
+    }
+
+
+    //台账组-添加
+    @RequestMapping(value = "/zAdd")
+    public ResultVO zAdd(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params==null)
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            Object name = params.get("name");
+            if(null==name)
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
+            Linshi2 Linshi2 = new Linshi2();
+            Linshi2.setName(name.toString());
+            imageNumberMapper.zAdd(Linshi2);
+            return ResultVOUtil.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "添加失败");
+        }
+    }
+    //台账组-删除
+    @RequestMapping(value = "/zDelete")
+    public ResultVO zDelete(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            Object id = params.get("id");
+            if(null==id)
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+            imageNumberMapper.zDelete(Integer.valueOf(id.toString()));
+            return ResultVOUtil.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "删除失败");
+        }
+    }
+    //台账组-修改
+    @RequestMapping(value = "/zUpdate")
+    public ResultVO zUpdate(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            Object name = params.get("name");
+            if(null==name)
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
+            Object id = params.get("id");
+            if(null==id)
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+            Linshi2 Linshi2 = new Linshi2();
+            Linshi2.setName(name.toString());
+            Linshi2.setId(Integer.valueOf(id.toString()));
+            imageNumberMapper.zUpdate(Linshi2);
+            return ResultVOUtil.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
+        }
+    }
+    //台账组-分页条件列表
+    @RequestMapping(value = "/zSelect")
+    public ResultVO zSelect(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            Object pageIndex = params.get("pageIndex");
+                if (pageIndex==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "当前页不能为空！");
+            Object pageSize = params.get("pageSize");
+               if (pageSize==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "每页条数不能为空！");
+            Object name = params.get("name");
+            PageBean pageBean = new PageBean();
+            if (name!=null)
+                pageBean.setStr1(name.toString());
+            pageBean.setPageIndex(Integer.valueOf(pageIndex.toString()));
+            pageBean.setPageSize(Integer.valueOf(pageSize.toString()));
+            pageBean.setPoSum(imageNumberMapper.getPoSum(pageBean));
+            pageBean.setPoList(imageNumberMapper.selectPoList(pageBean));
+            return ResultVOUtil.success(pageBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "查找失败");
         }
     }
 

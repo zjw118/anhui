@@ -96,4 +96,45 @@
 
 
 
+<!--    增-->
+    <insert id="zAdd" parameterType="com.gistone.entity.Linshi2">
+        INSERT INTO linshi2
+        (
+            name
+        )
+        VALUES(#{name})
+    </insert>
+<!--    删-->
+    <delete id="zDelete" parameterType="java.lang.Integer">
+		delete from linshi2 where id = #{id}
+	</delete>
+<!--    改-->
+    <update id="zUpdate" parameterType="com.gistone.entity.Linshi2" >
+        update linshi2
+        <set>
+            <if test="null!=name and ''!=name">
+                name=#{name}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+<!--    查-->
+    <select id="getPoSum"  resultType="java.lang.Integer" parameterType="com.gistone.util.PageBean">
+        SELECT count(*) from linshi2
+        where 1=1
+        <if test="str1!=null and str1!=''">
+            and name like '%${str1}%'
+        </if>
+    </select>
+    <select id="selectPoList"  resultType ="java.util.Map" parameterType="com.gistone.util.PageBean">
+        SELECT * from linshi2
+        where 1=1
+        <if test="str1!=null and str1!=''">
+            and name like '%${str1}%'
+        </if>
+        LIMIT #{firstLimit},#{pageSize}
+    </select>
+
+
+
 </mapper>

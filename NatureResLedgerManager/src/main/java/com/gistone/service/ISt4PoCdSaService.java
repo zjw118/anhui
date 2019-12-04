@@ -21,7 +21,7 @@ public interface ISt4PoCdSaService extends IService<St4PoCdSa> {
      * @param pointList
      * @return
      */
-    ResultVO givePoint(List<Integer> uids, List<Integer> pointList);
+    ResultVO givePoint(List<Integer> uids, List<Integer> pointList,Integer cl001);
 
 
 
