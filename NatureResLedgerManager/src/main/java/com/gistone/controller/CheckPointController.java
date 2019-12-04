@@ -211,7 +211,7 @@ public class CheckPointController {
         return checkUserRelavantService.givePoint(uids,pointList,taskId);
 
     }
-    
+
 
 
 

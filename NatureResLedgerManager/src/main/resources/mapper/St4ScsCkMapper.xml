@@ -1989,7 +1989,7 @@ unEmaminedNum,emaminedNum,backNum,
 2019.11.30这里由于同一个斑块可以在不同任务下下发给不同的核查人
 这里将原来的统计代码 拿出来改动一下备用
 !-->
-    <select id="selectSt4ScsCk2" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCk">
+    <select id="selectSt4ScsCk" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCk">
         SELECT *,(unEmaminedNum+emaminedNum+backNum) tzNum,emaminedNum/(unEmaminedNum+emaminedNum+backNum) passRate FROM
         (
         SELECT com.PK_ID,
@@ -2010,7 +2010,8 @@ unEmaminedNum,emaminedNum,backNum,
         ON cdsa.SA001 = sa.SA001
         LEFT JOIN st4_scs_cd cd
         ON cdsa.cd001 = cd.cd001
-
+        left JOIN st4_scs_cl cl
+        ON cl.CL001 = cdsa.CL001
         <if test=" groupByName==null or groupByName=='' or groupByName=='ck010' ">
             right
         </if>
@@ -2022,17 +2023,11 @@ unEmaminedNum,emaminedNum,backNum,
         FROM (SELECT
         MAX(CK001) AS id
         FROM st4_scs_ck
-        GROUP BY CD004,CK049) t
+        GROUP BY CD004,CK049,CK091) t
         INNER JOIN st4_scs_ck k
         ON t.id = k.CK001) ck
-         on ck.CD004 = cd.cd001 AND ck.CK049 = sa.SA001
-
-
-        left JOIN st4_scs_cl cl
-        ON cl.CL001 = ck.CK091
+         on ck.CD004 = cd.cd001 AND ck.CK049 = sa.SA001 AND ck.CK091=cl.CL001
         WHERE 1 = 1
-
-
         <choose>
             <when test="code != null and code != '' and code != '34' ">
                 and com.COM_F_CODE=#{code} or com.com_code = #{code}
@@ -2094,115 +2089,6 @@ unEmaminedNum,emaminedNum,backNum,
     </select>
 
 
-    <select id="selectSt4ScsCk" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCk">
-
-        SELECT *,(unEmaminedNum+emaminedNum+backNum) tzNum,emaminedNum/(unEmaminedNum+emaminedNum+backNum) passRate FROM
-        (
-        SELECT com.PK_ID,
-        com.COM_NAME,
-        ck.CK001,ck.ck067,ck.ck088,
-        sa.SA001,
-        cl.CL001,
-        cl.CL002,
-        sa.SA019,
-        IFNULL(SUBSTRING_INDEX(CK016,"-",-1), '') AS ck010,
-        IFNULL(SUM(ck067 = 0 OR (cdsa.CD001 IS NOT NULL AND CK067 IS NULL)), 0) AS unEmaminedNum,
-        IFNULL(SUM(ck067 = 1), 0) AS emaminedNum,
-        IFNULL(SUM(ck067 = 2), 0) AS backNum
-        FROM sys_company com
-
-        LEFT JOIN st4_sys_sa sa ON sa.SD001 = com.COM_CODE
-
-        LEFT JOIN st4_po_cd_sa cdsa
-        ON cdsa.SA001 = sa.SA001
-        LEFT JOIN st4_scs_cd cd
-        ON cdsa.cd001 = cd.cd001
-
-        <if test="groupByName=='ck010' ">
-            right
-        </if>
-        <if test="groupByName=='sd001'">
-            left
-        </if>
-
-
-        JOIN
-        (SELECT *
-        FROM (SELECT
-        MAX(CK001) AS id
-        FROM st4_scs_ck
-        GROUP BY CD004) t
-        INNER JOIN st4_scs_ck k
-        ON t.id = k.CK001) ck
-        ON ck.CD004 = cd.cd001
-
-        LEFT JOIN rlhd_group co
-        ON cd.group_id = co.id
-        LEFT JOIN st4_po_cl_co clco
-        ON clco.co001 = co.id
-        LEFT JOIN st4_scs_cl cl
-        ON cl.CL001 = clco.cl001
-        WHERE 1 = 1
-
-
-        <choose>
-            <when test="code != null and code != '' and code != '34' ">
-                and com.COM_F_CODE=#{code} or com.com_code = #{code}
-
-            </when>
-            <otherwise>
-                and com.COM_LEVEL=2
-            </otherwise>
-        </choose>
-
-
-        <!--年份、核查任务、时间区间、省份、保护地、巡查人员；!-->
-        <if test="st4SysSa != null">
-            <if test="st4SysSa.sa001!=null and st4SysSa.sa001  !=''">
-                and sa.SA001 =#{st4SysSa.sa001}
-            </if>
-
-            <if test="st4SysSa.sd001!=null and st4SysSa.sd001  !=''">
-                and sa.SD001 =#{st4SysSa.sd001}
-            </if>
-        </if>
-        <if test="cl001!=null and cl001!=''">
-                and cl.CL001 = #{cl001}
-        </if>
-        <if test="taskYear!=null and taskYear!=''">
-            and cl.CL010 =#{taskYear}
-        </if>
-
-        <!--这里时间传递进来时间之后传递大于2019-08-25 00:00:00和2019-08-20 00:00:00前者记录居然不包含后者!-->
-        <if test="strTime!=null and strTime!='' ">
-            and ck.CK048 <![CDATA[ >= ]]> #{strTime}
-        </if>
-        <if test="endTime!=null and endTime!='' ">
-            and ck.CK048 <![CDATA[ <= ]]> #{endTime}
-        </if>
-        <if test="groupByName==null or groupByName=='' ">
-             AND ck.CK016 IS NOT NULL AND ck.CK016 !=''  GROUP BY ck.CK016
-        </if>
-        <if test="groupByName=='ck010' ">
-            AND ck.CK016 IS NOT NULL AND ck.CK016 !=''  GROUP BY ck.CK016
-        </if>
-        <if test="groupByName=='sd001'">
-            GROUP BY com.PK_ID
-        </if>
-        ) t
-        <if test="groupByName==null or groupByName=='' ">
-              GROUP BY ck010
-        </if>
-        <if test="groupByName=='ck010' ">
-            GROUP BY ck010
-        </if>
-        <if test="groupByName=='sd001'">
-            GROUP BY PK_ID
-        </if>
-        <!--<if test="groupByName=='ck067'">-->
-            <!--GROUP BY ck.ck067-->
-        <!--</if>-->
-    </select>
 
 
     <select id="selectSt4ScsCkzg" parameterType="com.gistone.entity.St4ScsCk" resultType="Map">
