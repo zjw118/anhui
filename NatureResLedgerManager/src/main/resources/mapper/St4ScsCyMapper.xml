@@ -348,22 +348,22 @@
         FROM (SELECT
         MAX(CK001)    AS id
         FROM st4_scs_ck
-        GROUP BY CD004) t
+        GROUP BY CD004,CK049,CK091) t
         INNER JOIN st4_scs_ck k
         ON t.id = k.CK001) ck
-        ON ck.CD004 = cd.cd001
+        ON ck.CD004 = cd.cd001 AND cl.CL001 = ck.ck091  AND ck.CK049 = CDSA.SA001
         LEFT JOIN st4_scs_cc cc ON cc.CD004 = cd.CD001
         LEFT JOIN st4_scs_cy cy ON cc.CY017 = cy.CY017
         WHERE 1=1 and  com.PK_ID!=1
 
-            <choose>
-                <when test="code != null and code!= '' and code != '34' ">
-                    and com.COM_F_CODE=#{code} or com.com_code = #{code}
-                </when>
-                <otherwise>
-                    and com.COM_LEVEL=2
-                </otherwise>
-            </choose>
+        <choose>
+            <when test="code != null and code!= '' and code != '34' ">
+                and com.COM_F_CODE=#{code} or com.com_code = #{code}
+            </when>
+            <otherwise>
+                and com.COM_LEVEL=2
+            </otherwise>
+        </choose>
 
         <if test="uname!=null and uname  !=''">
             and sa.SA019 like '%${uname}%'
@@ -391,7 +391,7 @@
         <if test="groupByName=='sf' ">
             group by com.PK_ID
         </if>
-       
+
         ) T
 
 
@@ -422,16 +422,12 @@
         uname,totalCheckNum,checkNum,rwcs,gjlc,rwsc,
         (totalCheckNum - checkNum) AS uncheckNum  FROM (
         SELECT
-        com.PK_ID,
-        com.COM_NAME,
-        sa.SA001,
-        sa.SA015,
-        sa.SA019          uname,
-        IFNULL(COUNT(cy.CY001),0)    rwcs,
-        IFNULL(SUM(cy.CY006),0)    gjlc,
-        IFNULL(SUM(TIMESTAMPDIFF(HOUR,CY003,CY004)),0)    rwsc,
-        COUNT(DISTINCT cdsa.cd001,cdsa.sa001)    totalCheckNum,
-        COUNT(DISTINCT cdsa.cd001,cdsa.sa001,ck.CD004)    checkNum
+        com.PK_ID, com.COM_NAME, sa.SA001, sa.SA015, sa.SA019 AS uname
+        , IFNULL(COUNT(cy.CY001), 0) AS rwcs
+        , IFNULL(SUM(cy.CY006), 0) AS gjlc
+        , IFNULL(SUM(TIMESTAMPDIFF(HOUR, CY003, CY004)), 0) AS rwsc
+        , COUNT(DISTINCT cdsa.cd001, cdsa.sa001,cdsa.CL001) AS totalCheckNum
+        , COUNT(DISTINCT cdsa.cd001, cdsa.sa001, ck.CD004,ck.ck091) AS checkNum
         FROM sys_company com
 
         <choose>
@@ -444,19 +440,17 @@
                 ON sa.SD001 = com.COM_CODE
             </otherwise>
         </choose>
-
-        LEFT JOIN st4_po_cd_sa cdsa
-        ON cdsa.SA001 = sa.SA001
-        LEFT JOIN st4_scs_cd cd
-        ON cdsa.cd001 = cd.cd001
+        LEFT JOIN st4_po_cd_sa cdsa ON cdsa.SA001 = sa.SA001
+        LEFT JOIN st4_scs_cd cd ON cdsa.cd001 = cd.cd001
+        LEFT JOIN st4_scs_cl cl on cl.CL001= cdsa.CL001
         LEFT JOIN (SELECT *
         FROM (SELECT
         MAX(CK001)    AS id
         FROM st4_scs_ck
-        GROUP BY CD004) t
+        GROUP BY CD004,CK049,CK091) t
         INNER JOIN st4_scs_ck k
         ON t.id = k.CK001) ck
-        ON ck.CD004 = cd.cd001
+        ON ck.CD004 = cd.cd001  AND cl.CL001=ck.ck091 AND ck.CK049 = CDSA.SA001
         LEFT JOIN st4_scs_cc cc ON cc.CD004 = cd.CD001
         LEFT JOIN st4_scs_cy cy ON cc.CY017 = cy.CY017
         WHERE 1=1 and  com.PK_ID!=1
