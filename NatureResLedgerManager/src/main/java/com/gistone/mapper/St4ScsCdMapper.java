@@ -22,6 +22,8 @@ public interface St4ScsCdMapper extends BaseMapper<St4ScsCd> {
 
     void insertList(List<St4ScsCd> list);
 
+    int insertMap(Map map);
+
     List<St4ScsCd> batchSelectByCode(List<String> list);
 
     List<St4ScsCd> listCheckPointToView(St4ScsCd data);

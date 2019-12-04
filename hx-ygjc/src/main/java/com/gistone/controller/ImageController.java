@@ -1,15 +1,10 @@
 package com.gistone.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.Image;
-import com.gistone.entity.ImageConfig;
-import com.gistone.entity.ImageNumber;
-import com.gistone.entity.ImageTemp;
-import com.gistone.mapper.ImageConfigMapper;
-import com.gistone.mapper.ImageMapper;
-import com.gistone.mapper.ImageNumber2Mapper;
-import com.gistone.mapper.ImageNumberMapper;
+import com.gistone.entity.*;
+import com.gistone.mapper.*;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.IImageTempService;
 import com.gistone.service.ILmPointService;
@@ -27,7 +22,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -62,48 +62,6 @@ public class ImageController {
     private IImageTempService iImageTempService;
 
 
-    @Value("${ftp_host}")
-    private String ftpHost;
-    @Value("${ftp_port}")
-    private Integer ftpPort;
-    @Value("${ftp_username}")
-    private String ftpUserName;
-    @Value("${ftp_password}")
-    private String ftpPassword;
-    @Value("${ftp_pt}")
-    private String ftpPt;
-    @Value("${ftp_url}")
-    private String ftpUrl;
-    @Value("${dynamic_path}")
-    private String dynamicPath;//动态工作空间路径
-    @Value("${JYResult_PATH}")
-    private String jYResultPATH;//解疑结果存储路径
-    @ApiOperation(value = "image识别添加接口", notes = "此接口返回问题点批次数据", response = Result.class)
-    @PostMapping("/insertImagerTemp")
-    public ResultVO insertImagerTemp(@RequestBody @ApiParam(name = "任务批次添加接口", value = "json格式", required = true) Swagger<ImageTemp> data,
-                               HttpServletRequest request) throws FileNotFoundException {
-        ImageTemp it = data.getData();
-        if(!ObjectUtils.isNotNullAndEmpty(it.getName())){
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "名称不能为空！");
-        }
-        if(!ObjectUtils.isNotNullAndEmpty(it.getZipUrl())){
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "识别的url不能为空！");
-        }
-        it.setUpdateDate(LocalDateTime.now());
-        String type[] = {"shp","dbf","prj","sbn","sbx","shx"};
-        String fileName  = it.getShpurl().substring(it.getShpurl().lastIndexOf("/") + 1 ,it.getShpurl().length());
-        String fileUUid = fileName.substring(0,32);
-        //循环遍历将解译结果下载至服务器
-        for(String ty : type){
-            FTPUtilUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, dynamicPath  , jYResultPATH+ fileUUid, it.getShpurl().substring(it.getShpurl().lastIndexOf("/") + 1 ,it.getShpurl().length()).substring(0,it.getShpurl().substring(it.getShpurl().lastIndexOf("/"),it.getShpurl().length()).lastIndexOf(".")) + ty);
-        }
-        //将解译结果压缩
-        ZipUtil.toZip(jYResultPATH+ fileUUid , jYResultPATH  , jYResultPATH+ fileUUid + ".zip"   , true);
-        //解译结果下载路径存入数据库
-        it.setResultUrl(jYResultPATH + fileUUid + ".zip");
-        return ResultVOUtil.success(iImageTempService.save(it));
-
-    }
     @ApiOperation(value = "image识别列表接口", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/listImagerTemp")
     public ResultVO listImagerTemp(@RequestBody @ApiParam(name = "任务批次添加接口", value = "json格式", required = true) Swagger<ImageTemp> data,
