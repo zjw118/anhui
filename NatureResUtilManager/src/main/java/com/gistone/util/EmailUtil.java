@@ -9,14 +9,6 @@ import java.util.Properties;
 
 public class EmailUtil {
 
-
-//    private static String mailFrom = null;// 指明邮件的发件人
-//    private static String password_mailFrom = null;// 指明邮件的发件人登陆密码
-//    private static String mailTo = null;	// 指明邮件的收件人
-//    private static String mailTittle = null;// 邮件的标题
-//    private static String mailText =null;	// 邮件的文本内容
-//    private static String mail_host =null;	// 邮件的服务器域名
-
     public static void main(String[] args) throws Exception {
         String mailFrom = "anhuihongxian@163.com";
         String password_mailFrom = "ahhx1234";
@@ -24,13 +16,13 @@ public class EmailUtil {
         String mailTittle="节日快乐2！";
         String mailText = "这是一个简单的邮件";
         String mail_host="smtp.163.com";
-
         sendMail(mailFrom,password_mailFrom,mailTo,mailTittle,mailText,mail_host);
     }
 
 
     /**
-     *
+     *  发邮件
+     *  编译测试
      * @param mailfrom      发件邮箱
      * @param password_mailFrom  发件邮箱密码
      * @param mailTo        收件邮箱
