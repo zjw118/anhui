@@ -202,6 +202,10 @@ public class RlhdGroupController {
         if(StringUtils.isNotBlank(name)){
             rlhdGroup.setName(name);
         }
+        String type = (String) params.get("type");
+        if(StringUtils.isNotBlank(type)){
+            rlhdGroup.setType(type);
+        }
         String remark = (String) params.get("remark");
         if (StringUtils.isNotBlank(remark)){
             rlhdGroup.setRemark(remark);
