@@ -83,7 +83,8 @@ public class St4ScsCbdController {
 
         String time = (String) params.get("time");
         if(StringUtils.isNotBlank(time)){
-            DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+
             Date date2 = null;
             try {
                 date2 = format2.parse(time);
@@ -109,6 +110,7 @@ public class St4ScsCbdController {
           return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"内容不能为空");
         }
         entity.setCbd006(afterContent);
+        entity.setVerify(0);
 
         //判断添加人是否为空
        service.insert(entity);
@@ -192,7 +194,7 @@ public class St4ScsCbdController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"id不能为空");
         }
         St4ScsCbd st4ScsCbd = new St4ScsCbd();
-        st4ScsCbd.setVerify(2);
+        st4ScsCbd.setVerify(1);
         service.update(st4ScsCbd,new QueryWrapper<St4ScsCbd>().eq("CBD001",id));
 
 

@@ -19,12 +19,12 @@
     </sql>
     <update id="updateByType" >
         update st4_scs_cbd
-        set  verify = 1
+        set  verify = 0
     </update>
 
     <update id="updateByType2">
         update st4_scs_cbd
-        set  verify = 2
+        set  verify = 1
     </update>
 
 </mapper>
