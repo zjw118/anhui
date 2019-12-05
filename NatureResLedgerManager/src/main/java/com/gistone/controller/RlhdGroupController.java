@@ -77,7 +77,7 @@ public class RlhdGroupController {
         return st4ScsCdService.getPersonAndPoint( sa.getCl001());
 
     }
-    @ApiOperation(value="根据任务id查询其下的所有斑块及下发的人",notes = "",response = St4ScsCd.class)
+    @ApiOperation(value="根据任务id查询其下的所有斑块",notes = "",response = St4ScsCd.class)
     @PostMapping(value="/listReserveData")
     public ResultVO listReserveData(@RequestBody @ApiParam(name="", value="json格式", required=true)
                                             Swagger<St4ScsCd> cdLedger) {
