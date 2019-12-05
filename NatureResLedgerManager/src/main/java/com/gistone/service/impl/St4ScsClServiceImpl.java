@@ -5,9 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.*;
-import com.gistone.mapper.St4PoClCoMapper;
-import com.gistone.mapper.St4ScsClMapper;
-import com.gistone.mapper.SysUserMapper;
+import com.gistone.mapper.*;
 import com.gistone.service.ISt4PoClCoService;
 import com.gistone.service.ISt4ScsClService;
 import com.gistone.service.RlhdGroupService;
@@ -47,6 +45,13 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
 
     @Autowired
     private St4ScsClMapper st4ScsClMapper;
+
+    @Autowired
+    private St4ScsCkMapper st4ScsCkMapper;
+    @Autowired
+    private St4PoCdSaMapper st4PoCdSaMapper;
+    @Autowired
+    private St4ScsCdMapper st4ScsCdMapper;
 
     @Autowired
     private ISt4ScsClService st4ScsClService;
@@ -492,6 +497,10 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
                 if(st4PoClCoMapper.delete(clCoQueryWrapper)<1){
                     return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "服务器异常！");
                 }
+                //这里还得继续删除这个任务下的原来绑定的问题斑块和人的关联关系还有斑块台账的任务的核查信息
+                //这里还有个尴尬的问题就是cdsa表中 只有任务，点还有人的关联关系此时任务虽然没有删除但是任务下的台账很可能已经被删除
+                // 这样属于已删除监管台账下的斑块就应该被删除，所以这里就得拿到最新的任务关联到的台账的问题斑块然后重新在cdsa中去进行绑定
+
             }
 
             List<Integer> ledgerIdList = data.getLedgerIdList();
@@ -505,9 +514,35 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
                 clcoList.add(clco);
             }
             if(!st4PoClCoService.saveBatch(clcoList)){
+
                 return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "服务器异常！");
+            }else {
+                //这里应按照点和任务的条件进行删除
+                //查询到当前任务下的所有台账的问题斑块的信息构建wrapper的条件
+
+                List<St4ScsCd>  sharedPoints = st4ScsCdMapper.getSharedPoint(data.getCl001());
+                List<Integer> cdids = sharedPoints.stream().map(St4ScsCd::getCd001).collect(Collectors.toList());
+
+                QueryWrapper<St4PoCdSa> cdSaQueryWrapper = new QueryWrapper<>();
+                cdSaQueryWrapper.eq("CL001", data.getCl001());
+                if(cdids!=null&&cdids.size()>0){
+                    cdSaQueryWrapper.notIn("CD001",cdids);
+                    List<St4PoCdSa> cdSaList =st4PoCdSaMapper.selectList(cdSaQueryWrapper);
+                    if(cdSaList!=null&&cdSaList.size()>0){
+                        //
+                        st4PoCdSaMapper.delete(cdSaQueryWrapper);
+                        //接着删除提交的核查信息,这里就删到底了
+                        QueryWrapper<St4ScsCk> ckQueryWrapper = new QueryWrapper<>();
+                        ckQueryWrapper.eq("CK091", data.getCl001());
+                        ckQueryWrapper.in("CD004", cdids);
+                        st4ScsCkMapper.delete(ckQueryWrapper);
+
+                        return ResultVOUtil.success();
+                    }
+                }
+                return ResultVOUtil.success();
             }
-            return ResultVOUtil.success();
+
         }else{
             return ResultVOUtil.error(ResultEnum.HANDLEFAIL.getCode(), "服务器异常！");
         }
@@ -527,8 +562,14 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
                 if(st4PoClCoMapper.delete(clCoQueryWrapper)<1){
                     return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "服务器异常！");
                 }
+                QueryWrapper<St4PoCdSa> cdSaQueryWrapper = new QueryWrapper<>();
+                cdSaQueryWrapper.eq("CL001", data.getCl001());
+                st4PoCdSaMapper.delete(cdSaQueryWrapper);
+                QueryWrapper<St4ScsCk> ckQueryWrapper = new QueryWrapper<>();
+                ckQueryWrapper.eq("CK091", data.getCl001());
+                st4ScsCkMapper.delete(ckQueryWrapper);
+                return ResultVOUtil.success();
             }
-
             return ResultVOUtil.success();
         }else{
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "服务器异常！");

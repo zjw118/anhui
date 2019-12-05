@@ -130,5 +130,5 @@ public interface St4ScsCkMapper extends BaseMapper<St4ScsCk> {
      * @return
      */
     List<Map> examineQualityEasyPoi();
-
+    List<Map> selectSt4ScsCkMap(St4ScsCk ck);
 }
