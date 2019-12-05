@@ -445,6 +445,9 @@ public class LsRedlineinfoController {
                 }
             }
 
+
+
+
             lsRedlineinfo.setUpdatetime(new Date());
             return LsRedlineinfoService.infoUpdate(lsRedlineinfo);
         } catch (Exception e) {
