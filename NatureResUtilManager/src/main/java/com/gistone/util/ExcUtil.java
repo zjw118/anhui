@@ -6,6 +6,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -18,6 +20,43 @@ public class ExcUtil {
     private static HSSFWorkbook wb;
     private static HSSFSheet sheet;
     private static HSSFRow row;
+
+    /**
+     * HSSFSheet空白行删除并且上移一行
+     * @param sheet
+     * @param rowIndex
+     */
+    public static void removeRow(HSSFSheet sheet, int  rowIndex) {
+        int lastRowNum=sheet.getLastRowNum();
+        if(rowIndex>=0&&rowIndex<lastRowNum){
+            sheet.shiftRows(rowIndex+1,lastRowNum,  -1);
+        }
+        if(rowIndex==lastRowNum){
+            HSSFRow  removingRow=sheet.getRow(rowIndex);
+            if(removingRow!=null){
+                sheet.removeRow(removingRow);
+            }
+        }
+    }
+    /**
+     * Sheet空白行删除并且上移一行
+     * @param sheet
+     * @param rowIndex
+     */
+    public static void removeRowSheet(Sheet sheet, int  rowIndex) {
+        int lastRowNum=sheet.getLastRowNum();
+        if(rowIndex>=0&&rowIndex<lastRowNum){
+            sheet.shiftRows(rowIndex+1,lastRowNum,  -1);
+        }
+        if(rowIndex==lastRowNum){
+            Row removingRow=sheet.getRow(rowIndex);
+            if(removingRow!=null){
+                sheet.removeRow(removingRow);
+            }
+        }
+    }
+
+
     public static String getStandardDate(String date){
         if(date.contains("-")){
             date = date.replace("-", "/");
