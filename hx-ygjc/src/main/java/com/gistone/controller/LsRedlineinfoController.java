@@ -341,7 +341,7 @@ public class LsRedlineinfoController {
             //上传附件
             String path = PATH+"/epr/lsRedlineinfo/";//本地路径
             String[] arr = {"zip"};
-            Map<String, String> stringStringMap = FileUtil.uploadFile(request, path, arr, 500 * 1000000l);//1T
+            Map<String, String> stringStringMap = FileUtil.uploadFile(request, path, arr, 500 * 1000000l);//500MB
 
             String name = "";//本地新附件名称
             if(null!=stringStringMap){
@@ -363,8 +363,10 @@ public class LsRedlineinfoController {
                 lsRedlineinfo.setUpdatetime(new Date());
                 lsRedlineinfo.setFtp_shp("E:/FTP/lsRedlineinfo/"+fileName);
                 //判断是否需要审核
-                int audit = lsRedlineinfoMapper.getAudit(lsRedlineinfo.getVersion_id());
-                lsRedlineinfo.setAudit(audit);
+                Integer audit = lsRedlineinfoMapper.getAudit(lsRedlineinfo.getVersion_id());
+                if(null!=audit){
+                    lsRedlineinfo.setAudit(audit);
+                }
                 return LsRedlineinfoService.infoInsert(lsRedlineinfo);
             }
 
@@ -474,7 +476,7 @@ public class LsRedlineinfoController {
             Object id = params.get("id");
             if (id==null) return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"id不可为空");
             Object audit = params.get("audit");
-            if (audit==null) return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"audit不可为空");
+            if (audit==null||StringUtils.isBlank(audit.toString())) return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"audit不可为空");
 
             //如果审核失败发送邮件
             if(3==Integer.valueOf(audit.toString())){
@@ -487,7 +489,7 @@ public class LsRedlineinfoController {
                 String mailText = "您提交的红线服务审核失败，请检验后重新提交。";
                 String mail_host="smtp.163.com";
                 boolean b = EmailUtil.sendMail(mailFrom, password_mailFrom, mailTo, mailTittle, mailText, mail_host);
-//                System.out.println("发送邮件="+b);
+//                System.out.println("发送邮件:"+b);
             }
 
             LsRedlineinfo LsRedlineinfo = new LsRedlineinfo();
