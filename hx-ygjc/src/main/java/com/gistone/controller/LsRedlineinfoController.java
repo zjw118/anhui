@@ -20,7 +20,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * 红线信息服务-临时
@@ -300,6 +302,7 @@ public class LsRedlineinfoController {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求异常");
         }
     }
+
     //    版本-分页
     @PostMapping("/versionSelect")
     public ResultVO versionSelect(@RequestBody Map<String, Object> paramsMap) {
@@ -338,6 +341,7 @@ public class LsRedlineinfoController {
     @PostMapping("/infoInsert")
     public ResultVO infoInsert(HttpServletRequest request,LsRedlineinfo lsRedlineinfo) {
         try {
+            String uuid = UUID.randomUUID().toString();
             //上传附件
             String path = PATH+"/epr/lsRedlineinfo/";//本地路径
             String[] arr = {"zip"};
@@ -353,15 +357,30 @@ public class LsRedlineinfoController {
                 if(StringUtils.isNotBlank(newName)){
                     name = newName;
                 }
-            }
-            //上传FTP
-            String ftpPath = "/lsRedlineinfo/";
-            String fileName = name;
-            FileInputStream input = new FileInputStream(new File(PATH+"/epr/lsRedlineinfo/"+name));
-            String res = FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName, input);
-            if("0".equals(res)){
+                //解压附件
+                String zipPath = path+name;
+                String paths = path+uuid+"/";
+                FileUtil.unPackZip(zipPath,paths,null);
+
+                //FTP创建文件夹
+                String ftpPath="/lsRedlineinfo/"+uuid+"/";
+                FTPUtil.createDri(ftpHost,ftpUserName,ftpPassword,ftpPort,ftpPath);
+
+                //获取所有文件
+                File file = new File(paths);
+                List<File> files = FileUtil.listFiles(file);
+
+                for (File file1 : files) {
+                    String name1 = file1.getName();
+                    FileInputStream input1 = new FileInputStream(new File(file1.toString()));
+                    String res = FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath,uuid+"."+name1.split("\\.")[1], input1);
+                    if(!"0".equals(res)){
+                        System.out.println("上传失败");
+                    }
+                }
+
                 lsRedlineinfo.setUpdatetime(new Date());
-                lsRedlineinfo.setFtp_shp("E:/FTP/lsRedlineinfo/"+fileName);
+                lsRedlineinfo.setFtp_shp("E:/FTP"+ftpPath+uuid+".shp");
                 //判断是否需要审核
                 Integer audit = lsRedlineinfoMapper.getAudit(lsRedlineinfo.getVersion_id());
                 if(null!=audit){
@@ -376,6 +395,7 @@ public class LsRedlineinfoController {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求异常");
         }
     }
+
     //    服务-删
     @PostMapping("/infoDelete")
     public ResultVO infoDelete(@RequestBody Map<String, Object> paramsMap) {
@@ -392,6 +412,7 @@ public class LsRedlineinfoController {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求异常");
         }
     }
+
     //    服务-改
     @PostMapping("/infoUpdate")
     public ResultVO infoUpdate(HttpServletRequest request,LsRedlineinfo lsRedlineinfo) {
@@ -400,7 +421,6 @@ public class LsRedlineinfoController {
             String path = PATH+"/epr/lsRedlineinfo/";//本地路径
             String[] arr = {"zip"};
             Map<String, String> stringStringMap = FileUtil.uploadFile(request, path, arr, 1024 * 1000000l);//1T
-
             String name = "";//本地新附件名称
             if(null!=stringStringMap){
                 String error = stringStringMap.get("error");
@@ -430,6 +450,7 @@ public class LsRedlineinfoController {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求异常");
         }
     }
+
     //    服务-分页
     @PostMapping("/infoSelect")
     public ResultVO infoSelect(@RequestBody Map<String, Object> paramsMap) {
@@ -497,10 +518,11 @@ public class LsRedlineinfoController {
             LsRedlineinfo.setUpdatetime(new Date());
             LsRedlineinfo.setAudit(Integer.valueOf(audit.toString()));
             return LsRedlineinfoService.infoUpdate(LsRedlineinfo);
-        } catch (Exception e) {
+        } catch (Exception e){
             e.printStackTrace();
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求异常");
         }
+
     }
 
 
