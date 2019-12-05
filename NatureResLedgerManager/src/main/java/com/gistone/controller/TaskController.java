@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.VO.ResultVO;
 import com.gistone.annotation.PassToken;
 import com.gistone.entity.*;
+import com.gistone.mapper.St4ScsCkMapper;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.*;
 import com.gistone.swagger.SharePoint;
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,11 +54,37 @@ public class TaskController {
     private ISt4ScsCzService iSt4ScsCzService;
     @Autowired
     private RlhdGroupService rlhdGroupService;
-
+    @Autowired
+    private StatisService statisService;
     @Autowired
     private ISt4ScsCoService iSt4ScsCoService;
     @Autowired
     private ConfigUtils configUtils;
+
+    @Autowired
+    private St4ScsCkMapper st4ScsCkMapper;
+
+    @ApiOperation(value = "导出审核统计word", notes = "此接口返回问题点批次数据", response = Result.class)
+    @PostMapping("export")
+    public ResultVO examineExportWord(HttpServletRequest request, HttpServletResponse response){
+//        St4ScsCk ck = new St4ScsCk();
+//        ck.setGroupByName("sd001");
+//        List<St4ScsCk> list = st4ScsCkMapper.selectSt4ScsCk(ck);
+//
+//        Map mapp = new HashMap();
+//        mapp.put("${n1}", 2);
+//        mapp.put("${n2}", 2);
+//        mapp.put("${n3}", 2);
+//        mapp.put("${n4}", 2);
+//        WordUtil.getWord(mapp, list, "D:\\1\\bb.docx", list.size());
+//        Map map = new HashMap();
+        return ResultVOUtil.success(null);
+
+//        //这里是我说的一行代码
+//        WordUtil.SimpleWordExport("D:\\1\\aa.docx","D:\\1\\","aaa.docx",params,request,response);
+    }
+
+
 
     /*@ApiOperation(value = "问题点批次", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/listCheckPointToView")

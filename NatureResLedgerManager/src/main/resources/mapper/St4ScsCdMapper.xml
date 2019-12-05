@@ -340,7 +340,7 @@
         WHERE ck.CK085 = 1 AND cd.CD009=1
         <choose>
             <when test="comCode != null and comCode != '' and comCode != '34' ">
-                and com.COM_CODE = #{comCode} and com.COM_F_CODE=#{comCode}
+                and com.COM_CODE = #{comCode} or com.COM_F_CODE=#{comCode}
 
             </when>
             <otherwise>
