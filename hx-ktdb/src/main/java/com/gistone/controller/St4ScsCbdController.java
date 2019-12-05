@@ -2,8 +2,8 @@ package com.gistone.controller;
 
 
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.LsDataStrategy;
-import com.gistone.service.LsDataStrategyService;
+import com.gistone.entity.St4ScsCbd;
+import com.gistone.service.St4ScsCbdService;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultVOUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -14,30 +14,32 @@ import java.util.Map;
 
 /**
  * <p>
- * 前端控制器
+ * 移动端提交检测表 前端控制器
  * </p>
  *
  * @author zf1017@foxmail.com
  * @version v1.0
- * @since 2019-11-27
+ * @since 2019-12-04
  */
 
 @RestController
-@RequestMapping("/api/ktdb/lsDataStrategy")
-public class LsDataStrategyController {
+@RequestMapping("/api/st4ScsCbd")
+public class St4ScsCbdController {
     @Autowired
-    private LsDataStrategyService service;
+    private St4ScsCbdService service;
 
     @PostMapping("/list")
-    public ResultVO getList(@RequestBody Map<String, Object> paramsMap) {
-//请求参数格式校验
+    public ResultVO getList(@RequestBody Map<String, Object> paramsMap ) {
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
         if (params == null) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "请求数据data不能为空！");
         }
         Integer pageNum = (Integer) params.get("pageNum");
         Integer pageSize = (Integer) params.get("pageSize");
-        String name = (String) params.get("cycle");
+        String name = (String) params.get("cbd002");
+        String time = (String) params.get("cbd003");
+        String content = (String) params.get("content");
+
         if (pageNum == null) {
             pageNum = 1;
         }
@@ -46,7 +48,7 @@ public class LsDataStrategyController {
             pageSize = 10;
         }
 
-        Map<String, Object> result = service.list(pageNum, pageSize, name);
+        Map<String, Object> result = service.list(pageNum, pageSize, name,time,content);
         return ResultVOUtil.success(result);
     }
 
@@ -57,53 +59,29 @@ public class LsDataStrategyController {
         if (id == null || id < 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
-        LsDataStrategy entity = service.getById(id);
+        St4ScsCbd entity = service.getById(id);
         return ResultVOUtil.success(entity);
     }
 
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResultVO add(@RequestBody Map<String, Object> paramsMap) {
-        //请求参数格式校验
-        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-        if (params == null) {
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "请求数据data不能为空！");
-        }
-        LsDataStrategy entity = new LsDataStrategy();
+
         //判断添加人是否为空
-        String cycle = (String) params.get("cycle");
-        if (StringUtils.isBlank(cycle)) {
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "周期不能为空");
-        }
-        entity.setCycle(cycle);
-        String type = (String) params.get("type");
-        if (StringUtils.isBlank(type)) {
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "类型不能为空");
-        }
-        entity.setType(type);
-
-        String timeStr = (String) params.get("timeStr");
-        if (StringUtils.isBlank(timeStr)) {
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "时间不能为空");
-        }
-        entity.setTimeStr(timeStr);
-
-
-        service.insert(entity);
+//        service.insert(entity);
         return ResultVOUtil.success();
     }
 
 
     @RequestMapping(value = "/delete")
     public ResultVO delete(@RequestBody Map<String, Object> paramsMap) {
-
-        //请求参数格式校验
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
         if (params == null) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "请求数据data不能为空！");
         }
-        Integer id = (Integer) params.get("id");
-        if (id == null) {
+
+       Integer id = (Integer)params.get("id");
+        if (id == null || id < 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
         service.delete(id);
@@ -113,30 +91,33 @@ public class LsDataStrategyController {
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResultVO update(@RequestBody Map<String, Object> paramsMap) {
-        //请求参数格式校验
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
         if (params == null) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "请求数据data不能为空！");
         }
+
         Integer id = (Integer) params.get("id");
-        if (id == null || id < 0) {
-            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能");
+        if(id==null||id<0){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"id不能为空");
         }
-        LsDataStrategy entity = service.getById(id);
-        String cycle = (String) params.get("cycle");
-        if (StringUtils.isNotBlank(cycle)) {
-            entity.setCycle(cycle);
+        St4ScsCbd entity = service.getById(id);
+
+
+        String oprateUser = (String) params.get("user");
+        if(StringUtils.isNotBlank(oprateUser)){
+            entity.setCbd002(oprateUser);
         }
 
-        String type = (String) params.get("type");
-        if (StringUtils.isNotBlank(type)) {
-            entity.setType(type);
+        String midContent = (String) params.get("midContent");
+        if(StringUtils.isNotBlank(midContent)){
+            entity.setCbd005(midContent);
         }
 
-        String timeStr = (String) params.get("timeStr");
-        if (StringUtils.isNotBlank(timeStr)) {
-            entity.setTimeStr(timeStr);
+        String afterContent = (String) params.get("afterContent");
+        if(StringUtils.isNotBlank(afterContent)){
+            entity.setCbd006(afterContent);
         }
+//判断更新人加人是否为空
         service.edit(entity);
         return ResultVOUtil.success();
     }

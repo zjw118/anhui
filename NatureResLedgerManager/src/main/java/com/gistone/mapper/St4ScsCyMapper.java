@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gistone.entity.St4ScsCy;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
  * @author zhaojingwei
  * @since 2019-08-17
  */
+@Mapper
 public interface St4ScsCyMapper extends BaseMapper<St4ScsCy> {
     //考勤统计
     List<St4ScsCy> selectPoList(St4ScsCy st4ScsCy);
@@ -30,7 +32,7 @@ public interface St4ScsCyMapper extends BaseMapper<St4ScsCy> {
     //分页查询-获取总数量
     int getPoSum2(St4ScsCy st4ScsCy);
     //分页查询-获取分页数据
-    List<Object> selectPoList2(St4ScsCy st4ScsCy);
+    List<Object> selectPoList3(St4ScsCy st4ScsCy);
 
     /**
      * 航迹详情

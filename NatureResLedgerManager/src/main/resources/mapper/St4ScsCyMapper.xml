@@ -204,7 +204,7 @@
     2019.11.30这里由于同一个斑块可以在不同任务下下发给不同的核查人
     这里将原来的统计代码 拿出来改动一下备用
     !-->
-    <select id="selectPoList2" resultMap="BaseResultMap"   parameterType="com.gistone.entity.St4ScsCy">
+    <select id="selectPoList3" resultMap="BaseResultMap"   parameterType="com.gistone.entity.St4ScsCy">
         SELECT PK_ID,
         COM_NAME,
         SA001,

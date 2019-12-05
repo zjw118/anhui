@@ -1,11 +1,11 @@
 package com.gistone.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.St4ScsCbd;
 import com.gistone.mapper.St4ScsCbdMapper;
 import com.gistone.service.ISt4ScsCbdService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.util.ResultVOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 public class St4ScsCbdServiceImpl extends ServiceImpl<St4ScsCbdMapper, St4ScsCbd> implements ISt4ScsCbdService {
     @Autowired
     private  St4ScsCbdMapper st4ScsCbdMapper;
-
+@Override
         public ResultVO listCheckMsg (){
             QueryWrapper<St4ScsCbd> cbdQueryWrapper = new QueryWrapper<>();
             cbdQueryWrapper.last("limit 0,5");
