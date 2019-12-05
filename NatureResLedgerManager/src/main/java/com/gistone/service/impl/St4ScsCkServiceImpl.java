@@ -91,7 +91,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
     @Autowired
     ImageConfigMapper imageConfigMapper;
     @Autowired
-            MessageProperties messageProperties;
+    MessageProperties messageProperties;
 
     DateTimeFormatter dfMd = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     @Override
@@ -435,9 +435,9 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                 //这里要验证问题编码不能重复
                 List<String> pointNumList = new ArrayList<>();
                 *//**
-                 * 这里的导入逻辑改变，编号可以重复，并且对于编号重复的问题点，先在问题点的表里进行基础信息的修改比如可能修改的值有分组信息所属保护地经纬度信息等等，然后
-                 * 新增该问题点的。
-                 *//*
+         * 这里的导入逻辑改变，编号可以重复，并且对于编号重复的问题点，先在问题点的表里进行基础信息的修改比如可能修改的值有分组信息所属保护地经纬度信息等等，然后
+         * 新增该问题点的。
+         *//*
                 int jj=2;
                 for (Map mapRe:list) {
                     //首先判断excel里面的问题点的序号不能为空且不能重复
@@ -1084,7 +1084,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
         //这里的
         List<St4ScsCk> ckList = checkLedgerMapper.sysPointAndLedgerData(uid,taskSigns);//最新台账
 
-        List<St4ScsCk> ckHistoryList = checkLedgerMapper.sysPointAndLedgerDataOrign(uid,taskSigns);//历史台账
+        List<St4ScsCk> ckHistoryList =ckList;//历史台账 这里安徽江苏没有历史台账这一说app又必须要这个结构这两个list一样避免多一次查询
 
 
         try {
@@ -1225,54 +1225,54 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                     Object obj = jarr.get(i);
                     JSONObject jsonn =(JSONObject)obj;
                     jarrLedger = new JSONArray();
-                    newDataJson =new JSONObject();
-                    for (Object key:dataList) {
-
-                        newDataLedgerJson = new JSONObject();
-                        newDataLedger= parseObject(key.toString());
-                        newDataLedgerJson = newDataLedger;
-                        Object key1 = newDataLedger.get("id").toString().toLowerCase();
-                        Object value = mapledger.get(newDataLedger.get("id").toString().toLowerCase());
-                        //这里可以根据type的来控制返回的value是字符串还是数组
-                        if(key1.toString().contains("cn")){
-                            Object type = newDataLedger.get("type");
-                            if(Integer.valueOf(newDataLedger.get("type").toString())==9){
-                                newDataLedgerJson.put("value",phoList);
-                            }else if(Integer.valueOf(newDataLedger.get("type").toString())==1){
-                                if(cnList!=null&&cnList.size()>0){
-                                    newDataLedgerJson.put("value",BeanUtils.describe(cnList.get(0)).get(key1.toString()));
-                                }else{
-                                    newDataLedgerJson.put("value","");
-                                }
-                            }
-                        }else if(Integer.valueOf(newDataLedger.get("type").toString())==5){
-                            Object aaa =mapledger.get(key1);
-                            List<String> cList = new ArrayList<>();
-                            String valList = mapledger.get(key1.toString());
-                            if(valList!=null&&valList.contains(";")){
-                                String[] vals=valList.split(";");
-                                for (String val:vals) {
-                                    cList.add(val);
-                                }
-                            }
-                            newDataLedgerJson.put("value",cList);
-                        }
-                        else if(Integer.valueOf(newDataLedger.get("type").toString())==10){
-                            List<String> cList = new ArrayList<>();
-                            String valList = mapledger.get(key1.toString());
-                            if(valList!=null&&valList.contains(";")){
-                                String[] vals=valList.split(";");
-                                for (String val:vals) {
-                                    cList.add(val);
-                                }
-                            }
-                            newDataLedgerJson.put("value",cList);
-                        }else{
-                            newDataLedgerJson.put("value",value==null?"":value);
-                        }
-
-                        jarrLedger.add(newDataLedgerJson);
-                    }
+//                    newDataJson =new JSONObject();
+//                    for (Object key:dataList) {
+//
+//                        newDataLedgerJson = new JSONObject();
+//                        newDataLedger= parseObject(key.toString());
+//                        newDataLedgerJson = newDataLedger;
+//                        Object key1 = newDataLedger.get("id").toString().toLowerCase();
+//                        Object value = mapledger.get(newDataLedger.get("id").toString().toLowerCase());
+//                        //这里可以根据type的来控制返回的value是字符串还是数组
+//                        if(key1.toString().contains("cn")){
+//                            Object type = newDataLedger.get("type");
+//                            if(Integer.valueOf(newDataLedger.get("type").toString())==9){
+//                                newDataLedgerJson.put("value",phoList);
+//                            }else if(Integer.valueOf(newDataLedger.get("type").toString())==1){
+//                                if(cnList!=null&&cnList.size()>0){
+//                                    newDataLedgerJson.put("value",BeanUtils.describe(cnList.get(0)).get(key1.toString()));
+//                                }else{
+//                                    newDataLedgerJson.put("value","");
+//                                }
+//                            }
+//                        }else if(Integer.valueOf(newDataLedger.get("type").toString())==5){
+//                            Object aaa =mapledger.get(key1);
+//                            List<String> cList = new ArrayList<>();
+//                            String valList = mapledger.get(key1.toString());
+//                            if(valList!=null&&valList.contains(";")){
+//                                String[] vals=valList.split(";");
+//                                for (String val:vals) {
+//                                    cList.add(val);
+//                                }
+//                            }
+//                            newDataLedgerJson.put("value",cList);
+//                        }
+//                        else if(Integer.valueOf(newDataLedger.get("type").toString())==10){
+//                            List<String> cList = new ArrayList<>();
+//                            String valList = mapledger.get(key1.toString());
+//                            if(valList!=null&&valList.contains(";")){
+//                                String[] vals=valList.split(";");
+//                                for (String val:vals) {
+//                                    cList.add(val);
+//                                }
+//                            }
+//                            newDataLedgerJson.put("value",cList);
+//                        }else{
+//                            newDataLedgerJson.put("value",value==null?"":value);
+//                        }
+//
+//                        jarrLedger.add(newDataLedgerJson);
+//                    }
                     jsonn.put("historyLedger",jarrLedger);
                     i++;
                 }
@@ -1571,8 +1571,8 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                         return ResultCp.build(1003,ResultMsg.MSG_1003);
                     };
                     *//**
-                     * 这里比如张三李四王五是在A任务下，当张三提交了核查信息之后，是必须要推送给李四和王五的
-                     *//*
+         * 这里比如张三李四王五是在A任务下，当张三提交了核查信息之后，是必须要推送给李四和王五的
+         *//*
                     St4SysSa saUser = new St4SysSa();
                     saUser.setSa001(Integer.valueOf(ck.getCk049()));
                     saUser=st4SysSaMapper.selectById(saUser);
