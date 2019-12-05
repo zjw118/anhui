@@ -518,7 +518,6 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             }
             String newName = resMap.get("newName")+""; //附件名称
 
-
             String uuid = newName.split("\\.")[0];
             //解压
             File f = new File(path+uuid);
@@ -542,9 +541,6 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
             if(StringUtils.isBlank(shpStr)){
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"读取SHP失败");
             }
-
-//            System.out.println(shpStr);
-
 
             //替换字段名
             net.sf.json.JSONArray jsonArray = net.sf.json.JSONArray.fromObject(shpStr);
@@ -594,9 +590,6 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 map.put("geometry",geometry+"");
                 jSONArray.add(map);
             }
-//            System.out.println(jSONArray);
-
-
 
             //生成新SHP
             String url = PathUtile.getRandomPath(PATH+"/epr/image/","x.shp");
