@@ -10,67 +10,67 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * <p>
- * 人类活动台账信息表
+ * 移动端提交检测表
  * </p>
  *
  * @author zf1017@foxmail.com
- * @since 2019-10-25
+ * @since 2019-12-04
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class RlhdGroup extends Model<RlhdGroup> {
+public class St4ScsCbd extends Model<St4ScsCbd> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
-
     /**
-     * 台账名称
+     * 移动端提交检测表主键
      */
-    private String name;
+    @TableId(value = "CBD001", type = IdType.AUTO)
+    private Integer cbd001;
 
     /**
-     * 创建人id
+     * 操作人
      */
-    private Integer createBy;
+    @TableField("CBD002")
+    private String cbd002;
 
     /**
-     * 创建时间
+     * 操作时间
      */
-    private LocalDateTime createDate;
-
-    private Integer updateBy;
-
-    private String type;
-
-    private LocalDateTime updateDate;
+    @TableField("CBD003")
+    private LocalDateTime cbd003;
 
     /**
-     * 备注
+     * 问题斑块ID
      */
-    private String remark;
+    @TableField("CBD004")
+    private Integer cbd004;
 
     /**
-     * 逻辑删除 0删除，1未删除
+     * 推送内容中间内容
+     */
+    @TableField("CBD005")
+    private String cbd005;
+
+    /**
+     * 推送内容后缀内容
+     */
+    @TableField("CBD006")
+    private String cbd006;
+
+    /**
+     * 0删除，1未删除
      */
     private Integer delFlag;
-
-    private Integer sonCount;
-    @TableField(exist = false)
-    private Double sonArea;
-    @TableField(exist = false)
-private List<St4ScsCdVo> st4ScsCdList;
 
 
     @Override
     protected Serializable pkVal() {
-        return this.id;
+        return this.cbd001;
     }
 
 }

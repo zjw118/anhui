@@ -204,7 +204,7 @@
     2019.11.30这里由于同一个斑块可以在不同任务下下发给不同的核查人
     这里将原来的统计代码 拿出来改动一下备用
     !-->
-    <select id="selectPoList2" resultMap="BaseResultMap"   parameterType="com.gistone.entity.St4ScsCy">
+    <select id="selectPoList3" resultMap="BaseResultMap"   parameterType="com.gistone.entity.St4ScsCy">
         SELECT PK_ID,
         COM_NAME,
         SA001,
@@ -348,10 +348,10 @@
         FROM (SELECT
         MAX(CK001)    AS id
         FROM st4_scs_ck
-        GROUP BY CD004) t
+        GROUP BY CD004,CK049,CK091) t
         INNER JOIN st4_scs_ck k
         ON t.id = k.CK001) ck
-        ON ck.CD004 = cd.cd001
+        ON ck.CD004 = cd.cd001 AND cl.CL001 = ck.ck091  AND ck.CK049 = CDSA.SA001
         LEFT JOIN st4_scs_cc cc ON cc.CD004 = cd.CD001
         LEFT JOIN st4_scs_cy cy ON cc.CY017 = cy.CY017
         WHERE 1=1 and  com.PK_ID!=1
@@ -391,7 +391,7 @@
         <if test="groupByName=='sf' ">
             group by com.PK_ID
         </if>
-       
+
         ) T
 
 
@@ -413,9 +413,8 @@
     </select>
 
     <select id="selectPoListNew" resultMap="BaseResultMap"   parameterType="com.gistone.entity.St4ScsCy">
-
-
-        SELECT PK_ID,
+        SELECT
+        PK_ID,
         COM_NAME,
         SA001,
         SA015,

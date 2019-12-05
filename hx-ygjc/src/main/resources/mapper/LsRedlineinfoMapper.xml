@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gistone.mapper.LsRedlineinfoMapper">
+
+
+
+    <insert id="processInsert" parameterType="com.gistone.entity.LsRedlineinfoProcess">
+        INSERT INTO ls_redlineinfo_process
+        (
+            id,
+            name,
+            audit,
+            remark,
+            updatetime
+        )
+        VALUES(
+            #{id},
+            #{name},
+            #{audit},
+            #{remark},
+            #{updatetime}
+        )
+    </insert>
+    <insert id="templateInsert" parameterType="com.gistone.entity.LsRedlineinfoTemplate">
+        INSERT INTO ls_redlineinfo_template
+        (
+            id,
+            compass,
+            scale,
+            name,
+            updatetime
+        )
+        VALUES(
+            #{id},
+            #{compass},
+            #{scale},
+            #{name},
+            #{updatetime}
+        )
+    </insert>
+    <insert id="versionInsert" parameterType="com.gistone.entity.LsRedlineinfoVersion">
+        INSERT INTO ls_redlineinfo_version
+        (
+            id,
+            process_id,
+            template_id,
+            name,
+            updatetime
+        )
+        VALUES(
+            #{id},
+            #{process_id},
+            #{template_id},
+            #{name},
+            #{updatetime}
+        )
+    </insert>
+    <insert id="infoInsert" parameterType="com.gistone.entity.LsRedlineinfo">
+        INSERT INTO ls_redlineinfo
+        (
+            id,
+            version_id,
+            ftp_shp,
+            name,
+            updatetime,
+            audit
+        )
+        VALUES(
+            #{id},
+            #{version_id},
+            #{ftp_shp},
+            #{name},
+            #{updatetime},
+            #{audit}
+        )
+    </insert>
+
+
+
+    <update id="processDelete" parameterType="com.gistone.entity.LsRedlineinfoProcess" >
+        update ls_redlineinfo_process
+        <set>
+            closed = 0
+        </set>
+        where id=#{id}
+    </update>
+    <update id="templateDelete" parameterType="com.gistone.entity.LsRedlineinfoTemplate" >
+        update ls_redlineinfo_template
+        <set>
+            closed = 0
+        </set>
+        where id=#{id}
+    </update>
+    <update id="versionDelete" parameterType="com.gistone.entity.LsRedlineinfoVersion" >
+        update ls_redlineinfo_version
+        <set>
+            closed = 0
+        </set>
+        where id=#{id}
+    </update>
+    <update id="infoDelete" parameterType="com.gistone.entity.LsRedlineinfo" >
+        update ls_redlineinfo
+        <set>
+            closed = 0
+        </set>
+        where id=#{id}
+    </update>
+
+
+
+
+
+    <update id="processUpdate" parameterType="com.gistone.entity.LsRedlineinfoProcess" >
+        update  ls_redlineinfo_process
+        <set>
+            <if test="null!=name and ''!=name">
+                name=#{name},
+            </if>
+            <if test="null!=audit">
+                audit=#{audit},
+            </if>
+            <if test="null!=remark">
+                remark=#{remark},
+            </if>
+            <if test="null!=updatetime">
+                updatetime=#{updatetime},
+            </if>
+            <if test="null!=closed">
+                closed=#{closed},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <update id="templateUpdate" parameterType="com.gistone.entity.LsRedlineinfoTemplate" >
+        update ls_redlineinfo_template
+        <set>
+            <if test="null!=compass">
+                compass=#{compass},
+            </if>
+            <if test="null!=scale">
+                scale=#{scale},
+            </if>
+            <if test="null!=name and ''!=name">
+                name=#{name},
+            </if>
+            <if test="null!=updatetime">
+                updatetime=#{updatetime},
+            </if>
+            <if test="null!=closed">
+                closed=#{closed},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <update id="versionUpdate" parameterType="com.gistone.entity.LsRedlineinfoVersion" >
+        update ls_redlineinfo_version
+        <set>
+            <if test="null!=process_id">
+                process_id=#{process_id},
+            </if>
+            <if test="null!=template_id">
+                template_id=#{template_id},
+            </if>
+            <if test="null!=name and ''!=name">
+                name=#{name},
+            </if>
+            <if test="null!=updatetime">
+                updatetime=#{updatetime},
+            </if>
+            <if test="null!=closed">
+                closed=#{closed},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <update id="infoUpdate" parameterType="com.gistone.entity.LsRedlineinfo" >
+        update ls_redlineinfo
+        <set>
+            <if test="null!=version_id">
+                version_id=#{version_id},
+            </if>
+            <if test="null!=ftp_shp and ''!=ftp_shp">
+                ftp_shp=#{ftp_shp},
+            </if>
+            <if test="null!=name and ''!=name">
+                name=#{name},
+            </if>
+            <if test="null!=updatetime">
+                updatetime=#{updatetime},
+            </if>
+            <if test="null!=audit">
+                audit=#{audit},
+            </if>
+            <if test="null!=closed">
+                closed=#{closed},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+
+
+
+
+
+
+
+
+
+
+
+    <select id="getPoSumProcess"  resultType="java.lang.Integer" parameterType="com.gistone.util.PageBean">
+        SELECT count(*) from ls_redlineinfo_process
+        where closed = 1
+        <if test="str1!=null and str1!=''">
+            and name like '%${str1}%'
+        </if>
+    </select>
+    <select id="selectPoListProcess"  resultType ="java.util.Map" parameterType="com.gistone.util.PageBean">
+        SELECT * from ls_redlineinfo_process
+        where closed = 1
+        <if test="str1!=null and str1!=''">
+            and name like '%${str1}%'
+        </if>
+        LIMIT #{firstLimit},#{pageSize}
+    </select>
+
+
+
+    <select id="getPoSumTemplate"  resultType="java.lang.Integer" parameterType="com.gistone.util.PageBean">
+        SELECT count(*) from ls_redlineinfo_template
+        where closed = 1
+        <if test="str1!=null and str1!=''">
+            and name like '%${str1}%'
+        </if>
+    </select>
+    <select id="selectPoListTemplate"  resultType ="java.util.Map" parameterType="com.gistone.util.PageBean">
+        SELECT * from ls_redlineinfo_template
+        where closed = 1
+        <if test="str1!=null and str1!=''">
+            and name like '%${str1}%'
+        </if>
+        LIMIT #{firstLimit},#{pageSize}
+    </select>
+
+
+
+    <select id="getPoSumVersion"  resultType="java.lang.Integer" parameterType="com.gistone.util.PageBean">
+        SELECT count(*) from ls_redlineinfo_version
+        where closed = 1
+        <if test="str1!=null and str1!=''">
+            and name like '%${str1}%'
+        </if>
+    </select>
+    <select id="selectPoListVersion"  resultType ="java.util.Map" parameterType="com.gistone.util.PageBean">
+        SELECT * from ls_redlineinfo_version
+        where closed = 1
+        <if test="str1!=null and str1!=''">
+            and name like '%${str1}%'
+        </if>
+        LIMIT #{firstLimit},#{pageSize}
+    </select>
+
+
+
+    <select id="getPoSumInfo"  resultType="java.lang.Integer" parameterType="com.gistone.util.PageBean">
+        SELECT count(*) from ls_redlineinfo
+        where closed = 1
+        <if test="str1!=null and str1!=''">
+            and name like '%${str1}%'
+        </if>
+    </select>
+    <select id="selectPoListInfo"  resultType ="java.util.Map" parameterType="com.gistone.util.PageBean">
+        SELECT * from ls_redlineinfo
+        where closed = 1
+        <if test="str1!=null and str1!=''">
+            and name like '%${str1}%'
+        </if>
+        LIMIT #{firstLimit},#{pageSize}
+    </select>
+
+
+
+
+    <select id="LsRedlineinfoProcessList"  resultType ="com.gistone.entity.LsRedlineinfoProcess">
+        SELECT * from ls_redlineinfo_process
+        where closed = 1
+    </select>
+    <select id="LsRedlineinfoTemplateList"  resultType ="com.gistone.entity.LsRedlineinfoTemplate">
+        SELECT * from ls_redlineinfo_template
+        where closed = 1
+    </select>
+    <select id="LsRedlineinfoVersionList"  resultType ="com.gistone.entity.LsRedlineinfoVersion">
+        SELECT * from ls_redlineinfo_version
+        where closed = 1
+    </select>
+
+
+
+    <select id="getAudit"  resultType ="java.lang.Integer"  parameterType="java.lang.Integer">
+        SELECT audit from ls_redlineinfo_process
+        WHERE closed = 1
+        and id = (
+            SELECT process_id from ls_redlineinfo_version
+            WHERE closed = 1
+            and id = #{id}
+        )
+    </select>
+
+
+
+</mapper>

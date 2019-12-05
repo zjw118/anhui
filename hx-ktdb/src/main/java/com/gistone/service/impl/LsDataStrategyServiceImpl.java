@@ -18,7 +18,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,7 +41,7 @@ public class LsDataStrategyServiceImpl extends ServiceImpl<LsDataStrategyMapper,
 
         QueryWrapper<LsDataStrategy> wrapper = new QueryWrapper<>();
         if (StringUtils.isNotBlank(userName)) {
-            wrapper.likeRight("cycle",userName);
+            wrapper.like("cycle",userName);
         }
          wrapper.eq("del_flag",1);
         wrapper.orderByDesc("create_time");
@@ -57,13 +56,13 @@ public class LsDataStrategyServiceImpl extends ServiceImpl<LsDataStrategyMapper,
     }
 
     @Override
-    public void delete(List<Integer> ids) {
+    public void delete(Integer id) {
         //具体逻辑
-        for (Integer id : ids) {
+
             LsDataStrategy lsDataStrategy = mapper.selectById(id);
             lsDataStrategy.setDelFlag(0);
             mapper.updateById(lsDataStrategy);
-        }
+
     }
 
     @Override

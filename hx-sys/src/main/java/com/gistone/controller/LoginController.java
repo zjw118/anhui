@@ -16,6 +16,8 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -42,11 +44,8 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/api/sys/login")
 @Slf4j
 public class LoginController {
-
-
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
-
     @Autowired
     private ISysUserService sysUserService;
     @Autowired
@@ -68,6 +67,7 @@ public class LoginController {
 
     @Autowired
     private RedisUtil redisUtil;
+
 
     /**
      * 移动端登录接口开始

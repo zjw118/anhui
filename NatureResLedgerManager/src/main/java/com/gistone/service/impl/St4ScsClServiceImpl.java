@@ -175,19 +175,32 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
         int i=0;
         // 循环工作表Sheet
         for (int numSheet = 0; numSheet <hssfWorkbook.getNumberOfSheets(); numSheet++) {
-            //HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
             Sheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
             if (hssfSheet == null) {
                 continue;
             }
+            int rowNumTotal = hssfSheet.getLastRowNum();
+            for(int j =rowNumTotal;j>0;j--){
+                Row row = hssfSheet.getRow(j);
+                Cell cell = null;
+                String cellValue  = "";
+                if (row!=null){
+                    cell = row.getCell(0);
+                  //  row = hssfSheet.getRow(i);
+                    cellValue =  cell==null?"":cell.toString().trim();
+                }
+                if   (row==null||cell==null||cellValue.equals("")){
+                    //减去一条空行，总行数减一。
+                    ExcUtil.removeRowSheet(hssfSheet, j);
+                    rowNumTotal--;
+                }
+            }
+
             // 循环行Row
-            for (int rowNum = 1; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
-                //HSSFRow hssfRow = hssfSheet.getRow(rowNum);
+            for (int rowNum = 1; rowNum <= rowNumTotal; rowNum++) {
                 Row hssfRow = hssfSheet.getRow(rowNum);
                 if (hssfRow != null) {
                     cl = new St4ScsCl();
-                    //HSSFCell name = hssfRow.getCell(0);
-                    //HSSFCell pwd = hssfRow.getCell(1);
                     Cell taskName = hssfRow.getCell(0);  //任务批次名称
                     Cell taskDescri = hssfRow.getCell(1);//任务描述
                     Cell taskYear = hssfRow.getCell(2);//任务年份
@@ -198,11 +211,11 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
 
                     //这里是自己的逻辑
                     String ttName = taskName==null?"":taskName.toString();
-                    if("".equals(ttName.trim())){
-                        flag=false;
-                        i=rowNum;
-                        break;
-                    }
+//                    if("".equals(ttName.trim())){
+//                        flag=false;
+//                        i=rowNum;
+//                        break;
+//                    }
                     cl.setCl002(ttName);
                     cl.setCl009(taskDescri==null?"":taskDescri.toString());
                     cl.setCl010(taskYear==null?"":taskYear.toString());
@@ -216,9 +229,9 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
                 }
             }
         }
-        if(!flag){
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "第"+i+"行任务名称不能为空，导入失败!");
-        }
+//        if(!flag){
+//            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "第"+i+"行任务名称不能为空，导入失败!");
+//        }
         if(list!=null&&list.size()>0){
             if(st4ScsClService.saveBatch(list)){
                 for (St4ScsCl cll:list) {

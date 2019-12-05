@@ -2,13 +2,10 @@ package com.gistone.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.entity.*;
-
-import com.gistone.mapper.St4ScsCbdMapper;
 import com.gistone.mapper.St4ScsCeMapper;
 import com.gistone.service.*;
 import com.gistone.util.FileUtil;
 import com.gistone.util.ReadJson;
-import com.gistone.util.Result;
 import com.gistone.util.ResultCp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,8 +52,7 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
 
     @Autowired
     private  MessageProperties config;
-    @Autowired
-    private ISt4ScsCbdService iSt4ScsCbdService;
+
 //    @Autowired
 //    private Config
 
