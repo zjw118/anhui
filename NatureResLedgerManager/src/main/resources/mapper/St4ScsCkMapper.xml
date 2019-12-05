@@ -1891,7 +1891,8 @@
 
             SELECT
       *,
-      (unEmaminedNum+emaminedNum+backNum)    tzNum  ,IFNULL(emaminedNum/(unEmaminedNum+emaminedNum+backNum)  ,0) passRate,uname
+      (unEmaminedNum+emaminedNum+backNum)    tzNum  ,
+      FORMAT(IFNULL(emaminedNum/(unEmaminedNum+emaminedNum+backNum)  ,0),4) passRate,uname
     FROM (SELECT
             com.PK_ID,
             com.COM_NAME,
@@ -1908,7 +1909,7 @@
             IF(COUNT(*) IS NULL, 0, COUNT(*)) AS tzCheckedNum,
             IFNULL(SUM(ck088 = 0 OR ck088 IS NULL), 0) AS tzUncheckedNum,
 
-            IFNULL(SUM(ck067 = 0 ), 0) AS unEmaminedNum,
+            IFNULL(SUM(ck067 = 0  OR (cdsa.CD001 IS NOT NULL AND CK067 IS NULL) ), 0) AS unEmaminedNum,
             IFNULL(SUM(ck067 = 1), 0) AS emaminedNum,
             IFNULL(SUM(ck067 = 2), 0) AS backNum
           FROM st4_sys_sa sa
@@ -1918,20 +1919,17 @@
               ON cdsa.SA001 = sa.SA001
             LEFT JOIN st4_scs_cd cd
               ON cdsa.cd001 = cd.cd001
+              left JOIN st4_scs_cl cl
+        ON cl.CL001 = cdsa.CL001
             LEFT JOIN (SELECT *
                        FROM (SELECT
                                MAX(CK001)    AS id
                              FROM st4_scs_ck
-                             GROUP BY CD004) t
+                             GROUP BY CD004,ck049,ck091) t
                          INNER JOIN st4_scs_ck k
                            ON t.id = k.CK001) ck
-              ON ck.CD004 = cd.cd001
-            LEFT JOIN rlhd_group co
-              ON cd.group_id = co.id
-            LEFT JOIN st4_po_cl_co clco
-              ON clco.co001 = co.id
-            LEFT JOIN st4_scs_cl cl
-              ON cl.CL001 = clco.cl001
+              ON ck.CD004 = cd.cd001  AND ck.CK049 = sa.SA001   AND ck.CK091=cl.CL001
+
           WHERE 1 = 1 AND sa.SA019 IS NOT NULL AND sa.SA019 !=''
           GROUP BY sa.sa001 ) t
     </select>
@@ -1941,7 +1939,8 @@
 
             SELECT
 unEmaminedNum,emaminedNum,backNum,
-      (unEmaminedNum+emaminedNum+backNum)    tzNum  ,CONCAT(100*IFNULL(emaminedNum/(unEmaminedNum+emaminedNum+backNum)  ,0),'%') passRate,uname
+      (unEmaminedNum+emaminedNum+backNum)    tzNum  ,
+      CONCAT(100*IFNULL(emaminedNum/(unEmaminedNum+emaminedNum+backNum)  ,0),'%') passRate,uname
     FROM (SELECT
             com.PK_ID,
             com.COM_NAME,
@@ -1958,7 +1957,7 @@ unEmaminedNum,emaminedNum,backNum,
             IF(COUNT(*) IS NULL, 0, COUNT(*)) AS tzCheckedNum,
             IFNULL(SUM(ck088 = 0 OR ck088 IS NULL), 0) AS tzUncheckedNum,
 
-            IFNULL(SUM(ck067 = 0 ), 0) AS unEmaminedNum,
+            IFNULL(SUM(ck067 = 0 OR (cdsa.CD001 IS NOT NULL AND CK067 IS NULL) ), 0) AS unEmaminedNum,
             IFNULL(SUM(ck067 = 1), 0) AS emaminedNum,
             IFNULL(SUM(ck067 = 2), 0) AS backNum
           FROM st4_sys_sa sa
@@ -1968,20 +1967,17 @@ unEmaminedNum,emaminedNum,backNum,
               ON cdsa.SA001 = sa.SA001
             LEFT JOIN st4_scs_cd cd
               ON cdsa.cd001 = cd.cd001
+              left JOIN st4_scs_cl cl
+        ON cl.CL001 = cdsa.CL001
             LEFT JOIN (SELECT *
                        FROM (SELECT
                                MAX(CK001)    AS id
                              FROM st4_scs_ck
-                             GROUP BY CD004) t
+                             GROUP BY CD004,ck049,ck091) t
                          INNER JOIN st4_scs_ck k
                            ON t.id = k.CK001) ck
-              ON ck.CD004 = cd.cd001
-            LEFT JOIN rlhd_group co
-              ON cd.group_id = co.id
-            LEFT JOIN st4_po_cl_co clco
-              ON clco.co001 = co.id
-            LEFT JOIN st4_scs_cl cl
-              ON cl.CL001 = clco.cl001
+              ON ck.CD004 = cd.cd001  AND ck.CK049 = sa.SA001   AND ck.CK091=cl.CL001
+
           WHERE 1 = 1 AND sa.SA019 IS NOT NULL AND sa.SA019 !=''
           GROUP BY sa.sa001 ) t
     </select>
@@ -2082,6 +2078,8 @@ unEmaminedNum,emaminedNum,backNum,
         <if test="groupByName=='sd001'">
             GROUP BY PK_ID
         </if>
+
+        ORDER BY tzNum DESC
         <!--<if test="groupByName=='ck067'">-->
         <!--GROUP BY ck.ck067-->
         <!--</if>-->
