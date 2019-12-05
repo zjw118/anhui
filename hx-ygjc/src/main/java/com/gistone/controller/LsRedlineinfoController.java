@@ -380,7 +380,8 @@ public class LsRedlineinfoController {
                 }
 
                 lsRedlineinfo.setUpdatetime(new Date());
-                lsRedlineinfo.setFtp_shp("E:/FTP"+ftpPath+uuid+".shp");
+                lsRedlineinfo.setFtp_shp("/"+uuid+"/"+uuid+".shp");
+//                lsRedlineinfo.setFtp_shp("E:/FTP"+ftpPath+uuid+".shp");
                 //判断是否需要审核
                 Integer audit = lsRedlineinfoMapper.getAudit(lsRedlineinfo.getVersion_id());
                 if(null!=audit){
