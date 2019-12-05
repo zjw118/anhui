@@ -4,9 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.gistone.entity.LsSuanfa;
 import com.gistone.entity.RemoteSensingData;
-import com.gistone.mapper.LsSuanfaMapper;
 import com.gistone.mapper.RemoteSensingDataMapper;
 import com.gistone.service.IRemoteSensingDataService;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,5 +50,23 @@ public class RemoteSensingDataServiceImpl extends ServiceImpl<RemoteSensingDataM
         result.put("rows", iPage.getRecords());
         result.put("total", iPage.getTotal());
         return result;
+    }
+
+    @Override
+    public Map<String, Object> exportExcel(RemoteSensingData param) {
+        QueryWrapper<RemoteSensingData> wrapper = new QueryWrapper<>();
+
+        String rsdBsm = (String) param.getRsdBsm();
+
+        if (StringUtils.isNotBlank(rsdBsm)) {
+            wrapper.like("rsd_bsm", rsdBsm);
+        }
+        wrapper.eq("rsd_del_flag", 1);
+        List<RemoteSensingData> remoteSensingData = remoteSensingDataMapper.selectList(wrapper);
+
+        Map<String, Object> result = new HashMap<>();
+
+        return result;
+
     }
 }

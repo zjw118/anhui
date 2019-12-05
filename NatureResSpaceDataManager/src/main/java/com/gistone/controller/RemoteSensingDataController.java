@@ -62,6 +62,31 @@ public class RemoteSensingDataController {
 
         return ResultVOUtil.success(result);
     }
+
+    @PostMapping("/exportExcel")
+    public ResultVO exportExcel(@RequestBody @ApiParam(name = "遥感影像数据列表", value = "json格式", required = true) Swagger<RemoteSensingData> data){
+        //请求参数格式校验
+        RemoteSensingData param = data.getData();
+        if (param == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        //页码
+        if(param.getPageNumber() == null){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "pageNumber不能为空！");
+        }
+        //每页条数
+        if(param.getPageSize() == null){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "pageSize！");
+        }
+        //标识码
+        if(param.getRsdBsm() == null){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "pageSize！");
+        }
+        Map<String, Object> result = iRemoteSensingDataService.exportExcel( param);
+
+
+        return ResultVOUtil.success(result);
+    }
     /**
      * 遥感影像数据添加
      * @param data
