@@ -1,5 +1,7 @@
 package com.gistone.annotation;
 
+import com.gistone.LogType;
+
 import java.lang.annotation.*;
 
 /**
@@ -12,4 +14,10 @@ import java.lang.annotation.*;
 @Documented
 public @interface SysLog {
     String value() default "";
+    /**
+     * 日志类型
+     *
+     * @return
+     */
+    LogType type() default LogType.XTCZ;
 }

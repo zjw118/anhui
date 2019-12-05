@@ -1,9 +1,9 @@
 package com.gistone.service;
 
-    import com.gistone.entity.LsDataStrategy;
     import com.baomidou.mybatisplus.extension.service.IService;
-    import java.util.List;
-    import java.util.Map;
+import com.gistone.entity.LsDataStrategy;
+
+import java.util.Map;
 
     /**
     * <p>
@@ -18,7 +18,7 @@ package com.gistone.service;
 
     Map<String, Object> list(Integer pageNum,Integer pageSize,String Name);
 
-    void delete(List<Integer> id);
+    void delete(Integer id);
 
     void insert(LsDataStrategy entity);
 

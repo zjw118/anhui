@@ -16,6 +16,8 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.gistone.service.ISt4ScsCbdService;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,7 +32,7 @@ public class StatisController {
 	private ISt4ScsCkService st4ScsCkservice;
 	@Autowired
 	private ISt4ScsCdService st4ScsCdservice;
-	@Autowired
+	@Autowired(required = true)
 	private ISt4ScsCbdService iSt4ScsCbdService;
 	@Autowired
 	private IDirTempService iDirTempService;
@@ -88,6 +90,7 @@ public class StatisController {
 
 		return ResultVOUtil.success(ResultVOUtil.success(iSt4ScsCbdService.list(cbdQueryWrapper)));
 	}
+
 	/**
 	 * 分页
 	 * @param requestData
