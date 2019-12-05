@@ -12,7 +12,10 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-
+/**
+ * 拦截器
+ * 过滤器
+ */
 //@Configuration
 public class WebConfigurer implements WebMvcConfigurer {
 
@@ -25,7 +28,6 @@ public class WebConfigurer implements WebMvcConfigurer {
 //    @Bean
 //    public FilterRegistrationBean sessionExpireFilter(){
 //        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-////        registrationBean.setFilter((Filter) this.SessionExpireFilter());
 //        registrationBean.setFilter(new SingleSignOutFilter());
 //        registrationBean.addUrlPatterns("/*");
 //        registrationBean.setOrder(1);//启动时候的优先级

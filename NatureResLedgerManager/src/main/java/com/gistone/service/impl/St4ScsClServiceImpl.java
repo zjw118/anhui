@@ -60,7 +60,7 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
     private ISt4PoClCoService st4PoClCoService;
     @Autowired
     private St4PoClCoMapper st4PoClCoMapper;
-    private ExcelStyleTools tools;
+    //private ExcelStyleTools tools;
     @Autowired
     private ConfigUtils configUtils;
     @Override
@@ -316,9 +316,9 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
             //headstyle1.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 上下居中
             headstyle1.setLocked(true);
             headstyle1.setWrapText(true);// 自动换行
-            tools = new ExcelStyleTools();
+            //tools = new ExcelStyleTools();
             // 填写表格内容
-            loadTaskDataMsg(clsData, sheet, tools, workbook);
+            loadTaskDataMsg(clsData, sheet, workbook);
             // 把创建的内容写入到输出流中，并关闭输出流
             workbook.write(os);
             os.close();
@@ -329,7 +329,7 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
         }
             return "";
     }
-    public  void loadTaskDataMsg(List<St4ScsCl> clsData,HSSFSheet sheet,ExcelStyleTools tools,HSSFWorkbook workbook){
+    public  void loadTaskDataMsg(List<St4ScsCl> clsData,HSSFSheet sheet,HSSFWorkbook workbook){
 //        HSSFFont font = tools.getFont(workbook, "宋体", (short) 12, (short) 0);
 //
 //        HSSFCellStyle style = tools.getCellStyle(workbook, font,

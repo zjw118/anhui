@@ -135,6 +135,10 @@ public class St4ScsCl extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private SysCompany sysCompany;
 
+    @ApiModelProperty(name="st4ScsCdList",value="任务下的问题斑块的信息",dataType = "String",required = false,example="")
+    @TableField(exist = false)
+    private List<St4ScsCd> st4ScsCdList;
+
     public static void main(String[] args) {
         String aa= "D:\\epr\\UploadData/dynamicLayerSpace//75822b253252477dbe15aa1c94603b2e_GF1B_PMS_E117.9_N31.3_20190907_L1A1227691115-PAN_ortho_fuse_clip.img";
         System.out.println(aa.substring(aa.lastIndexOf("/")+1 ));

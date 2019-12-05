@@ -1,11 +1,10 @@
 package com.gistone.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.Image;
-import com.gistone.entity.ImageConfig;
-import com.gistone.entity.ImageNumber;
-import com.gistone.entity.ImageTemp;
+import com.gistone.entity.*;
+import com.gistone.mapper.*;
 import com.gistone.mapper.ImageConfigMapper;
 import com.gistone.mapper.ImageMapper;
 import com.gistone.mapper.ImageNumber2Mapper;
@@ -27,7 +26,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -62,48 +66,6 @@ public class ImageController {
     private IImageTempService iImageTempService;
 
 
-    @Value("${ftp_host}")
-    private String ftpHost;
-    @Value("${ftp_port}")
-    private Integer ftpPort;
-    @Value("${ftp_username}")
-    private String ftpUserName;
-    @Value("${ftp_password}")
-    private String ftpPassword;
-    @Value("${ftp_pt}")
-    private String ftpPt;
-    @Value("${ftp_url}")
-    private String ftpUrl;
-    @Value("${dynamic_path}")
-    private String dynamicPath;//动态工作空间路径
-    @Value("${JYResult_PATH}")
-    private String jYResultPATH;//解疑结果存储路径
-    @ApiOperation(value = "image识别添加接口", notes = "此接口返回问题点批次数据", response = Result.class)
-    @PostMapping("/insertImagerTemp")
-    public ResultVO insertImagerTemp(@RequestBody @ApiParam(name = "任务批次添加接口", value = "json格式", required = true) Swagger<ImageTemp> data,
-                               HttpServletRequest request) throws FileNotFoundException {
-        ImageTemp it = data.getData();
-        if(!ObjectUtils.isNotNullAndEmpty(it.getName())){
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "名称不能为空！");
-        }
-        if(!ObjectUtils.isNotNullAndEmpty(it.getZipUrl())){
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "识别的url不能为空！");
-        }
-        it.setUpdateDate(LocalDateTime.now());
-        String type[] = {"shp","dbf","prj","sbn","sbx","shx"};
-        String fileName  = it.getShpurl().substring(it.getShpurl().lastIndexOf("/") + 1 ,it.getShpurl().length());
-        String fileUUid = fileName.substring(0,32);
-        //循环遍历将解译结果下载至服务器
-        for(String ty : type){
-            FTPUtilUtil.downloadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, dynamicPath  , jYResultPATH+ fileUUid, it.getShpurl().substring(it.getShpurl().lastIndexOf("/") + 1 ,it.getShpurl().length()).substring(0,it.getShpurl().substring(it.getShpurl().lastIndexOf("/"),it.getShpurl().length()).lastIndexOf(".")) + ty);
-        }
-        //将解译结果压缩
-        ZipUtil.toZip(jYResultPATH+ fileUUid , jYResultPATH  , jYResultPATH+ fileUUid + ".zip"   , true);
-        //解译结果下载路径存入数据库
-        it.setResultUrl(jYResultPATH + fileUUid + ".zip");
-        return ResultVOUtil.success(iImageTempService.save(it));
-
-    }
     @ApiOperation(value = "image识别列表接口", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/listImagerTemp")
     public ResultVO listImagerTemp(@RequestBody @ApiParam(name = "任务批次添加接口", value = "json格式", required = true) Swagger<ImageTemp> data,
@@ -1034,7 +996,7 @@ public class ImageController {
             Object data1 = params.get("data1");//人类活动类型统计量柱状图
             Object data2 = params.get("data2");//人类活动类型统计面积占比饼状图
             Object data3 = params.get("data3");//人类活动解译批次任务数量统计柱状图
-            Object data4 = params.get("data4");//人类活动解译批次面积统计柱状图
+//            Object data4 = params.get("data4");//人类活动解译批次面积统计柱状图
 
             if(null==data1)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data1不能为空！");
             if(null==data2)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data2不能为空！");
@@ -1048,6 +1010,106 @@ public class ImageController {
     }
 
 
+    //临时文件夹
+    @RequestMapping(value = "/lswjj")
+    public ResultVO lswjjAdd(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            Object data = params.get("data");
+            if(null!=data){
+                imageNumberMapper.updateLinshi(data.toString());
+            }
+            String linshi = imageNumberMapper.getLinshi();
+            return ResultVOUtil.success(linshi);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "添加失败");
+        }
+    }
+
+
+    //台账组-添加
+    @RequestMapping(value = "/zAdd")
+    public ResultVO zAdd(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params==null)
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            Object name = params.get("name");
+            if(null==name)
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
+            Linshi2 Linshi2 = new Linshi2();
+            Linshi2.setName(name.toString());
+            imageNumberMapper.zAdd(Linshi2);
+            return ResultVOUtil.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "添加失败");
+        }
+    }
+    //台账组-删除
+    @RequestMapping(value = "/zDelete")
+    public ResultVO zDelete(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            Object id = params.get("id");
+            if(null==id)
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+            imageNumberMapper.zDelete(Integer.valueOf(id.toString()));
+            return ResultVOUtil.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "删除失败");
+        }
+    }
+    //台账组-修改
+    @RequestMapping(value = "/zUpdate")
+    public ResultVO zUpdate(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            Object name = params.get("name");
+            if(null==name)
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
+            Object id = params.get("id");
+            if(null==id)
+                return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+            Linshi2 Linshi2 = new Linshi2();
+            Linshi2.setName(name.toString());
+            Linshi2.setId(Integer.valueOf(id.toString()));
+            imageNumberMapper.zUpdate(Linshi2);
+            return ResultVOUtil.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
+        }
+    }
+    //台账组-分页条件列表
+    @RequestMapping(value = "/zSelect")
+    public ResultVO zSelect(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            Object pageIndex = params.get("pageIndex");
+                if (pageIndex==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "当前页不能为空！");
+            Object pageSize = params.get("pageSize");
+               if (pageSize==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "每页条数不能为空！");
+            Object name = params.get("name");
+            PageBean pageBean = new PageBean();
+            if (name!=null)
+                pageBean.setStr1(name.toString());
+            pageBean.setPageIndex(Integer.valueOf(pageIndex.toString()));
+            pageBean.setPageSize(Integer.valueOf(pageSize.toString()));
+            pageBean.setPoSum(imageNumberMapper.getPoSum(pageBean));
+            pageBean.setPoList(imageNumberMapper.selectPoList(pageBean));
+            return ResultVOUtil.success(pageBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "查找失败");
+        }
+    }
 
 
 

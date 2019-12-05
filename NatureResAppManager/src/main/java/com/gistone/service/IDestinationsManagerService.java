@@ -7,7 +7,6 @@ import java.util.List;
 
 /**
  * @ClassName IDestinationsManager
- * @Description TODO
  * @Author xxh
  * @Date 2019/8/15 9:05
  * @Version 1.0

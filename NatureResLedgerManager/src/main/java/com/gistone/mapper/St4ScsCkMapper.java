@@ -30,15 +30,17 @@ public interface St4ScsCkMapper extends BaseMapper<St4ScsCk> {
 
     void insertList(List<St4ScsCk> list);
     /**
-     * 台账记录统计
+     * 核查结果统计分析
      * NatureResDecodeManager
      * @param st4ScsCk
      * @return
      */
     List<St4ScsCk> selectSt4ScsCk(St4ScsCk st4ScsCk);
 
+
+
     /**
-     * APP端同步问题点的接口及原始台账接口
+     * APP端同步问题点台账接口
      * @param uid
      * @return
      */

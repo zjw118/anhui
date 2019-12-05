@@ -47,11 +47,16 @@ public class StatisController {
 		return ResultVOUtil.success();
 
 	}
-
+	@ApiOperation(value = "(安徽用)生态保护红线核查监管报告导出", notes = "", response = Result.class)
+	@PostMapping("/redLineReportExport")
+	public ResultVO redLineReportExport(@RequestBody Swagger<SysCompany> requestData,  HttpServletResponse response){
+		SysCompany cl = requestData.getData();
+		return statisService.redLineReportExport(cl,response);
+	}
 
 	@ApiOperation(value = "(安徽用)统计核查审核的质量评估导出", notes = "", response = Result.class)
 	@PostMapping("/examineQualityExport")
-	public ResultVO examineQualityExport(@RequestBody Swagger<St4ScsCl> requestData, HttpServletRequest request, HttpServletResponse response){
+	public ResultVO examineQualityExport(@RequestBody Swagger<St4ScsCl> requestData,  HttpServletResponse response){
 		St4ScsCl cl = requestData.getData();
 		return statisService.examineQualityExport(cl,response);
 	}

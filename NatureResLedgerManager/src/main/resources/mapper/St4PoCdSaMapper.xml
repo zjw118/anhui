@@ -6,6 +6,7 @@
     <resultMap id="BaseResultMap" type="com.gistone.entity.St4PoCdSa">
         <result column="CD001" property="cd001" />
         <result column="SA001" property="sa001" />
+        <result column="CL001" property="cl001" />
         <result column="CDSA001" property="cdsa001" />
         <association property="checkLedger" javaType="com.gistone.entity.St4ScsCk">
             <id column="CK001" property="ck001" />

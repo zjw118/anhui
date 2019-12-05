@@ -1,12 +1,10 @@
 package com.gistone.mapper;
 
-import com.gistone.entity.RlhdGroup;
-import com.gistone.entity.St4ScsCd;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.gistone.entity.St4ScsCl;
-import com.gistone.entity.St4SysSa;
-import com.gistone.swagger.ActivityStatic;
+import com.gistone.entity.*;
+import com.gistone.entity.excel.ReportVo;
 import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +19,8 @@ import java.util.Map;
 public interface St4ScsCdMapper extends BaseMapper<St4ScsCd> {
 
     void insertList(List<St4ScsCd> list);
+
+    int insertMap(Map map);
 
     List<St4ScsCd> batchSelectByCode(List<String> list);
 
@@ -81,4 +81,6 @@ public interface St4ScsCdMapper extends BaseMapper<St4ScsCd> {
     List<Map> pointQualityOrginExport(RlhdGroup rl);
 
     List<Map> pointQualityNowExport(RlhdGroup rl);
+
+    List<ReportVo> redLineReportExport(SysCompany com);
 }

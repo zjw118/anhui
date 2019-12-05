@@ -4,18 +4,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.*;
-import com.gistone.entity.EXCEL.LmPointVO;
 import com.gistone.entity.excel.ActivityVo;
 import com.gistone.entity.excel.ExamineVo;
+import com.gistone.entity.excel.ReportVo;
 import com.gistone.mapper.St4ScsCcMapper;
 import com.gistone.mapper.St4ScsCdMapper;
 import com.gistone.mapper.St4ScsCkMapper;
 import com.gistone.mapper.St4ScsCyMapper;
-import com.gistone.service.ISt4ScsCkService;
 import com.gistone.service.StatisService;
 import com.gistone.swagger.StaticSwagger;
 import com.gistone.util.*;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -110,6 +108,16 @@ public class StatisServiceImpl extends ServiceImpl<St4ScsCyMapper, St4ScsCy> imp
 
         }
         String filepath = ExcelUtil.toXls("人类活动巡查结果质量评估统计表", voList, configUtils.getExcel_PATH(), ActivityVo.class, response);
+        Map map1 = new HashMap();
+        map1.put("filepath", filepath.substring(2));
+        return ResultVOUtil.success(map1);
+    }
+
+    @Override
+    public ResultVO redLineReportExport(SysCompany sc, HttpServletResponse response) {
+        List<ReportVo> voList = st4ScsCdMapper.redLineReportExport(sc);
+        String filepath = ExcelUtil.toXls("生态保护红线核查监管报告统计表", voList,
+                configUtils.getExcel_PATH(), ReportVo.class, response);
         Map map1 = new HashMap();
         map1.put("filepath", filepath.substring(2));
         return ResultVOUtil.success(map1);
@@ -328,7 +336,7 @@ public class StatisServiceImpl extends ServiceImpl<St4ScsCyMapper, St4ScsCy> imp
     @Override
     public ResultVO listPatrol(St4ScsCy st4ScsCy){
 
-        List<St4ScsCy> list = st4ScsCyMapper.selectPoList(st4ScsCy);
+        List<St4ScsCy> list = st4ScsCyMapper.selectPoListNew(st4ScsCy);
         return ResultVOUtil.success(list);
     }
 
