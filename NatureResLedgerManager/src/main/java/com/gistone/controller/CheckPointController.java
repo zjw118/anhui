@@ -132,13 +132,13 @@ public class CheckPointController {
         Image toPD = new Image();//构造判读数据对象
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         toPD.setUpdateDate(new Date());
-        toPD.setCreateDate((new Date()).toString());
+        toPD.setCreateDate(sdf.format(it.getCreateDate()));
         toPD.setName(it.getName());
         toPD.setAuditDate(it.getAuditDate() == null ? null : sdf.parse(it.getAuditDate().toString()));
         toPD.setRemark(it.getRemark());
         toPD.setShp(jYResultPATH+ fileUUid + ".shp");
         //将数据添加至image表
-        service.save(toPD);
+        //service.save(toPD);
         //将文件上传至影像斑块地址，并且进行解析存入斑块表
         upload(request,jYResultPATH + fileUUid + ".zip" , toPD , fileUUid);
         return ResultVOUtil.success(iImageTempService.save(it));
