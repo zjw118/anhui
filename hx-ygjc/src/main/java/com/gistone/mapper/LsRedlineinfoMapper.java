@@ -44,7 +44,7 @@ public interface LsRedlineinfoMapper {
     int getPoSumInfo(PageBean pageBean);
     List<Object> selectPoListInfo(PageBean pageBean);
 
-    int getAudit(@Param(value="id") Integer id);
+    Integer getAudit(@Param(value="id") Integer id);
 
 
 }

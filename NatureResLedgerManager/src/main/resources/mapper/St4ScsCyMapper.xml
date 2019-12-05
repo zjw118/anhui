@@ -413,9 +413,8 @@
     </select>
 
     <select id="selectPoListNew" resultMap="BaseResultMap"   parameterType="com.gistone.entity.St4ScsCy">
-
-
-        SELECT PK_ID,
+        SELECT
+        PK_ID,
         COM_NAME,
         SA001,
         SA015,

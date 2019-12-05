@@ -112,7 +112,11 @@ public class StatisServiceImpl extends ServiceImpl<St4ScsCyMapper, St4ScsCy> imp
         map1.put("filepath", filepath.substring(2));
         return ResultVOUtil.success(map1);
     }
-
+    @Override
+    public ResultVO redLineReport(SysCompany sc, HttpServletResponse response) {
+        List<ReportVo> voList = st4ScsCdMapper.redLineReportExport(sc);
+        return ResultVOUtil.success(voList);
+    }
     @Override
     public ResultVO redLineReportExport(SysCompany sc, HttpServletResponse response) {
         List<ReportVo> voList = st4ScsCdMapper.redLineReportExport(sc);

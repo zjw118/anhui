@@ -119,7 +119,7 @@
             <if test="null!=audit">
                 audit=#{audit},
             </if>
-            <if test="null!=remark and ''!=remark">
+            <if test="null!=remark">
                 remark=#{remark},
             </if>
             <if test="null!=updatetime">
@@ -303,10 +303,7 @@
         and id = (
             SELECT process_id from ls_redlineinfo_version
             WHERE closed = 1
-            and id =
-            (SELECT version_id from ls_redlineinfo
-            WHERE closed = 1
-            and id = #{id})
+            and id = #{id}
         )
     </select>
 

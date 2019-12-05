@@ -77,7 +77,7 @@ public class RlhdGroupController {
         return st4ScsCdService.getPersonAndPoint( sa.getCl001());
 
     }
-    @ApiOperation(value="根据任务id查询其下的所有斑块及下发的人",notes = "",response = St4ScsCd.class)
+    @ApiOperation(value="根据任务id查询其下的所有斑块",notes = "",response = St4ScsCd.class)
     @PostMapping(value="/listReserveData")
     public ResultVO listReserveData(@RequestBody @ApiParam(name="", value="json格式", required=true)
                                             Swagger<St4ScsCd> cdLedger) {
@@ -160,10 +160,9 @@ public class RlhdGroupController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "创建人id不能为空");
         }
         Object type = params.get("type");
-        type = 999;
-//        if(null==type){
-//            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "type不能为空");
-//        }
+        if(null==type){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "type不能为空");
+        }
 
         String remark = (String) params.get("remark");
         service.insert(name, createBy, remark, ids,type.toString());
@@ -202,6 +201,10 @@ public class RlhdGroupController {
         String name = (String) params.get("name");
         if(StringUtils.isNotBlank(name)){
             rlhdGroup.setName(name);
+        }
+        String type = (String) params.get("type");
+        if(StringUtils.isNotBlank(type)){
+            rlhdGroup.setType(type);
         }
         String remark = (String) params.get("remark");
         if (StringUtils.isNotBlank(remark)){

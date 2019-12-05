@@ -68,7 +68,6 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
 
 
         Map<String, Object> result = new HashMap<>();
-
         if(iPage.getRecords()!=null&&iPage.getRecords().size()>0){
             for (RlhdGroup record : iPage.getRecords()) {
                 List<St4ScsCd> list = iterpretationMapper.selectList(new QueryWrapper<St4ScsCd>().eq("group_id", record.getId()));

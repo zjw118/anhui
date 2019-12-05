@@ -53,7 +53,6 @@ public class EmailUtil {
             Transport ts = session.getTransport();
             // 3、使用邮箱的用户名和密码连上邮件服务器，发送邮件时，发件人需要提交邮箱的用户名和密码给smtp服务器，用户名和密码都通过验证之后才能够正常发送邮件给收件人。
             ts.connect(mail_host,mailfrom, password_mailFrom);
-
             // 创建邮件对象
             MimeMessage message = new MimeMessage(session);
             // 指明邮件的发件人
