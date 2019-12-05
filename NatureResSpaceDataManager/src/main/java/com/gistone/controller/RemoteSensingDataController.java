@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -64,7 +65,7 @@ public class RemoteSensingDataController {
     }
 
     @PostMapping("/exportExcel")
-    public ResultVO exportExcel(@RequestBody @ApiParam(name = "遥感影像数据列表", value = "json格式", required = true) Swagger<RemoteSensingData> data){
+    public ResultVO exportExcel(@RequestBody @ApiParam(name = "遥感影像数据列表", value = "json格式", required = true) Swagger<RemoteSensingData> data, HttpServletResponse response){
         //请求参数格式校验
         RemoteSensingData param = data.getData();
         if (param == null) {
@@ -82,7 +83,7 @@ public class RemoteSensingDataController {
         if(param.getRsdBsm() == null){
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "pageSize！");
         }
-        Map<String, Object> result = iRemoteSensingDataService.exportExcel( param);
+        Map<String, Object> result = iRemoteSensingDataService.exportExcel( param,response);
 
 
         return ResultVOUtil.success(result);

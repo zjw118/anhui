@@ -7,10 +7,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.entity.RemoteSensingData;
 import com.gistone.mapper.RemoteSensingDataMapper;
 import com.gistone.service.IRemoteSensingDataService;
+import com.gistone.util.ConfigUtils;
+import com.gistone.util.ExcelUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +31,9 @@ public class RemoteSensingDataServiceImpl extends ServiceImpl<RemoteSensingDataM
 
     @Autowired
     private RemoteSensingDataMapper remoteSensingDataMapper;
+
+    @Autowired
+    private ConfigUtils configUtils;
 
     @Override
     public Map<String, Object> list(RemoteSensingData param) {
@@ -53,7 +59,7 @@ public class RemoteSensingDataServiceImpl extends ServiceImpl<RemoteSensingDataM
     }
 
     @Override
-    public Map<String, Object> exportExcel(RemoteSensingData param) {
+    public Map<String, Object> exportExcel(RemoteSensingData param, HttpServletResponse response) {
         QueryWrapper<RemoteSensingData> wrapper = new QueryWrapper<>();
 
         String rsdBsm = (String) param.getRsdBsm();
@@ -62,10 +68,14 @@ public class RemoteSensingDataServiceImpl extends ServiceImpl<RemoteSensingDataM
             wrapper.like("rsd_bsm", rsdBsm);
         }
         wrapper.eq("rsd_del_flag", 1);
-        List<RemoteSensingData> remoteSensingData = remoteSensingDataMapper.selectList(wrapper);
+        List<RemoteSensingData> list = remoteSensingDataMapper.selectList(wrapper);
+
+        String filepath = ExcelUtil.toXls("遥感影像数据台账", list, configUtils.getExcel_PATH(), RemoteSensingData.class, response);
+
 
         Map<String, Object> result = new HashMap<>();
 
+        result.put("excelPath", filepath.substring(2));
         return result;
 
     }
