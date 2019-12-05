@@ -39,6 +39,12 @@ public class RemoteSensingDataController {
     @Autowired
     private IRemoteSensingDataService iRemoteSensingDataService;
 
+    /**
+     * 遥感影像数据列表
+     * @param data
+     * @param request
+     * @return
+     */
     @PostMapping("/list")
     public ResultVO list(@RequestBody @ApiParam(name = "遥感影像数据列表", value = "json格式", required = true) Swagger<RemoteSensingData> data,
                          HttpServletRequest request) {
@@ -64,7 +70,12 @@ public class RemoteSensingDataController {
 
         return ResultVOUtil.success(result);
     }
-
+    /**
+     * 遥感影像数据添加
+     * @param data
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResultVO add(@RequestBody @ApiParam(name = "遥感影像数据添加", value = "json格式", required = true) Swagger<RemoteSensingData> data,
                         HttpServletRequest request) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
@@ -89,7 +100,12 @@ public class RemoteSensingDataController {
         iRemoteSensingDataService.save(param);
         return ResultVOUtil.success();
     }
-
+    /**
+     * 遥感影像数据修改
+     * @param data
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResultVO update(@RequestBody @ApiParam(name = "遥感影像数据修改", value = "json格式", required = true) Swagger<RemoteSensingData> data,
                         HttpServletRequest request) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
@@ -105,6 +121,12 @@ public class RemoteSensingDataController {
         iRemoteSensingDataService.updateById(param);
         return ResultVOUtil.success();
     }
+    /**
+     * 遥感影像数据删除
+     * @param data
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResultVO delete(@RequestBody @ApiParam(name = "遥感影像数据删除", value = "json格式", required = true) Swagger<RemoteSensingData> data,
                         HttpServletRequest request) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
