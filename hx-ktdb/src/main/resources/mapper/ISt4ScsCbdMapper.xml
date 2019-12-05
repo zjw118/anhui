@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gistone.mapper.St4ScsCbdMapper">
+<mapper namespace="com.gistone.mapper.ISt4ScsCbdMapper">
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.gistone.entity.St4ScsCbd">
@@ -17,5 +17,14 @@
     <sql id="Base_Column_List">
         CBD001, CBD002, CBD003, CBD004, CBD005, CBD006, del_flag
     </sql>
+    <update id="updateByType" >
+        update st4_scs_cbd
+        set  verify = 1
+    </update>
+
+    <update id="updateByType2">
+        update st4_scs_cbd
+        set  verify = 2
+    </update>
 
 </mapper>

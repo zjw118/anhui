@@ -11,6 +11,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author zf1017@foxmail.com
  * @since 2019-12-04
  */
-public interface St4ScsCbdMapper extends BaseMapper<St4ScsCbd> {
+public interface ISt4ScsCbdMapper extends BaseMapper<St4ScsCbd> {
 
+    int updateByType();
+
+    int updateByType2();
 }

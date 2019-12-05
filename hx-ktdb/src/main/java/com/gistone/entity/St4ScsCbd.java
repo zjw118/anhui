@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -42,7 +42,7 @@ public class St4ScsCbd extends Model<St4ScsCbd> {
      * 操作时间
      */
     @TableField("CBD003")
-    private LocalDateTime cbd003;
+    private Date cbd003;
 
     /**
      * 问题斑块ID
@@ -67,6 +67,7 @@ public class St4ScsCbd extends Model<St4ScsCbd> {
      */
     private Integer delFlag;
 
+    private Integer verify;
 
     @Override
     protected Serializable pkVal() {
