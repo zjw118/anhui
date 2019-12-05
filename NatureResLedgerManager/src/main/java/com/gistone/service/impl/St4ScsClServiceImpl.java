@@ -127,7 +127,7 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
                 if(cllist!=null&&cllist.size()>0){
                     if(st4ScsClService.saveBatch(cllist))
                         return ResultVOUtil.success();
-                     return ResultVOUtil.error("1222","处理结果失败");
+                    return ResultVOUtil.error("1222","处理结果失败");
                 }
                 return ResultVOUtil.error("1444","服务器未读取到数据，请确认所上传excel是否有信息");
 
@@ -186,7 +186,11 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
                 String cellValue  = "";
                 if (row!=null){
                     cell = row.getCell(0);
+<<<<<<< HEAD
                   //  row = hssfSheet.getRow(i);
+=======
+                    //  row = hssfSheet.getRow(i);
+>>>>>>> e6d1ca8d000af291e09c9708ff71c386062c3734
                     cellValue =  cell==null?"":cell.toString().trim();
                 }
                 if   (row==null||cell==null||cellValue.equals("")){
@@ -340,7 +344,7 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
             e.printStackTrace();
             System.out.println("创建excel文件失败");
         }
-            return "";
+        return "";
     }
     public  void loadTaskDataMsg(List<St4ScsCl> clsData,HSSFSheet sheet,HSSFWorkbook workbook){
 //        HSSFFont font = tools.getFont(workbook, "宋体", (short) 12, (short) 0);
@@ -366,7 +370,7 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
         HSSFCell cell = null;
         cell = row.createCell(0);
         cell.setCellValue("任务名称");
-         //cell.setCellStyle(style);
+        //cell.setCellStyle(style);
 
         cell = row.createCell(1);
         cell.setCellValue("任务描述");

@@ -26,6 +26,7 @@ public class St4ScsCbdServiceImpl extends ServiceImpl<ISt4ScsCbdMapper, St4ScsCb
         public ResultVO listCheckMsg (){
             QueryWrapper<St4ScsCbd> cbdQueryWrapper = new QueryWrapper<>();
             cbdQueryWrapper.last("limit 0,5");
+            cbdQueryWrapper.eq("del_flag",1);
             return ResultVOUtil.success(st4ScsCbdMapper.selectList(cbdQueryWrapper));
 
         }
