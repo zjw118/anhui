@@ -315,6 +315,9 @@ public class FileUtil {
             if(!ServletFileUpload.isMultipartContent(request)) return null;
             MultipartHttpServletRequest multipartRequest = WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class);
             MultipartFile file = multipartRequest.getFile("file");
+            if(null==file){
+                return null;
+            }
             //判断附件格式
             String oldName = file.getOriginalFilename();
             String suffix = oldName.substring(oldName.lastIndexOf("."));
