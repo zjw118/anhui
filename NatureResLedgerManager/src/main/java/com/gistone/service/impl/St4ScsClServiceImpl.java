@@ -198,12 +198,9 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
 
             // 循环行Row
             for (int rowNum = 1; rowNum <= rowNumTotal; rowNum++) {
-                //HSSFRow hssfRow = hssfSheet.getRow(rowNum);
                 Row hssfRow = hssfSheet.getRow(rowNum);
                 if (hssfRow != null) {
                     cl = new St4ScsCl();
-                    //HSSFCell name = hssfRow.getCell(0);
-                    //HSSFCell pwd = hssfRow.getCell(1);
                     Cell taskName = hssfRow.getCell(0);  //任务批次名称
                     Cell taskDescri = hssfRow.getCell(1);//任务描述
                     Cell taskYear = hssfRow.getCell(2);//任务年份
