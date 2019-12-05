@@ -160,10 +160,9 @@ public class RlhdGroupController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "创建人id不能为空");
         }
         Object type = params.get("type");
-        type = 999;
-//        if(null==type){
-//            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "type不能为空");
-//        }
+        if(null==type){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "type不能为空");
+        }
 
         String remark = (String) params.get("remark");
         service.insert(name, createBy, remark, ids,type.toString());
