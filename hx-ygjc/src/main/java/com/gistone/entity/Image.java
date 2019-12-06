@@ -60,6 +60,8 @@ public class Image extends Model<Image> {
     private Date auditDate;
     @TableId(value = "country_border")
     private String countryBorder;
+    @TableId(value = "result_url")
+    private String resultUrl;
     @TableId(value = "audit_path")
     private String auditPath;
     @TableId(value = "audit_path2")

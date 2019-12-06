@@ -59,8 +59,13 @@ public class ImageController {
     @Autowired
     private IImageTempService iImageTempService;
 
+
     @Value("${WORD_PATH}")
     private String WORD_PATH;
+
+
+    @Value("${PATH}")
+    private String PATH;
 
 
     @ApiOperation(value = "image识别列表接口", notes = "此接口返回问题点批次数据", response = Result.class)
@@ -1162,6 +1167,31 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "查找失败");
         }
     }
+
+
+    /**
+     * 人类活动板块导出zip
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/downImageShp")
+    public ResultVO downImageShp(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params==null)
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            Object id = params.get("id");
+            if (id==null)
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "id不能为空！");
+            return service.downImageShp(Integer.valueOf(id.toString()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "导出异常！");
+        }
+    }
+
+
+
 
 
 
