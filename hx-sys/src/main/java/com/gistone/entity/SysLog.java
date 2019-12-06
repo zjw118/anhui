@@ -103,6 +103,8 @@ public class  SysLog extends Model<SysLog> {
     @Excel(name = "浏览器信息",height = 11, width = 15)
     private String browser;
 
+    private String category;
+
     /**
      * 地区
      */

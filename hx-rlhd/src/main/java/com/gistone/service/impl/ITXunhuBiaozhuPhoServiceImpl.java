@@ -3,7 +3,6 @@ package com.gistone.service.impl;
 import com.gistone.entity.TXunhuBiaozhuPho;
 import com.gistone.mapper.TXunhuBiaozhuPhoMapper;
 import com.gistone.util.ConfigUtils;
-import com.gistone.util.PictureUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

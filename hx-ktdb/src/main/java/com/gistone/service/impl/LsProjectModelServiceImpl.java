@@ -8,6 +8,7 @@ import com.gistone.entity.LsProjectModel;
 import com.gistone.mapper.LsProjectModelMapper;
 import com.gistone.service.LsProjectModelService;
 import com.gistone.util.PictureUtils;
+import com.gistone.util.UploadFileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +78,7 @@ public class LsProjectModelServiceImpl extends ServiceImpl<LsProjectModelMapper,
             mapper.updateFlag(entity.getType());
         }
         String path = "/epr/word/"+entity.getName()+"-"+entity.getType()+".docx";
-        PictureUtils.uploadFile(path, file);
+        UploadFileUtil.uploadFile(path, file);
         entity.setUrl(path);
         mapper.insert(entity);
 
