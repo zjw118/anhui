@@ -138,7 +138,7 @@ public class CheckPointController {
         toPD.setRemark(it.getRemark());
         toPD.setShp(jYResultPATH+ fileUUid + ".shp");
         //将数据添加至image表
-        service.save(toPD);
+        //service.save(toPD);
         //将文件上传至影像斑块地址，并且进行解析存入斑块表
         upload(request,jYResultPATH + fileUUid + ".zip" , toPD , fileUUid);
         return ResultVOUtil.success(iImageTempService.save(it));
@@ -212,7 +212,7 @@ public class CheckPointController {
                 if (StringUtils.isNotBlank(image.getRemark()))
                     jSONObject1.put("remark",image.getRemark());
                 if (StringUtils.isNotBlank(image.getName()))
-                    jSONObject1.put("name",image.getName());
+                    jSONObject1.put("name","");
 
                 if (null!=image.getCreateDate()){
                     jSONObject1.put("createDate",image.getCreateDate());
