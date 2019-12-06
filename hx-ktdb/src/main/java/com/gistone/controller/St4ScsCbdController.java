@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.St4ScsCbd;
 import com.gistone.service.St4ScsCbdService;
+import com.gistone.util.DateUtils;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultVOUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -41,8 +42,9 @@ public class St4ScsCbdController {
         }
         Integer pageNum = (Integer) params.get("pageNum");
         Integer pageSize = (Integer) params.get("pageSize");
-        String name = (String) params.get("cbd002");
-        String time = (String) params.get("cbd003");
+        String name = (String) params.get("userName");
+        String time = (String) params.get("time");
+        String title = (String) params.get("title");
         String content = (String) params.get("content");
 
         if (pageNum == null) {
@@ -53,7 +55,7 @@ public class St4ScsCbdController {
             pageSize = 10;
         }
 
-        Map<String, Object> result = service.list(pageNum, pageSize, name,time,content);
+        Map<String, Object> result = service.list(pageNum, pageSize, name,time,title,content);
         return ResultVOUtil.success(result);
     }
 
@@ -83,7 +85,7 @@ public class St4ScsCbdController {
 
         String time = (String) params.get("time");
         if(StringUtils.isNotBlank(time)){
-            DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
 
             Date date2 = null;
             try {
@@ -91,7 +93,8 @@ public class St4ScsCbdController {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            entity.setCbd003(date2);
+            Date date = DateUtils.addDateDays(date2, 1);
+            entity.setCbd003(date);
         }else {
             entity.setCbd003(new Date());
         }
@@ -157,7 +160,7 @@ public class St4ScsCbdController {
         if(StringUtils.isNotBlank(time)){
 
 
-            DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
             Date date2 = null;
 
             try {
@@ -165,7 +168,8 @@ public class St4ScsCbdController {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            entity.setCbd003(date2);
+            Date date = DateUtils.addDateDays(date2, 1);
+            entity.setCbd003(date);
         }else{
             entity.setCbd003(new Date());
         }
