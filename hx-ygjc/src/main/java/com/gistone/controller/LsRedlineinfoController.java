@@ -345,7 +345,7 @@ public class LsRedlineinfoController {
             //上传附件
             String path = PATH+"/epr/lsRedlineinfo/";//本地路径
             String[] arr = {"zip"};
-            Map<String, String> stringStringMap = FileUtil.uploadFile(request, path, arr, 500 * 1000000l);//500MB
+            Map<String, String> stringStringMap = FileUtil.uploadFile(request, path, arr, 10000 * 1000000l);//10GB
 
             String name = "";//本地新附件名称
             if(null!=stringStringMap){
@@ -419,39 +419,11 @@ public class LsRedlineinfoController {
     @PostMapping("/infoUpdate")
     public ResultVO infoUpdate(HttpServletRequest request,LsRedlineinfo lsRedlineinfo) {
         try {
-
-
-//            //上传附件
-//            String path = PATH+"/epr/lsRedlineinfo/";//本地路径
-//            String[] arr = {"zip"};
-//            Map<String, String> stringStringMap = FileUtil.uploadFile(request, path, arr, 1024 * 1000000l);//1T
-//            String name = "";//本地新附件名称
-//            if(null!=stringStringMap){
-//                String error = stringStringMap.get("error");
-//                if(StringUtils.isNotBlank(error)){
-//                    return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), error);
-//                }
-//                String newName = stringStringMap.get("newName");
-//                if(StringUtils.isNotBlank(newName)){
-//                    name = newName;
-//                }
-//                //上传FTP
-//                String ftpPath = "/lsRedlineinfo/";
-//                String fileName = name;
-//                FileInputStream input = new FileInputStream(new File(PATH+"/epr/lsRedlineinfo/"+name));
-//                String res = FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName, input);
-//                if("0".equals(res)){
-//                    lsRedlineinfo.setUpdatetime(new Date());
-//                    lsRedlineinfo.setFtp_shp("E:\\FTP\\lsRedlineinfo\\"+fileName);
-//                    return LsRedlineinfoService.infoUpdate(lsRedlineinfo);
-//                }
-//            }
-
             String uuid = UUID.randomUUID().toString();
             //上传附件
             String path = PATH+"/epr/lsRedlineinfo/";//本地路径
             String[] arr = {"zip"};
-            Map<String, String> stringStringMap = FileUtil.uploadFile(request, path, arr, 500 * 1000000l);//500MB
+            Map<String, String> stringStringMap = FileUtil.uploadFile(request, path, arr, 10000 * 1000000l);//10GB
 
             if(null!=stringStringMap) {
                 String name = "";//本地新附件名称
