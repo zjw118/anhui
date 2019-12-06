@@ -2,6 +2,7 @@ package com.gistone.controller;
 
 import cn.afterturn.easypoi.word.WordExportUtil;
 import com.gistone.VO.ResultVO;
+import com.gistone.annotation.SysLog;
 import com.gistone.entity.*;
 import com.gistone.mapper.ImageConfigMapper;
 import com.gistone.mapper.ImageMapper;
@@ -15,11 +16,13 @@ import com.gistone.service.ImageService;
 import com.gistone.util.*;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +44,8 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/ygjc/image")
+@Slf4j
+@Transactional
 public class ImageController {
     @Autowired
     private ImageService service;
@@ -1175,6 +1180,7 @@ public class ImageController {
      * @return
      */
     @RequestMapping(value = "/downImageShp")
+    @SysLog("导出人类活动斑块")
     public ResultVO downImageShp(@RequestBody Map<String, Object> paramsMap) {
         try {
             Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");

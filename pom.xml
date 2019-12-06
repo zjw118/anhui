@@ -365,12 +365,13 @@
             <name>Boundless Maven Repository</name>
             <url>http://repo.boundlessgeo.com/main</url>
         </repository>
-
-
-
     </repositories>
+
+
+
+
     <build>
-        <finalName>gistone</finalName>
+        <finalName>epr</finalName>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -386,7 +387,7 @@
                     <configuration>
                         <webResources>
                             <resource>
-                                <directory>${basedir}/lib/</directory>
+                                <directory>src/main/resources/lib/</directory>
                                 <targetPath>WEB-INF/lib/</targetPath>
                                 <includes>
                                     <include>**/*.jar</include>
@@ -395,25 +396,9 @@
                         </webResources>
                     </configuration>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <id>copy-dependencies</id>
-                            <phase>compile</phase>
-                            <goals>
-                                <goal>copy-dependencies</goal>
-                            </goals>
-                            <configuration>
-                                <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/lib
-                                </outputDirectory>
-                                <includeScope>system</includeScope>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
             </plugins>
         </pluginManagement>
     </build>
+
+
 </project>

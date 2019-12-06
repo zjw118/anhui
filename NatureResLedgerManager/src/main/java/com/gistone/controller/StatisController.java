@@ -77,7 +77,11 @@ public class StatisController {
 		RlhdGroup cl = requestData.getData();
 		return statisService.pointQualityExport(cl,response);
 	}
-
+	@ApiOperation(value = "(安徽用)人类活动巡查结果质量评估明细", notes = "", response = Result.class)
+	@PostMapping("/pointQualityDetail")
+	public ResultVO pointQualityDetail(@RequestBody Swagger<RlhdGroup> requestData, HttpServletRequest request, HttpServletResponse response){
+		return st4ScsCdservice.pointQualityDetail();
+	}
 	@ApiOperation(value = "(安徽用)人类活动巡查结果质量评估得传递所属监管台账的id", notes = "", response = Result.class)
 	@PostMapping("/pointQuality")
 	public ResultVO pointQuality(@RequestBody Swagger<RlhdGroup> requestData, HttpServletRequest request, HttpServletResponse response){

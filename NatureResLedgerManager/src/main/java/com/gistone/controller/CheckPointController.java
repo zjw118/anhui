@@ -117,6 +117,7 @@ public class CheckPointController {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "识别的url不能为空！");
         }
         it.setUpdateDate(LocalDateTime.now());
+        it.setShp(it.getShpurl());
         String type[] = {"shp","dbf","prj","sbn","sbx","shx"};
         String fileName  = it.getShpurl().substring(it.getShpurl().lastIndexOf("/") + 1 ,it.getShpurl().length());
         String fileUUid = fileName.substring(0,32);
