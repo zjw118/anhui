@@ -88,5 +88,5 @@ public interface ISt4ScsCdService extends IService<St4ScsCd> {
      * (安徽用)人类活动巡查结果质量评估明细
      * @return
      */
-    ResultVO  pointQualityDetail();
+    ResultVO  pointQualityDetail(RlhdGroup rl);
 }
