@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -178,6 +180,14 @@ public class St4ScsCba extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "删除状态0已删除 1未删除")
     @TableField("DEL")
     private String del;
+
+    @ApiModelProperty(value = "添加人id")
+    @TableField("ADD_UID")
+    private Integer add_uid;
+
+    @ApiModelProperty(value = "添加时间")
+    @TableField("ADD_TIME")
+    private LocalDateTime add_time;
 
 
 }
