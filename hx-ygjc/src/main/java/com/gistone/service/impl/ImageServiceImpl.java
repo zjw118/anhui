@@ -79,7 +79,8 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             wrapper.like("name",userName);
         }
         wrapper.eq("del_flag",1);
-        wrapper.orderByDesc("create_date").orderByDesc("id");
+        wrapper.orderByDesc("id");
+        //wrapper.orderByDesc("create_date").orderByDesc("id");
         IPage<Image> imageIPage = mapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
 
         if(imageIPage.getRecords()!=null&&imageIPage.getRecords().size()>0){
