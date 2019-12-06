@@ -61,6 +61,7 @@ public interface ImageService extends IService<Image> {
     ResultVO getAudit2(Integer id);
     ResultVO addAudit2(Integer id, JSONObject json);
 
+    ResultVO downImageShp(Integer id);
 
 
 }

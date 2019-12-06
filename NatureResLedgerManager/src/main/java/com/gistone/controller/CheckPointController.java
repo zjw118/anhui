@@ -212,7 +212,7 @@ public class CheckPointController {
                 if (StringUtils.isNotBlank(image.getRemark()))
                     jSONObject1.put("remark",image.getRemark());
                 if (StringUtils.isNotBlank(image.getName()))
-                    jSONObject1.put("name",image.getName());
+                    jSONObject1.put("name","");
 
                 if (null!=image.getCreateDate()){
                     jSONObject1.put("createDate",image.getCreateDate());

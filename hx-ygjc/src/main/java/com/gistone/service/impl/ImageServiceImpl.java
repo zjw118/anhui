@@ -82,6 +82,18 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         wrapper.orderByDesc("create_date").orderByDesc("id");
         IPage<Image> imageIPage = mapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
 
+        if(imageIPage.getRecords()!=null&&imageIPage.getRecords().size()>0){
+            for (Image record : imageIPage.getRecords()) {
+                Double area = record.getArea();
+                int num = (int) (area/100000);
+                if(num>100){
+                    record.setScore(100);
+                }
+                record.setScore(num);
+                mapper.updateById(record);
+            }
+        }
+
         Map<String, Object> result = new HashMap<>();
         result.put("rows", imageIPage.getRecords());
         result.put("total", imageIPage.getTotal());
@@ -623,8 +635,37 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         }
     }
 
+    @Override
+    public ResultVO downImageShp(Integer id) {
+        Image imageById = mapper.getImageById(id);
+        //压缩文件
+        String shp = imageById.getShp();
+        String dpath = "";
+        if(StringUtils.isNotBlank(shp)){
+            String uuid = UUID.randomUUID().toString();
+            String path = PATH + "/epr/image/";
+            String srcDir = shp.substring(0,shp.lastIndexOf("/") + 1); //将要压缩文件夹
+            dpath = path+uuid+".zip";
+            File file = new File(dpath);  //压缩位置
+            boolean b = FileUtil.toZip(srcDir, file, false);
+            if(!b){
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "压缩失败！");
+            }
+        }else{
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "shp目录为空！");
+        }
+        //更新表
+        Image image = new Image();
+        image.setId(id);
+        image.setResultUrl(dpath);
+        int i = mapper.updateImage(image);
+        if(0<i){
+            //导出
+            return ResultVOUtil.success(dpath);
+        }
+        return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "导出失败！");
 
-
+    }
 
 
     @Override

@@ -9,7 +9,6 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -61,6 +60,8 @@ public class Image extends Model<Image> {
     private Date auditDate;
     @TableId(value = "country_border")
     private String countryBorder;
+    @TableId(value = "result_url")
+    private String resultUrl;
     @TableId(value = "audit_path")
     private String auditPath;
     @TableId(value = "audit_path2")
@@ -69,6 +70,8 @@ public class Image extends Model<Image> {
     private Double area;
     @TableId(value = "plaque_number")
     private Integer plaqueNumber;
+
+    private Integer score;
 
 
 

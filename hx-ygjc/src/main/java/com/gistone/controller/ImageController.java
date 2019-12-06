@@ -1,10 +1,9 @@
 package com.gistone.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import cn.afterturn.easypoi.word.WordExportUtil;
 import com.gistone.VO.ResultVO;
+import com.gistone.annotation.SysLog;
 import com.gistone.entity.*;
-import com.gistone.mapper.*;
 import com.gistone.mapper.ImageConfigMapper;
 import com.gistone.mapper.ImageMapper;
 import com.gistone.mapper.ImageNumber2Mapper;
@@ -17,24 +16,22 @@ import com.gistone.service.ImageService;
 import com.gistone.util.*;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import net.sf.json.JSONArray;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.io.FileOutputStream;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -47,6 +44,8 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/api/ygjc/image")
+@Slf4j
+@Transactional
 public class ImageController {
     @Autowired
     private ImageService service;
@@ -64,6 +63,14 @@ public class ImageController {
     private ImageNumber2Mapper imageNumber2Mapper;
     @Autowired
     private IImageTempService iImageTempService;
+
+
+    @Value("${WORD_PATH}")
+    private String WORD_PATH;
+
+
+    @Value("${PATH}")
+    private String PATH;
 
 
     @ApiOperation(value = "image识别列表接口", notes = "此接口返回问题点批次数据", response = Result.class)
@@ -116,6 +123,61 @@ public class ImageController {
         entity.setShp(shpStr);
 
         return ResultVOUtil.success(entity);
+    }
+
+    @PostMapping("/exportWord")
+    public ResultVO exportWord(@RequestBody Map<String, Object> paramsMap){
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+
+        Integer id = (Integer) params.get("id");
+        Image image = service.getById(id);
+        Map<String, Object> param = new HashMap<>();
+        param.put("name",image.getName());
+        if(StringUtils.isNotBlank(image.getRemark())){
+            param.put("remark",image.getRemark());
+        }else{
+            param.put("remark","-");
+        }
+
+        param.put("date",image.getCreateDate());
+        if(StringUtils.isNotBlank(image.getUrl())){
+            param.put("url",image.getUrl());
+        }else {
+            param.put("url","-");
+        }
+
+        param.put("count",image.getPlaqueNumber());
+
+        param.put("area",image.getArea());
+        if(image.getScore()==null){
+            param.put("score","-");
+        }else{
+            param.put("score",image.getScore());
+        }
+
+
+        String Name = "";
+        try {
+
+
+                XWPFDocument doc = WordExportUtil.exportWord07(
+                        "word/report.docx", param);
+                String fileName = image.getName() + "报告";
+                String lastName = WORD_PATH + fileName + ".docx";
+                Name = lastName.substring(2);
+                FileOutputStream fos = new FileOutputStream(lastName);
+                doc.write(fos);
+                fos.close();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ResultVOUtil.success(Name);
     }
 
 
@@ -1110,6 +1172,32 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "查找失败");
         }
     }
+
+
+    /**
+     * 人类活动板块导出zip
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/downImageShp")
+    @SysLog("导出人类活动斑块")
+    public ResultVO downImageShp(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params==null)
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            Object id = params.get("id");
+            if (id==null)
+                return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "id不能为空！");
+            return service.downImageShp(Integer.valueOf(id.toString()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "导出异常！");
+        }
+    }
+
+
+
 
 
 

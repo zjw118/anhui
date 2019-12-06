@@ -260,7 +260,7 @@ public class FileUtil {
             if(!ml.isDirectory()) ml.mkdirs();
             return path;
         }
-        return "1";
+        return null;
     }
 
 

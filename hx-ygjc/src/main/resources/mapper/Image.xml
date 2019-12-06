@@ -222,6 +222,9 @@
             <if test="null!=plaqueNumber">
                 plaque_number=#{plaqueNumber},
             </if>
+            <if test="null!=resultUrl and ''!=resultUrl">
+                result_url=#{resultUrl},
+            </if>
         </set>
 		where id=#{id}
 	</update>
