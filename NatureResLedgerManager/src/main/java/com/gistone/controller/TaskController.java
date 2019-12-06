@@ -25,11 +25,10 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -67,18 +66,42 @@ public class TaskController {
     @ApiOperation(value = "导出审核统计word", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("export")
     public ResultVO examineExportWord(HttpServletRequest request, HttpServletResponse response){
-//        St4ScsCk ck = new St4ScsCk();
-//        ck.setGroupByName("sd001");
-//        List<St4ScsCk> list = st4ScsCkMapper.selectSt4ScsCk(ck);
-//
-//        Map mapp = new HashMap();
-//        mapp.put("${n1}", 2);
-//        mapp.put("${n2}", 2);
-//        mapp.put("${n3}", 2);
-//        mapp.put("${n4}", 2);
-//        WordUtil.getWord(mapp, list, "D:\\1\\bb.docx", list.size());
-//        Map map = new HashMap();
-        return ResultVOUtil.success(null);
+        St4ScsCk ck = new St4ScsCk();
+        ck.setGroupByName("sd001");
+        List<Map> list = st4ScsCkMapper.selectSt4ScsCkMap(ck);
+        //Map<String,St4ScsCk> map = list.stream().collect(Collectors.toMap(St4ScsCk::getKey,c -> c));
+        Map mapp = new HashMap();
+        List<St4ScsCk> listNum = st4ScsCkMapper.selectSt4ScsCk(ck);
+        List<String> totalNum = listNum.stream().map(St4ScsCk::getTzNum).collect(Collectors.toList());
+        Integer totalCount = 0;
+        for (String t:totalNum) {
+            totalCount+=Integer.valueOf(t);
+        }
+        mapp.put("${total}", totalCount);
+        totalCount = 0;
+        List<String> t1Num = listNum.stream().map(St4ScsCk::getEmaminedNum).collect(Collectors.toList());
+        for (String t:t1Num) {
+            totalCount+=Integer.valueOf(t);
+        }
+        mapp.put("${t1}", totalCount);
+        totalCount = 0;
+        List<String> t2Num = listNum.stream().map(St4ScsCk::getUnEmaminedNum).collect(Collectors.toList());
+        for (String t:t2Num) {
+            totalCount+=Integer.valueOf(t);
+        }
+        mapp.put("${t2}", totalCount);
+        totalCount = 0;
+        List<String> t3Num = listNum.stream().map(St4ScsCk::getBackNum).collect(Collectors.toList());
+        for (String t:t3Num) {
+            totalCount+=Integer.valueOf(t);
+        }
+        mapp.put("${t3}", totalCount);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String finalPath = configUtils.getExcel_PATH()+sdf.format(new Date())+"江苏省生态红线问题斑块审核报告.docx";
+        WordUtil.getWord(mapp, list, finalPath, list.size());
+        Map map = new HashMap();
+        map.put("path", finalPath.substring(finalPath.indexOf(":")+1));
+        return ResultVOUtil.success(map);
 
 //        //这里是我说的一行代码
 //        WordUtil.SimpleWordExport("D:\\1\\aa.docx","D:\\1\\","aaa.docx",params,request,response);
