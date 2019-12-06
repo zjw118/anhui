@@ -87,8 +87,8 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     }
 
     @Override
-    public ResultVO pointQualityDetail() {
-        List<Map> cds =  st4ScsCdMapper.pointQualityDetail();
+    public ResultVO pointQualityDetail(RlhdGroup rl) {
+        List<Map> cds =  st4ScsCdMapper.pointQualityDetail(rl);
         return ResultVOUtil.success(cds);
     }
 
