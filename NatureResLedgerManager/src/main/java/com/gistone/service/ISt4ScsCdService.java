@@ -82,4 +82,11 @@ public interface ISt4ScsCdService extends IService<St4ScsCd> {
      * @return
      */
     ResultVO pointQuality(RlhdGroup rl);
+
+
+    /**
+     * (安徽用)人类活动巡查结果质量评估明细
+     * @return
+     */
+    ResultVO  pointQualityDetail();
 }
