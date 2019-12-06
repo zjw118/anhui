@@ -1,9 +1,9 @@
 package com.gistone.service;
 
+    import com.gistone.entity.Msgset;
     import com.baomidou.mybatisplus.extension.service.IService;
-import com.gistone.entity.LsDataStrategy;
-
-import java.util.Map;
+    import java.util.List;
+    import java.util.Map;
 
     /**
     * <p>
@@ -11,16 +11,16 @@ import java.util.Map;
     * </p>
     *
     * @author zf1017@foxmail.com
-    * @since 2019-11-27
+    * @since 2019-12-05
     */
-    public interface LsDataStrategyService extends IService<LsDataStrategy> {
+    public interface MsgsetService extends IService<Msgset> {
 
 
     Map<String, Object> list(Integer pageNum,Integer pageSize,String Name);
 
-    void delete(Integer id);
+    void delete(List<Integer> id);
 
-    void insert(LsDataStrategy entity);
+    void insert(Msgset entity);
 
-    void edit(LsDataStrategy entity);
+    void edit(Msgset entity);
     }

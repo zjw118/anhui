@@ -543,34 +543,21 @@
 
     <select id="getProblemPlaque" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCd">
 
-        select * from (
-            select
-           cd.*,IFNULL(ck088,0) AS ck088,
-          IFNULL(cdsa.CD001,0) AS sendStatus
-            FROM st4_scs_cd cd LEFT JOIN
-            (
-            SELECT *  FROM (
-            SELECT MAX(CK001) AS ID FROM st4_scs_ck  GROUP BY CD004 )t
-            INNER JOIN st4_scs_ck d ON t.ID= d.CK001
-            )
-            ck
-            ON ck.cd004 = cd.cd001
-            left join st4_po_cd_sa cdsa on cdsa.cd001=cd.cd001
-            LEFT JOIN rlhd_group co ON co.id = cd.group_id
-            LEFT JOIN st4_po_cl_co clco ON clco.co001=co.id
-            LEFT JOIN st4_scs_cl cl
-            ON clco.CL001 = cl.CL001
-            WHERE  cd.CD009 =1
-            AND cl.cl001 =#{cl001}
-
-        <!--<if test="pageSize!=null  and pageNumber!=null ">-->
-            <!--limit #{pageNumber},#{pageSize}-->
-        <!--</if>-->
-
-    ) cd
-    left join st4_po_cd_sa cdsa on cdsa.CD001  = cd.CD001
-        LEFT JOIN  st4_sys_sa sa on sa.SA001 = cdsa.SA001
-where cd.cd001 not in (select cd001 from st4_po_cd_sa )
+            SELECT
+          cd.*
+        FROM st4_scs_cd cd
+          INNER JOIN rlhd_group co
+            ON co.id = cd.group_id
+          INNER JOIN st4_po_cl_co clco
+            ON clco.co001 = co.id
+          INNER JOIN st4_scs_cl cl
+            ON cl.CL001 = clco.CL001
+        WHERE cl.CL001 = 59
+            AND cd.CD009 = 1
+            AND cd.CD001 NOT IN(SELECT
+                                  CD001
+                                FROM st4_po_cd_sa
+                                WHERE CL001 = #{cl001})
 
     </select>
     <select id="getPointBySa001" resultMap="BaseResultMap" parameterType="Integer">

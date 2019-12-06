@@ -132,7 +132,7 @@ public class CheckPointController {
         Image toPD = new Image();//构造判读数据对象
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         toPD.setUpdateDate(new Date());
-        toPD.setCreateDate((new Date()).toString());
+        toPD.setCreateDate(sdf.format(it.getCreateDate()));
         toPD.setName(it.getName());
         toPD.setAuditDate(it.getAuditDate() == null ? null : sdf.parse(it.getAuditDate().toString()));
         toPD.setRemark(it.getRemark());

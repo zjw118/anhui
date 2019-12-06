@@ -2,20 +2,16 @@ package com.gistone.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.entity.*;
-
-import com.gistone.mapper.St4ScsCbdMapper;
 import com.gistone.mapper.St4ScsCeMapper;
 import com.gistone.service.*;
 import com.gistone.util.FileUtil;
 import com.gistone.util.ReadJson;
-import com.gistone.util.Result;
 import com.gistone.util.ResultCp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -55,8 +51,7 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
 
     @Autowired
     private  MessageProperties config;
-    @Autowired
-    private ISt4ScsCbdService iSt4ScsCbdService;
+
 //    @Autowired
 //    private Config
 
@@ -95,7 +90,7 @@ public class DestinationsManagerServiceImpl implements IDestinationsManagerServi
             cbd = new St4ScsCbd();
             cbd.setCbd002(ck1.getCk049());
             cbd.setCbd004(Integer.valueOf(ck1.getCd004()));
-            cbd.setCbd003(LocalDateTime.now());
+            cbd.setCbd003(new Date());
             cbd.setCbd005("提交了关于“");
             cbd.setCbd006("”问题斑块的核查信息");
         }

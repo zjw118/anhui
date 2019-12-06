@@ -1,10 +1,9 @@
 package com.gistone.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.gistone.VO.ResultVO;
 import com.gistone.entity.RemoteSensingData;
 
-import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -18,4 +17,6 @@ import java.util.Map;
 public interface IRemoteSensingDataService extends IService<RemoteSensingData> {
 
     Map<String, Object> list(RemoteSensingData param);
+
+    Map<String,Object> exportExcel(RemoteSensingData param, HttpServletResponse response);
 }

@@ -87,6 +87,7 @@ public class WebLogAspect {
         if(mylog != null){
             //注解上的描述
             sysLog.setTitle(mylog.value());
+            //TODO 按模块业务划分，加日志类型
         }
 
         Map<String,String> browserMap = ToolUtil.getOsAndBrowserInfo(request);

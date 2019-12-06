@@ -47,7 +47,6 @@ public class RlhdGroup extends Model<RlhdGroup> {
 
     private Integer updateBy;
 
-    @TableField(exist = false)
     private String type;
 
     private LocalDateTime updateDate;

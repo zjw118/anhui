@@ -186,7 +186,11 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
                 String cellValue  = "";
                 if (row!=null){
                     cell = row.getCell(0);
+<<<<<<< HEAD
+                  //  row = hssfSheet.getRow(i);
+=======
                     //  row = hssfSheet.getRow(i);
+>>>>>>> e6d1ca8d000af291e09c9708ff71c386062c3734
                     cellValue =  cell==null?"":cell.toString().trim();
                 }
                 if   (row==null||cell==null||cellValue.equals("")){
