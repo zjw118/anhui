@@ -306,6 +306,11 @@
             and id = #{id}
         )
     </select>
+    <select id="getAudit2"  resultType ="java.lang.Integer"  parameterType="java.lang.Integer">
+        SELECT audit from ls_redlineinfo
+        where id = #{id}
+        and closed = 1
+    </select>
 
 
 

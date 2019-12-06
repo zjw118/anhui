@@ -53,16 +53,16 @@
 
         <dependency>
             <groupId>com.github.jl</groupId>
-            <artifactId>aspose</artifactId>
-            <version>8.5.2.0</version>
+            <artifactId>aspose-cells</artifactId>
+            <version>8.5.2</version>
             <scope>system</scope>
             <systemPath>${basedir}/lib/aspose-cells-8.5.2.jar</systemPath>
         </dependency>
 
         <dependency>
             <groupId>com.github.jl</groupId>
-            <artifactId>words</artifactId>
-            <version>15.8.0.0</version>
+            <artifactId>aspose-words</artifactId>
+            <version>15.8.0</version>
             <scope>system</scope>
             <systemPath>${basedir}/lib/aspose-words-15.8.0-jdk16.jar</systemPath>
         </dependency>
