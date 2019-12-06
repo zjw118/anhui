@@ -9,7 +9,6 @@ import java.util.UUID;
 
 /**
  * 上传图片
- *
  * @author xjc
  */
 public class PictureUtils {

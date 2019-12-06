@@ -353,7 +353,7 @@
     <select id="pointQualityDetail" resultType="Map"  parameterType="com.gistone.entity.RlhdGroup">
 
 
-      select img.name oldType ,SUBSTRING_INDEX(CK016,"-",-1) nowType,cd.cd001,cd.active_name nname ,geometry  from st4_scs_cd cd
+      select cd.active_name aname,img.name oldType ,SUBSTRING_INDEX(CK016,"-",-1) nowType,cd.cd001,cd.active_name nname ,geometry  from st4_scs_cd cd
       inner join rlhd_group co on co.id=cd.group_id
        inner join
        (SELECT *
@@ -366,7 +366,7 @@
         on ck.CD004 = cd.CD001
         left join image_config img on img.id=cd.active_type
         where 1=1
-        <if test="id!=null and id !=''">
+        <if test="id != null and id !='' ">
            and co.id=#{id}
         </if>
 

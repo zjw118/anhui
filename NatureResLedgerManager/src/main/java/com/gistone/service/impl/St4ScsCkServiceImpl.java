@@ -91,7 +91,7 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
     @Autowired
     ImageConfigMapper imageConfigMapper;
     @Autowired
-            MessageProperties messageProperties;
+    MessageProperties messageProperties;
 
     DateTimeFormatter dfMd = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     @Override
@@ -435,9 +435,9 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                 //这里要验证问题编码不能重复
                 List<String> pointNumList = new ArrayList<>();
                 *//**
-                 * 这里的导入逻辑改变，编号可以重复，并且对于编号重复的问题点，先在问题点的表里进行基础信息的修改比如可能修改的值有分组信息所属保护地经纬度信息等等，然后
-                 * 新增该问题点的。
-                 *//*
+         * 这里的导入逻辑改变，编号可以重复，并且对于编号重复的问题点，先在问题点的表里进行基础信息的修改比如可能修改的值有分组信息所属保护地经纬度信息等等，然后
+         * 新增该问题点的。
+         *//*
                 int jj=2;
                 for (Map mapRe:list) {
                     //首先判断excel里面的问题点的序号不能为空且不能重复
@@ -1571,8 +1571,8 @@ public class St4ScsCkServiceImpl extends ServiceImpl<St4ScsCkMapper, St4ScsCk> i
                         return ResultCp.build(1003,ResultMsg.MSG_1003);
                     };
                     *//**
-                     * 这里比如张三李四王五是在A任务下，当张三提交了核查信息之后，是必须要推送给李四和王五的
-                     *//*
+         * 这里比如张三李四王五是在A任务下，当张三提交了核查信息之后，是必须要推送给李四和王五的
+         *//*
                     St4SysSa saUser = new St4SysSa();
                     saUser.setSa001(Integer.valueOf(ck.getCk049()));
                     saUser=st4SysSaMapper.selectById(saUser);

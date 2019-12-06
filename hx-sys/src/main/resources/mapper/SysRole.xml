@@ -44,7 +44,7 @@
         left join sys_user c on a.update_by = b.id
 
         where
-        1= 1
+        a.del_flag = 1
         <if test="name!=null and name !='' ">
             and a.name like concat( #{name}, '%')
         </if>

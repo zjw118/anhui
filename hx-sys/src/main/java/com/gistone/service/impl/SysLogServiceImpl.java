@@ -45,8 +45,9 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
             wrapper.likeRight("type", type);
         }
         if(StringUtils.isNotBlank(category)){
-            wrapper.likeRight("http_method",category);
+            wrapper.likeRight("category",category);
         }
+
         wrapper.eq("del_flag", 1);
         wrapper.orderByDesc("create_date");
         IPage<SysLog> iPage = mapper.selectPage(new Page<>(pageNum, pageSize), wrapper);

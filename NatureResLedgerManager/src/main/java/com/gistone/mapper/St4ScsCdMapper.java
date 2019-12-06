@@ -82,7 +82,7 @@ public interface St4ScsCdMapper extends BaseMapper<St4ScsCd> {
      * 统计质量明细
      * @return
      */
-    List<Map>  pointQualityDetail();
+    List<Map>  pointQualityDetail(RlhdGroup rl);
     /**
      * 统计当前任务下现在的活动设施类型及类型数
      * @param rl

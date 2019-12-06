@@ -662,7 +662,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         int i = mapper.updateImage(image);
         if(0<i){
             //导出
-            return ResultVOUtil.success(dpath);
+            return ResultVOUtil.success(dpath.split(":")[1]);
         }
         return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "导出失败！");
 
