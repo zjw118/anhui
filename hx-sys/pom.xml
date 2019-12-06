@@ -25,13 +25,12 @@
 
 
 
-
         <dependency>
             <groupId>com.szboanda.platform</groupId>
             <artifactId>powerdata-platform-module-cas-client</artifactId>
             <version>4.1.1-RELEASE</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/powerdata-platform-module-cas-client-4.1.1-RELEASE.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/resources/lib/powerdata-platform-module-cas-client-4.1.1-RELEASE.jar</systemPath>
         </dependency>
 
 
