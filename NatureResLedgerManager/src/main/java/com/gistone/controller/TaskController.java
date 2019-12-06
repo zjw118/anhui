@@ -187,6 +187,7 @@ public class TaskController {
     public ResultVO updateTask(@RequestBody @ApiParam(name = "任务批次修改接口", value = "json格式", required = true) Swagger<St4ScsCl> data
             , HttpServletRequest request) {
         St4ScsCl param = data.getData();
+        param.setCl003("1");
         if(param.getCl001()==null){
            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "批次任务ciId不能为空！");
         }
