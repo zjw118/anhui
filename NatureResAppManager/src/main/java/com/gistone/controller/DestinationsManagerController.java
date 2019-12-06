@@ -6,6 +6,7 @@ import com.auth0.jwt.JWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.SawggerModel.Destination;
 import com.gistone.annotation.PassToken;
+import com.gistone.annotation.SysLog;
 import com.gistone.entity.*;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.*;
@@ -55,7 +56,7 @@ public class DestinationsManagerController {
      * @param data
      * @return
      */
-
+    @SysLog
     @ApiOperation(value = "插入航点信息", notes = "此接口返回插入成功与否", response = Result.class)
     @PostMapping("/insertDestinations")
     public ResultCp insertDestinations(HttpServletRequest request,
@@ -218,7 +219,7 @@ public class DestinationsManagerController {
 
         return destinationsManagerService.insertDestinationsManager(scsCcList, scsCkList, scsCfList, sysceList);
     }
-
+@SysLog
     @ApiOperation(value = "插入巡护记录信息", notes = "此接口返回插入成功与否", response = Result.class)
     @PostMapping("/insertDestinationsRecord")
     public ResultCp insertDestinationsRecord(HttpServletRequest request, @RequestBody @ApiParam(name = "巡护信息添加", value = "json格式", required = true) Swagger<Destinations> data) {
