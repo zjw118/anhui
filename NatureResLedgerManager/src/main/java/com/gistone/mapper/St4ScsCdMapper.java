@@ -51,6 +51,13 @@ public interface St4ScsCdMapper extends BaseMapper<St4ScsCd> {
     List<St4ScsCd> getProblemPlaque(St4ScsCd data);
 
     /**
+     * 得到指定任务下已经下发的点
+     * @param data
+     * @return
+     */
+    List<St4ScsCd> getSharedPoint(Integer data);
+
+    /**
      *
      * @param uid
      * @return

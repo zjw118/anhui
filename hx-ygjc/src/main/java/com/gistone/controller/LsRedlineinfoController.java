@@ -363,8 +363,9 @@ public class LsRedlineinfoController {
                 FileUtil.unPackZip(zipPath,paths,null);
 
                 //FTP创建文件夹
-                String ftpPath="/lsRedlineinfo/"+uuid+"/";
-                FTPUtil.createDri(ftpHost,ftpUserName,ftpPassword,ftpPort,ftpPath);
+                String ftpPath="/lsRedlineinfo/";
+//                String ftpPath="/lsRedlineinfo/"+uuid+"/";
+//                FTPUtil.createDri(ftpHost,ftpUserName,ftpPassword,ftpPort,ftpPath);
 
                 //获取所有文件
                 File file = new File(paths);
@@ -375,13 +376,13 @@ public class LsRedlineinfoController {
                     FileInputStream input1 = new FileInputStream(new File(file1.toString()));
                     String res = FTPUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath,uuid+"."+name1.split("\\.")[1], input1);
                     if(!"0".equals(res)){
-                        System.out.println("上传失败");
+                        return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "上传失败");
                     }
                 }
 
                 lsRedlineinfo.setUpdatetime(new Date());
-                lsRedlineinfo.setFtp_shp("/"+uuid+"/"+uuid+".shp");
-//                lsRedlineinfo.setFtp_shp("E:/FTP"+ftpPath+uuid+".shp");
+                lsRedlineinfo.setFtp_shp(uuid+".shp");
+//                lsRedlineinfo.setFtp_shp("/"+uuid+"/"+uuid+".shp");
                 //判断是否需要审核
                 Integer audit = lsRedlineinfoMapper.getAudit(lsRedlineinfo.getVersion_id());
                 if(null!=audit){
@@ -443,6 +444,9 @@ public class LsRedlineinfoController {
                     return LsRedlineinfoService.infoUpdate(lsRedlineinfo);
                 }
             }
+
+
+
 
             lsRedlineinfo.setUpdatetime(new Date());
             return LsRedlineinfoService.infoUpdate(lsRedlineinfo);

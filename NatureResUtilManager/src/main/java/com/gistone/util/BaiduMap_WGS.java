@@ -21,8 +21,8 @@ public class BaiduMap_WGS {
     }
 	
 	  /**
-     * * 火星坐标系 (GCJ-02) to 84 * * @param lon * @param lat * @return
-     * */
+        * 火星坐标系 (GCJ-02) to 84 * * @param lon * @param lat * @return
+        */
     public static double[] gcj02_To_Gps84(double lat, double lon) {
         double[] gps = transform(lat, lon);
         double lontitude = lon * 2 - gps[1];

@@ -33,6 +33,8 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/powerdata-platform-module-cas-client-4.1.1-RELEASE.jar</systemPath>
         </dependency>
+
+
         <dependency>
             <groupId>com</groupId>
             <artifactId>NatureResUtilManager</artifactId>
