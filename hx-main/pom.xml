@@ -66,6 +66,24 @@
             <version>2.7.0</version>
         </dependency>
 
+
+
+        <dependency>
+            <groupId>com.github.jl</groupId>
+            <artifactId>jacob</artifactId>
+            <version>1.18-M2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/jacob.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.jl</groupId>
+            <artifactId>jxl</artifactId>
+            <version>1.4.2_02-b03</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/jxl.jar</systemPath>
+        </dependency>
+
         <dependency>
             <groupId>com.github.jl</groupId>
             <artifactId>aspose</artifactId>
@@ -81,36 +99,44 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/resources/lib/aspose-words-15.8.0-jdk16.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>com.szboanda.platform</groupId>
+            <artifactId>powerdata-platform-module-cas-client</artifactId>
+            <version>4.1.1-RELEASE</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/powerdata-platform-module-cas-client-4.1.1-RELEASE.jar</systemPath>
+        </dependency>
 
     </dependencies>
 
-    <build>
-        <finalName>epr</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <webResources>
-                        <resource>
-                            <directory>src/main/resources/lib/</directory>
-                            <targetPath>WEB-INF/lib/</targetPath>
-                            <includes>
-                                <include>**/*.jar</include>
-                            </includes>
-                        </resource>
-                    </webResources>
-                </configuration>
-            </plugin>
 
 
-        </plugins>
-    </build>
+
+
+<!--    <build>-->
+<!--        <finalName>epr</finalName>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--            </plugin>-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-war-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <webResources>-->
+<!--                        <resource>-->
+<!--                            <directory>src/main/resources/lib/</directory>-->
+<!--                            <targetPath>WEB-INF/lib/</targetPath>-->
+<!--                            <includes>-->
+<!--                                <include>**/*.jar</include>-->
+<!--                            </includes>-->
+<!--                        </resource>-->
+<!--                    </webResources>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
 
 
 </project>

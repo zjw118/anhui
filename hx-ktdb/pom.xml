@@ -18,6 +18,10 @@
             <artifactId>hx-sys</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
+
+
+
         <dependency>
             <groupId>com</groupId>
             <artifactId>NatureResUtilManager</artifactId>
@@ -28,22 +32,6 @@
             <artifactId>gt-geojson</artifactId>
             <version>17.0</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.github.jl</groupId>
-            <artifactId>jacob</artifactId>
-            <version>1.18-M2</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/jacob.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.jl</groupId>
-            <artifactId>jxl</artifactId>
-            <version>1.4.2_02-b03</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/jxl.jar</systemPath>
-        </dependency>
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
@@ -51,20 +39,38 @@
         </dependency>
 
 
+
+
         <dependency>
             <groupId>com.github.jl</groupId>
-            <artifactId>aspose-cells</artifactId>
-            <version>8.5.2</version>
+            <artifactId>jacob</artifactId>
+            <version>1.18-M2</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/aspose-cells-8.5.2.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/resources/lib/jacob.jar</systemPath>
         </dependency>
 
         <dependency>
             <groupId>com.github.jl</groupId>
-            <artifactId>aspose-words</artifactId>
-            <version>15.8.0</version>
+            <artifactId>jxl</artifactId>
+            <version>1.4.2_02-b03</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/aspose-words-15.8.0-jdk16.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/resources/lib/jxl.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.jl</groupId>
+            <artifactId>aspose</artifactId>
+            <version>0.0.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/aspose-cells-8.5.2.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.jl</groupId>
+            <artifactId>words</artifactId>
+            <version>0.0.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/aspose-words-15.8.0-jdk16.jar</systemPath>
         </dependency>
 
     </dependencies>
