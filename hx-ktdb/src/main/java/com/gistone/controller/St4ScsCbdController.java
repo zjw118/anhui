@@ -83,7 +83,7 @@ public class St4ScsCbdController {
 
         String time = (String) params.get("time");
         if(StringUtils.isNotBlank(time)){
-            DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
             Date date2 = null;
             try {
@@ -156,7 +156,8 @@ public class St4ScsCbdController {
         String time = (String) params.get("time");
         if(StringUtils.isNotBlank(time)){
 
-            DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+
+            DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date2 = null;
 
             try {

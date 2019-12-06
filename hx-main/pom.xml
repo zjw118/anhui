@@ -66,6 +66,22 @@
             <version>2.7.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.jl</groupId>
+            <artifactId>aspose</artifactId>
+            <version>0.0.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/aspose-cells-8.5.2.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.jl</groupId>
+            <artifactId>words</artifactId>
+            <version>0.0.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/aspose-words-15.8.0-jdk16.jar</systemPath>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -74,7 +90,25 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <directory>src/main/resources/lib/</directory>
+                            <targetPath>WEB-INF/lib/</targetPath>
+                            <includes>
+                                <include>**/*.jar</include>
+                            </includes>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+
+
         </plugins>
     </build>
 

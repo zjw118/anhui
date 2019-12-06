@@ -82,6 +82,18 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         wrapper.orderByDesc("create_date").orderByDesc("id");
         IPage<Image> imageIPage = mapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
 
+        if(imageIPage.getRecords()!=null&&imageIPage.getRecords().size()>0){
+            for (Image record : imageIPage.getRecords()) {
+                Double area = record.getArea();
+                int num = (int) (area/100000);
+                if(num>100){
+                    record.setScore(100);
+                }
+                record.setScore(num);
+                mapper.updateById(record);
+            }
+        }
+
         Map<String, Object> result = new HashMap<>();
         result.put("rows", imageIPage.getRecords());
         result.put("total", imageIPage.getTotal());
