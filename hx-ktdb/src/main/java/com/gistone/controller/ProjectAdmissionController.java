@@ -724,7 +724,7 @@ public class ProjectAdmissionController {
                 projectAdmission.setCreateTime(DateUtil.DATEtoString(projectAdmission.getCreateDate(), "yyyy-MM-dd"));
                 projectAdmission.setTimeString(DateUtil.DATEtoString(projectAdmission.getTime(), "yyyy-MM-dd"));
 
-                projectAdmission.setBufferRange(Double.parseDouble(new BigDecimal(projectAdmission.getBufferRange().toString()).toString()));
+                projectAdmission.setArea(new BigDecimal(projectAdmission.getBufferRange().toString()).toString());
                 System.out.println(projectAdmission.getBufferRange());
             }
         }

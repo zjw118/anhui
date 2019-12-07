@@ -46,11 +46,15 @@ public class ProjectAdmission implements Serializable {
     @Excel(name = "缓冲区半径",height = 11, width = 15)
     private Integer radius;
 
+
     /**
      * 缓冲区面积
      */
-    @Excel(name = "缓冲区面积",height = 11, width = 15)
+
     private Double bufferRange;
+    @TableField(exist = false)
+    @Excel(name = "缓冲区面积",height = 11, width = 15)
+    private String area;
 
     /**
      * 项目坐标shape文件存储路径
