@@ -6,9 +6,9 @@
         <id column="ID" property="id" />
         <result column="TJSJ" property="tjsj" />
         <result column="BMS" property="bms" />
-        <result column="Province" property="Province" />
-        <result column="City" property="City" />
-        <result column="DCounty" property="DCounty" />
+        <result column="PROVINCE" property="province" />
+        <result column="CITY" property="city" />
+        <result column="DCOUNTY" property="dcounty" />
         <result column="XZQHDM" property="xzqhdm" />
         <result column="YSDM" property="ysdm" />
         <result column="ZDSTXTFWGN" property="zdstxtfwgn" />
@@ -45,8 +45,14 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        ID, TJSJ, BMS, Province, City, DCounty, XZQHDM, YSDM, ZDSTXTFWGN, HXLX, LXBM, BHDMC, BHDJB, HXMM, HXBM, STXTYZBLX, ZYRWHDLX, STHJWT, GKCS, TBBM, TBMJ, BZ, DLFW, HXJTWZ, SJMS, GNFQ, FD, YJLY, FLMC, BHDX, BHMB, GKYQ, BGSJ, XZ, YQ, SZXZ, SZMB, DEL
+        ID, TJSJ, BMS, PROVINCE, CITY, DCOUNTY, XZQHDM, YSDM, ZDSTXTFWGN, HXLX, LXBM, BHDMC, BHDJB,
+         HXMM, HXBM, STXTYZBLX, ZYRWHDLX, STHJWT, GKCS, TBBM, TBMJ, BZ, DLFW, HXJTWZ, SJMS, GNFQ, FD,
+          YJLY, FLMC, BHDX, BHMB, GKYQ, BGSJ, XZ, YQ, SZXZ, SZMB, DEL
     </sql>
+    <select id="exportRedLineBorder" resultType="com.gistone.entity.excel.CbaVo" parameterType="com.gistone.entity.St4ScsCba">
+         SELECT *
+    FROM st4_scs_cba cba where DEL = 1
+    </select>
 <select id="listRedLineLedger" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCba">
   select * from st4_scs_cba where del = 1
 

@@ -56,12 +56,16 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
        return null;// ResultVOUtil.success(mapper.getLedgerUnbinded());
     }
 
-    public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName) {
+    public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName,String type) {
 
         QueryWrapper<RlhdGroup> wrapper = new QueryWrapper<>();
         if (StringUtils.isNotBlank(userName)) {
             wrapper.like("name",userName);
         }
+        if (StringUtils.isNotBlank(type)) {
+            wrapper.eq("type",type);
+        }
+
          wrapper.eq("del_flag",1);
         wrapper.orderByDesc("create_date");
         IPage<RlhdGroup> iPage = mapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
