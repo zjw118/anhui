@@ -69,6 +69,8 @@ public class St4ScsCbd extends Model<St4ScsCbd> {
 
     private Integer verify;
 
+    private String user;
+
     @Override
     protected Serializable pkVal() {
         return this.cbd001;
