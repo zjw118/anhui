@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.St4ScsCbd;
 import com.gistone.service.St4ScsCbdService;
-import com.gistone.util.DateUtils;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultVOUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -93,8 +92,8 @@ public class St4ScsCbdController {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            Date date = DateUtils.addDateDays(date2, 1);
-            entity.setCbd003(date);
+//            Date date = DateUtils.addDateDays(date2, 1);
+            entity.setCbd003(date2);
         }else {
             entity.setCbd003(new Date());
         }
@@ -125,6 +124,7 @@ public class St4ScsCbdController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"审核状态不能为空");
         }
         entity.setVerify(verify);
+        entity.setCreateDate(new Date());
 
         //判断添加人是否为空
        service.insert(entity);
@@ -179,8 +179,8 @@ public class St4ScsCbdController {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            Date date = DateUtils.addDateDays(date2, 1);
-            entity.setCbd003(date);
+//            Date date = DateUtils.addDateDays(date2, 1);
+            entity.setCbd003(date2);
         }else{
             entity.setCbd003(new Date());
         }
