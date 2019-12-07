@@ -723,6 +723,9 @@ public class ProjectAdmissionController {
             for (ProjectAdmission projectAdmission : list) {
                 projectAdmission.setCreateTime(DateUtil.DATEtoString(projectAdmission.getCreateDate(), "yyyy-MM-dd"));
                 projectAdmission.setTimeString(DateUtil.DATEtoString(projectAdmission.getTime(), "yyyy-MM-dd"));
+
+                projectAdmission.setBufferRange(Double.parseDouble(new BigDecimal(projectAdmission.getBufferRange().toString()).toString()));
+                System.out.println(projectAdmission.getBufferRange());
             }
         }
         String filepath = ExcelUtil.toXls("项目准入任务列表", list, configUtils.getExcel_PATH(), ProjectAdmission.class, response);
@@ -855,6 +858,10 @@ public class ProjectAdmissionController {
 
     public static void main(String[] args) {
         System.out.println("用户的当前工作目录:" + System.getProperty("user.dir") + "/hx-ktdb/src/main/resources/word");
+
+        Double num=8.2347983984297E7;
+        String str=new BigDecimal(num.toString()).toString();
+        System.out.println(str);
     }
 
 

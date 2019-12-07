@@ -87,15 +87,23 @@ public class LsProjectModelServiceImpl extends ServiceImpl<LsProjectModelMapper,
 
     @Override
     public void edit(LsProjectModel entity,MultipartFile file) {
-        if(entity.getFlag()!=null&&entity.getFlag()==1&&entity.getType()!=null&&entity.getType()==1){
-            mapper.updateFlag(entity.getType());
-        }
+
         if(file!=null){
             String path = PATH+"/epr/word/"+entity.getName()+"-"+entity.getType()+".docx";
             PictureUtils.uploadFile(path, file);
+            entity.setUrl(path.substring(2));
         }
+        mapper.updateById(entity);
         /*mapper.updateFlag1(entity);
         mapper.updateFlag2(entity);*/
+    }
+
+    @Override
+    public void set(Integer id, Integer type) {
+        mapper.updateFlag(type);
+        LsProjectModel lsProjectModel = mapper.selectById(id);
+        lsProjectModel.setFlag(1);
+        mapper.updatebyType(id,type);
     }
 
 }
