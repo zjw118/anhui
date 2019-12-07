@@ -145,7 +145,7 @@
         id, name, create_by, create_date, update_by, update_date, remark, del_flag
     </sql>
     <select id="detailWithStage" resultMap="BaseResultMap" >
-                  SELECT rg.*,cd.*,ck.*
+                  SELECT rg.*,cd.*,SUBSTRING_INDEX(ck.CK016,"-",-1) ck016,ck.*
         FROM rlhd_group rg
           LEFT JOIN st4_scs_cd cd
             ON cd.group_id = rg.id
