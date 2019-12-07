@@ -66,7 +66,7 @@ public class ISt4ScsCbdServiceImpl extends ServiceImpl<ISt4ScsCbdMapper, St4ScsC
             wrapper.like("CBD006",content);
         }
         wrapper.eq("del_flag", 1);
-        wrapper.orderByDesc("CBD003");
+        wrapper.orderByDesc("create_date");
         IPage<St4ScsCbd> iPage = mapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
 
 

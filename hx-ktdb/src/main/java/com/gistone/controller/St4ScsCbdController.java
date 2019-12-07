@@ -125,6 +125,7 @@ public class St4ScsCbdController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"审核状态不能为空");
         }
         entity.setVerify(verify);
+        entity.setCreateDate(new Date());
 
         //判断添加人是否为空
        service.insert(entity);

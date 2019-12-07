@@ -71,6 +71,8 @@ public class St4ScsCbd extends Model<St4ScsCbd> {
 
     private String user;
 
+    private Date createDate;
+
     @Override
     protected Serializable pkVal() {
         return this.cbd001;
