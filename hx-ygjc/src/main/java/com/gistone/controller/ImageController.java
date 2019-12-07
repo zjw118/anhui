@@ -44,8 +44,6 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/ygjc/image")
-@Slf4j
-@Transactional
 public class ImageController {
     @Autowired
     private ImageService service;

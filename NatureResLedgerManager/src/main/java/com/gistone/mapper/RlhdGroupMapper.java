@@ -16,7 +16,7 @@ import java.util.List;
  * @since 2019-10-25
  */
 public interface RlhdGroupMapper extends BaseMapper<RlhdGroup> {
-    RlhdGroup getPointFromStage(Integer rl);
+    List<RlhdGroup> getPointFromStage(Integer rls);
 
 
     IPage<RlhdGroup> detailWithStage(IPage<RlhdGroup> list,@Param("id") Integer id,@Param("number")String number,@Param("name")String name);

@@ -16,7 +16,6 @@ public @interface SysLog {
     String value() default "";
     /**
      * 日志类型
-     *
      * @return
      */
     LogType type() default LogType.XTCZ;

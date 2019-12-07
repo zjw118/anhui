@@ -63,11 +63,11 @@ public interface ISt4ScsCdService extends IService<St4ScsCd> {
 
 
     /**
-     * 根据台账id查询到具体的斑块信息
-     * @param rlGroupID
+     * 根据任务id查询到具体的斑块信息
+     * @param taskId
      * @return
      */
-    ResultVO getPointFromStage(Integer rlGroupID);
+    ResultVO getPointFromStage(Integer taskId);
 
     /**
      * 在核查统计分析处展示
