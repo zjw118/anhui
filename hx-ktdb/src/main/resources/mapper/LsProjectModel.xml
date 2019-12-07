@@ -40,6 +40,12 @@
         type = #{type}
     </update>
 
+    <update id="updatebyType">
+        update ls_project_model
+        set flag = 1
+        where
+        id  =#{id} and type = #{type}
+    </update>
 
 
 

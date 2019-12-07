@@ -18,5 +18,6 @@ public interface LsProjectModelMapper extends BaseMapper<LsProjectModel> {
     int updateFlag1(LsProjectModel lsProjectModel);
     int updateFlag2(LsProjectModel lsProjectModel);
     int updateFlag(Integer type);
+    int updatebyType(@Param("id") Integer id,@Param("type") Integer type);
 
 }
