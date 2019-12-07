@@ -16,7 +16,7 @@ import java.util.Map;
     public interface St4ScsCbdService extends IService<St4ScsCbd> {
 
 
-    Map<String, Object> list(Integer pageNum,Integer pageSize,String Name,String time,String content);
+    Map<String, Object> list(Integer pageNum,Integer pageSize,String Name,String time,String title,String content);
 
     void delete(Integer id);
 

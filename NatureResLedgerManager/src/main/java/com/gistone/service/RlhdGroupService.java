@@ -18,7 +18,7 @@ import java.util.Map;
 public interface RlhdGroupService extends IService<RlhdGroup> {
 
 
-    Map<String, Object> list(Integer pageNum, Integer pageSize, String Name);
+    Map<String, Object> list(Integer pageNum, Integer pageSize, String Name,String type);
 
     void delete(List<Integer> id);
 

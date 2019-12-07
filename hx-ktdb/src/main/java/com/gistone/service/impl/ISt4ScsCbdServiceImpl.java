@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.entity.St4ScsCbd;
 import com.gistone.mapper.ISt4ScsCbdMapper;
 import com.gistone.service.St4ScsCbdService;
+import com.gistone.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class ISt4ScsCbdServiceImpl extends ServiceImpl<ISt4ScsCbdMapper, St4ScsC
     private ISt4ScsCbdMapper mapper;
 
     @Override
-    public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName,String time,String content) {
+    public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName,String time,String title,String content) {
 
         QueryWrapper<St4ScsCbd> wrapper = new QueryWrapper<>();
         if (StringUtils.isNotBlank(userName)) {
@@ -53,12 +54,16 @@ public class ISt4ScsCbdServiceImpl extends ServiceImpl<ISt4ScsCbdMapper, St4ScsC
                 e.printStackTrace();
             }
 
-            wrapper.eq("CBD003",date2);
+            Date date = DateUtils.addDateDays(date2, 1);
+            wrapper.eq("CBD003",date);
 
         }
 
+        if(StringUtils.isNotBlank(title)){
+            wrapper.like("CBD005",title);
+        }
         if(StringUtils.isNotBlank(content)){
-            wrapper.like("CBD005",content).or().like("CBD006",content);
+            wrapper.like("CBD006",content);
         }
         wrapper.eq("del_flag", 1);
         wrapper.orderByDesc("CBD003");
