@@ -10,6 +10,7 @@ import com.gistone.entity.*;
 import com.gistone.mapper.*;
 import com.gistone.service.ISt4ScsCdService;
 import com.gistone.util.*;
+import net.bytebuddy.asm.Advice;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,8 @@ import java.util.stream.Collectors;
 @Service
 @Component
 public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> implements ISt4ScsCdService {
-
+    @Autowired
+    private  St4PoClCoMapper st4PoClCoMapper;
     @Autowired
     private RlhdGroupMapper rlhdGroupMapper;
     @Autowired
@@ -93,9 +95,8 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     }
 
     @Override
-    public ResultVO getPointFromStage(Integer rlGroupID) {
-
-        return ResultVOUtil.success(rlhdGroupMapper.getPointFromStage(rlGroupID));
+    public ResultVO getPointFromStage(Integer taskId) {
+        return ResultVOUtil.success(rlhdGroupMapper.getPointFromStage(taskId));
     }
 
     @Override
