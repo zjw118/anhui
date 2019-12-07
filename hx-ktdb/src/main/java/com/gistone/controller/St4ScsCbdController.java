@@ -219,7 +219,7 @@ public class St4ScsCbdController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"id不能为空");
         }
         St4ScsCbd st4ScsCbd = new St4ScsCbd();
-        st4ScsCbd.setVerify(1);
+        st4ScsCbd.setVerify(3);
         service.update(st4ScsCbd,new QueryWrapper<St4ScsCbd>().eq("CBD001",id));
 
 
