@@ -7,10 +7,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.St4ScsCkrl;
 import com.gistone.entity.St4SysSa;
+import com.gistone.entity.excel.ReportVo;
+import com.gistone.entity.excel.St4ScsCkrlVO;
 import com.gistone.mapper.St4ScsCkrlMapper;
 import com.gistone.service.ISt4ScsCkrlService;
 import com.gistone.service.ISt4ScsCsService;
 import com.gistone.util.*;
+import io.netty.handler.codec.http2.Http2Settings;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -21,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -44,6 +48,8 @@ public class St4ScsCkrlServiceImpl extends ServiceImpl<St4ScsCkrlMapper, St4ScsC
     private St4ScsCkrlMapper st4ScsCkrlMapper;
     @Autowired
     private ISt4ScsCkrlService st4ScsCkrlService;
+    @Autowired
+    private  ConfigUtils configUtils;
 
     @Override
     public Result listHumanStage(St4ScsCkrl ckrl) {
@@ -360,5 +366,15 @@ public class St4ScsCkrlServiceImpl extends ServiceImpl<St4ScsCkrlMapper, St4ScsC
 //        }
 
         return ResultVOUtil.error("1444","服务器未读取到数据，请确认所上传excel是否有信息");
+    }
+
+    @Override
+    public ResultVO exportHumanStage(St4ScsCkrl ckrl, HttpServletResponse response) {
+        List<St4ScsCkrlVO> voList = st4ScsCkrlMapper.exportHumanStage(ckrl);
+        String filepath = ExcelUtil.toXls("人类台账资料管理统计表", voList,
+                configUtils.getExcel_PATH(), ReportVo.class, response);
+        Map map1 = new HashMap();
+        map1.put("filepath", filepath.substring(2));
+        return ResultVOUtil.success(map1);
     }
 }

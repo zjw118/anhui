@@ -112,7 +112,27 @@ public class LsProjectModelController {
     }
 
 
+    @PostMapping("/set")
+    public ResultVO set(@RequestBody Map<String, Object> paramsMap){
+        Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
+        if (dataParam == null) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "请求数据data不能为空！");
+        }
 
+        Integer id = (Integer) dataParam.get("id");
+        if(id==null){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"id不能为空");
+        }
+
+        Integer type = (Integer) dataParam.get("type");
+        if(type==null){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"类型不能为空");
+        }
+
+        service.set(id,type);
+
+        return ResultVOUtil.success();
+}
 
 
 }

@@ -72,9 +72,6 @@ public class LsKnowledgeServiceImpl extends ServiceImpl<LsKnowledgeMapper, LsKno
     @Override
     public void insert(LsKnowledge entity, MultipartFile file) {
         //具体逻辑
-        if(entity.getFlag()==1&&entity.getFlag()==1){
-            mapper.updateFlag();
-        }
         String path = PATH+"/epr/attached/";
         String picturePath = PictureUtils.getPicturePath(path, file);
         entity.setCreateTime(LocalDateTime.now()).setUrl(picturePath);

@@ -25,4 +25,6 @@ import java.util.Map;
     void insert(LsProjectModel entity, MultipartFile file);
 
     void edit(LsProjectModel entity,MultipartFile file);
+
+    void set(Integer id,Integer type);
     }

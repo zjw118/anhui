@@ -142,7 +142,32 @@ public class RlhdGroupController {
        Map<String,Object> result = service.getDetailById(pageNum,pageSize,id);
         return ResultVOUtil.success(result);
     }
+    @PostMapping("/detailWithStage")
+    public ResultVO detailWithStage(@RequestBody Map<String, Object> paramsMap) {
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        Integer id = (Integer) params.get("id");
 
+        String name = (String) params.get("name");
+        String number = (String) params.get("number");
+        if (id == null || id < 0) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
+        }
+        Integer pageNum = (Integer) params.get("pageNumber");
+        Integer pageSize = (Integer) params.get("pageSize");
+        if (pageNum == null) {
+            pageNum = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = 10;
+        }
+        RlhdGroup rl = new RlhdGroup();
+        rl.setId(id);
+        return  service.detailWithStage(rl,pageNum,pageSize,number,name);
+    }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResultVO add(@RequestBody Map<String, Object> paramsMap) {

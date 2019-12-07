@@ -112,8 +112,19 @@ public class St4ScsCbdController {
         if(StringUtils.isBlank(afterContent)){
           return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"内容不能为空");
         }
+
+        String users = (String) params.get("users");
+        if(StringUtils.isBlank(users)){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"发布对象不能为空");
+        }
+        entity.setUser(users);
         entity.setCbd006(afterContent);
-        entity.setVerify(0);
+
+        Integer verify = (Integer) params.get("verify");
+        if(verify==null){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"审核状态不能为空");
+        }
+        entity.setVerify(verify);
 
         //判断添加人是否为空
        service.insert(entity);
@@ -183,6 +194,15 @@ public class St4ScsCbdController {
         if(StringUtils.isNotBlank(afterContent)){
             entity.setCbd006(afterContent);
         }
+
+        String user = (String) params.get("users");
+        if(StringUtils.isNotBlank(user)){
+            entity.setUser(user);
+        }
+        Integer verify = (Integer) params.get("verify");
+        if(verify!=null){
+            entity.setVerify(verify);
+        }
 //判断更新人加人是否为空
         service.edit(entity);
         return ResultVOUtil.success();
@@ -200,6 +220,24 @@ public class St4ScsCbdController {
         }
         St4ScsCbd st4ScsCbd = new St4ScsCbd();
         st4ScsCbd.setVerify(1);
+        service.update(st4ScsCbd,new QueryWrapper<St4ScsCbd>().eq("CBD001",id));
+
+
+        return ResultVOUtil.success();
+    }
+
+    @PostMapping("/refuse")
+    public ResultVO refuse(@RequestBody Map<String, Object> paramsMap){
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "请求数据data不能为空！");
+        }
+        Integer id = (Integer) params.get("id");
+        if(id==null||id<0){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"id不能为空");
+        }
+        St4ScsCbd st4ScsCbd = new St4ScsCbd();
+        st4ScsCbd.setVerify(2);
         service.update(st4ScsCbd,new QueryWrapper<St4ScsCbd>().eq("CBD001",id));
 
 

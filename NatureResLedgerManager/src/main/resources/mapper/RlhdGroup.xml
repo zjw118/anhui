@@ -43,10 +43,98 @@
             <result column="group_id" property="groupId" />
             <result column="activityName" property="activityName" />
             <result column="sendStatus" property="sendStatus" />
-            <association property="st4SysSa" javaType="com.gistone.entity.St4SysSa">
-                <id column="SA001" property="sa001" />
-                <result column="SA019" property="sa019" />
-                <result column="SD001" property="sd001" />
+            <association property="st4ScsCk" javaType="com.gistone.entity.St4ScsCk">
+                <id column="CK001" property="ck001" />
+                <result column="CK002" property="ck002" />
+                <result column="CD004" property="cd004" />
+                <result column="SG001" property="sg001" />
+                <result column="CK005" property="ck005" />
+                <result column="CK006" property="ck006" />
+                <result column="CK007" property="ck007" />
+                <result column="CK008" property="ck008" />
+                <result column="CK009" property="ck009" />
+                <result column="CK010" property="ck010" />
+                <result column="CK011" property="ck011" />
+                <result column="CK012" property="ck012" />
+                <result column="CK013" property="ck013" />
+                <result column="CK014" property="ck014" />
+                <result column="CK015" property="ck015" />
+                <result column="CK016" property="ck016" />
+                <result column="CK017" property="ck017" />
+                <result column="CK018" property="ck018" />
+                <result column="CK019" property="ck019" />
+                <result column="CK020" property="ck020" />
+                <result column="CK021" property="ck021" />
+                <result column="CK022" property="ck022" />
+                <result column="CK023" property="ck023" />
+                <result column="CK024" property="ck024" />
+                <result column="CK025" property="ck025" />
+                <result column="CK026" property="ck026" />
+                <result column="CK027" property="ck027" />
+                <result column="CK028" property="ck028" />
+                <result column="CK029" property="ck029" />
+                <result column="CK030" property="ck030" />
+                <result column="CK031" property="ck031" />
+                <result column="CK032" property="ck032" />
+                <result column="CK033" property="ck033" />
+                <result column="CK034" property="ck034" />
+                <result column="CK035" property="ck035" />
+                <result column="CK036" property="ck036" />
+                <result column="CK037" property="ck037" />
+                <result column="CK038" property="ck038" />
+                <result column="CK039" property="ck039" />
+                <result column="CK040" property="ck040" />
+                <result column="CK041" property="ck041" />
+                <result column="CK042" property="ck042" />
+                <result column="CK043" property="ck043" />
+                <result column="CK044" property="ck044" />
+                <result column="CK045" property="ck045" />
+                <result column="CK046" property="ck046" />
+                <result column="CK047" property="ck047" />
+                <result column="CK048" property="ck048" />
+                <result column="CK049" property="ck049" />
+                <result column="CK050" property="ck050" />
+                <result column="CK051" property="ck051" />
+                <result column="CK052" property="ck052" />
+                <result column="CK053" property="ck053" />
+                <result column="CK054" property="ck054" />
+                <result column="CK055" property="ck055" />
+                <result column="CK056" property="ck056" />
+                <result column="CK057" property="ck057" />
+                <result column="CK058" property="ck058" />
+                <result column="CK059" property="ck059" />
+                <result column="CK060" property="ck060" />
+                <result column="CK061" property="ck061" />
+                <result column="CK062" property="ck062" />
+                <result column="CK063" property="ck063" />
+                <result column="CK064" property="ck064" />
+                <result column="CK065" property="ck065" />
+                <result column="CK066" property="ck066" />
+                <result column="CK067" property="ck067" />
+                <result column="CK068" property="ck068" />
+                <result column="CK069" property="ck069" />
+                <result column="CK070" property="ck070" />
+                <result column="CK071" property="ck071" />
+                <result column="CK072" property="ck072" />
+                <result column="CC002" property="cc002" />
+                <result column="CK074" property="ck074" />
+                <result column="CK075" property="ck075" />
+                <result column="CK076" property="ck076" />
+                <result column="CK077" property="ck077" />
+                <result column="CK078" property="ck078" />
+                <result column="CK079" property="ck079" />
+                <result column="CK080" property="ck080" />
+                <result column="CK081" property="ck081" />
+                <result column="CK082" property="ck082" />
+                <result column="CK083" property="ck083" />
+                <result column="CK084" property="ck084" />
+                <result column="CK085" property="ck085" />
+                <result column="CK086" property="ck086" />
+                <result column="CK087" property="ck087" />
+                <result column="CK088" property="ck088" />
+                <result column="CK089" property="ck089" />
+                <result column="CK090" property="ck090" />
+                <result column="CK091" property="ck091" />
             </association>
         </collection>
 
@@ -56,15 +144,28 @@
     <sql id="Base_Column_List">
         id, name, create_by, create_date, update_by, update_date, remark, del_flag
     </sql>
-    <select id="getLedgerUnbinded" resultMap="BaseResultMap" >
-                  SELECT *
+    <select id="detailWithStage" resultMap="BaseResultMap" >
+                  SELECT rg.*,cd.*,SUBSTRING_INDEX(ck.CK016,"-",-1) ck016,ck.*
         FROM rlhd_group rg
-          LEFT JOIN st4_po_cl_co clco
-            ON clco.co001 = rg.id
-        WHERE rg.del_flag = 1
-            AND rg.id NOT IN(SELECT
-                               co001
-                             FROM st4_po_cl_co) order by create_date desc
+          LEFT JOIN st4_scs_cd cd
+            ON cd.group_id = rg.id
+            left join
+             (
+            SELECT *  FROM (
+            SELECT MAX(CK001) AS ID FROM st4_scs_ck  GROUP BY CD004 )t
+            INNER JOIN st4_scs_ck d ON t.ID= d.CK001
+
+            )
+            ck  ON ck.CD004= cd.CD001
+        WHERE rg.del_flag = 1 and rg.id=#{id}
+        <if test="number !=null and number!='' ">
+            and cd.CD001 LIKE  '%${number}%'
+        </if>
+
+        <if test="name !=null and name!='' ">
+            and cd.active_name LIKE  '%${name}%'
+        </if>
+
     </select>
 
     <select id="getPointFromStage" resultMap="BaseResultMap" parameterType="Integer">

@@ -5,6 +5,7 @@ import com.auth0.jwt.JWT;
 import com.gistone.VO.ResultVO;
 import com.gistone.annotation.PassToken;
 import com.gistone.entity.*;
+import com.gistone.entity.excel.CbaVo;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.*;
 import com.gistone.swagger.TrackDistribution;
@@ -78,19 +79,75 @@ public class CheckNrledgerController {
 
     @Autowired
     private ConfigUtils configUtils;
+    @Autowired
+    private ISt4ScsCbaService iSt4ScsCbaService;
 
     /**
-     * 台账表的插入2产品化
-     * @param checkLedger
+     * 导出生态保护红线陆地边界数据Excel
+     * @param response
+     * @return
+     */
+    @ApiOperation(value="(江苏用:已完成)导出生态保护红线陆地边界数据Excel",notes = "",response = St4ScsCk.class)
+    @RequestMapping(value="/exportRedLineBorder",method = RequestMethod.POST)
+    public ResultVO exportRedLineBorder(@RequestBody @ApiParam(name="", value="json格式", required=true)Swagger<St4ScsCba> data,HttpServletResponse response) {
+        return iSt4ScsCbaService.exportRedLineBorder(data.getData(),response);
+    }
+    /**
+     * 导出人类活动台账Excel
+     * @param response
+     * @return
+     */
+    @ApiOperation(value="导出人类活动台账Excel",notes = "",response = St4ScsCk.class)
+    @RequestMapping(value="/exportHumanStage",method = RequestMethod.POST)
+    public ResultVO exportHumanStage(@RequestBody @ApiParam(name="", value="json格式", required=true)Swagger<St4ScsCkrl> data,HttpServletResponse response) {
+        return iSt4ScsCkrlService.exportHumanStage(data.getData(),response);
+    }
+    /**
+     * 导入生态保护红线陆地边界数据Excel
      * @param request
      * @return
      */
-    @ApiOperation(value="台账字段动态配置接口",notes = "台账插入2",response = St4ScsCk.class)
-    @RequestMapping(value="/doSelfStage",method = RequestMethod.POST)
-    public Result doSelfStage(@RequestBody @ApiParam(name="台账信息", value="json格式", required=true)
-                                          Swagger<St4ScsCk> checkLedger,
-                              HttpServletRequest request) {
-        return null;
+    @ApiOperation(value="导入生态保护红线陆地边界数据Excel",notes = "",response = St4ScsCk.class)
+    @RequestMapping(value="/importRedLineBorder",method = RequestMethod.POST)
+    public ResultVO importRedLineBorder(MultipartFile file,HttpServletRequest request) {
+        try{
+            //MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+            //MultipartFile file = multipartRequest.getFile("file");
+            List<CbaVo> list = ExcelUtil.importExcel(file, 1, 1, CbaVo.class);
+
+            System.out.println(list);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "上传文件不规范！");
+        }
+
+        return ResultVOUtil.success();
+
+    }
+
+
+    /**
+     * 导入人类活动台账Excel
+     * @param request
+     * @return
+     */
+    @ApiOperation(value="导入人类活动台账Excel",notes = "",response = St4ScsCk.class)
+    @RequestMapping(value="/importHumanStage",method = RequestMethod.POST)
+    public ResultVO importHumanStage(MultipartFile file,HttpServletRequest request) {
+        try{
+            //MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+            //MultipartFile file = multipartRequest.getFile("file");
+            List<CbaVo> list = ExcelUtil.importExcel(file, 1, 1, CbaVo.class);
+
+            System.out.println(list);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "上传文件不规范！");
+        }
+
+        return ResultVOUtil.success();
 
     }
 
@@ -242,45 +299,45 @@ public class CheckNrledgerController {
      * @param response
      * @return
      */
-    @ApiOperation(value="(江苏用)导入台账Excel",notes = "导入台账Excel",response = St4ScsCk.class)
-    @RequestMapping(value="/importHumanStage",method = RequestMethod.POST)
-    public Result importHumanStage(@RequestParam MultipartFile file, HttpServletRequest request, HttpServletResponse response) {
-//        if(!file.isEmpty()) {
-//            // 在定义一个文件上传后的临时存储路径
-//            request.getServletContext().getRealPath("/");
-//            String temp_savepath = configUtils.getExcel_PATH()+"ledger/temp/importPersonTask" ;
-//            File dirFile = new File(temp_savepath);
-//            if(!dirFile.exists()&&!dirFile.isDirectory()){
-//                //检查临时目录是否存在，不存在则创建
-//                dirFile.mkdirs();
-//            }
-//            String aaa =PictureUtils.getDiyTempFilePath(temp_savepath, file);
-//            try{
-//                return iSt4ScsClService.readExcel(aaa);
-//            }catch (Exception e){
-//                e.printStackTrace();
-//                return ResultVOUtil.error("1222","处理结果失败");
-//            }
+//    @ApiOperation(value="(江苏用)导入台账Excel",notes = "导入台账Excel",response = St4ScsCk.class)
+//    @RequestMapping(value="/importHumanStage",method = RequestMethod.POST)
+//    public Result importHumanStage(@RequestParam MultipartFile file, HttpServletRequest request, HttpServletResponse response) {
+////        if(!file.isEmpty()) {
+////            // 在定义一个文件上传后的临时存储路径
+////            request.getServletContext().getRealPath("/");
+////            String temp_savepath = configUtils.getExcel_PATH()+"ledger/temp/importPersonTask" ;
+////            File dirFile = new File(temp_savepath);
+////            if(!dirFile.exists()&&!dirFile.isDirectory()){
+////                //检查临时目录是否存在，不存在则创建
+////                dirFile.mkdirs();
+////            }
+////            String aaa =PictureUtils.getDiyTempFilePath(temp_savepath, file);
+////            try{
+////                return iSt4ScsClService.readExcel(aaa);
+////            }catch (Exception e){
+////                e.printStackTrace();
+////                return ResultVOUtil.error("1222","处理结果失败");
+////            }
+////        }
+//
+//        Result result= new Result();
+//        String token = request.getHeader("token");// 从 http 请求头中取出 token
+//        try{
+//
+//            St4SysSa seUser = new St4SysSa();
+//            seUser.setSa001(1);
+//            MultipartHttpServletRequest req = (MultipartHttpServletRequest) request;
+//            Map<String, MultipartFile> items = req.getFileMap();
+//            List<Integer> uidList = new ArrayList<>();
+//            return iSt4ScsCkrlService.importHumanStage(items,seUser);
+//        }catch (Exception e){
+//            result.setStatus(1000);
+//            result.setMsg("无token，请重新登录");
+//            e.printStackTrace();
 //        }
-
-        Result result= new Result();
-        String token = request.getHeader("token");// 从 http 请求头中取出 token
-        try{
-
-            St4SysSa seUser = new St4SysSa();
-            seUser.setSa001(1);
-            MultipartHttpServletRequest req = (MultipartHttpServletRequest) request;
-            Map<String, MultipartFile> items = req.getFileMap();
-            List<Integer> uidList = new ArrayList<>();
-            return iSt4ScsCkrlService.importHumanStage(items,seUser);
-        }catch (Exception e){
-            result.setStatus(1000);
-            result.setMsg("无token，请重新登录");
-            e.printStackTrace();
-        }
-
-        return result;
-    }
+//
+//        return result;
+//    }
 
 
 
