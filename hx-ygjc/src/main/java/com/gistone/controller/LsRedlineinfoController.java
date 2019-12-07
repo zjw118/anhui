@@ -1,6 +1,7 @@
 package com.gistone.controller;
 
 import com.gistone.VO.ResultVO;
+import com.gistone.annotation.SysLog;
 import com.gistone.entity.LsRedlineinfo;
 import com.gistone.entity.LsRedlineinfoProcess;
 import com.gistone.entity.LsRedlineinfoTemplate;
@@ -337,7 +338,8 @@ public class LsRedlineinfoController {
     //--------------------------------------------------------------------
 
 
-    //    服务-增
+    //服务-增
+    @SysLog("发布红线信息服务")
     @PostMapping("/infoInsert")
     public ResultVO infoInsert(HttpServletRequest request,LsRedlineinfo lsRedlineinfo) {
         try {
