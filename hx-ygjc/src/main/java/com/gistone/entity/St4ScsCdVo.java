@@ -39,4 +39,14 @@ public class St4ScsCdVo{
     private Integer CD017;
     private String region;
     private String position;
+
+    private String ck015;
+    private String ck021;
+    private String ck012;
+    private String ck051;
+    private String ck011;
+    private String ck006;
+    private String ck020;
+    private String ck013;
+    private String ck016;
 }

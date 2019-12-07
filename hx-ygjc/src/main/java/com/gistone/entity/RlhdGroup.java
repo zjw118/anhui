@@ -65,7 +65,9 @@ public class RlhdGroup extends Model<RlhdGroup> {
     @TableField(exist = false)
     private Double sonArea;
     @TableField(exist = false)
-private List<St4ScsCdVo> st4ScsCdList;
+    private List<St4ScsCdVo> st4ScsCdList;
+
+
 
 
     @Override
