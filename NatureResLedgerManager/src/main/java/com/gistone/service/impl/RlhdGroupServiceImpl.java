@@ -5,15 +5,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.Image;
-import com.gistone.entity.ImageConfig;
-import com.gistone.entity.RlhdGroup;
-import com.gistone.entity.St4ScsCd;
+import com.gistone.entity.*;
 import com.gistone.mapper.ImageConfigMapper;
 import com.gistone.mapper.ImageMapper;
 import com.gistone.mapper.RlhdGroupMapper;
 import com.gistone.mapper.St4ScsCdMapper;
 import com.gistone.service.RlhdGroupService;
+import com.gistone.util.Result;
 import com.gistone.util.ResultVOUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -51,9 +49,17 @@ public class RlhdGroupServiceImpl extends ServiceImpl<RlhdGroupMapper, RlhdGroup
     @Autowired
     private ImageConfigMapper imageConfigMapper;
 
-    @Autowired
-    public ResultVO getLedgerUnbinded(){
-       return null;// ResultVOUtil.success(mapper.getLedgerUnbinded());
+
+
+    @Override
+    public ResultVO detailWithStage(RlhdGroup rl,Integer pageNumber,Integer pageSize,String number,String name) {
+        Page<RlhdGroup> page = new Page<>(pageNumber,pageSize);
+        IPage<RlhdGroup> list = mapper.detailWithStage(page,rl.getId(),number,name);
+        Result result = new Result();
+        result.setTotal((int)list.getTotal());
+        result.setPage((int)list.getPages());
+        result.setRows(list.getRecords());
+        return ResultVOUtil.success(result);
     }
 
     public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName,String type) {

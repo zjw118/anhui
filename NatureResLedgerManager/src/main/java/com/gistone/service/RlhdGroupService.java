@@ -35,6 +35,7 @@ public interface RlhdGroupService extends IService<RlhdGroup> {
 
     ResultVO listLedger();
 
-    ResultVO getLedgerUnbinded();
+
+    ResultVO detailWithStage(RlhdGroup rl,Integer pageNumber,Integer pageSize,String number,String name);
 
 }
