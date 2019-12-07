@@ -104,6 +104,7 @@ public class RlhdGroupController {
         Integer pageNum = (Integer) params.get("pageNum");
         Integer pageSize = (Integer) params.get("pageSize");
         String name = (String) params.get("name");
+        String type = (String) params.get("type");
         if (pageNum == null) {
             pageNum = 1;
         }
@@ -112,7 +113,7 @@ public class RlhdGroupController {
             pageSize = 10;
         }
 
-        Map<String, Object> result = service.list(pageNum, pageSize, name);
+        Map<String, Object> result = service.list(pageNum, pageSize, name,type);
         return ResultVOUtil.success(result);
     }
 
