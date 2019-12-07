@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gistone.entity.St4ScsCba;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.gistone.entity.excel.CbaVo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -16,4 +19,6 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface St4ScsCbaMapper extends BaseMapper<St4ScsCba> {
     IPage<St4ScsCba> listRedLineLedger(Page<St4ScsCba> page,@Param("cba") St4ScsCba cba);
+
+   List<CbaVo> exportRedLineBorder(St4ScsCba cba);
 }

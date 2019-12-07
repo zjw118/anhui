@@ -4,14 +4,18 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.St4ScsCba;
+import com.gistone.entity.excel.CbaVo;
 import com.gistone.mapper.St4ScsCbaMapper;
 import com.gistone.service.ISt4ScsCbaService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.gistone.util.ObjectUtils;
-import com.gistone.util.Result;
-import com.gistone.util.ResultVOUtil;
+import com.gistone.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -25,7 +29,8 @@ import org.springframework.stereotype.Service;
 public class St4ScsCbaServiceImpl extends ServiceImpl<St4ScsCbaMapper, St4ScsCba> implements ISt4ScsCbaService {
     @Autowired
     private  St4ScsCbaMapper st4ScsCbaMapper;
-
+   @Autowired
+    private ConfigUtils  configUtils;
 
     @Override
     public ResultVO listRedLineLedger(St4ScsCba cba){
@@ -44,5 +49,16 @@ public class St4ScsCbaServiceImpl extends ServiceImpl<St4ScsCbaMapper, St4ScsCba
         result.setTotal((int)cbaList.getTotal());
         result.setPage((int)cbaList.getPages());
         return ResultVOUtil.success(result);
+    }
+
+    @Override
+    public ResultVO exportRedLineBorder(St4ScsCba cba, HttpServletResponse response) {
+
+        List<CbaVo> voList = st4ScsCbaMapper.exportRedLineBorder(cba);
+        String filepath = ExcelUtil.toXls("生态保护红线陆地边界数据统计表", voList,
+                configUtils.getExcel_PATH(), CbaVo.class, response);
+        Map map1 = new HashMap();
+        map1.put("filepath", filepath.substring(2));
+        return ResultVOUtil.success(map1);
     }
 }
