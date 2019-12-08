@@ -52,6 +52,9 @@ public interface ImageMapper extends BaseMapper<Image> {
 
     Integer getlastImageId();
 
+    List<Map<String,Object>> getTotalByType();
+    List<Map<String,Object>> getTotalByCode();
+
 
 
 }

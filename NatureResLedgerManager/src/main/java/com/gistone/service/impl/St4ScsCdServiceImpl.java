@@ -10,7 +10,6 @@ import com.gistone.entity.*;
 import com.gistone.mapper.*;
 import com.gistone.service.ISt4ScsCdService;
 import com.gistone.util.*;
-import net.bytebuddy.asm.Advice;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +20,8 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.HEAD;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -369,6 +366,9 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 St4ScsCd iterpretation = new St4ScsCd();
                 if (null != attributes.get("name")){
                     iterpretation.setActiveName(attributes.get("name") + "");
+                }
+                if (StringUtils.isNotBlank((String) attributes.get("code"))) {
+                    iterpretation.setCode((String) attributes.get("code"));
                 }
                 if (null != attributes.get("center")) {
                     String center = attributes.get("center") + "";
