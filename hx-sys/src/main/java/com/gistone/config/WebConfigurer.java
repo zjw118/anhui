@@ -7,9 +7,7 @@ import org.jasig.cas.client.util.HttpServletRequestWrapperFilter;
 import org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -18,8 +16,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 //@Configuration
 public class WebConfigurer implements WebMvcConfigurer {
-
-
 
     /**
      * 该过滤器用于实现单点登出功能，可选配置
@@ -59,7 +55,6 @@ public class WebConfigurer implements WebMvcConfigurer {
         registrationBean.setOrder(3);//启动时候的优先级
         return registrationBean;
     }
-
 
     /**
      * 该过滤器负责实现HttpServletRequest请求的包裹，

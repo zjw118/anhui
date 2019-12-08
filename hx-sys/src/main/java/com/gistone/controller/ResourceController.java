@@ -190,6 +190,8 @@ public class ResourceController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "资源类型不能为空");
         }
 
+
+
         sysResourcesService.updateById(sysResources);
 
 

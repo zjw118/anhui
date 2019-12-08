@@ -163,15 +163,15 @@
 
     <select id="getCountChange" resultType="java.util.Map">
         SELECT
-            count(*) count,
-            b.`name` name
-        FROM
-            st4_scs_cd a
+		count(*) count,
+		b.create_date name
+        FROM st4_scs_cd a
         inner JOIN image b ON a.image_id = b.id
+        where a.CD009 = 1
+        and b.del_flag = 1
         GROUP BY
-            a.image_id
+                a.image_id
         ORDER BY b.create_date DESC
-        LIMIT 1,5
     </select>
 
     <select id="getAreaChange" resultType="java.util.Map">

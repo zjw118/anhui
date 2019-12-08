@@ -1056,7 +1056,6 @@ public class ImageController {
             Object data1 = params.get("data1");//人类活动类型统计量柱状图
             Object data2 = params.get("data2");//人类活动类型统计面积占比饼状图
             Object data3 = params.get("data3");//人类活动解译批次任务数量统计柱状图
-//            Object data4 = params.get("data4");//人类活动解译批次面积统计柱状图
 
             if(null==data1)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data1不能为空！");
             if(null==data2)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data2不能为空！");
