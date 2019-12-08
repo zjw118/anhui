@@ -11,24 +11,24 @@ public class ActivityVo {
 
 
     /**
-     * 核查人
+     * 原人类活动名称
      */
-    @Excel(name = "原斑块活动类型名称",height = 11, width = 15)
+    @Excel(name = "原人类活动名称",height = 11, width = 15)
     private String orign;
     /**
-     * 已审核通过斑块数目
+     * 原斑块数量
      */
-    @Excel(name = "原斑块活动类型数目",height = 11, width = 15)
+    @Excel(name = "原人类活动斑块数量",height = 11, width = 15)
     private String orignCount;
     /**
-     * 未审核通过斑块数目
+     * 核查后斑块数量
      */
-    @Excel(name = "现在斑块活动类型",height = 11, width = 15)
+    @Excel(name = "核查后人类活动名称",height = 11, width = 20)
     private String nows;
     /**
-     * 待审核斑块数目
+     * 现在斑块活动数目
      */
-    @Excel(name = "现在斑块活动数目",height = 11, width = 15)
+    @Excel(name = "核查后人类活动斑块数量",height = 11, width = 25)
     private String nowsCount;
 
 
