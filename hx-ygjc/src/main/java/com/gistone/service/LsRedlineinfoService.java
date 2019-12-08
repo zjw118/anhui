@@ -30,7 +30,7 @@ public interface LsRedlineinfoService {
 //    ResultVO audit(LsRedlineinfo lsRedlineinfo)throws Exception;
 
 
-    ResultVO export(String data1,String data2,String data3)throws Exception;
+    ResultVO export(String data1,String data2,String data3,String data4)throws Exception;
 
 
 }

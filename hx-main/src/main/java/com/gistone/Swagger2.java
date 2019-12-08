@@ -65,6 +65,8 @@ private boolean swaggerState=true;
                 .globalResponseMessage(RequestMethod.POST, responseMessageList())
                 .apiInfo(apiInfo("手机端接口文档V1.1","文档中主要为手机端业务处理接口","1.1")).enable(swaggerState);
     }
+
+
     private ApiInfo apiInfo(String name, String description, String version) {
         ApiInfo apiInfo = new ApiInfoBuilder().title(name).description(description).version(version).build();
         return apiInfo;
