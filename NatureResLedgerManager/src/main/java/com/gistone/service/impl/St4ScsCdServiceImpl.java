@@ -80,12 +80,13 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     private String ftpUrl;
     @Override
     public ResultVO pointQuality(RlhdGroup rl) {
-        List<Map> cdsOrg = st4ScsCdMapper.pointQualityOrgin(rl);
-        List<Map> cdsNow = st4ScsCdMapper.pointQualityNow(rl);
-        com.alibaba.fastjson.JSONObject json = new com.alibaba.fastjson.JSONObject();
-        json.put("orgin", cdsOrg);
-        json.put("nows", cdsNow);
-        return ResultVOUtil.success(json);
+        List<Map> cds= st4ScsCdMapper.pointQualityOrginAndNow(rl);
+        //List<Map> cdsNow = st4ScsCdMapper.pointQualityNow(rl);
+        Map<Integer,String> map = new HashMap<>();
+
+
+
+        return ResultVOUtil.success(cds);
     }
 
     @Override
