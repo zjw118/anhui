@@ -567,13 +567,11 @@ public class LsRedlineinfoController {
             Object data1 = params.get("data1");
             Object data2 = params.get("data2");
             Object data3 = params.get("data3");
-            Object data4 = params.get("data4");
 
 
             if(null==data1)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data1不能为空！");
             if(null==data2)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data2不能为空！");
             if(null==data3)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data3不能为空！");
-            if(null==data4)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data4不能为空！");
 
             return LsRedlineinfoService.export(data1.toString(),data2.toString(),data3.toString());
         } catch (Exception e) {
