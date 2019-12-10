@@ -443,7 +443,7 @@
         ON t.id = k.CK001) ck
         on ck.CD004 = cd.CD001
         left join image_config img on img.id=cd.active_type
-        where 1=1
+        where 1=1 and ck.ck067=1 
         <if test="id != null and id !='' ">
            and co.id=#{id}
         </if>
