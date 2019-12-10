@@ -14,6 +14,7 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Component
+@PropertySource(value="classpath:application-prod.properties",encoding = "utf-8")
 public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> implements ISt4ScsCdService {
     @Autowired
     private  St4PoClCoMapper st4PoClCoMapper;
@@ -58,11 +60,18 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     @Autowired
     private ConfigUtils configUtils;
 
+
+    private String type_region="保护区";
+    private String type_position="位置";
+    private String type_area="面积m2";
+    private String type_type="类型";
+    private String type_j="经度";
+    private String type_w="维度";
+
+
+
     @Value("${PATH}")
     private String PATH;
-
-
-
     @Value("${ftp_host}")
     private String ftpHost;
     @Value("${ftp_port}")
@@ -586,31 +595,41 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 JSONObject attributes = JSONObject.fromObject(jo.get("attributes"));
                 JSONObject jSONObject1 = new JSONObject();
 
-                //匹配类型
-                String type = attributes.get("二级类").toString();
-                if("".equals(type)){
-                    type = attributes.get("一级类").toString();
+                if(null!=attributes.get(type_region))
+                    jSONObject1.put("region",attributes.get(type_region));
+                if(null!=attributes.get(type_position))
+                    jSONObject1.put("position",attributes.get(type_position));
+
+                double mj = 0;
+                if(null!=attributes.get(type_area)){
+                    mj = Double.valueOf(attributes.get(type_area)+"");
+                    jSONObject1.put("area",mj);
+                    area += mj;
                 }
+
+                String w = "0";
+                if(null!=attributes.get(type_w))
+                    w = ShpUtil.DddToDms(Double.valueOf(attributes.get(type_w).toString()));
+                String j = "0";
+                if(null!=attributes.get(type_j))
+                    j = ShpUtil.DddToDms(Double.valueOf(attributes.get(type_j).toString()));
+                String type = "未识别类型";
+                if(null!=attributes.get(type_type))
+                    type = attributes.get(type_type).toString();
+
                 ImageConfig ic = imageConfigMapper.like(type);
                 if(null!=ic){
                     jSONObject1.put("type",ic.getId());
                 }else{
-                    jSONObject1.put("type",59);
+                    jSONObject1.put("type",imageConfigMapper.like("未识别类型").getId());
                 }
-                jSONObject1.put("region",attributes.get("功能分"));
-                jSONObject1.put("position",attributes.get("位置"));
-                jSONObject1.put("area",attributes.get("面积")+"");
-                area += Double.valueOf(attributes.get("面积")+"");
 
-                String j = ShpUtil.DddToDms(Double.valueOf(attributes.get("实地经").toString()));
-                String w = ShpUtil.DddToDms(Double.valueOf(attributes.get("实地纬").toString()));
+
                 jSONObject1.put("center",j+","+w);
-
                 if (StringUtils.isNotBlank(image.getRemark()))
                     jSONObject1.put("remark",image.getRemark());
                 if (StringUtils.isNotBlank(image.getName()))
                     jSONObject1.put("name",image.getName());
-
                 if (null!=image.getCreateDate()){
                     jSONObject1.put("createDate",image.getCreateDate());
                 }

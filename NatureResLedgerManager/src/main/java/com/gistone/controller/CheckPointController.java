@@ -141,11 +141,11 @@ public class CheckPointController {
         //将数据添加至image表
         //service.save(toPD);
         //将文件上传至影像斑块地址，并且进行解析存入斑块表
-        upload(request,jYResultPATH + fileUUid + ".zip" , toPD , fileUUid);
-        return ResultVOUtil.success(iImageTempService.save(it));
+        upload(request,jYResultPATH + fileUUid + ".zip" , toPD , fileUUid ,it);
+        return ResultVOUtil.success();
 
     }
-    public void upload(HttpServletRequest request , String filePath, Image image , String uuid) {
+    public void upload(HttpServletRequest request , String filePath, Image image , String uuid ,ImageTemp it) {
         try {
             SimpleDateFormat ymdhms = new SimpleDateFormat("yyyy-MM-dd");
             String path = FileUtil.getPath(PATH+"/epr/image/");
@@ -204,8 +204,8 @@ public class CheckPointController {
                 jSONObject1.put("area",attributes.get("area")+"");
                 area += Double.valueOf(attributes.get("area")+"");
 
-                String j = ShpUtil.DddToDms(Double.valueOf(attributes.get("CENTROID_X") == null ? null : attributes.get("CENTROID_X").toString()));
-                String w = ShpUtil.DddToDms(Double.valueOf(attributes.get("CENTROID_Y") == null ? null : attributes.get("CENTROID_Y").toString()));
+                String j = ShpUtil.DddToDms(attributes.get("CENTROID_X") == null ? null : Double.valueOf(attributes.get("CENTROID_X").toString()));
+                String w = ShpUtil.DddToDms(attributes.get("CENTROID_Y") == null ? null :Double.valueOf( attributes.get("CENTROID_Y").toString()));
                 //String j = ShpUtil.DddToDms(101.366);
                 //String w = ShpUtil.DddToDms(36.36);
                 jSONObject1.put("center",j+","+w);
@@ -269,11 +269,13 @@ public class CheckPointController {
             image.setSign(1);
             image.setArea(area);
             image.setPlaqueNumber(plaque_number);
+            it.setArea(area);//自动解译对象
+            it.setPlaqueNumber(plaque_number);//自动解译对象
             if(null!=image.getCreateDate()){
                 image.setCreateDate(image.getCreateDate());
             }
             boolean res = service.save(image);
-
+            iImageTempService.save(it);//自动解译对象
             //从data中构造属性
             for (Object o : jSONArray) {
                 Map<String, Object> datum = (Map<String, Object>) o;
