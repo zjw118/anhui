@@ -86,13 +86,37 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
     private String ftpUrl;
     @Override
     public ResultVO pointQuality(RlhdGroup rl) {
-        List<Map> cds= st4ScsCdMapper.pointQualityOrginAndNow(rl);
-        //List<Map> cdsNow = st4ScsCdMapper.pointQualityNow(rl);
-        Map<Integer,String> map = new HashMap<>();
+        //List<Map> cds= st4ScsCdMapper.pointQualityOrginAndNow(rl);
+        List<StaticHelp> cdsOrgin = st4ScsCdMapper.pointQualityOrgin(rl);
+        List<StaticHelp> cdsNow = st4ScsCdMapper.pointQualityNow(rl);
+        Set<StaticHelp> cdsOrginR = new HashSet<>();
+        StaticHelp sh = null;
+        if(cdsNow!=null&&cdsNow.size()>0){
+//            List<String> cd001s = cdsOrgin.stream().map(StaticHelp::getCd001).collect(Collectors.toList());
+//            List<String> cd001sNow = cdsNow.stream().map(StaticHelp::getCd001).collect(Collectors.toList());
 
+            for (StaticHelp shNow:cdsNow) {
 
+                for (StaticHelp shOrg:cdsOrgin) {
+                    if(shOrg.getName().equals(shNow.getName())){
+                        shOrg.setNowsCount(shNow.getNowsCount());
+                    }else if(shOrg.getNowsCount()==null) {
+                        shOrg.setNowsCount("0");
+                    }else {
+                    }
+                    cdsOrginR.add(shOrg);
 
-        return ResultVOUtil.success(cds);
+                }
+            }
+        }else{
+            cdsOrgin.forEach(aa->{
+                aa.setNowsCount("0");
+                cdsOrginR.add(aa);
+            });
+
+            //cdsOrginR=cdsOrgin;
+        }
+        return ResultVOUtil.success(cdsOrginR);
     }
 
     @Override
@@ -597,7 +621,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 if(null!=ic){
                     jSONObject1.put("type",ic.getId());
                 }else{
-                    jSONObject1.put("type",59);
+                    jSONObject1.put("type",imageConfigMapper.like("未识别类型").getId());
                 }
 
 

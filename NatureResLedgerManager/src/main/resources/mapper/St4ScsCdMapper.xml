@@ -352,81 +352,77 @@
 
     <select id="pointQualityOrginAndNow" resultType="Map"  parameterType="com.gistone.entity.RlhdGroup">
 
-                SELECT IFNULL(a.orign,b.nows) name,IFNULL(a.orignCount,0) orignCount,IFNULL(b.nowsCount,0) nowsCount
-         FROM (
-
-
-        SELECT NAME, orign, IFNULL(orignCount, 0) AS orignCount
+        SELECT a.cd001,IFNULL(a.orign, b.nows) AS name
+        , IFNULL(a.orignCount, 0) AS orignCount
+        , IFNULL(b.nowsCount, 0) AS nowsCount
+        FROM (
+        SELECT cd001,NAME, orign, IFNULL(orignCount, 0) AS orignCount
         FROM image_config conf
-            LEFT JOIN (
-                SELECT orign, COUNT(orign) AS orignCount
-                FROM (
-                    SELECT cd.CD001, cd.active_type
-                        , IFNULL(SUBSTRING_INDEX(CK016, '-', -1), '') AS nows
-                        , cof.name AS orign, co.id
-                    FROM st4_scs_cd cd
-                        LEFT JOIN image_config cof ON cof.id = cd.active_type
-                        LEFT JOIN rlhd_group co ON co.id = cd.group_id
-                        LEFT JOIN (
-                            SELECT *
-                            FROM (
-                                SELECT MAX(CK001) AS id
-                                FROM st4_scs_ck
-                                GROUP BY CD004
-                            ) t
-                                INNER JOIN st4_scs_ck k ON t.id = k.CK001
-                        ) ck
-                        ON ck.cd004 = cd.CD001
-                    WHERE 1 = 1
-                <if test="id!=null  and id!='' ">
-                    and co.id=#{id}
-                </if>
-                    GROUP BY cof.id
-                ) t
-                GROUP BY orign
-            ) aa
-            ON aa.orign = conf.name
+        LEFT JOIN (
+        SELECT cd001,orign, COUNT(orign) AS orignCount
+        FROM (
+        SELECT cd.CD001, cd.active_type
+        , IFNULL(SUBSTRING_INDEX(CK016, '-', -1), '') AS nows
+        , cof.name AS orign, co.id
+        FROM st4_scs_cd cd
+        LEFT JOIN image_config cof ON cof.id = cd.active_type
+        LEFT JOIN rlhd_group co ON co.id = cd.group_id
+        LEFT JOIN (
+        SELECT *
+        FROM (
+        SELECT MAX(CK001) AS id
+        FROM st4_scs_ck
+        GROUP BY CD004
+        ) t
+        INNER JOIN st4_scs_ck k ON t.id = k.CK001
+        ) ck
+        ON ck.cd004 = cd.CD001
+        WHERE 1 = 1
+        <if test="id!=null  and id!='' ">
+            AND co.id=#{id}
+        </if>
+        GROUP BY cd.CD001
+        ) t
+        GROUP BY orign
+        ) aa
+        ON aa.orign = conf.name
         WHERE orign IS NOT NULL
-
-
-
-         ) a LEFT JOIN (
-
-
-        SELECT NAME, nows, IFNULL(nowsCount, 0) AS nowsCount
+        ) a
+        LEFT JOIN (
+        SELECT cd001,NAME, nows, IFNULL(nowsCount, 0) AS nowsCount
         FROM image_config conf
-            LEFT JOIN (
-                SELECT cofid, nows, COUNT(nows) AS nowsCount
-                FROM (
-                    SELECT cd.CD001, cd.active_type
-                        , IFNULL(SUBSTRING_INDEX(CK016, '-', -1), '') AS nows
-                        , cof.name AS orign, co.id, cof.id AS cofid
-                    FROM st4_scs_cd cd
-                        LEFT JOIN image_config cof ON cof.id = cd.active_type
-                        LEFT JOIN rlhd_group co ON co.id = cd.group_id
-                        LEFT JOIN (
-                            SELECT *
-                            FROM (
-                                SELECT MAX(CK001) AS id
-                                FROM st4_scs_ck
-                                GROUP BY CD004
-                            ) t
-                                INNER JOIN st4_scs_ck k ON t.id = k.CK001
-                        ) ck
-                        ON ck.cd004 = cd.CD001
-                    WHERE 1 = 1
-                <if test="id!=null  and id!='' ">
-                    and co.id=#{id}
-                </if>
-                    GROUP BY cof.id
-                ) t
-                WHERE nows IS NOT NULL
-                    AND nows != ''
-                GROUP BY nows
-            ) aa
-            ON aa.nows = conf.name
+        LEFT JOIN (
+        SELECT cd001,cofid, nows, COUNT(nows) AS nowsCount
+        FROM (
+        SELECT cd.CD001, cd.active_type
+        , IFNULL(SUBSTRING_INDEX(CK016, '-', -1), '') AS nows
+        , cof.name AS orign, co.id, cof.id AS cofid
+        FROM st4_scs_cd cd
+        LEFT JOIN image_config cof ON cof.id = cd.active_type
+        LEFT JOIN rlhd_group co ON co.id = cd.group_id
+        LEFT JOIN (
+        SELECT *
+        FROM (
+        SELECT MAX(CK001) AS id
+        FROM st4_scs_ck
+        GROUP BY CD004
+        ) t
+        INNER JOIN st4_scs_ck k ON t.id = k.CK001
+        ) ck
+        ON ck.cd004 = cd.CD001
+        WHERE 1 = 1
+        <if test="id!=null  and id!='' ">
+            AND co.id=#{id}
+        </if>
+        GROUP BY cd.CD001
+        ) t
+
+        GROUP BY nows
+        ) aa
+        ON aa.nows = conf.name
         WHERE nows IS NOT NULL
-         ) b ON a.orign=b.nows
+        ) b
+        ON a.cd001 = b.cd001
 
     </select>
 
@@ -453,42 +449,39 @@
         </if>
 
     </select>
-    <select id="pointQualityOrgin" resultType="Map"  parameterType="com.gistone.entity.RlhdGroup">
+    <select id="pointQualityOrgin" resultType="com.gistone.entity.StaticHelp"  parameterType="com.gistone.entity.RlhdGroup">
 
-        SELECT  name,orign,IFNULL(orignCount,0) orignCount  FROM
-        image_config conf LEFT JOIN
-
-         (
-
-         SELECT orign,COUNT(orign) orignCount FROM (
-                SELECT
-
-                  cd.CD001,cd.active_type  ,IFNULL(SUBSTRING_INDEX(CK016,"-",-1), '') AS nows,cof.name orign,co.id
-                FROM
-                 st4_scs_cd cd
-                LEFT JOIN  image_config cof
-                 ON cof.id = cd.active_type
-
-                  LEFT JOIN rlhd_group co
-                    ON co.id = cd.group_id
-                    LEFT JOIN
-
-                    (
-                                SELECT *
-                                FROM (
-                                    SELECT MAX(CK001) AS id
-                                    FROM st4_scs_ck
-                                    GROUP BY CD004
-                                ) t
-                                    INNER JOIN st4_scs_ck k ON t.id = k.CK001
-                            ) ck
-                            ON ck.cd004 = cd.CD001
-                  WHERE 1=1
+      SELECT cd001,NAME, orign, IFNULL(orignCount, 0) AS orignCount
+	FROM image_config conf
+		LEFT JOIN (
+			SELECT cd001,orign, COUNT(orign) AS orignCount
+			FROM (
+				SELECT cd.CD001, cd.active_type
+					, IFNULL(SUBSTRING_INDEX(CK016, '-', -1), '') AS nows
+					, cof.name AS orign, co.id
+				FROM st4_scs_cd cd
+					LEFT JOIN image_config cof ON cof.id = cd.active_type
+					LEFT JOIN rlhd_group co ON co.id = cd.group_id
+					LEFT JOIN (
+						SELECT *
+						FROM (
+							SELECT MAX(CK001) AS id
+							FROM st4_scs_ck
+							GROUP BY CD004
+						) t
+							INNER JOIN st4_scs_ck k ON t.id = k.CK001
+					) ck
+					ON ck.cd004 = cd.CD001
+				WHERE 1 = 1
         <if test="id!=null  and id!='' ">
             and co.id=#{id}
         </if>
-                GROUP BY cof.id ) t   GROUP BY orign ) aa ON aa.orign = conf.name WHERE orign IS NOT NULL
 
+			) t
+			GROUP BY orign
+		) aa
+		ON aa.orign = conf.name
+	WHERE orign IS NOT NULL
     </select>
     <select id="pointQualityOrginExport" resultType="Map"  parameterType="com.gistone.entity.RlhdGroup">
 
@@ -527,40 +520,40 @@
         GROUP BY cof.id ) t   GROUP BY orign ) aa ON aa.orign = conf.name WHERE orign != ''
 
     </select>
-    <select id="pointQualityNow" resultType="Map"   parameterType="com.gistone.entity.RlhdGroup">
+    <select id="pointQualityNow" resultType="com.gistone.entity.StaticHelp"   parameterType="com.gistone.entity.RlhdGroup">
 
-        SELECT  name,nows,IFNULL(nowsCount,0) nowsCount  FROM
-        image_config conf LEFT JOIN
+       SELECT cd001,NAME, nows, IFNULL(nowsCount, 0) AS nowsCount
+		FROM image_config conf
+			LEFT JOIN (
+				SELECT cd001,cofid, nows, COUNT(nows) AS nowsCount
+				FROM (
+					SELECT cd.CD001, cd.active_type
+						, IFNULL(SUBSTRING_INDEX(CK016, '-', -1), '') AS nows
+						, cof.name AS orign, co.id, cof.id AS cofid
+					FROM st4_scs_cd cd
+						LEFT JOIN image_config cof ON cof.id = cd.active_type
+						LEFT JOIN rlhd_group co ON co.id = cd.group_id
+						LEFT JOIN (
+							SELECT *
+							FROM (
+								SELECT MAX(CK001) AS id
+								FROM st4_scs_ck
+								GROUP BY CD004
+							) t
+								INNER JOIN st4_scs_ck k ON t.id = k.CK001
+						) ck
+						ON ck.cd004 = cd.CD001
+					WHERE 1 = 1
+                <if test="id!=null  and id!='' ">
+                    and co.id=#{id}
+                </if>
 
-         (
-        SELECT cofid,nows,COUNT(nows) nowsCount FROM (
-        SELECT
+				) t
 
-          cd.CD001,cd.active_type  ,IFNULL(SUBSTRING_INDEX(CK016,"-",-1), '') AS nows,cof.name orign,co.id,cof.id cofid
-        FROM
-         st4_scs_cd cd
-        LEFT JOIN  image_config cof
-         ON cof.id = cd.active_type
-
-          LEFT JOIN rlhd_group co
-            ON co.id = cd.group_id
-            LEFT JOIN
-
-            (
-                        SELECT *
-                        FROM (
-                            SELECT MAX(CK001) AS id
-                            FROM st4_scs_ck
-                            GROUP BY CD004
-                        ) t
-                            INNER JOIN st4_scs_ck k ON t.id = k.CK001
-                    ) ck
-                    ON ck.cd004 = cd.CD001
-        WHERE 1=1
-        <if test="id!=null  and id!='' ">
-          and  co.id=#{id}
-        </if>
-        GROUP BY cof.id ) t  WHERE nows IS NOT NULL AND nows != '' GROUP BY nows   ) aa ON aa.nows = conf.name WHERE nows IS NOT null
+				GROUP BY nows
+			) aa
+			ON aa.nows = conf.name
+		WHERE nows IS NOT NULL
 
     </select>
 
