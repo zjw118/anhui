@@ -163,23 +163,6 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             //清空原数据
             dataRedlineRegisterMapper.delete(null);
             //dataRedlineMapper.delete(null);
-            int bid = mapper.insert(params);
-            //再批量插入
-            if (lmMarkerMobiles != null && lmMarkerMobiles.size() > 0) {
-                for (DataRedlineRegister lmMarkerMobile : lmMarkerMobiles) {
-                    //将数据绑定红线调整审核数据
-                    lmMarkerMobile.setSrldShpBatchId(params.getId());
-                    //3方测试单独添加
-                    DataRedlineRegisterBatch batch = new DataRedlineRegisterBatch();
-                    BeanUtils.copyProperties(batch, lmMarkerMobile);
-                    dataRedlineRegisterBatchMapper.insert(batch);
-                    dataRedlineRegisterMapper.insert(lmMarkerMobile);
-                    /*DataRedline dataRedline = new DataRedline();
-                    BeanUtils.copyProperties(lmMarkerMobile,dataRedline);
-                    dataRedlineMapper.insert(dataRedline);*/
-
-                }
-            }
 
             //批次表中录入数据
             // 把生成的文件上传到ftp服务器的文件夹下面，并返回地址
@@ -217,7 +200,25 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             if (StringUtils.isNotBlank(remark)) {
                 shpBatch.setRemark(remark);
             }
-            mapper.insert(shpBatch);
+            //mapper.insert(shpBatch);
+            int bid = mapper.insert(shpBatch);
+            //再批量插入
+            if (lmMarkerMobiles != null && lmMarkerMobiles.size() > 0) {
+                for (DataRedlineRegister lmMarkerMobile : lmMarkerMobiles) {
+                    //将数据绑定红线调整审核数据
+                    lmMarkerMobile.setSrldShpBatchId(shpBatch.getId());
+                    //3方测试单独添加
+                    DataRedlineRegisterBatch batch = new DataRedlineRegisterBatch();
+                    BeanUtils.copyProperties(batch, lmMarkerMobile);
+                    dataRedlineRegisterBatchMapper.insert(batch);
+                    dataRedlineRegisterMapper.insert(lmMarkerMobile);
+                    /*DataRedline dataRedline = new DataRedline();
+                    BeanUtils.copyProperties(lmMarkerMobile,dataRedline);
+                    dataRedlineMapper.insert(dataRedline);*/
+
+                }
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             log.error("导入预置红线数据失败，异常信息为:", e.getMessage());
