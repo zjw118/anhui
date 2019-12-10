@@ -192,20 +192,6 @@ public class ImageController {
         if (StringUtils.isBlank(name)) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "名称不能为空");
         }
-        String oriDir = "";
-        String finalDir = "";
-        String ftpurl = "";
-        try {
-            oriDir = "D:\\epr\\attached\\shp";
-            finalDir = "D:\\FTP\\epr\\image\\shptemp";
-            ftpurl = ExcelUtils.copyDirectiory(oriDir, finalDir);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        /**这里是因为11.21演示所以在服务器的上放置了演示用的shp相关文件这里的地址是移动端加载的这里去掉了url必填项的检验
-         *这里传递进去的是shape文件拷贝后存放的ftp地址
-         *
-         */
 
         String url = params.get("url") == null ? "" : params.get("url").toString();
 
@@ -220,7 +206,7 @@ public class ImageController {
         if (createBy == null || createBy <= 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "创建人不能为空");
         }
-        service.insert(name, url, ftpurl, createBy, remark, createDate);
+        service.insert(name, url, createBy, remark, createDate);
         return ResultVOUtil.success();
     }
 
