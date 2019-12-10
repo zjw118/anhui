@@ -298,7 +298,6 @@ public class ShpUtil {
                 featureStore.setTransaction(transaction);
                 try {
                     featureStore.addFeatures(collection);
-                    System.out.println("finish");
                     transaction.commit();
                 } catch (Exception problem) {
 
@@ -371,7 +370,6 @@ public class ShpUtil {
                         Double y = 0.0;
                         for (int j = 0; j < lists.get(x).get(i).size(); j++) {
                             if (j == 0) {
-                                System.out.println(lists.get(x).get(i).get(j));
                                 lon = Double.parseDouble(lists.get(x).get(i).get(j).toPlainString());
                             } else {
                                 y = Double.parseDouble(lists.get(x).get(i).get(j).toPlainString());
@@ -449,7 +447,6 @@ public class ShpUtil {
              *
              * Each data store has different limitations so check the resulting SimpleFeatureType.
              */
-            System.out.println("SHAPE:" + SHAPE_TYPE);
 
             if (featureSource instanceof SimpleFeatureStore) {
                 SimpleFeatureStore featureStore = (SimpleFeatureStore) featureSource;
@@ -902,7 +899,6 @@ public class ShpUtil {
             SimpleFeatureSource featureSource = newDataStore.getFeatureSource(typeName);
             SimpleFeatureType SHAPE_TYPE = featureSource.getSchema();
 
-            System.out.println("SHAPE:" + SHAPE_TYPE);
 
             if (featureSource instanceof SimpleFeatureStore) {
                 SimpleFeatureStore featureStore = (SimpleFeatureStore) featureSource;
@@ -1167,7 +1163,7 @@ public class ShpUtil {
             features.close();
             fsb.append(array.toString());
             fsb.append("}");
-            System.out.println(array.toString());
+//            System.out.println(array.toString());
 
             result.setMsg("ok");
             result.setData(fsb);

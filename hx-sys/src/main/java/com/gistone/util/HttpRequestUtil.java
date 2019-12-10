@@ -59,6 +59,5 @@ public class HttpRequestUtil {
 
         String url = PathUtile.getRandomPath("D:/epr/shp/", "x.shp");
         ShpUtil.importPreRedlinedata(jsonArray, url);
-        System.out.println(jsonArray);
     }
 }
