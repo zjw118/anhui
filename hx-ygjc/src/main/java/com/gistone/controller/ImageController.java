@@ -16,13 +16,11 @@ import com.gistone.service.ImageService;
 import com.gistone.util.*;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -74,12 +72,12 @@ public class ImageController {
     @ApiOperation(value = "image识别列表接口", notes = "此接口返回问题点批次数据", response = Result.class)
     @PostMapping("/listImagerTemp")
     public ResultVO listImagerTemp(@RequestBody @ApiParam(name = "任务批次添加接口", value = "json格式", required = true) Swagger<ImageTemp> data,
-                               HttpServletRequest request) {
+                                   HttpServletRequest request) {
         ImageTemp param = data.getData();
-        if(!ObjectUtils.isNotNullAndEmpty(param.getPageNumber())||!ObjectUtils.isNotNullAndEmpty(param.getPageSize())){
+        if (!ObjectUtils.isNotNullAndEmpty(param.getPageNumber()) || !ObjectUtils.isNotNullAndEmpty(param.getPageSize())) {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "pageSize和pageNumber不能为空！");
         }
-        return  iImageTempService.listImageTemp(param);
+        return iImageTempService.listImageTemp(param);
     }
 
     /**
@@ -124,7 +122,7 @@ public class ImageController {
     }
 
     @PostMapping("/exportWord")
-    public ResultVO exportWord(@RequestBody Map<String, Object> paramsMap){
+    public ResultVO exportWord(@RequestBody Map<String, Object> paramsMap) {
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
         if (params == null) {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
@@ -133,27 +131,27 @@ public class ImageController {
         Integer id = (Integer) params.get("id");
         Image image = service.getById(id);
         Map<String, Object> param = new HashMap<>();
-        param.put("name",image.getName());
-        if(StringUtils.isNotBlank(image.getRemark())){
-            param.put("remark",image.getRemark());
-        }else{
-            param.put("remark","-");
+        param.put("name", image.getName());
+        if (StringUtils.isNotBlank(image.getRemark())) {
+            param.put("remark", image.getRemark());
+        } else {
+            param.put("remark", "-");
         }
 
-        param.put("date",image.getCreateDate());
-        if(StringUtils.isNotBlank(image.getUrl())){
-            param.put("url",image.getUrl());
-        }else {
-            param.put("url","-");
+        param.put("date", image.getCreateDate());
+        if (StringUtils.isNotBlank(image.getUrl())) {
+            param.put("url", image.getUrl());
+        } else {
+            param.put("url", "-");
         }
 
-        param.put("count",image.getPlaqueNumber());
+        param.put("count", image.getPlaqueNumber());
 
-        param.put("area",image.getArea());
-        if(image.getScore()==null){
-            param.put("score","-");
-        }else{
-            param.put("score",image.getScore());
+        param.put("area", image.getArea());
+        if (image.getScore() == null) {
+            param.put("score", "-");
+        } else {
+            param.put("score", image.getScore());
         }
 
 
@@ -161,14 +159,14 @@ public class ImageController {
         try {
 
 
-                XWPFDocument doc = WordExportUtil.exportWord07(
-                        "word/report.docx", param);
-                String fileName = image.getName() + "报告";
-                String lastName = WORD_PATH + fileName + ".docx";
-                Name = lastName.substring(2);
-                FileOutputStream fos = new FileOutputStream(lastName);
-                doc.write(fos);
-                fos.close();
+            XWPFDocument doc = WordExportUtil.exportWord07(
+                    "word/report.docx", param);
+            String fileName = image.getName() + "报告";
+            String lastName = WORD_PATH + fileName + ".docx";
+            Name = lastName.substring(2);
+            FileOutputStream fos = new FileOutputStream(lastName);
+            doc.write(fos);
+            fos.close();
 
 
         } catch (Exception e) {
@@ -194,22 +192,8 @@ public class ImageController {
         if (StringUtils.isBlank(name)) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "名称不能为空");
         }
-        String oriDir="";
-        String finalDir="";
-        String ftpurl="";
-        try {
-            oriDir = "D:\\epr\\attached\\shp";
-            finalDir = "D:\\FTP\\epr\\image\\shptemp";
-            ftpurl = ExcelUtils.copyDirectiory(oriDir, finalDir);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        /**这里是因为11.21演示所以在服务器的上放置了演示用的shp相关文件这里的地址是移动端加载的这里去掉了url必填项的检验
-         *这里传递进去的是shape文件拷贝后存放的ftp地址
-         *
-         */
 
-        String url =  params.get("url")==null?"": params.get("url").toString();
+        String url = params.get("url") == null ? "" : params.get("url").toString();
 
         String createDate = (String) params.get("createDate");
         if (StringUtils.isBlank(createDate)) {
@@ -222,7 +206,7 @@ public class ImageController {
         if (createBy == null || createBy <= 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "创建人不能为空");
         }
-        service.insert(name,url,ftpurl, createBy, remark,createDate);
+        service.insert(name, url, createBy, remark, createDate);
         return ResultVOUtil.success();
     }
 
@@ -314,7 +298,7 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
         }
 
-        Integer  imageId = (Integer) params.get("imageId");
+        Integer imageId = (Integer) params.get("imageId");
         List<Map<String, Object>> result = service.getCountGroupByType(imageId);
         return ResultVOUtil.success(result);
     }
@@ -336,19 +320,43 @@ public class ImageController {
         }
 
 
-        Integer  imageId = (Integer) params.get("imageId");
+        Integer imageId = (Integer) params.get("imageId");
         List<Map<String, Object>> result = service.getAreaGroupByType(imageId);
         return ResultVOUtil.success(result);
     }
 
     @PostMapping("/getCountChange")
-    public ResultVO getCountChange(){
+    public ResultVO getCountChange() {
         List<Map<String, Object>> result = service.getCountChange();
         return ResultVOUtil.success(result);
     }
 
+    /**
+     * @param paramsMap
+     * @return com.gistone.VO.ResultVO
+     * @description:按类型统计
+     * @author zf1017@foxmail.com
+     * @motto: Talk is cheap,show me the code
+     * @date 2019/12/8 0008 19:41
+     */
+    @PostMapping("/totalByType")
+    public ResultVO totalByType(@RequestBody Map<String, Object> paramsMap) {
+        //请求参数格式校验
+        Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+        if (params == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        Integer type = (Integer) params.get("type");
+        /*if(type==null){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"类型不能为空");
+        }*/
+        List<Map<String, Object>> list = service.totalByType(type);
+
+        return ResultVOUtil.success(list);
+    }
+
     @PostMapping("/getAreaChange")
-    public ResultVO getAreaChange(@RequestBody Map<String, Object> paramsMap){
+    public ResultVO getAreaChange(@RequestBody Map<String, Object> paramsMap) {
         List<Map<String, Object>> result = service.getAreaChange();
         return ResultVOUtil.success(result);
     }
@@ -410,6 +418,7 @@ public class ImageController {
 
     /**
      * 添加配置
+     *
      * @param paramsMap
      * @return
      */
@@ -523,11 +532,9 @@ public class ImageController {
     }
 
 
-
-
-
     /**
      * 审核详情1
+     *
      * @param paramsMap
      * @return
      */
@@ -537,14 +544,16 @@ public class ImageController {
         if (params == null) {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
         }
-        Object id =  params.get("id");
-        if (null==id) {
+        Object id = params.get("id");
+        if (null == id) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "影像主键id不能为空");
         }
-        return service.getAudit(Integer.valueOf(id+""));
+        return service.getAudit(Integer.valueOf(id + ""));
     }
+
     /**
      * 审核计算1
+     *
      * @param paramsMap
      * @return
      */
@@ -559,17 +568,17 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "主键id不能为空");
         }
         Object json = params.get("json");
-        if (null==json) {
+        if (null == json) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "系数json不能为空");
         }
         JSONObject job = JSONObject.fromObject(json);
-        return service.addAudit(Integer.valueOf(id),job);
+        return service.addAudit(Integer.valueOf(id), job);
     }
-
 
 
     /**
      * 审核详情2
+     *
      * @param paramsMap
      * @return
      */
@@ -579,14 +588,16 @@ public class ImageController {
         if (params == null) {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
         }
-        Object id =  params.get("id");
-        if (null==id) {
+        Object id = params.get("id");
+        if (null == id) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "影像主键id不能为空");
         }
-        return service.getAudit2(Integer.valueOf(id+""));
+        return service.getAudit2(Integer.valueOf(id + ""));
     }
+
     /**
      * 审核计算2
+     *
      * @param paramsMap
      * @return
      */
@@ -601,19 +612,12 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "主键id不能为空");
         }
         Object json = params.get("json");
-        if (null==json) {
+        if (null == json) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "系数json不能为空");
         }
         JSONObject job = JSONObject.fromObject(json);
-        return service.addAudit2(Integer.valueOf(id),job);
+        return service.addAudit2(Integer.valueOf(id), job);
     }
-
-
-
-
-
-
-
 
 
     /**
@@ -633,8 +637,6 @@ public class ImageController {
     }
 
 
-
-
 //    ______________________________________系数___________________________________________
 
 
@@ -648,6 +650,7 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
         }
     }
+
     //系数1-系数批次名查询列表
     @RequestMapping(value = "/getNumberByName", method = RequestMethod.POST)
     public ResultVO getNumberByName(@RequestBody Map<String, Object> paramsMap) {
@@ -657,7 +660,7 @@ public class ImageController {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
             }
             Object name = params.get("name");
-            if (null==name) {
+            if (null == name) {
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
             }
             ImageNumber imageNumber = new ImageNumber();
@@ -665,7 +668,7 @@ public class ImageController {
             List<ImageNumber> imageNumbers = imageNumberMapper.selectImageNumber(imageNumber);
             //判断是否需要新增
             for (ImageNumber number : imageNumbers) {
-                if(null==number.getId()){
+                if (null == number.getId()) {
                     ImageNumber add = new ImageNumber();
                     add.setImage_config_id(number.getImageConfigId());
                     add.setName(name.toString());
@@ -679,7 +682,8 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
         }
     }
-//    系数1-修改
+
+    //    系数1-修改
     @RequestMapping(value = "/updateNumber", method = RequestMethod.POST)
     public ResultVO updateNumber(@RequestBody Map<String, Object> paramsMap) {
         try {
@@ -688,14 +692,14 @@ public class ImageController {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
             }
             Object json = params.get("json");
-            if(null==json)
+            if (null == json)
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "json不能为空！");
             JSONObject jsonObject = JSONObject.fromObject(json);
 
-            for (Object o : jsonObject.keySet()){
+            for (Object o : jsonObject.keySet()) {
                 ImageNumber imageNumber = new ImageNumber();
                 imageNumber.setId(Integer.valueOf(o.toString()));
-                imageNumber.setNumber(Double.valueOf(jsonObject.get(o)+""));
+                imageNumber.setNumber(Double.valueOf(jsonObject.get(o) + ""));
                 imageNumberMapper.updateImageNumber(imageNumber);
                 imageNumber = null;
             }
@@ -705,7 +709,8 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
         }
     }
-//    系数1-修改批次名
+
+    //    系数1-修改批次名
     @RequestMapping(value = "/updateNume", method = RequestMethod.POST)
     public ResultVO updateNume(@RequestBody Map<String, Object> paramsMap) {
         try {
@@ -714,21 +719,21 @@ public class ImageController {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
             }
             Object name = params.get("name");
-            if(null==name)
+            if (null == name)
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "原名称name不能为空！");
             Object data = params.get("data");
-            if(null==data)
+            if (null == data)
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "新名称data不能为空！");
             //判断名称是否重复
             List list = imageNumberMapper.selectImageNumber2(data.toString());
-            if(0<list.size()){
+            if (0 < list.size()) {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "名称已存在！");
             }
             ImageNumber imageNumber = new ImageNumber();
             imageNumber.setName(name.toString());
             imageNumber.setData(data.toString());
             int res = imageNumberMapper.updateNum(imageNumber);
-            if(0>res){
+            if (0 > res) {
                 return ResultVOUtil.success();
             }
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
@@ -737,7 +742,8 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
         }
     }
-//    系数1-创建批次
+
+    //    系数1-创建批次
     @RequestMapping(value = "/addNumber", method = RequestMethod.POST)
     public ResultVO addNumber(@RequestBody Map<String, Object> paramsMap) {
         try {
@@ -745,12 +751,12 @@ public class ImageController {
             if (params == null) {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
             }
-            if(null==params.get("name")){
+            if (null == params.get("name")) {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "name不能为空！");
             }
             //判断名称是否重复
             List list = imageNumberMapper.selectImageNumber2(params.get("name").toString());
-            if(0<list.size()){
+            if (0 < list.size()) {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "批次名已存在！");
             }
             ImageNumber imageNumber = new ImageNumber();
@@ -761,6 +767,7 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "添加失败");
         }
     }
+
     //系数1-删除系数
     @RequestMapping(value = "/deleteNumber", method = RequestMethod.POST)
     public ResultVO deleteNumber(@RequestBody Map<String, Object> paramsMap) {
@@ -779,7 +786,8 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "删除失败");
         }
     }
-//    系数1-设置默认系数
+
+    //    系数1-设置默认系数
     @RequestMapping(value = "/defaultNumber", method = RequestMethod.POST)
     public ResultVO defaultNumber(@RequestBody Map<String, Object> paramsMap) {
         try {
@@ -788,12 +796,12 @@ public class ImageController {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
             }
             Object name = params.get("name");
-            if (null==name) {
+            if (null == name) {
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
             }
             int res1 = imageNumberMapper.defaultNumber1(name.toString());
             int res2 = imageNumberMapper.defaultNumber2(name.toString());
-            if(0<res1&&0<res2){
+            if (0 < res1 && 0 < res2) {
                 return ResultVOUtil.success();
             }
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
@@ -817,6 +825,7 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
         }
     }
+
     //系数2-系数批次名查询列表
     @RequestMapping(value = "/getNumberByName2", method = RequestMethod.POST)
     public ResultVO getNumberByName2(@RequestBody Map<String, Object> paramsMap) {
@@ -826,7 +835,7 @@ public class ImageController {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
             }
             Object name = params.get("name");
-            if (null==name) {
+            if (null == name) {
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
             }
             ImageNumber imageNumber = new ImageNumber();
@@ -834,7 +843,7 @@ public class ImageController {
             List<ImageNumber> imageNumbers = imageNumber2Mapper.selectImageNumber(imageNumber);
             //判断是否需要新增
             for (ImageNumber number : imageNumbers) {
-                if(null==number.getId()){
+                if (null == number.getId()) {
                     ImageNumber add = new ImageNumber();
                     add.setImage_config_id(number.getImageConfigId());
                     add.setName(name.toString());
@@ -848,6 +857,7 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
         }
     }
+
     //系数2-修改
     @RequestMapping(value = "/updateNumber2", method = RequestMethod.POST)
     public ResultVO updateNumber2(@RequestBody Map<String, Object> paramsMap) {
@@ -857,14 +867,14 @@ public class ImageController {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
             }
             Object json = params.get("json");
-            if(null==json)
+            if (null == json)
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "json不能为空！");
             JSONObject jsonObject = JSONObject.fromObject(json);
 
-            for (Object o : jsonObject.keySet()){
+            for (Object o : jsonObject.keySet()) {
                 ImageNumber imageNumber = new ImageNumber();
                 imageNumber.setId(Integer.valueOf(o.toString()));
-                imageNumber.setNumber(Double.valueOf(jsonObject.get(o)+""));
+                imageNumber.setNumber(Double.valueOf(jsonObject.get(o) + ""));
                 imageNumber2Mapper.updateImageNumber(imageNumber);
                 imageNumber = null;
             }
@@ -874,6 +884,7 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
         }
     }
+
     //系数2-修改批次名
     @RequestMapping(value = "/updateNume2", method = RequestMethod.POST)
     public ResultVO updateNume2(@RequestBody Map<String, Object> paramsMap) {
@@ -883,21 +894,21 @@ public class ImageController {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
             }
             Object name = params.get("name");
-            if(null==name)
+            if (null == name)
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "原名称name不能为空！");
             Object data = params.get("data");
-            if(null==data)
+            if (null == data)
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "新名称data不能为空！");
             //判断名称是否重复
             List list = imageNumber2Mapper.selectImageNumber2(data.toString());
-            if(0<list.size()){
+            if (0 < list.size()) {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "名称已存在！");
             }
             ImageNumber imageNumber = new ImageNumber();
             imageNumber.setName(name.toString());
             imageNumber.setData(data.toString());
             int res = imageNumber2Mapper.updateNum(imageNumber);
-            if(0>res){
+            if (0 > res) {
                 return ResultVOUtil.success();
             }
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
@@ -906,6 +917,7 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
         }
     }
+
     //系数2-创建批次
     @RequestMapping(value = "/addNumber2", method = RequestMethod.POST)
     public ResultVO addNumber2(@RequestBody Map<String, Object> paramsMap) {
@@ -914,12 +926,12 @@ public class ImageController {
             if (params == null) {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
             }
-            if(null==params.get("name")){
+            if (null == params.get("name")) {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "name不能为空！");
             }
             //判断名称是否重复
             List list = imageNumber2Mapper.selectImageNumber2(params.get("name").toString());
-            if(0<list.size()){
+            if (0 < list.size()) {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "批次名已存在！");
             }
             ImageNumber imageNumber = new ImageNumber();
@@ -930,6 +942,7 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "添加失败");
         }
     }
+
     //系数2-删除系数
     @RequestMapping(value = "/deleteNumber2", method = RequestMethod.POST)
     public ResultVO deleteNumber2(@RequestBody Map<String, Object> paramsMap) {
@@ -948,6 +961,7 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "删除失败");
         }
     }
+
     //系数2-设置默认系数
     @RequestMapping(value = "/defaultNumber2", method = RequestMethod.POST)
     public ResultVO defaultNumber2(@RequestBody Map<String, Object> paramsMap) {
@@ -957,12 +971,12 @@ public class ImageController {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
             }
             Object name = params.get("name");
-            if (null==name) {
+            if (null == name) {
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
             }
             int res1 = imageNumber2Mapper.defaultNumber1(name.toString());
             int res2 = imageNumber2Mapper.defaultNumber2(name.toString());
-            if(0<res1&&0<res2){
+            if (0 < res1 && 0 < res2) {
                 return ResultVOUtil.success();
             }
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
@@ -971,8 +985,6 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "获取失败");
         }
     }
-
-
 
 
 //    ______________________________________________________________________________
@@ -987,7 +999,7 @@ public class ImageController {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
             }
             Object rc = params.get("rc");  //容差
-            if (null==rc) {
+            if (null == rc) {
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "容差rc不能为空");
             }
             return service.gdShp(Double.valueOf(rc.toString()));
@@ -1006,7 +1018,7 @@ public class ImageController {
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
             }
             Object data = params.get("data");
-            if (null==data) {
+            if (null == data) {
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "拐点数据不能为空");
             }
             return service.gdShp2(data);
@@ -1041,9 +1053,9 @@ public class ImageController {
     }
 
 
-
     /**
      * 导出人类活动专题统计模板报告
+     *
      * @param paramsMap
      * @return
      */
@@ -1051,18 +1063,17 @@ public class ImageController {
     public ResultVO exportZTTJ(@RequestBody Map<String, Object> paramsMap) {
         try {
             Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-            if (params==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            if (params == null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
 
             Object data1 = params.get("data1");//人类活动类型统计量柱状图
             Object data2 = params.get("data2");//人类活动类型统计面积占比饼状图
             Object data3 = params.get("data3");//人类活动解译批次任务数量统计柱状图
-//            Object data4 = params.get("data4");//人类活动解译批次面积统计柱状图
 
-            if(null==data1)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data1不能为空！");
-            if(null==data2)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data2不能为空！");
-            if(null==data3)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data3不能为空！");
+            if (null == data1) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data1不能为空！");
+            if (null == data2) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data2不能为空！");
+            if (null == data3) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data3不能为空！");
 
-            return service.exportZTTJ(data1.toString(),data2.toString(),data3.toString());
+            return service.exportZTTJ(data1.toString(), data2.toString(), data3.toString());
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "报告导出失败");
@@ -1075,9 +1086,9 @@ public class ImageController {
     public ResultVO lswjjAdd(@RequestBody Map<String, Object> paramsMap) {
         try {
             Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-            if (params==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            if (params == null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
             Object data = params.get("data");
-            if(null!=data){
+            if (null != data) {
                 imageNumberMapper.updateLinshi(data.toString());
             }
             String linshi = imageNumberMapper.getLinshi();
@@ -1094,10 +1105,10 @@ public class ImageController {
     public ResultVO zAdd(@RequestBody Map<String, Object> paramsMap) {
         try {
             Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-            if (params==null)
+            if (params == null)
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
             Object name = params.get("name");
-            if(null==name)
+            if (null == name)
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
             Linshi2 Linshi2 = new Linshi2();
             Linshi2.setName(name.toString());
@@ -1108,14 +1119,15 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "添加失败");
         }
     }
+
     //台账组-删除
     @RequestMapping(value = "/zDelete")
     public ResultVO zDelete(@RequestBody Map<String, Object> paramsMap) {
         try {
             Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-            if (params==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            if (params == null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
             Object id = params.get("id");
-            if(null==id)
+            if (null == id)
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
             imageNumberMapper.zDelete(Integer.valueOf(id.toString()));
             return ResultVOUtil.success();
@@ -1124,17 +1136,18 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "删除失败");
         }
     }
+
     //台账组-修改
     @RequestMapping(value = "/zUpdate")
     public ResultVO zUpdate(@RequestBody Map<String, Object> paramsMap) {
         try {
             Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-            if (params==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            if (params == null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
             Object name = params.get("name");
-            if(null==name)
+            if (null == name)
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "name不能为空");
             Object id = params.get("id");
-            if(null==id)
+            if (null == id)
                 return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
             Linshi2 Linshi2 = new Linshi2();
             Linshi2.setName(name.toString());
@@ -1146,19 +1159,20 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "修改失败");
         }
     }
+
     //台账组-分页条件列表
     @RequestMapping(value = "/zSelect")
     public ResultVO zSelect(@RequestBody Map<String, Object> paramsMap) {
         try {
             Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-            if (params==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+            if (params == null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
             Object pageIndex = params.get("pageIndex");
-                if (pageIndex==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "当前页不能为空！");
+            if (pageIndex == null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "当前页不能为空！");
             Object pageSize = params.get("pageSize");
-               if (pageSize==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "每页条数不能为空！");
+            if (pageSize == null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "每页条数不能为空！");
             Object name = params.get("name");
             PageBean pageBean = new PageBean();
-            if (name!=null)
+            if (name != null)
                 pageBean.setStr1(name.toString());
             pageBean.setPageIndex(Integer.valueOf(pageIndex.toString()));
             pageBean.setPageSize(Integer.valueOf(pageSize.toString()));
@@ -1174,6 +1188,7 @@ public class ImageController {
 
     /**
      * 人类活动板块导出zip
+     *
      * @param paramsMap
      * @return
      */
@@ -1182,10 +1197,10 @@ public class ImageController {
     public ResultVO downImageShp(@RequestBody Map<String, Object> paramsMap) {
         try {
             Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
-            if (params==null)
+            if (params == null)
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
             Object id = params.get("id");
-            if (id==null)
+            if (id == null)
                 return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "id不能为空！");
             return service.downImageShp(Integer.valueOf(id.toString()));
         } catch (Exception e) {
@@ -1193,11 +1208,6 @@ public class ImageController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "导出异常！");
         }
     }
-
-
-
-
-
 
 
 }

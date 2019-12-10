@@ -87,7 +87,7 @@ public class ValidDataFormatUtil {
 	     }  
 	     return b;  
 	 }
-	
+
 	/**
 	 * 验证密码格式
 	 * @param str
@@ -102,4 +102,7 @@ public class ValidDataFormatUtil {
 	    b = m.matches();  
 	    return b;
 	}
+
+
+
 }

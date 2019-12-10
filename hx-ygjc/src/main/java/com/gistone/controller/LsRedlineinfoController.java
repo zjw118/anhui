@@ -553,7 +553,32 @@ public class LsRedlineinfoController {
     }
 
 
+    /**
+     * 导出红线信息服务统计
+     * @param paramsMap
+     * @return
+     */
+    @RequestMapping(value = "/export")
+    public ResultVO export(@RequestBody Map<String, Object> paramsMap) {
+        try {
+            Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
+            if (params==null) return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
 
+            Object data1 = params.get("data1");
+            Object data2 = params.get("data2");
+            Object data3 = params.get("data3");
+
+
+            if(null==data1)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data1不能为空！");
+            if(null==data2)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data2不能为空！");
+            if(null==data3)return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "data3不能为空！");
+
+            return LsRedlineinfoService.export(data1.toString(),data2.toString(),data3.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "报告导出失败");
+        }
+    }
 
 
 

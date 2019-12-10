@@ -163,15 +163,41 @@
 
     <select id="getCountChange" resultType="java.util.Map">
         SELECT
-            count(*) count,
-            b.`name` name
+		count(*) count,
+		b.create_date name
+        FROM st4_scs_cd a
+        inner JOIN image b ON a.image_id = b.id
+        where a.CD009 = 1
+        and b.del_flag = 1
+        GROUP BY
+                a.image_id
+        ORDER BY b.create_date DESC
+    </select>
+
+    <select id="getTotalByType" resultType="map">
+        SELECT
+            COUNT(*) count,
+            b. NAME name
         FROM
             st4_scs_cd a
-        inner JOIN image b ON a.image_id = b.id
+        INNER JOIN image_config b ON a.active_type = b.id
+        WHERE
+            a.CD009 = 1
         GROUP BY
-            a.image_id
-        ORDER BY b.create_date DESC
-        LIMIT 1,5
+            b.id
+    </select>
+
+    <select id="getTotalByCode" resultType="map">
+       SELECT
+			COUNT(*) count,
+			b.COM_NAME name
+		FROM
+			st4_scs_cd a
+        INNER JOIN sys_company b ON a.code = b.COM_CODE
+		WHERE
+			CD009 = 1
+		GROUP BY
+			a.code
     </select>
 
     <select id="getAreaChange" resultType="java.util.Map">

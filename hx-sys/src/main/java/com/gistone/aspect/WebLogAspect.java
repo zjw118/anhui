@@ -101,6 +101,7 @@ public class WebLogAspect {
 //            sysLog.setIsp(map.get("isp"));
 //        }
         sysLog.setType(ToolUtil.isAjax(request)?"Ajax请求":"普通请求");
+        sysLog.setCategory("用户日志"); //临时
         //获取用户
        /* if(MySysUser.ShiroUser() != null) {
             sysLog.setUsername(StringUtils.isNotBlank(MySysUser.nickName()) ? MySysUser.nickName() : MySysUser.loginName());

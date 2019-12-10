@@ -39,6 +39,12 @@ public class AnalysisReport implements Serializable {
     private Double intersectArea;
     @TableField(exist = false)
     private String area;
+    @TableField(exist = false)
+    private String type;
+    @TableField(exist = false)
+    private String target;
+    @TableField(exist = false)
+    private String name;
 
 
 

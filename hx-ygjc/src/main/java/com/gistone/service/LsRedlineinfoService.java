@@ -27,8 +27,10 @@ public interface LsRedlineinfoService {
     ResultVO infoInsert(LsRedlineinfo lsRedlineinfo)throws Exception;
     ResultVO infoDelete(LsRedlineinfo lsRedlineinfo)throws Exception;
     ResultVO infoUpdate(LsRedlineinfo lsRedlineinfo)throws Exception;
-    ResultVO audit(LsRedlineinfo lsRedlineinfo)throws Exception;
+//    ResultVO audit(LsRedlineinfo lsRedlineinfo)throws Exception;
 
+
+    ResultVO export(String data1,String data2,String data3)throws Exception;
 
 
 }

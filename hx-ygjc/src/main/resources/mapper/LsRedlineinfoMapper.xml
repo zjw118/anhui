@@ -264,22 +264,35 @@
 
 
     <select id="getPoSumInfo"  resultType="java.lang.Integer" parameterType="com.gistone.util.PageBean">
-        SELECT count(*) from ls_redlineinfo
-        where closed = 1
+        SELECT count(*)
+        from ls_redlineinfo a
+        LEFT JOIN ls_redlineinfo_version b
+        ON a.version_id = b.id
+        LEFT JOIN ls_redlineinfo_template c
+        ON b.template_id = c.id
+        where a.closed = 1
+        and b.closed = 1
+        and c.closed = 1
         <if test="str1!=null and str1!=''">
-            and name like '%${str1}%'
+            and a.name like '%${str1}%'
         </if>
     </select>
+
     <select id="selectPoListInfo"  resultType ="java.util.Map" parameterType="com.gistone.util.PageBean">
-        SELECT * from ls_redlineinfo
-        where closed = 1
+        SELECT a.*,c.compass,c.scale
+        from ls_redlineinfo a
+        LEFT JOIN ls_redlineinfo_version b
+        ON a.version_id = b.id
+        LEFT JOIN ls_redlineinfo_template c
+        ON b.template_id = c.id
+        where a.closed = 1
+        and b.closed = 1
+        and c.closed = 1
         <if test="str1!=null and str1!=''">
-            and name like '%${str1}%'
+            and a.name like '%${str1}%'
         </if>
         LIMIT #{firstLimit},#{pageSize}
     </select>
-
-
 
 
     <select id="LsRedlineinfoProcessList"  resultType ="com.gistone.entity.LsRedlineinfoProcess">
