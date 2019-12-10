@@ -597,7 +597,7 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 if(null!=ic){
                     jSONObject1.put("type",ic.getId());
                 }else{
-                    jSONObject1.put("type",59);
+                    jSONObject1.put("type",imageConfigMapper.like("未识别类型").getId());
                 }
 
 
