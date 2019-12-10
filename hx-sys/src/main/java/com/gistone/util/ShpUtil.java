@@ -45,7 +45,7 @@ public class ShpUtil {
 
 
     public static void main(String[] args) {
-        String shpStr1 = ShpUtil.readShapeFileToStr("E:\\epr\\image\\2019-11-10\\3\\5deda7e4ecfe4eb9ae2b62b5415ad884.shp", 1) + "";
+        String shpStr1 = ShpUtil.readShapeFileToStr("C:\\Users\\KING\\Desktop\\人类活动\\安徽2018年人类活动数据.shp", 1) + "";
         System.out.println(shpStr1);
     }
 

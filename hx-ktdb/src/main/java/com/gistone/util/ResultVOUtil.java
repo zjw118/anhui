@@ -1,7 +1,11 @@
 package com.gistone.util;
 import com.gistone.VO.ResultVO;
 
-public class ResultVOUtil {
+import java.io.Serializable;
+
+public class ResultVOUtil implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public static ResultVO success(Object object) {
         ResultVO resultVO = new ResultVO();
         resultVO.setData(object);

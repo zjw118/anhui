@@ -7,6 +7,7 @@ import com.gistone.service.LsProjectModelService;
 import com.gistone.util.ResultEnum;
 import com.gistone.util.ResultVOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,7 +31,10 @@ public class LsProjectModelController {
     @Autowired
     private LsProjectModelService service;
 
+
+
     @PostMapping("/list")
+//    @Cacheable(value = "aa" ,key = "123")
     public ResultVO getList(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
         Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");

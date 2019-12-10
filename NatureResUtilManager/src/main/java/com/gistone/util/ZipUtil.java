@@ -120,7 +120,7 @@ public class ZipUtil {
            //3.生成解压后的文件路径
            zipEntryName = entry.getName();
            zipEntryName = zipEntryName.substring(zipEntryName.lastIndexOf("/")+1);
-           String outPath = (descDir+"/"+ uuidStr+"_"+zipEntryName).replaceAll("\\*", "/");
+           String outPath = (descDir+"/"+ uuidStr + zipEntryName.substring(zipEntryName.lastIndexOf("."))).replaceAll("\\*", "/");
            // 判断路径是否存在,不存在则创建文件路径
            File file = new File(outPath.substring(0, outPath.lastIndexOf('/')));
            if (!file.exists()) {
@@ -135,7 +135,8 @@ public class ZipUtil {
            //4.如果是tif文件或img文件，则返回文件名称
            String shapeName = zipEntryName.substring(zipEntryName.lastIndexOf("."));
            if(shapeName.equals(".tif") || shapeName.equals(".img") ){
-        	   fileUrl = uuidStr +"_"+ zipEntryName;
+        	   //fileUrl = uuidStr +"_"+ zipEntryName; //文件名称太长导致gp服务失败
+        	   fileUrl = uuidStr;
            }
 
            //5.复制文件

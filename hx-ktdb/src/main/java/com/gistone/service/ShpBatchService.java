@@ -25,7 +25,7 @@ package com.gistone.service;
 
     void edit(ShpBatch entity);
 
-    void importPreRedlineDate(String url,String remark);
+    void importPreRedlineDate(String url,String remark ,ShpBatch param);
 
     void importPreMarkerData(String url,String remark);
 
@@ -41,6 +41,7 @@ package com.gistone.service;
 
     void importPreImageMarker(String url,String remark);
 
+    ResultVO getShpDetailById(ShpBatch param);
     /**
      * 边界数据列表无分页
      * @param sb

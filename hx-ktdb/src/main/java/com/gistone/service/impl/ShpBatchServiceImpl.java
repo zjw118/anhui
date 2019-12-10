@@ -80,6 +80,11 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
     }
 
     @Override
+    public ResultVO getShpDetailById(ShpBatch param) {
+        List<Map> map = mapper.getShpDetailById(param);
+        return ResultVOUtil.success(map);
+    }
+    @Override
     public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName) {
 
         QueryWrapper<ShpBatch> wrapper = new QueryWrapper<>();
@@ -87,7 +92,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             //wrapper.likeRight("SA008",userName);
         }
         wrapper.eq("type", 1);
-        //wrapper.orderByDesc("SA003");
+        wrapper.orderByDesc("id");
         IPage<ShpBatch> iPage = mapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
 
 
@@ -117,7 +122,7 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
     }
 
     @Override
-    public void importPreRedlineDate(String url, String remark) {
+    public void importPreRedlineDate(String url, String remark ,ShpBatch params) {
         //获取服务数据
         try {
             //获取主键url
@@ -156,11 +161,15 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             ArrayList<DataRedlineRegister> lmMarkerMobiles = importRedlineData.readShapeFile(fileUrl);
 
             //清空原数据
-            dataRedlineRegisterMapper.delete(null);
-            dataRedlineMapper.delete(null);
+            //dataRedlineRegisterMapper.delete(null);
+            //dataRedlineMapper.delete(null);
+            int bid = mapper.insert(params);
             //再批量插入
             if (lmMarkerMobiles != null && lmMarkerMobiles.size() > 0) {
                 for (DataRedlineRegister lmMarkerMobile : lmMarkerMobiles) {
+                    //将数据绑定红线调整审核数据
+                    System.out.println(lmMarkerMobile.getSrldId());
+                    lmMarkerMobile.setSrldShpBatchId(params.getId());
                     dataRedlineRegisterMapper.insert(lmMarkerMobile);
                     /*DataRedline dataRedline = new DataRedline();
                     BeanUtils.copyProperties(lmMarkerMobile,dataRedline);

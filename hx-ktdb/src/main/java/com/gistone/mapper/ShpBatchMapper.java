@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.gistone.entity.ShpBatch;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -24,6 +25,6 @@ public interface ShpBatchMapper extends BaseMapper<ShpBatch> {
     //修改拐点附件路径
     int updateGrpoint(ShpBatch shpBatch);
 
-
+    List<Map> getShpDetailById(ShpBatch data);
 
 }

@@ -15,6 +15,7 @@
         <result column="del_flag" property="delFlag" />
         <result column="version" property="version" />
         <result column="json_data" property="jsonData" />
+        <result column="name" property="name" />
         <collection property="st4ScsCbcList" ofType="com.gistone.entity.St4ScsCbc">
             <id column="id" property="id" />
             <result column="orign_name" property="orignName" />
@@ -38,6 +39,11 @@
       <if test="id!=null and id !='' ">
         and   sb.id=#{id}
       </if>
+      order by sb.id desc
+    </select>
+    <select id="getShpDetailById" resultType="java.util.HashMap"  parameterType="com.gistone.entity.ShpBatch">
+        SELECT dtype,SUM(srld_area) AS area , service_url  FROM (SELECT b.srld_id ,a.service_url , CONCAT(b.srld_type,b.target ) AS dtype FROM shp_batch a LEFT JOIN data_redline_register b ON b.srld_shpBatch_id = a.id WHERE a.id = #{id})c
+        LEFT JOIN data_redline_register d ON c.srld_id = d.srld_id GROUP BY dtype
     </select>
     <!--分组查询最新的数据-->
     <select id="getNewList" resultType="com.gistone.entity.ShpBatch">

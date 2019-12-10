@@ -7,11 +7,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.web.servlet.ModelAndView;
 
 @MapperScan("com.gistone.mapper") // 配置dao层路径
 @SpringBootApplication
 @ServletComponentScan
+@EnableCaching
 public class GistoneApplication  extends SpringBootServletInitializer {
 
     public static void main(String[] args) {

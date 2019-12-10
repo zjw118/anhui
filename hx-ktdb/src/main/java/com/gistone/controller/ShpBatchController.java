@@ -56,9 +56,10 @@ public class ShpBatchController {
      */
     @PostMapping("/list")
     public ResultVO getList(@RequestBody Map<String, Object> params) {
-        Integer pageNum = (Integer) params.get("pageNum");
-        Integer pageSize = (Integer) params.get("pageSize");
-        String name = (String) params.get("name");
+        Map<String, Object> dataParam = (Map<String, Object>) params.get("data");
+        Integer pageNum = (Integer) dataParam.get("pageNum");
+        Integer pageSize = (Integer) dataParam.get("pageSize");
+        String name = (String) dataParam.get("name");
         if (pageNum == null) {
             pageNum = 1;
         }
@@ -70,7 +71,24 @@ public class ShpBatchController {
         Map<String, Object> result = service.list(pageNum, pageSize, name);
         return ResultVOUtil.success(result);
     }
-
+    /**
+     * 红线调整审核数据根据id查询详情
+     * @return
+     */
+    @ApiOperation(value = "红线调整审核数据根据id查询详情", notes = "红线调整审核数据根据id查询详情", response = ResultVO.class)
+    @RequestMapping(value = "/getShpDetailById", method = RequestMethod.POST)
+    public ResultVO getShpDetailById(@RequestBody @ApiParam(name = "", value = "json格式", required = true) Swagger<ShpBatch> data) {
+        //请求参数格式校验
+        ShpBatch param = data.getData();
+        if (param == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        //数据名称
+        if(param.getId() == null){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "id(数据id)不能为空！");
+        }
+        return  service.getShpDetailById(param);
+    }
     /**
      * @param
      * @return com.gistone.VO.ResultVO
@@ -155,8 +173,10 @@ public class ShpBatchController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "服务地址不能为空");
         }
         String remark = (String) dataParam.get("remark");
-
-        service.importPreRedlineDate(url, remark);
+        ShpBatch param = new ShpBatch();
+        param.setRemark(remark);
+        param.setServiceUrl(url);
+        service.importPreRedlineDate(url, remark ,param );
         return ResultVOUtil.success();
     }
 
@@ -241,9 +261,12 @@ public class ShpBatchController {
         if (type == null) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "类型不能为空");
         }
-
+        ShpBatch param = new ShpBatch();
+        param.setRemark(remark);
+        param.setType(type);
+        param.setServiceUrl(url);
         if (type == 1) {
-            service.importPreRedlineDate(url, remark);
+            service.importPreRedlineDate(url, remark ,param);
         } else if (type == 2) {
             service.importPreMarkerData(url, remark);
         }

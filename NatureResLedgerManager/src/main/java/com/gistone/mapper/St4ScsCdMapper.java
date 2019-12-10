@@ -76,7 +76,14 @@ public interface St4ScsCdMapper extends BaseMapper<St4ScsCd> {
      * @param rl
      * @return
      */
-    List<Map> pointQualityOrgin(RlhdGroup rl);
+    List<StaticHelp> pointQualityOrgin(RlhdGroup rl);
+
+    /**
+     * 统计当前任务下现在的活动设施类型及类型数
+     * @param rl
+     * @return
+     */
+    List<StaticHelp> pointQualityNow(RlhdGroup rl);
 
     /**
      * 合并原始人类活动类型和现在的活动设施类型一块返回
@@ -89,12 +96,7 @@ public interface St4ScsCdMapper extends BaseMapper<St4ScsCd> {
      * @return
      */
     List<Map>  pointQualityDetail(RlhdGroup rl);
-    /**
-     * 统计当前任务下现在的活动设施类型及类型数
-     * @param rl
-     * @return
-     */
-    List<Map> pointQualityNow(RlhdGroup rl);
+
 
     List<Map> pointQualityOrginExport(RlhdGroup rl);
 

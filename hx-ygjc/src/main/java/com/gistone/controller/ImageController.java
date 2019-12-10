@@ -86,6 +86,7 @@ public class ImageController {
      */
     @PostMapping("/list")
     public ResultVO getList(@RequestBody Map<String, Object> paramsMap) {
+
         Map<String, Object> params = (Map<String, Object>) paramsMap.get("data");
         if (params == null) {
             return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
