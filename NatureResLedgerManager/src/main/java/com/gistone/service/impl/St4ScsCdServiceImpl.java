@@ -107,7 +107,10 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                     cdsOrginR.add(shOrg);
 
                 }
+                cdsOrginR.add(shNow);
+
             }
+
         }else{
             cdsOrgin.forEach(aa->{
                 aa.setNowsCount("0");
