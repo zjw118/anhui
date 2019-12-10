@@ -8,11 +8,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.VO.CoordinateVO;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.AnalysisReport;
+import com.gistone.entity.DataRedlineRegister;
 import com.gistone.entity.LsProjectModel;
 import com.gistone.entity.ProjectAdmission;
 import com.gistone.exception.ProjectException;
 import com.gistone.mapper.ProjectAdmissionMapper;
 import com.gistone.service.IAnalysisReportService;
+import com.gistone.service.IDataRedlineRegisterService;
 import com.gistone.service.IProjectAdmissionService;
 import com.gistone.service.LsProjectModelService;
 import com.gistone.util.*;
@@ -67,6 +69,9 @@ public class ProjectAdmissionController {
 
     @Autowired
     private LsProjectModelService service;
+
+    @Autowired
+    private IDataRedlineRegisterService dataRedlineRegisterService;
 
     @Autowired
     private IAnalysisReportService analysisReportService;
@@ -485,7 +490,14 @@ public class ProjectAdmissionController {
         return ResultVOUtil.success(result1);
     }
 
-
+    /**
+     * @param paramsMap
+     * @return com.gistone.VO.ResultVO
+     * @description:导出分析报告word并转PDF
+     * @author zf1017@foxmail.com
+     * @motto: Talk is cheap,show me the code
+     * @date 2019/12/10 0010 16:17
+     */
     @PostMapping("/exportWord")
     public ResultVO exportWord(@RequestBody Map<String, Object> paramsMap) {
         //请求参数格式校验
@@ -520,6 +532,35 @@ public class ProjectAdmissionController {
         if (analysisReports != null && analysisReports.size() > 0) {
             for (AnalysisReport analysisReport : analysisReports) {
                 String area = new BigDecimal(analysisReport.getIntersectArea().toString()).toString();
+
+                DataRedlineRegister redline = dataRedlineRegisterService.getOne(new QueryWrapper<DataRedlineRegister>().eq("srld_number",analysisReport.getRedlineId()));
+                if(redline!=null){
+                    analysisReport.setName(redline.getSrldName());
+                    if("01".equals(redline.getTarget())){
+                        analysisReport.setTarget("生态功能重要区");
+                        if("01".equals(redline.getSrldType())){
+                                analysisReport.setType("水源涵养");
+                        }else if("02".equals(redline.getSrldType())){
+                            analysisReport.setType("生物多样性维护");
+                        }else if("03".equals(redline.getSrldType())){
+                            analysisReport.setType("水土保持");
+                        }else if("04".equals(redline.getSrldType())){
+                            analysisReport.setType("防风固沙");
+                        }
+                    }else if("02".equals(redline.getTarget())){
+                        analysisReport.setTarget("生态环境敏感区");
+                        if("01".equals(redline.getSrldType())){
+                            analysisReport.setType("水源流失");
+                        }else if("02".equals(redline.getSrldType())){
+                            analysisReport.setType("土地沙化");
+                        }else if("03".equals(redline.getSrldType())){
+                            analysisReport.setType("石漠化");
+                        }else if("04".equals(redline.getSrldType())){
+                            analysisReport.setType("其他敏感性");
+                        }
+                    }
+
+                }
                 analysisReport.setArea(area);
             }
         }
@@ -529,9 +570,9 @@ public class ProjectAdmissionController {
         try {
             //TODO
             String wordPath = "";
-            LsProjectModel one = service.getOne(new QueryWrapper<LsProjectModel>().eq("type", 1).eq("flag", 1));
+            LsProjectModel one = service.getOne(new QueryWrapper<LsProjectModel>().eq("type", 1).eq("flag", 1).eq("del_flag",1));
             if (one == null) {
-                wordPath = "word/export1.docx";
+                wordPath = "word/export.docx";
             } else {
                 wordPath = PATH + one.getUrl();
             }
@@ -561,11 +602,11 @@ public class ProjectAdmissionController {
             e.printStackTrace();
         }
 
-        ExcelToPdf.doc2pdf(projectAdmission.getFileUrl(),configUtils.getExcel_PATH() + projectAdmission.getName()+"分析报告.pdf");
+        ExcelToPdf.doc2pdf(projectAdmission.getFileUrl(), configUtils.getExcel_PATH() + projectAdmission.getName() + "分析报告.pdf");
 
-        Map<String,Object> result = new HashMap<>();
-        result.put("wordPath",projectAdmission.getFileUrl());
-        result.put("pdfPath",(configUtils.getExcel_PATH() + projectAdmission.getName()+"分析报告.pdf").substring(2));
+        Map<String, Object> result = new HashMap<>();
+        result.put("wordPath", projectAdmission.getFileUrl());
+        result.put("pdfPath", (configUtils.getExcel_PATH() + projectAdmission.getName() + "分析报告.pdf").substring(2));
         return ResultVOUtil.success(result);
     }
 
@@ -739,102 +780,7 @@ public class ProjectAdmissionController {
 
         return ResultVOUtil.success(map1);
     }
-/*
 
-    @RequestMapping("/exportPDF")
-    public ResultVO exportPDF(HttpServletRequest request, HttpServletResponse response, ModelMap map) {
-        //项目名称、位置形状、创建时间范围
-        //请求参数格式校验
-        Map<String, Object> dataParam = new HashMap<>();
-        if (dataParam == null) {
-            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
-        }
-
-
-        String projectName = (String) dataParam.get("projectName");
-        String shape = (String) dataParam.get("shape");
-
-        String startTime = (String) dataParam.get("startTime");
-        String endTime = (String) dataParam.get("endTime");
-
-        String type = (String) dataParam.get("type");
-        String attribute = (String) dataParam.get("attribute");
-        String time = (String) dataParam.get("time");
-
-        QueryWrapper<ProjectAdmission> wrapper = new QueryWrapper<>();
-
-        if (StringUtils.isNotBlank(projectName)) {
-            wrapper.likeRight("name", projectName);
-        }
-
-        if (StringUtils.isNotBlank(shape)) {
-            wrapper.likeRight("shape", shape);
-        }
-
-        if (StringUtils.isNotBlank(startTime)) {
-            DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
-            Date date2 = null;
-
-            try {
-                date2 = format2.parse(startTime);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            Date date = DateUtils.addDateDays(date2, 1);
-            wrapper.ge("time", date);
-        }
-
-        if (StringUtils.isNotBlank(endTime)) {
-            DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
-            Date date2 = null;
-
-            try {
-                date2 = format2.parse(endTime);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            Date date = DateUtils.addDateDays(date2, 1);
-            wrapper.le("time", date);
-        }
-
-        if (StringUtils.isNotBlank(type)) {
-            wrapper.likeRight("type", type);
-        }
-
-        if (StringUtils.isNotBlank(attribute)) {
-            wrapper.likeRight("attribute", attribute);
-        }
-
-        if (StringUtils.isNotBlank(time)) {
-            Date endDate = DateUtils.stringToDate(time, DateUtils.DATE_TIME_PATTERN);
-            wrapper.eq("time", endDate);
-        }
-
-        wrapper.eq("del_flag", 1);
-
-
-        List<ProjectAdmission> list = projectAdmissionService.list(wrapper);
-
-        if (list != null && list.size() > 0) {
-            for (ProjectAdmission projectAdmission : list) {
-                projectAdmission.setCreateTime(DateUtil.DATEtoString(projectAdmission.getCreateDate(), "yyyy-MM-dd"));
-                projectAdmission.setTimeString(DateUtil.DATEtoString(projectAdmission.getTime(), "yyyy-MM-dd"));
-            }
-        }
-//        String filepath = ExcelUtil.toXls("项目准入任务列表", list, configUtils.getExcel_PATH(), ProjectAdmission.class, response);
-        Map map1 = new HashMap();
-//        map1.put("excelPath", filepath.substring(2));
-
-        ExportParams params = new ExportParams("2412312", "测试", ExcelType.XSSF);
-        params.setFreezeCol(2);
-        map.put(NormalExcelConstants.DATA_LIST, list);
-        map.put(NormalExcelConstants.CLASS, ProjectAdmission.class);
-        map.put(NormalExcelConstants.PARAMS, params);
-        PoiBaseView.render(map, request, response, NormalExcelConstants.EASYPOI_EXCEL_VIEW);
-
-        return ResultVOUtil.success();
-    }
-*/
 
     /**
      * @param file
@@ -859,8 +805,8 @@ public class ProjectAdmissionController {
     public static void main(String[] args) {
         System.out.println("用户的当前工作目录:" + System.getProperty("user.dir") + "/hx-ktdb/src/main/resources/word");
 
-        Double num=8.2347983984297E7;
-        String str=new BigDecimal(num.toString()).toString();
+        Double num = 8.2347983984297E7;
+        String str = new BigDecimal(num.toString()).toString();
         System.out.println(str);
     }
 
