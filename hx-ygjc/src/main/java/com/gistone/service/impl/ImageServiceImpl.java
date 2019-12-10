@@ -87,11 +87,13 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         if (imageIPage.getRecords() != null && imageIPage.getRecords().size() > 0) {
             for (Image record : imageIPage.getRecords()) {
                 Double area = record.getArea();
-                int num = (int) (area / 100000);
-                if (num > 100) {
-                    record.setScore(100);
+                if(area != null){
+                    int num = (int) (area / 100000);
+                    if (num > 100) {
+                        record.setScore(100);
+                    }
+                    record.setScore(num);
                 }
-                record.setScore(num);
                 mapper.updateById(record);
             }
         }

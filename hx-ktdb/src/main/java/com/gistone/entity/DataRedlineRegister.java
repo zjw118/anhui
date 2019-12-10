@@ -11,7 +11,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author xjc
@@ -28,7 +28,12 @@ public class DataRedlineRegister extends Model<DataRedlineRegister> implements S
      * 唯一主键
      */
 //    @TableId(value = "srld_id", type = IdType.AUTO)
+    //关联字段
     private Integer srldId;
+
+    //主键
+    @TableField(value = "srld_did")
+    private Integer srldDid;
     /**
      * 市级行政区划
      */
@@ -126,6 +131,10 @@ public class DataRedlineRegister extends Model<DataRedlineRegister> implements S
      * 红线功能用途
      */
     private String target;
-
+    /**
+     * 红线审核数据id
+     */
+    @TableField("srld_shpBatch_id")
+    private Integer srldShpBatchId;
 
 }

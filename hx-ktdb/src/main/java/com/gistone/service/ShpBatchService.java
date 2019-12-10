@@ -25,7 +25,7 @@ package com.gistone.service;
 
     void edit(ShpBatch entity);
 
-    void importPreRedlineDate(String url,String remark);
+    void importPreRedlineDate(String url,String remark ,ShpBatch param);
 
     void importPreMarkerData(String url,String remark);
 
