@@ -489,6 +489,9 @@
         <if test="groupByName=='sf' ">
             group by com.PK_ID
         </if>
+        <if test="groupByName=='uname' ">
+              group by uname
+        </if>
 
         ) T
 

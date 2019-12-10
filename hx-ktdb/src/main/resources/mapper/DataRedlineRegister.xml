@@ -54,6 +54,8 @@
         WHERE
             srld_id = #{redlineId}
     </select>
+
+
     <update id="updateTarget" >
        UPDATE data_redline_register
        SET srld_target = #{target}
