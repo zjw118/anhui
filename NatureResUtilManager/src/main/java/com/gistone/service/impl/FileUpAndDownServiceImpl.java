@@ -90,7 +90,7 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
                         // 获得文件类型
                         String fileType =file.getOriginalFilename();
-                                //file.getContentType();
+                        //file.getContentType();
                         // 获得文件后缀名称
                         //开始处理
 
@@ -108,7 +108,7 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                         // 年月日文件夹
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
                         String baseDateDir = sdf.format(new Date());
-
+                        String cPath ="";
 
                         // 进行压缩(大于20M)
                         if (file.getSize() >config.getFileSize()) {
@@ -127,7 +127,6 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                             //Thumbnails.of(oldFile).scale(config.getScaleRatio()).toFile(path);
                             // 显示路径
                             json.put("path", "/" +  dirId + "/" + baseDateDir +"/" + newUUID  + sufName);
-
                         }
                         else {
                             path = config.getUpPath() + "/" +  dirId + "/" + baseDateDir + "/" + uuid   + sufName;
@@ -142,6 +141,7 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                             // 显示路径
                             json.put("path", "/" +  dirId + "/" + baseDateDir + "/" + uuid  + sufName);
                         }
+                        cPath="/" +  dirId + "/" + baseDateDir +"/" + newUUID  + sufName;
                         if("nr_object".equals(dirId)){
                             int num = oldFileName.lastIndexOf(".");
                             json.put("type", oldFileName.substring(num-1,num));
@@ -158,8 +158,8 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                                 SimpleDateFormat sdf1 =  new SimpleDateFormat("yyyy-MM-dd-HH-mm");
                                 //在服务器上压缩后存储的路径
                                 String savePath = config.getUpPath() + "/dynamicLayerSpace/"+sdf1.format(nowDate);
-
-                                shpName = ZipUtil.unZipArcGISFiles(config.getUpPath() +"/" +  dirId + "/" + baseDateDir + "/" + newUUID  + sufName,savePath,newUUID);
+                                String pppATH=config.getUpPath() +"/" + cPath;
+                                shpName = ZipUtil.unZipArcGISFiles(config.getUpPath() +json.get("path"),savePath,newUUID);
 
                                 shpName=config.getUpPath() + "/dynamicLayerSpace//"+shpName;
                                 //下面是shp文件的在磁盘上的路径但是不是shp后缀的
@@ -204,11 +204,11 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                                             fileName = name ;
                                             input = new FileInputStream(new File(url));
                                         }
-                                            //FTPUtilUtil ftp = new FtpUtils22();
+                                        //FTPUtilUtil ftp = new FtpUtils22();
                                         FTPUtilUtil.uploadFile(ftpHost, ftpUserName, ftpPassword, ftpPort, ftpPath, fileName, input);
-                                            if("tif".equals(suf)||"img".equals(suf)){
-                                                ppath = ftpPt+ftpUrl+ftpPath+fileName;
-                                            }
+                                        if("tif".equals(suf)||"img".equals(suf)){
+                                            ppath = ftpPt+ftpUrl+ftpPath+fileName;
+                                        }
 
                                     }
                                 }
@@ -223,7 +223,7 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                         json.put("oldFileName", oldFileName);
                         jarr.add(json);
                         resMap.put("data",jarr);
-                       // resMap.put("fileSize", file.getSize());
+                        // resMap.put("fileSize", file.getSize());
                         sucNum++;
                     } else {
                         resMap.put("result", "文件格式不正确,上传失败");

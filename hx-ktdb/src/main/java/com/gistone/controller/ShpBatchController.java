@@ -70,7 +70,24 @@ public class ShpBatchController {
         Map<String, Object> result = service.list(pageNum, pageSize, name);
         return ResultVOUtil.success(result);
     }
-
+    /**
+     * 红线调整审核数据根据id查询详情
+     * @return
+     */
+    @ApiOperation(value = "红线调整审核数据根据id查询详情", notes = "红线调整审核数据根据id查询详情", response = ResultVO.class)
+    @RequestMapping(value = "/getShpDetailById", method = RequestMethod.POST)
+    public ResultVO getShpDetailById(@RequestBody @ApiParam(name = "", value = "json格式", required = true) Swagger<ShpBatch> data) {
+        //请求参数格式校验
+        ShpBatch param = data.getData();
+        if (param == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        //数据名称
+        if(param.getId() == null){
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "id(数据id)不能为空！");
+        }
+        return  service.getShpDetailById(param);
+    }
     /**
      * @param
      * @return com.gistone.VO.ResultVO

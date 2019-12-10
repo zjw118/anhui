@@ -41,6 +41,7 @@ package com.gistone.service;
 
     void importPreImageMarker(String url,String remark);
 
+    ResultVO getShpDetailById(ShpBatch param);
     /**
      * 边界数据列表无分页
      * @param sb

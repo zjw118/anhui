@@ -204,10 +204,10 @@ public class CheckPointController {
                 jSONObject1.put("area",attributes.get("area")+"");
                 area += Double.valueOf(attributes.get("area")+"");
 
-                //String j = ShpUtil.DddToDms(Double.valueOf(attributes.get("CENTROID_X") == null ? null : attributes.get("CENTROID_X").toString()));
-                //String w = ShpUtil.DddToDms(Double.valueOf(attributes.get("CENTROID_Y") == null ? null : attributes.get("CENTROID_Y").toString()));
-                String j = ShpUtil.DddToDms(101.366);
-                String w = ShpUtil.DddToDms(36.36);
+                String j = ShpUtil.DddToDms(Double.valueOf(attributes.get("CENTROID_X") == null ? null : attributes.get("CENTROID_X").toString()));
+                String w = ShpUtil.DddToDms(Double.valueOf(attributes.get("CENTROID_Y") == null ? null : attributes.get("CENTROID_Y").toString()));
+                //String j = ShpUtil.DddToDms(101.366);
+                //String w = ShpUtil.DddToDms(36.36);
                 jSONObject1.put("center",j+","+w);
 
                 if (StringUtils.isNotBlank(image.getRemark()))
@@ -289,8 +289,12 @@ public class CheckPointController {
                     if(-1<center.indexOf("°")){
                         iterpretation.setCd013(center.split(",")[0]);
                         iterpretation.setCd014(center.split(",")[1]);
+                        iterpretation.setCd002(PointHelp.Dms2D(center.split(",")[0]));
+                        iterpretation.setCd003(PointHelp.Dms2D(center.split(",")[1]));
                         iterpretation.setCd015(1);
                     }else{
+                        iterpretation.setCd013(PointHelp.toDfm(center.split(",")[0]));
+                        iterpretation.setCd014(PointHelp.toDfm(center.split(",")[1]));
                         iterpretation.setCd002(center.split(",")[0]);
                         iterpretation.setCd003(center.split(",")[1]);
                         iterpretation.setCd015(0);

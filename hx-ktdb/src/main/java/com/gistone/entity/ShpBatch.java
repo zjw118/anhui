@@ -35,6 +35,10 @@ public class ShpBatch extends Model<ShpBatch> {
      * shp文件存储路径
      */
     private String shpUrl;
+    /**
+     * 数据名称
+     */
+    private String name;
 
     private String ftpShpUrl;
 

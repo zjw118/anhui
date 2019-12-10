@@ -80,6 +80,11 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
     }
 
     @Override
+    public ResultVO getShpDetailById(ShpBatch param) {
+        List<Map> map = mapper.getShpDetailById(param);
+        return ResultVOUtil.success(map);
+    }
+    @Override
     public Map<String, Object> list(Integer pageNum, Integer pageSize, String userName) {
 
         QueryWrapper<ShpBatch> wrapper = new QueryWrapper<>();

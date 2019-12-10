@@ -135,7 +135,8 @@ public class ZipUtil {
            //4.如果是tif文件或img文件，则返回文件名称
            String shapeName = zipEntryName.substring(zipEntryName.lastIndexOf("."));
            if(shapeName.equals(".tif") || shapeName.equals(".img") ){
-        	   fileUrl = uuidStr +"_"+ zipEntryName;
+        	   //fileUrl = uuidStr +"_"+ zipEntryName; //文件名称太长导致gp服务失败
+        	   fileUrl = uuidStr;
            }
 
            //5.复制文件
