@@ -6,7 +6,6 @@
         <module>hx-main</module>
         <module>hx-sys</module>
         <module>hx-ktdb</module>
-        <module>hx-dxcc</module>
         <module>hx-rlhd</module>
         <module>NatureResAppManager</module>
         <module>NatureResLedgerManager</module>
