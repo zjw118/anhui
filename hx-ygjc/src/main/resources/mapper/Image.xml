@@ -177,7 +177,7 @@
     <select id="getTotalByType" resultType="map">
         SELECT
             COUNT(*) count,
-            b. NAME type
+            b. NAME name
         FROM
             st4_scs_cd a
         INNER JOIN image_config b ON a.active_type = b.id
@@ -190,7 +190,7 @@
     <select id="getTotalByCode" resultType="map">
        SELECT
 			COUNT(*) count,
-			b.COM_NAME NAME
+			b.COM_NAME name
 		FROM
 			st4_scs_cd a
         INNER JOIN sys_company b ON a.code = b.COM_CODE

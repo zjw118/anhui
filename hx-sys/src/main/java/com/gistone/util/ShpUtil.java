@@ -537,6 +537,7 @@ public class ShpUtil {
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("position"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("type"));
                 featureBuilder.add(jobj.getJSONObject("attributes").getString("region"));
+                featureBuilder.add(jobj.getJSONObject("attributes").getString("xzqh"));
                 SimpleFeature feature = featureBuilder.buildFeature(null);
                 features.add(feature);
             }
@@ -954,6 +955,8 @@ public class ShpUtil {
         builder.length(100).add("position", String.class);
         builder.length(100).add("type", String.class);
         builder.length(100).add("region", String.class);
+        builder.length(100).add("xzqh", String.class);
+
 
 
 

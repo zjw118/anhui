@@ -368,8 +368,8 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 if (null != attributes.get("name")){
                     iterpretation.setActiveName(attributes.get("name") + "");
                 }
-                if (StringUtils.isNotBlank((String) attributes.get("code"))) {
-                    iterpretation.setCode((String) attributes.get("code"));
+                if (StringUtils.isNotBlank((String) attributes.get("xzqh"))) {
+                    iterpretation.setCode((String) attributes.get("xzqh"));
                 }
                 if (null != attributes.get("center")) {
                     String center = attributes.get("center") + "";

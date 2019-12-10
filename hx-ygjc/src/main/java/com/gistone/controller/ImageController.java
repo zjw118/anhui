@@ -364,9 +364,9 @@ public class ImageController {
         /*if(type==null){
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"类型不能为空");
         }*/
-        service.totalByType(type);
+        List<Map<String, Object>> list = service.totalByType(type);
 
-        return ResultVOUtil.success();
+        return ResultVOUtil.success(list);
     }
 
     @PostMapping("/getAreaChange")
