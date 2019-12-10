@@ -87,12 +87,16 @@ public class ImageContrastServiceImpl extends ServiceImpl<ImageContrastMapper,Im
         if(!"".equals(res)){
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),res);
         }
-        String p1 = "?file1="+image1.getShpurl();
-        String p2 = "&file2="+image2.getShpurl();
-        String p3 = "&outfile="+ftpPt+ftpUrl+outUrl;
-        String p4 = "&f=pjson";
-        HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4,null);
 
+        if(null!=image1&&null!=image2){
+            String p1 = "?file1="+image1.getShpurl();
+            String p2 = "&file2="+image2.getShpurl();
+            String p3 = "&outfile="+ftpPt+ftpUrl+outUrl;
+            String p4 = "&f=pjson";
+            HttpUtil.GET(IMAGE_SERVICE+"/submitJob"+p1+p2+p3+p4,null);
+        }else{
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"image文件为空");
+        }
 
         //判断FTP文件是否生成
         boolean b = false;
