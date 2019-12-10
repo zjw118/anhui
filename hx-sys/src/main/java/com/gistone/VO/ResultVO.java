@@ -2,9 +2,11 @@ package com.gistone.VO;
 
 import lombok.Data;
 
-@Data
-public class ResultVO<T> extends Object{
+import java.io.Serializable;
 
+@Data
+public class ResultVO<T> extends Object implements Serializable {
+    private static final long serialVersionUID = 1L;
     /** 错误码. */
     private String code;
 
