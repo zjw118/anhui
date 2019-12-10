@@ -8,15 +8,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.DataRedlineRegister;
-import com.gistone.entity.LmBoard;
-import com.gistone.entity.LmMarkerMobile;
-import com.gistone.entity.ShpBatch;
+import com.gistone.entity.*;
 import com.gistone.exception.ImportException;
 import com.gistone.mapper.*;
 import com.gistone.service.ShpBatchService;
 import com.gistone.util.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,6 +46,8 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
 
     @Autowired
     private DataRedlineRegisterMapper dataRedlineRegisterMapper;
+    @Autowired
+    private DataRedlineRegisterBatchMapper dataRedlineRegisterBatchMapper;
 
     @Autowired
     private DataRedlineMapper dataRedlineMapper;
@@ -161,15 +161,18 @@ public class ShpBatchServiceImpl extends ServiceImpl<ShpBatchMapper, ShpBatch> i
             ArrayList<DataRedlineRegister> lmMarkerMobiles = importRedlineData.readShapeFile(fileUrl);
 
             //清空原数据
-            //dataRedlineRegisterMapper.delete(null);
+            dataRedlineRegisterMapper.delete(null);
             //dataRedlineMapper.delete(null);
             int bid = mapper.insert(params);
             //再批量插入
             if (lmMarkerMobiles != null && lmMarkerMobiles.size() > 0) {
                 for (DataRedlineRegister lmMarkerMobile : lmMarkerMobiles) {
                     //将数据绑定红线调整审核数据
-                    System.out.println(lmMarkerMobile.getSrldId());
                     lmMarkerMobile.setSrldShpBatchId(params.getId());
+                    //3方测试单独添加
+                    DataRedlineRegisterBatch batch = new DataRedlineRegisterBatch();
+                    BeanUtils.copyProperties(batch, lmMarkerMobile);
+                    dataRedlineRegisterBatchMapper.insert(batch);
                     dataRedlineRegisterMapper.insert(lmMarkerMobile);
                     /*DataRedline dataRedline = new DataRedline();
                     BeanUtils.copyProperties(lmMarkerMobile,dataRedline);
