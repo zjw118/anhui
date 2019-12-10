@@ -114,8 +114,8 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
 
 
     @Override
-    public void insert(String name, String url, String ftpurl, Integer createBy, String remark, String createDate) {
-        Image image = new Image().setName(name).setUrl(url).setShpurl(ftpurl).setCreateDate(createDate).setCreateBy(createBy).setUpdateDate(new Date());
+    public void insert(String name, String url, Integer createBy, String remark, String createDate) {
+        Image image = new Image().setName(name).setUrl(url).setCreateDate(createDate).setCreateBy(createBy).setUpdateDate(new Date());
         if (StringUtils.isNotBlank(remark)) {
             image.setRemark(remark);
         }
