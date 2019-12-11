@@ -897,7 +897,7 @@ public class LmBoardController {
     public ResultVO export_PreExcel(@RequestBody Map<String, Object> paramsMap, HttpServletResponse response) {
         //请求参数格式校验
         Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
-        String boardNum = (String) dataParam.get("boardNum");
+        String boardNum = (String) dataParam.get("param");
         String code = (String) dataParam.get("code");
         //截取code做模糊查询
         String codes = null;

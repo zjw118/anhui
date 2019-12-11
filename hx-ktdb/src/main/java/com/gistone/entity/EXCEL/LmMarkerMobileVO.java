@@ -9,8 +9,6 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class LmMarkerMobileVO {
-
-
     /**
      * id
      */
@@ -20,13 +18,13 @@ public class LmMarkerMobileVO {
     /**
      * 界桩编号
      */
-    @Excel(name = "界桩编号",height = 11, width = 15)
+    @Excel(name = "预设界桩编号",height = 11, width = 15)
     private String jzNumber;
 
     /**
      * 界桩刻号
      */
-    @Excel(name = "界桩刻号",height = 11, width = 15)
+    @Excel(name = "预设界桩刻号",height = 11, width = 15)
     private String jzKh;
     /**
      * 行政区划
@@ -65,7 +63,7 @@ public class LmMarkerMobileVO {
     /**
      * 所在红线区
      */
-    @Excel(name = "所在红线区",height = 11, width = 15)
+    @Excel(name = "所在红线斑块",height = 11, width = 15)
     private String redlineName;
 
     /**
@@ -140,7 +138,7 @@ public class LmMarkerMobileVO {
     /**
      * 所属地方名
      */
-    @Excel(name = "所属地方名",height = 11, width = 15)
+    @Excel(name = "行政区划",height = 11, width = 15)
     private String placeName;
 
 

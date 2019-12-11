@@ -50,7 +50,7 @@ public class DataRedlineRegister extends Model<DataRedlineRegister> implements S
      */
     @TableField("srld_code")
 //    @Excel(name = "红线编码",height = 11, width = 15 ,orderNum = "0")
-    private String srldCode; 
+    private String srldCode;
     /**
      * 名称
      */
@@ -66,7 +66,7 @@ public class DataRedlineRegister extends Model<DataRedlineRegister> implements S
      * 类型
      */
     @TableField("srld_type")
-    @Excel(name = "生态功能属性",replace = { "生态功能重要区_01", "生态功能敏感区_03" },height = 11, width = 15)
+    @Excel(name = "功能属性",replace = { "生态功能重要区_01", "生态功能敏感区_03" },height = 11, width = 15)
     private String srldType;
     /**
      * 生态系统服务功能与保护目标
@@ -88,7 +88,7 @@ public class DataRedlineRegister extends Model<DataRedlineRegister> implements S
      * 生态系统与植被类型
      */
     @TableField("srld_plant_type")
-    @Excel(name = "植被类型",height = 11, width = 15)
+    @Excel(name = "生态植被",height = 11, width = 15)
     private String srldPlantType;
     /**
      * 主要人为活动
@@ -127,7 +127,7 @@ public class DataRedlineRegister extends Model<DataRedlineRegister> implements S
     /**
      * 红线编号
      */
-    @Excel(name = "红线编号",height = 11, width = 15)
+    @Excel(name = "红线编码",height = 11, width = 15)
     private String srldNumber;
     /**
      * 红线功能用途

@@ -73,6 +73,11 @@ public class LsSuanfaController {
         if(file==null){
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"文件不能为空");
         }
+        String name = file.getOriginalFilename();
+        String[] split = name.split("\\.");
+        if(!"xml".equals(split[1])){
+            return ResultVOUtil.error(ResultEnum.ERROR.getCode(),"请上传xml格式的文件");
+        }
         service.insert(entity,file);
         return ResultVOUtil.success();
     }
