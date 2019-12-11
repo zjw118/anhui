@@ -115,9 +115,10 @@
         </foreach>
     </select>
     <select id="getExportData" resultMap="BaseResultMap" parameterType="com.gistone.entity.St4ScsCl">
-      select cl.*,co.name,co.* from st4_scs_cl cl
+      select cl.*,co.name,co.*,sc.* from st4_scs_cl cl
         left join  st4_po_cl_co clco on cl.cl001 = clco.cl001
         left join rlhd_group co on co.id=clco.co001
+        LEFT JOIN sys_company sc on sc.COM_CODE =cl.CL016
         where cl.CL012 =1
         <if test="cl002!=null and cl002!='' ">
             AND   cl.CL002 like '%${cl002}%'

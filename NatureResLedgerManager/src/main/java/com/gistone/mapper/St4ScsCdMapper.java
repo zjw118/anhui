@@ -1,6 +1,8 @@
 package com.gistone.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gistone.entity.*;
 import com.gistone.entity.excel.ReportVo;
 import org.apache.ibatis.annotations.Param;
@@ -102,5 +104,7 @@ public interface St4ScsCdMapper extends BaseMapper<St4ScsCd> {
 
     List<Map> pointQualityNowExport(RlhdGroup rl);
 
-    List<ReportVo> redLineReportExport(SysCompany com);
+    List<ReportVo> redLineReportExport( SysCompany com);
+
+    IPage<St4ScsCd> redLineReport(Page<St4ScsCd> page,@Param("cd") St4ScsCd com);
 }

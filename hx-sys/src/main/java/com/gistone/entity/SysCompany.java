@@ -17,7 +17,7 @@ import java.io.Serializable;
  * @since 2019-03-07
  */
 @TableName("sys_company")
-public class SysCompany implements Serializable {
+public class SysCompany extends  BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -58,7 +58,16 @@ public class SysCompany implements Serializable {
      */
     @TableField("LON")
     private String lon;
+@TableField(exist = false)
+    private String code;
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public Integer getPkId() {
         return pkId;

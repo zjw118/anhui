@@ -121,7 +121,7 @@ public interface StatisService extends IService<St4ScsCy> {
      * @param response
      * @return
      */
-    ResultVO redLineReport(SysCompany sc, HttpServletResponse response);
+    ResultVO redLineReport(St4ScsCd sc, HttpServletResponse response);
 
 
 

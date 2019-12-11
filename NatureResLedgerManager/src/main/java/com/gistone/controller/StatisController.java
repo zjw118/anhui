@@ -7,9 +7,7 @@ import com.gistone.entity.*;
 import com.gistone.pkname.Swagger;
 import com.gistone.service.*;
 import com.gistone.swagger.StaticSwagger;
-import com.gistone.util.Result;
-import com.gistone.util.ResultEnum;
-import com.gistone.util.ResultVOUtil;
+import com.gistone.util.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -55,8 +53,13 @@ public class StatisController {
 	}
 	@ApiOperation(value = "(安徽用)生态保护红线核查监管报告列表", notes = "", response = Result.class)
 	@PostMapping("/redLineReport")
-	public ResultVO redLineReport(@RequestBody Swagger<SysCompany> requestData,  HttpServletResponse response){
-		SysCompany cl = requestData.getData();
+	public ResultVO redLineReport(@RequestBody Swagger<St4ScsCd> requestData,  HttpServletResponse response){
+		St4ScsCd cl = requestData.getData();
+		Object pageNumber=cl.getPageNumber();
+		Object pageSize=cl.getPageSize();
+		if(!ObjectUtils.isNotNullAndEmpty(pageNumber)||!ObjectUtils.isNotNullAndEmpty(pageSize)){
+			return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "pageNumber，pageSize不能为空！");
+		}
 		return statisService.redLineReport(cl,response);
 	}
 	@ApiOperation(value = "(安徽用)统计核查审核的质量评估导出", notes = "", response = Result.class)

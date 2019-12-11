@@ -1,6 +1,8 @@
 package com.gistone.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.*;
@@ -113,9 +115,17 @@ public class StatisServiceImpl extends ServiceImpl<St4ScsCyMapper, St4ScsCy> imp
         return ResultVOUtil.success(map1);
     }
     @Override
-    public ResultVO redLineReport(SysCompany sc, HttpServletResponse response) {
-        List<ReportVo> voList = st4ScsCdMapper.redLineReportExport(sc);
-        return ResultVOUtil.success(voList);
+    public ResultVO redLineReport(St4ScsCd sc, HttpServletResponse response) {
+
+        Page<St4ScsCd> page = new Page<>(sc.getPageNumber(),sc.getPageSize());
+
+        IPage<St4ScsCd> voIPage = st4ScsCdMapper.redLineReport(page,sc);
+        List<St4ScsCd> voList = voIPage.getRecords();
+        Result result = new Result();
+        result.setTotal((int)voIPage.getTotal());
+        result.setPage((int)voIPage.getPages());
+        result.setData(voList);
+        return ResultVOUtil.success(result);
     }
     @Override
     public ResultVO redLineReportExport(SysCompany sc, HttpServletResponse response) {
