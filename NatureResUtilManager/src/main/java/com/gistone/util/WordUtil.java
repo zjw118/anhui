@@ -7,6 +7,7 @@ import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.rtf.RtfWriter2;
 import com.lowagie.text.rtf.style.RtfFont;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xwpf.usermodel.*;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -46,7 +47,6 @@ public class WordUtil {
                     BufferedImage sourceImg = ImageIO.read(new FileInputStream(file));
                     double proportion = (double) sourceImg.getHeight() / sourceImg.getWidth();
                     double height = proportion * 500;
-                    System.out.println(new Double(height).intValue());
                     output = new ByteArrayOutputStream();
                     byte[] buffer = new byte[1024];
                     int len;
@@ -62,6 +62,9 @@ public class WordUtil {
                 }
             }
             //写入模板
+            if(StringUtils.isBlank(path)||null==params){
+                return false;
+            }
             XWPFDocument doc = WordExportUtil.exportWord07(path,params);
             //创建文件夹
             File f1 = new File(docxPath);
