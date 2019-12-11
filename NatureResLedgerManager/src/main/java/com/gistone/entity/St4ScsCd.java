@@ -174,7 +174,8 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     @ApiModelProperty(name = "groupId", value = "关联台账表外键", dataType = "{}", required = false, example = "")
     @TableField("group_id")
     private Integer groupId;
-
+    @ApiModelProperty(name = "code", value = "行政区划", dataType = "{}", required = false, example = "")
+    @TableField("code")
     private String code;
 
 
@@ -311,5 +312,21 @@ public class St4ScsCd extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private String activeTypeName;
 
+
+
+    @TableField(exist = false)
+    private String adminRegion;
+    @TableField(exist = false)
+    private String pointNumber;
+    @TableField(exist = false)
+    private String pointName;
+    @TableField(exist = false)
+    private String orignType;
+    @TableField(exist = false)
+    private String nowType;
+    @TableField(exist = false)
+    private String orignScale;
+    @TableField(exist = false)
+    private String nowScale;
 
 }

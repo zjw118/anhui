@@ -8,6 +8,7 @@ import com.gistone.entity.*;
 import com.gistone.mapper.*;
 import com.gistone.service.ISt4PoClCoService;
 import com.gistone.service.ISt4ScsClService;
+import com.gistone.service.ISysCompanyService;
 import com.gistone.service.RlhdGroupService;
 import com.gistone.util.*;
 import org.apache.poi.hssf.usermodel.*;
@@ -65,6 +66,8 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
     private ISt4PoClCoService st4PoClCoService;
     @Autowired
     private St4PoClCoMapper st4PoClCoMapper;
+    @Autowired
+    private ISysCompanyService sysCompanyService;
     //private ExcelStyleTools tools;
     @Autowired
     private ConfigUtils configUtils;
@@ -150,6 +153,11 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
      * @throws Exception
      */
     public  ResultVO readExcel(String fileName) throws Exception{
+        List<SysCompany> sysCompanys = sysCompanyService.list();
+        Map<String,Integer> scMap = new HashMap<>();
+        sysCompanys.forEach(sysCompany -> {
+            scMap.put(sysCompany.getComName(),Integer.valueOf(sysCompany.getComCode()) );
+        });
 
         //这里得对台账进行map的处理因为任务导入的时候是有可能填的台账是系统里存在了的
         QueryWrapper<RlhdGroup> rlhdGroupQueryWrapper = new QueryWrapper<>();
@@ -208,9 +216,11 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
                 if (hssfRow != null) {
                     cl = new St4ScsCl();
                     Cell taskName = hssfRow.getCell(0);  //任务批次名称
-                    Cell taskDescri = hssfRow.getCell(1);//任务描述
-                    Cell taskYear = hssfRow.getCell(2);//任务年份
-                    Cell taskLedger = hssfRow.getCell(3);//任务台账
+                    Cell code = hssfRow.getCell(1);//行政区划
+
+                    Cell taskDescri = hssfRow.getCell(2);//任务描述
+                    Cell taskYear = hssfRow.getCell(3);//任务年份
+                    Cell taskLedger = hssfRow.getCell(4);//任务台账
                     cl.setCl012(1);
                     cl.setCl003("1");//todo 这里写死成1原因是目前没有没有对任务进行核查字段不同情况的处理
                     cl.setCl015(0);//因为是导入所以默认是系统创建
@@ -226,6 +236,9 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
                     cl.setCl009(taskDescri==null?"":taskDescri.toString());
                     cl.setCl010(taskYear==null?"":taskYear.toString());
                     cl.setCl014(LocalDateTime.now());
+                    if(ObjectUtils.isNotNullAndEmpty(code)){
+                        cl.setCl016(scMap.get(code.toString()));
+                    }
                     if(ObjectUtils.isNotNullAndEmpty(taskLedger)){
                         if(ObjectUtils.isNotNullAndEmpty(map.get(taskLedger.toString().trim()))){
                             cl.setLedgerId(map.get(taskLedger.toString()).toString());
@@ -307,6 +320,7 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
             sheet.setColumnWidth(1, (int) ((20.5 + 0.72) * 256));
             sheet.setColumnWidth(2, (int) ((20.5 + 0.72) * 256));
             sheet.setColumnWidth(3, (int) ((12 + 0.72) * 256));
+            sheet.setColumnWidth(4, (int) ((12 + 0.72) * 256));
 
 
             // 设置单元格宽度
@@ -375,14 +389,17 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
         //cell.setCellStyle(style);
 
         cell = row.createCell(1);
+        cell.setCellValue("行政区划");
+
+        cell = row.createCell(2);
         cell.setCellValue("任务描述");
         // cell.setCellStyle(style);
 
-        cell = row.createCell(2);
+        cell = row.createCell(3);
         cell.setCellValue("任务年份");
         //  cell.setCellStyle(style);
 
-        cell = row.createCell(3);
+        cell = row.createCell(4);
         cell.setCellValue("任务台账");
         // cell.setCellStyle(style);
 
@@ -397,16 +414,23 @@ public class St4ScsClServiceImpl extends ServiceImpl<St4ScsClMapper, St4ScsCl> i
             cell = row.createCell(0);
             cell.setCellValue(cl.getCl002() == null ? "" : cl.getCl002().toString());// 任务名称
             // cell.setCellStyle(ustyle);
-
             cell = row.createCell(1);
+            if(cl.getSysCompany()!=null){
+                cell.setCellValue(cl.getSysCompany().getComName() == null ? "" : cl.getSysCompany().getComName());// 行政区划
+            }else{
+                cell.setCellValue("");// 行政区划
+            }
+
+
+            cell = row.createCell(2);
             cell.setCellValue(cl.getCl009() == null ? "" : cl.getCl009().toString());// 任务描述
             // cell.setCellStyle(ustyle);
 
-            cell = row.createCell(2);
+            cell = row.createCell(3);
             cell.setCellValue(cl.getCl010() == null ? "" : cl.getCl010().toString()); // 任务年份
             // cell.setCellStyle(ustyle);
 
-            cell = row.createCell(3);
+            cell = row.createCell(4);
             if(cl.getRlhdGroupList()!=null&&cl.getRlhdGroupList().size()>0){
                 List<RlhdGroup> lists = cl.getRlhdGroupList();
                 String value ="" ;
