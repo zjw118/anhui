@@ -33,7 +33,7 @@ public class LmBoardVO{
     /**
      * 所在行政区划名称
      */
-//    @Excel(name = "所在行政区划名称",height = 11, width = 15)
+    @Excel(name = "所在行政区划名称",height = 11, width = 15)
     private String placeName;
 
 //    /**

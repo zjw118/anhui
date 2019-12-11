@@ -2,6 +2,7 @@ package com.gistone.entity;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
@@ -27,7 +28,7 @@ public class DataRedlineRegister extends Model<DataRedlineRegister> implements S
     /**
      * 唯一主键
      */
-//    @TableId(value = "srld_id", type = IdType.AUTO)
+    @TableId(value = "srld_id")
     //关联字段
     private Integer srldId;
 
@@ -48,13 +49,13 @@ public class DataRedlineRegister extends Model<DataRedlineRegister> implements S
      * 编码
      */
     @TableField("srld_code")
-    @Excel(name = "红线编码",height = 11, width = 15)
-    private String srldCode;
+//    @Excel(name = "红线编码",height = 11, width = 15 ,orderNum = "0")
+    private String srldCode; 
     /**
      * 名称
      */
     @TableField("srld_name")
-
+    @Excel(name = "斑块名称",mergeRely={0},height = 11, width = 15)
     private String srldName;
     /**
      * 人口
@@ -65,6 +66,7 @@ public class DataRedlineRegister extends Model<DataRedlineRegister> implements S
      * 类型
      */
     @TableField("srld_type")
+    @Excel(name = "生态功能属性",replace = { "生态功能重要区_01", "生态功能敏感区_03" },height = 11, width = 15)
     private String srldType;
     /**
      * 生态系统服务功能与保护目标
@@ -98,7 +100,7 @@ public class DataRedlineRegister extends Model<DataRedlineRegister> implements S
      */
     @TableField("srld_problem")
     private String srldProblem;
-    @Excel(name = "红线名称",height = 11, width = 15)
+//    @Excel(name = "红线名称",height = 11, width = 15)
     @TableField("area_redline")
     private String areaRedline;
     /**

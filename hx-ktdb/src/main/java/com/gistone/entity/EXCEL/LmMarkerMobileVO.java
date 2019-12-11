@@ -31,7 +31,7 @@ public class LmMarkerMobileVO {
     /**
      * 行政区划
      */
-    @Excel(name = "行政区划",height = 11, width = 15)
+
     private String code;
     /**
      * 是否为界桩 0不是，1是
@@ -136,16 +136,12 @@ public class LmMarkerMobileVO {
     /*@Excel(name = "界桩与方位物位置信息",height = 11, width = 15)
     private List<LmMarkerRelationPosition> lmMarkerRelationPositions;*/
 
+
     /**
-     * 记录类型，0预置数据，1采集数据
-     */
-    /*@Excel(name = "记录类型",replace = {"预置数据_0", "采集数据_1"},height = 11, width = 15)
-    private Integer type;
-    *//**
      * 所属地方名
-     *//*
+     */
     @Excel(name = "所属地方名",height = 11, width = 15)
-    private String placeName;*/
+    private String placeName;
 
 
 

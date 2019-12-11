@@ -39,11 +39,11 @@ public class ProjectAdmissionServiceImpl extends ServiceImpl<ProjectAdmissionMap
         QueryWrapper<ProjectAdmission> wrapper = new QueryWrapper<>();
 
         if (StringUtils.isNotBlank(projectName)) {
-            wrapper.likeRight("name", projectName);
+            wrapper.like("name", projectName);
         }
 
         if (StringUtils.isNotBlank(shape)) {
-            wrapper.likeRight("shape", shape);
+            wrapper.like("shape", shape);
         }
 
         if (StringUtils.isNotBlank(startTime)) {
@@ -73,11 +73,11 @@ public class ProjectAdmissionServiceImpl extends ServiceImpl<ProjectAdmissionMap
         }
 
         if(StringUtils.isNotBlank(type)){
-            wrapper.likeRight("type",type);
+            wrapper.like("type",type);
         }
 
         if(StringUtils.isNotBlank(attribute)){
-            wrapper.likeRight("attribute",attribute);
+            wrapper.like("attribute",attribute);
         }
 
         if(StringUtils.isNotBlank(time)){

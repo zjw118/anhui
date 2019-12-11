@@ -120,10 +120,10 @@
 		WHERE
 		1=1
         <if test="code!=null and code !='' ">
-            and a.srld_code like concat( #{code}, '%')
+            and a.srld_code like concat( '%',#{code}, '%')
         </if>
 		<if test="param!=null and param !='' ">
-			and  b.lp_code like concat( #{param}, '%')
+			and  b.lp_code like concat('%', #{param}, '%')
 		</if>
 
 		<if test="redlineId!=null  ">
