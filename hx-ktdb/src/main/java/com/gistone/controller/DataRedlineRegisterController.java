@@ -59,8 +59,8 @@ public class DataRedlineRegisterController {
      * 临时
      */
     @RequestMapping(value = "delete1", method = RequestMethod.POST)
-    public Object delete1(Integer id) {
-        dataRedlineRegisterMapper.delete1(id);
+    public Object delete1(@RequestBody Map map) {
+        dataRedlineRegisterMapper.delete1(Integer.valueOf(map.get("id").toString()));
         return Result.ok();
     }
 
@@ -79,8 +79,8 @@ public class DataRedlineRegisterController {
      * 临时
      */
     @RequestMapping(value = "delete2", method = RequestMethod.POST)
-    public Object delete2(Integer id) {
-        lmMarkerMobileMapper.delete2(id);
+    public Object delete2(@RequestBody Map map) {
+        lmMarkerMobileMapper.delete2(Integer.valueOf(map.get("id").toString()));
         return Result.ok();
     }
 
@@ -100,8 +100,8 @@ public class DataRedlineRegisterController {
      * 临时
      */
     @RequestMapping(value = "delete3", method = RequestMethod.POST)
-    public Object delete3(Integer id) {
-        lmBoardMapper.delete3(id);
+    public Object delete3(@RequestBody Map map) {
+        lmBoardMapper.delete3(Integer.valueOf(map.get("id").toString()));
         return Result.ok();
     }
 
@@ -121,8 +121,8 @@ public class DataRedlineRegisterController {
      * 临时
      */
     @RequestMapping(value = "delete4", method = RequestMethod.POST)
-    public Object delete4(Integer id) {
-        lmPointMapper.delete4(id);
+    public Object delete4(@RequestBody Map map) {
+        lmPointMapper.delete4(Integer.valueOf(map.get("id").toString()));
         return Result.ok();
     }
 

@@ -123,15 +123,9 @@
 
     </insert>
 
-    <update id="delete1" parameterType="Object" >
-        update data_redline_register
-        <set>
-            srld_is_del=1,
-        </set>
-        where srld_id=#{id}
-    </update>
-
-
+    <delete id="delete1" parameterType="java.lang.Integer">
+		delete from data_redline_register where srld_id=#{id}
+	</delete>
 
 
 </mapper>
