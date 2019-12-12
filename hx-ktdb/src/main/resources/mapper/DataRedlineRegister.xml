@@ -128,7 +128,7 @@
         <set>
             srld_is_del=1,
         </set>
-        where srld_is_del=#{id}
+        where srld_id=#{id}
     </update>
 
 

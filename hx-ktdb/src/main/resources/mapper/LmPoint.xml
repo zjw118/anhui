@@ -229,7 +229,7 @@
 
 
 	<delete id="delete4" parameterType="java.lang.Integer">
-		delete from lm_point where id=#{id}
+		delete from lm_point where lp_id=#{id}
 	</delete>
 
 
