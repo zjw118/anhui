@@ -87,7 +87,7 @@ public class ImportRedlineData {
 //                int a = (int) b;
                 if(property.getName().toString().equals("Id")){
 
-                    model.setSrldId(Integer.parseInt(property.getValue().toString()));
+                    model.setSrldId(Long.valueOf(property.getValue().toString()));
                 }
                 if(property.getName().toString().equals("pac")){
                     model.setSrldCode(property.getValue().toString());
