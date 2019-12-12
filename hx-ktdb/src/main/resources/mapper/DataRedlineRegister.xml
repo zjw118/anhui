@@ -83,7 +83,6 @@
     <insert id="add1" parameterType="com.gistone.entity.DataRedlineRegister">
         INSERT INTO data_redline_register
         (
-            srld_id,
             srld_number,
             srld_code,
             srld_name,
@@ -104,7 +103,6 @@
             srld_did
         )
         VALUES(
-            #{srld_id},
             #{srld_number},
             #{srld_code},
             #{srld_name},

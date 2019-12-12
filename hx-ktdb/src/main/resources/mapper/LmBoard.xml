@@ -139,7 +139,6 @@
     <insert id="add3" parameterType="com.gistone.entity.LmMarkerMobile">
         INSERT INTO lm_marker_mobile
         (
-            id,
             redline_num,
             redline_id,
             code,
@@ -164,7 +163,6 @@
             object_id
         )
         VALUES(
-            #{id},
             #{redline_num},
             #{redline_id},
             #{code},

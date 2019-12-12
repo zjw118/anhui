@@ -201,7 +201,6 @@
 	<insert id="add4" parameterType="com.gistone.entity.LmPoint">
         INSERT INTO lm_point
         (
-			lp_id,
 			lp_code,
 			lp_srld_id,
 			lp_lon,
@@ -216,7 +215,6 @@
 			object_id
         )
         VALUES(
-        	#{lp_id},
 			#{lp_code},
 			#{lp_srld_id},
 			#{lp_lon},
