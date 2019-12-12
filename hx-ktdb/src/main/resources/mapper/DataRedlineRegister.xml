@@ -124,7 +124,7 @@
     </insert>
 
     <delete id="delete1" parameterType="java.lang.Integer">
-		delete from data_redline_register where srld_id=#{id}
+		delete from data_redline_register where srld_did=#{id}
 	</delete>
 
 
