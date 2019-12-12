@@ -40,23 +40,16 @@ public class UserController {
 
     @Autowired
     private ISt4SysSaService userService;
-
     @Autowired
     private ISt4SysSbService roleService;
-
-
     @Autowired
     private ISt4SysSjService unitService;
-
     @Autowired
     private ISt4SysScService moduleService;
-
     @Autowired
     private ISt4PoSaSbService sysUserRoleService;
-
     @Autowired
     private ISt4PoSaSjService sysUserUnitRelevantService;
-
     @Autowired
     private  ISt4SysShService st4SysShService;
     @Autowired

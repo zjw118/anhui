@@ -125,6 +125,10 @@ public class St4SysSa extends BaseEntity implements Serializable {
     private Integer sg001;
 
 
+    @TableField("role")
+    private Integer role;
+
+
     @ApiModelProperty(value = "行政区划Id")
     @TableField("SD001")
     private Integer sd001;
