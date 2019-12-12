@@ -71,6 +71,7 @@ public class DataRedlineRegisterController {
      */
     @RequestMapping(value = "add2", method = RequestMethod.POST)
     public Object add2(@RequestBody LmMarkerMobile lmMarkerMobile) {
+        lmMarkerMobile.setType(0);
         lmMarkerMobileMapper.add2(lmMarkerMobile);
         return Result.ok();
     }
@@ -91,7 +92,7 @@ public class DataRedlineRegisterController {
      */
     @RequestMapping(value = "add3", method = RequestMethod.POST)
     public Object add3(@RequestBody LmBoard LmBoard) {
-        System.out.println(LmBoard.toString());
+        LmBoard.setType(0);
         lmBoardMapper.add3(LmBoard);
         return Result.ok();
     }
