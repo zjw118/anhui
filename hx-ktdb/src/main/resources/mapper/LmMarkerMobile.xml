@@ -423,28 +423,28 @@
             object_id
         )
         VALUES(
-            #{jz_number},
-            #{jz_kh},
+            #{jzNumber},
+            #{jzKh},
             #{code},
             #{landform},
-            #{proof_lon},
-            #{proof_lat},
+            #{proofLon},
+            #{proofLat},
             #{longitude},
             #{latitude},
-            #{redline_id},
+            #{redlineId},
             #{remark},
-            #{position_picture},
-            #{verify_person},
-            #{verify_time},
-            #{create_user},
-            #{save_time},
-            #{create_time},
-            #{update_time},
+            #{positionPicture},
+            #{verifyPerson},
+            #{verifyTime},
+            #{createUser},
+            #{saveTime},
+            #{createTime},
+            #{updateTime},
             #{type},
-            #{word_url},
-            #{is_bs},
-            #{file_url},
-            #{object_id}
+            #{wordUrl},
+            #{isBs},
+            #{fileUrl},
+            #{objectId}
         )
 
     </insert>

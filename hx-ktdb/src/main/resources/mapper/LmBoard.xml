@@ -163,28 +163,28 @@
             object_id
         )
         VALUES(
-            #{redline_num},
-            #{redline_id},
+            #{redlineNum},
+            #{redlineId},
             #{code},
             #{content},
             #{number},
-            #{proof_lon},
-            #{proof_lat},
+            #{proofLon},
+            #{proofLat},
             #{longitude},
-            #{file_url},
+            #{fileUrl},
             #{type},
             #{latitude},
-            #{create_date},
-            #{create_by},
-            #{verify_by},
-            #{save_date},
-            #{verify_date},
-            #{update_by},
-            #{update_date},
+            #{createDate},
+            #{createBy},
+            #{verifyBy},
+            #{saveDate},
+            #{verifyDate},
+            #{updateBy},
+            #{updateDate},
             #{remarks},
-            #{verify_person},
-            #{word_url},
-            #{object_id}
+            #{verifyPerson},
+            #{wordUrl},
+            #{objectId}
         )
 
     </insert>

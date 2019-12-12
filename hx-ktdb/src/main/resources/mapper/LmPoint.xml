@@ -215,18 +215,18 @@
 			object_id
         )
         VALUES(
-			#{lp_code},
-			#{lp_srld_id},
-			#{lp_lon},
-			#{lp_lat},
-			#{lp_x},
-			#{lp_y},
-			#{lp_getTime},
-			#{lp_add_uid},
-			#{lp_add_time},
-			#{lp_upd_uid},
-			#{lp_upd_time},
-			#{object_id}
+			#{lpCode},
+			#{lpSrldId},
+			#{lpLon},
+			#{lpLat},
+			#{lpX},
+			#{lpY},
+			#{lpGetTime},
+			#{lpAddUid},
+			#{lpAddTime},
+			#{lpUpdUid},
+			#{lpUpdTime},
+			#{objectId}
         )
 
     </insert>

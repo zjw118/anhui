@@ -103,24 +103,24 @@
             srld_did
         )
         VALUES(
-            #{srld_number},
-            #{srld_code},
-            #{srld_name},
-            #{srld_population},
-            #{srld_type},
+            #{srldNumber},
+            #{srldCode},
+            #{srldName},
+            #{srldPopulation},
+            #{srldType},
             #{target},
-            #{srld_target},
-            #{srld_position},
-            #{srld_area},
-            #{srld_plant_type},
-            #{srld_active},
-            #{srld_problem},
-            #{srld_control},
-            #{srld_add_time},
-            #{srld_add_uid},
-            #{area_redline},
-            #{srld_shpBatch_id},
-            #{srld_did}
+            #{srldTarget},
+            #{srldPosition},
+            #{srldArea},
+            #{srldPlantType},
+            #{srldActive},
+            #{srldProblem},
+            #{srldControl},
+            #{srldAddTime},
+            #{srldAddUid},
+            #{areaRedline},
+            #{srldShpBatchId},
+            #{srldDid}
         )
 
     </insert>
