@@ -136,8 +136,8 @@
     </update>
 
 
-    <insert id="add3" parameterType="com.gistone.entity.LmMarkerMobile">
-        INSERT INTO lm_marker_mobile
+    <insert id="add3" parameterType="com.gistone.entity.LmBoard">
+        INSERT INTO lm_board
         (
             redline_num,
             redline_id,
@@ -191,7 +191,7 @@
 
 
     <delete id="delete3" parameterType="java.lang.Integer">
-		delete from lm_marker_mobile where id=#{id}
+		delete from lm_board where id=#{id}
 	</delete>
 
 

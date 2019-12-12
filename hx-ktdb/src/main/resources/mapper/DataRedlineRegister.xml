@@ -99,8 +99,7 @@
             srld_add_time,
             srld_add_uid,
             area_redline,
-            srld_shpBatch_id,
-            srld_did
+            srld_shpBatch_id
         )
         VALUES(
             #{srldNumber},
@@ -119,8 +118,7 @@
             #{srldAddTime},
             #{srldAddUid},
             #{areaRedline},
-            #{srldShpBatchId},
-            #{srldDid}
+            #{srldShpBatchId}
         )
 
     </insert>

@@ -1,6 +1,7 @@
 package com.gistone.entity;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -22,19 +23,20 @@ import java.util.Date;
 @Data
 public class DataRedlineRegister extends Model<DataRedlineRegister> implements Serializable {
 
-//    @TableId(value = "srld_id", type = IdType.AUTO)
     private static final long serialVersionUID = 1L;
+
+
+    //主键
+    @TableId(value = "srld_did", type = IdType.AUTO)
+    private Integer srldDid;
 
     /**
      * 唯一主键
      */
     @TableId(value = "srld_id")
-    //关联字段
-    private Integer srldId;
+    private Long srldId;
 
-    //主键
-    @TableField(value = "srld_did")
-    private Integer srldDid;
+
     /**
      * 市级行政区划
      */

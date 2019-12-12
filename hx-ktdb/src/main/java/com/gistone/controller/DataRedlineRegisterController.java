@@ -49,7 +49,8 @@ public class DataRedlineRegisterController {
      * 临时
      */
     @RequestMapping(value = "add1", method = RequestMethod.POST)
-    public Object add1(DataRedlineRegister dataRedlineRegister) {
+    public Object add1(@RequestBody DataRedlineRegister dataRedlineRegister) {
+
         dataRedlineRegisterMapper.add1(dataRedlineRegister);
         return Result.ok();
     }
@@ -58,8 +59,8 @@ public class DataRedlineRegisterController {
      * 临时
      */
     @RequestMapping(value = "delete1", method = RequestMethod.POST)
-    public Object delete1(Object id) {
-        dataRedlineRegisterMapper.delete1(Integer.valueOf(id.toString()));
+    public Object delete1(Integer id) {
+        dataRedlineRegisterMapper.delete1(id);
         return Result.ok();
     }
 
@@ -69,7 +70,7 @@ public class DataRedlineRegisterController {
      * 临时
      */
     @RequestMapping(value = "add2", method = RequestMethod.POST)
-    public Object add2(LmMarkerMobile lmMarkerMobile) {
+    public Object add2(@RequestBody LmMarkerMobile lmMarkerMobile) {
         lmMarkerMobileMapper.add2(lmMarkerMobile);
         return Result.ok();
     }
@@ -78,8 +79,8 @@ public class DataRedlineRegisterController {
      * 临时
      */
     @RequestMapping(value = "delete2", method = RequestMethod.POST)
-    public Object delete2(Object id) {
-        lmMarkerMobileMapper.delete2(Integer.valueOf(id.toString()));
+    public Object delete2(Integer id) {
+        lmMarkerMobileMapper.delete2(id);
         return Result.ok();
     }
 
@@ -89,7 +90,8 @@ public class DataRedlineRegisterController {
      * 临时
      */
     @RequestMapping(value = "add3", method = RequestMethod.POST)
-    public Object add3(LmBoard LmBoard) {
+    public Object add3(@RequestBody LmBoard LmBoard) {
+        System.out.println(LmBoard.toString());
         lmBoardMapper.add3(LmBoard);
         return Result.ok();
     }
@@ -98,8 +100,8 @@ public class DataRedlineRegisterController {
      * 临时
      */
     @RequestMapping(value = "delete3", method = RequestMethod.POST)
-    public Object delete3(Object id) {
-        lmBoardMapper.delete3(Integer.valueOf(id.toString()));
+    public Object delete3(Integer id) {
+        lmBoardMapper.delete3(id);
         return Result.ok();
     }
 
@@ -110,7 +112,7 @@ public class DataRedlineRegisterController {
      * 临时
      */
     @RequestMapping(value = "add4", method = RequestMethod.POST)
-    public Object add4(LmPoint LmPoint) {
+    public Object add4(@RequestBody LmPoint LmPoint) {
         lmPointMapper.add4(LmPoint);
         return Result.ok();
     }
@@ -119,8 +121,8 @@ public class DataRedlineRegisterController {
      * 临时
      */
     @RequestMapping(value = "delete4", method = RequestMethod.POST)
-    public Object delete4(Object id) {
-        lmPointMapper.delete4(Integer.valueOf(id.toString()));
+    public Object delete4(Integer id) {
+        lmPointMapper.delete4(id);
         return Result.ok();
     }
 
@@ -130,22 +132,22 @@ public class DataRedlineRegisterController {
      * @return
      */
     @RequestMapping(value = "add5", method = RequestMethod.POST)
-    public Object add5(LsX lsX) {
+    public Object add5(@RequestBody LsX lsX) {
         lsXMapper.add(lsX);
         return Result.ok();
     }
     @RequestMapping(value = "delete5", method = RequestMethod.POST)
-    public Object delete5(LsX lsX) {
+    public Object delete5(@RequestBody LsX lsX) {
         lsXMapper.delete(lsX);
         return Result.ok();
     }
     @RequestMapping(value = "update5", method = RequestMethod.POST)
-    public Object update5(LsX lsX) {
+    public Object update5(@RequestBody LsX lsX) {
         lsXMapper.update(lsX);
         return Result.ok();
     }
     @RequestMapping(value = "get5", method = RequestMethod.POST)
-    public Object get5(LsX lsX) {
+    public Object get5(@RequestBody LsX lsX) {
         return Result.ok(lsXMapper.get(lsX));
     }
 

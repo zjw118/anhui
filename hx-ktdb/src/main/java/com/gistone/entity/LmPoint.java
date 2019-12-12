@@ -54,6 +54,7 @@ public class LmPoint implements Serializable {
      */
     @TableField("lp_getTime")
     private Date lpGettime;
+
     @TableField("lp_add_uid")
     private Integer lpAddUid;
 

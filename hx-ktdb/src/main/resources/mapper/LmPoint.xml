@@ -207,12 +207,10 @@
 			lp_lat,
 			lp_x,
 			lp_y,
-			lp_getTime,
 			lp_add_uid,
 			lp_add_time,
 			lp_upd_uid,
-			lp_upd_time,
-			object_id
+			lp_upd_time
         )
         VALUES(
 			#{lpCode},
@@ -221,12 +219,10 @@
 			#{lpLat},
 			#{lpX},
 			#{lpY},
-			#{lpGetTime},
 			#{lpAddUid},
 			#{lpAddTime},
 			#{lpUpdUid},
-			#{lpUpdTime},
-			#{objectId}
+			#{lpUpdTime}
         )
 
     </insert>
