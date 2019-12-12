@@ -25,6 +25,7 @@
         <result column="SA020" property="sa020" jdbcType="INTEGER" />
         <result column="SG001" property="sg001" jdbcType="INTEGER" />
         <result column="SD001" property="sd001" jdbcType="INTEGER" />
+        <result column="role" property="role" jdbcType="INTEGER" />
         <association property="sysCompany" javaType="com.gistone.entity.SysCompany">
             <id column="PK_ID" property="pkId" />
             <result column="COM_NAME" property="comName" />
@@ -127,7 +128,7 @@
   </delete>
     <select id="listUser" resultMap="BaseResultMap" >
         select
-        <include refid="Base_Column_List1" />,com.*
+        <include refid="Base_Column_List1" />,com.*,sa.role
         from  st4_sys_sa sa left join sys_company com
         ON sa.SD001 = com.COM_CODE
         where SA007 = 1
