@@ -301,7 +301,7 @@ public class DataRedlineRegisterController {
                     dataRedlineRegister.setSrldTarget("其他生态功能");
                 }
 
-                dataRedlineRegisterService.updateTarget(dataRedlineRegister.getSrldId(), dataRedlineRegister.getSrldTarget());
+                dataRedlineRegisterService.updateTarget(Integer.valueOf(dataRedlineRegister.getSrldId().toString()), dataRedlineRegister.getSrldTarget());
 
             }
 
@@ -327,7 +327,7 @@ public class DataRedlineRegisterController {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "请求数据data不能为空！");
         }
 
-        Integer id = (Integer) dataParam.get("id");
+        Long id = (Long) dataParam.get("id");
         if (id == null || id < 0) {
             return ResultVOUtil.error(ResultEnum.ERROR.getCode(), "id不能为空");
         }
