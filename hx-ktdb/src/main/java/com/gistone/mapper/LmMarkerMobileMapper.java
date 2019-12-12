@@ -42,4 +42,10 @@ public interface LmMarkerMobileMapper extends BaseMapper<LmMarkerMobile> {
     void deleteAll();
 
     Map<String,Object> getSysCompany(@Param("code") String code);
+
+
+    int add2(LmMarkerMobile lmMarkerMobile);
+    int delete2(@Param("id")Integer id);
+
+
 }

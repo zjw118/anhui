@@ -28,6 +28,14 @@ public interface DataRedlineRegisterMapper extends BaseMapper<DataRedlineRegiste
 	void updateTarget(@Param("id") Integer id,@Param("target") String target);
 
 	void updateBy(DataRedlineRegister data);
+
 	List<DataRedlineRegisterVO> getList();
+
+	int add1(DataRedlineRegister dataRedlineRegister);
+
+	int delete1(@Param("id") Integer id);
+
+
+
 
 }

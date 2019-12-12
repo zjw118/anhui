@@ -3,7 +3,8 @@ package com.gistone.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gistone.VO.ResultVO;
-import com.gistone.entity.DataRedlineRegister;
+import com.gistone.entity.*;
+import com.gistone.mapper.*;
 import com.gistone.service.IDataRedlineRegisterService;
 import com.gistone.service.ILmPointService;
 import com.gistone.util.*;
@@ -25,14 +26,136 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/ktdb/dataRedlineRegister")
 public class DataRedlineRegisterController {
-
     @Autowired
     private IDataRedlineRegisterService dataRedlineRegisterService;
-
     @Autowired
     private ILmPointService iLmPointService;
     @Autowired
     private ConfigUtils configUtils;
+    @Autowired
+    private DataRedlineRegisterMapper dataRedlineRegisterMapper;
+    @Autowired
+    private LmMarkerMobileMapper lmMarkerMobileMapper;
+    @Autowired
+    private LmBoardMapper lmBoardMapper;
+    @Autowired
+    private LmPointMapper lmPointMapper;
+    @Autowired
+    private LsXMapper lsXMapper;
+
+
+    /**
+     * 红线斑块 添加
+     * 临时
+     */
+    @RequestMapping(value = "add1", method = RequestMethod.POST)
+    public Object add1(DataRedlineRegister dataRedlineRegister) {
+        dataRedlineRegisterMapper.add1(dataRedlineRegister);
+        return Result.ok();
+    }
+    /**
+     * 红线斑块 删除
+     * 临时
+     */
+    @RequestMapping(value = "delete1", method = RequestMethod.POST)
+    public Object delete1(Object id) {
+        dataRedlineRegisterMapper.delete1(Integer.valueOf(id.toString()));
+        return Result.ok();
+    }
+
+
+    /**
+     * 界桩 添加
+     * 临时
+     */
+    @RequestMapping(value = "add2", method = RequestMethod.POST)
+    public Object add2(LmMarkerMobile lmMarkerMobile) {
+        lmMarkerMobileMapper.add2(lmMarkerMobile);
+        return Result.ok();
+    }
+    /**
+     * 界桩 删除
+     * 临时
+     */
+    @RequestMapping(value = "delete2", method = RequestMethod.POST)
+    public Object delete2(Object id) {
+        lmMarkerMobileMapper.delete2(Integer.valueOf(id.toString()));
+        return Result.ok();
+    }
+
+
+    /**
+     * 标识牌 添加
+     * 临时
+     */
+    @RequestMapping(value = "add3", method = RequestMethod.POST)
+    public Object add3(LmBoard LmBoard) {
+        lmBoardMapper.add3(LmBoard);
+        return Result.ok();
+    }
+    /**
+     * 标识牌  删除
+     * 临时
+     */
+    @RequestMapping(value = "delete3", method = RequestMethod.POST)
+    public Object delete3(Object id) {
+        lmBoardMapper.delete3(Integer.valueOf(id.toString()));
+        return Result.ok();
+    }
+
+
+
+    /**
+     * 标识牌 添加
+     * 临时
+     */
+    @RequestMapping(value = "add4", method = RequestMethod.POST)
+    public Object add4(LmPoint LmPoint) {
+        lmPointMapper.add4(LmPoint);
+        return Result.ok();
+    }
+    /**
+     * 标识牌  删除
+     * 临时
+     */
+    @RequestMapping(value = "delete4", method = RequestMethod.POST)
+    public Object delete4(Object id) {
+        lmPointMapper.delete4(Integer.valueOf(id.toString()));
+        return Result.ok();
+    }
+
+
+    /**
+     * 临时  可删除
+     * @return
+     */
+    @RequestMapping(value = "add5", method = RequestMethod.POST)
+    public Object add5(LsX lsX) {
+        lsXMapper.add(lsX);
+        return Result.ok();
+    }
+    @RequestMapping(value = "delete5", method = RequestMethod.POST)
+    public Object delete5(LsX lsX) {
+        lsXMapper.delete(lsX);
+        return Result.ok();
+    }
+    @RequestMapping(value = "update5", method = RequestMethod.POST)
+    public Object update5(LsX lsX) {
+        lsXMapper.update(lsX);
+        return Result.ok();
+    }
+    @RequestMapping(value = "get5", method = RequestMethod.POST)
+    public Object get5(LsX lsX) {
+        return Result.ok(lsXMapper.get(lsX));
+    }
+
+
+
+
+
+
+
+
 
 
     /**

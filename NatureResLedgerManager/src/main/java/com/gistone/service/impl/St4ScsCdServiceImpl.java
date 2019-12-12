@@ -616,15 +616,17 @@ public class St4ScsCdServiceImpl extends ServiceImpl<St4ScsCdMapper, St4ScsCd> i
                 String j = "0";
                 if(null!=attributes.get(type_j))
                     j = ShpUtil.DddToDms(Double.valueOf(attributes.get(type_j).toString()));
-                String type = "未识别类型";
-                if(null!=attributes.get(type_type))
-                    type = attributes.get(type_type).toString();
 
-                ImageConfig ic = imageConfigMapper.like(type);
-                if(null!=ic){
-                    jSONObject1.put("type",ic.getId());
+                if(null!=attributes.get(type_type)){
+                    String type = attributes.get(type_type).toString();
+                    ImageConfig ic = imageConfigMapper.like(type);
+                    if(null!=ic){
+                        jSONObject1.put("type",ic.getId());
+                    }else{
+                        jSONObject1.put("type",imageConfigMapper.like("未识别类型").getId());
+                    }
                 }else{
-                    jSONObject1.put("type",imageConfigMapper.like("未识别类型").getId());
+                    jSONObject1.put("type",0);
                 }
 
 

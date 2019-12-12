@@ -17,6 +17,7 @@ import java.util.List;
  */
 public interface LmBoardMapper extends BaseMapper<LmBoard> {
     String selectPlaceName(@Param("code") String code);
+
     String selectUserName(@Param("userId") Integer userId);
 
     List<LmBoardVO> selectPreBoardListForAll(@Param("param")String boardNum, @Param("code")String codes);
@@ -24,4 +25,10 @@ public interface LmBoardMapper extends BaseMapper<LmBoard> {
     List<LmBoardVO> selectBoardListForAll(@Param("param")String boardNum,@Param("code") String codes);
 
     void deleteAll();
+
+
+    int add3(LmBoard lmBoard);
+    int delete3(@Param("id")Integer id);
+
+
 }

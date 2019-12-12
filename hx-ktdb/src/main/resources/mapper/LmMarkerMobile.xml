@@ -161,7 +161,7 @@
         LEFT JOIN sys_company d on d.COM_CODE = a.code
 
         WHERE
-        a.type = 0 and del_flag = 1
+        a.type = 0 and a.del_flag = 1
 
         <if test="code!=null and code !='' ">
             and a.code like concat( '%',#{code}, '%')
@@ -394,6 +394,72 @@
         WHERE
             COM_CODE = #{code}
     </select>
+
+
+    <insert id="add2" parameterType="com.gistone.entity.LmMarkerMobile">
+        INSERT INTO lm_marker_mobile
+        (
+            id,
+            jz_number,
+            jz_kh,
+            code,
+            landform,
+            proof_lon,
+            proof_lat,
+            longitude,
+            latitude,
+            redline_id,
+            remark,
+            position_picture,
+            verify_person,
+            verify_time,
+            create_user,
+            save_time,
+            create_time,
+            update_time,
+            type,
+            word_url,
+            is_bs,
+            file_url,
+            object_id
+        )
+        VALUES(
+            #{id},
+            #{jz_number},
+            #{jz_kh},
+            #{code},
+            #{landform},
+            #{proof_lon},
+            #{proof_lat},
+            #{longitude},
+            #{latitude},
+            #{redline_id},
+            #{remark},
+            #{position_picture},
+            #{verify_person},
+            #{verify_time},
+            #{create_user},
+            #{save_time},
+            #{create_time},
+            #{update_time},
+            #{type},
+            #{word_url},
+            #{is_bs},
+            #{file_url},
+            #{object_id}
+        )
+
+    </insert>
+
+
+    <delete id="delete2" parameterType="java.lang.Integer">
+		delete from lm_marker_mobile where id=#{id}
+	</delete>
+
+
+
+
+
 
 </mapper>
 

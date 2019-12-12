@@ -59,6 +59,7 @@ public class DataRedlineRegisterServiceImpl extends ServiceImpl<DataRedlineRegis
 		if (StringUtils.isNotBlank(code)) {
 			wrapper.likeRight("srld_code", code);
 		}
+		wrapper.eq("srld_is_del","0");
 
 		IPage<DataRedlineRegister> IPage = dataRedlineRegisterMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
 

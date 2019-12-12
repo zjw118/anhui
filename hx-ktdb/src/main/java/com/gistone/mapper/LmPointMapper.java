@@ -2,6 +2,7 @@ package com.gistone.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.gistone.entity.EXCEL.LmPointVO;
+import com.gistone.entity.LmBoard;
 import com.gistone.entity.LmPoint;
 
 import java.util.List;
@@ -41,4 +42,10 @@ public interface LmPointMapper extends BaseMapper<LmPoint> {
 	Integer selectLevelByCode(String code);
 
 	List<LmPointVO> selectPointListForAll(@Param("code")String codes, @Param("param")String param,@Param("redlineId") Integer redlineId);
+
+
+
+	int add4(LmPoint lmPoint);
+	int delete4(@Param("id")Integer id);
+
 }

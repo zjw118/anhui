@@ -135,4 +135,67 @@
         where type = 0
     </update>
 
+
+    <insert id="add3" parameterType="com.gistone.entity.LmMarkerMobile">
+        INSERT INTO lm_marker_mobile
+        (
+            id,
+            redline_num,
+            redline_id,
+            code,
+            content,
+            number,
+            proof_lon,
+            proof_lat,
+            longitude,
+            file_url,
+            type,
+            latitude,
+            create_date,
+            create_by,
+            verify_by,
+            save_date,
+            verify_date,
+            update_by,
+            update_date,
+            remarks,
+            verify_person,
+            word_url,
+            object_id
+        )
+        VALUES(
+            #{id},
+            #{redline_num},
+            #{redline_id},
+            #{code},
+            #{content},
+            #{number},
+            #{proof_lon},
+            #{proof_lat},
+            #{longitude},
+            #{file_url},
+            #{type},
+            #{latitude},
+            #{create_date},
+            #{create_by},
+            #{verify_by},
+            #{save_date},
+            #{verify_date},
+            #{update_by},
+            #{update_date},
+            #{remarks},
+            #{verify_person},
+            #{word_url},
+            #{object_id}
+        )
+
+    </insert>
+
+
+    <delete id="delete3" parameterType="java.lang.Integer">
+		delete from lm_marker_mobile where id=#{id}
+	</delete>
+
+
+
 </mapper>
