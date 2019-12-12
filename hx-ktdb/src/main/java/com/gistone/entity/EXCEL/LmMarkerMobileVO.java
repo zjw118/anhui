@@ -9,8 +9,6 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class LmMarkerMobileVO {
-
-
     /**
      * id
      */
@@ -20,18 +18,18 @@ public class LmMarkerMobileVO {
     /**
      * 界桩编号
      */
-    @Excel(name = "界桩编号",height = 11, width = 15)
+    @Excel(name = "预设界桩编号",height = 11, width = 15)
     private String jzNumber;
 
     /**
      * 界桩刻号
      */
-    @Excel(name = "界桩刻号",height = 11, width = 15)
+    @Excel(name = "预设界桩刻号",height = 11, width = 15)
     private String jzKh;
     /**
      * 行政区划
      */
-    @Excel(name = "行政区划",height = 11, width = 15)
+
     private String code;
     /**
      * 是否为界桩 0不是，1是
@@ -65,7 +63,7 @@ public class LmMarkerMobileVO {
     /**
      * 所在红线区
      */
-    @Excel(name = "所在红线区",height = 11, width = 15)
+    @Excel(name = "所在红线斑块",height = 11, width = 15)
     private String redlineName;
 
     /**
@@ -136,16 +134,12 @@ public class LmMarkerMobileVO {
     /*@Excel(name = "界桩与方位物位置信息",height = 11, width = 15)
     private List<LmMarkerRelationPosition> lmMarkerRelationPositions;*/
 
+
     /**
-     * 记录类型，0预置数据，1采集数据
-     */
-    /*@Excel(name = "记录类型",replace = {"预置数据_0", "采集数据_1"},height = 11, width = 15)
-    private Integer type;
-    *//**
      * 所属地方名
-     *//*
-    @Excel(name = "所属地方名",height = 11, width = 15)
-    private String placeName;*/
+     */
+    @Excel(name = "行政区划",height = 11, width = 15)
+    private String placeName;
 
 
 

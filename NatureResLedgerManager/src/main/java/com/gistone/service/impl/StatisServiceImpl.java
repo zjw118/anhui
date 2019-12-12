@@ -25,10 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -75,41 +72,40 @@ public class StatisServiceImpl extends ServiceImpl<St4ScsCyMapper, St4ScsCy> imp
 
     @Override
     public ResultVO pointQualityExport(RlhdGroup cl, HttpServletResponse response) {
-        List<Map> mapOrign = st4ScsCdMapper.pointQualityOrginExport(cl);
-        List<Map> mapNow = st4ScsCdMapper.pointQualityNowExport(cl);
-        List<ActivityVo> voList = new ArrayList<>();
-        ActivityVo vo = null;
-        if(mapOrign!=null&&mapOrign.size()>0){
-            for (Map map:mapOrign) {
-                vo = new ActivityVo();
-                String orgin = map.get("orign")==null?"":map.get("orign").toString();
-                vo.setOrign(orgin);
-                vo.setOrignCount(map.get("orignCount").toString());
-                vo.setNows("");
-                vo.setNowsCount("0");
-                if(mapNow!=null&&mapNow.size()>0){
-                    for (Map map1:mapNow) {
-                        String now = map1.get("nows")==null?"":map1.get("nows").toString();
-                        if(ObjectUtils.isNotNullAndEmpty(orgin)&&ObjectUtils.isNotNullAndEmpty(now)){
-                            if(orgin.equals(now)){
-                                vo.setNows(now);
-                                vo.setNowsCount(map1.get("nowsCount").toString());
-                            }
-                        }else {
-                            vo.setNows("");
-                            vo.setNowsCount("0");
-                        }
-                    }
+        //List<Map> cds= st4ScsCdMapper.pointQualityOrginAndNow(rl);
+        List<StaticHelp> cdsOrgin = st4ScsCdMapper.pointQualityOrgin(cl);
+        List<StaticHelp> cdsNow = st4ScsCdMapper.pointQualityNow(cl);
+        Set<StaticHelp> cdsOrginR = new HashSet<>();
+        StaticHelp sh = null;
+        if(cdsNow!=null&&cdsNow.size()>0){
+//            List<String> cd001s = cdsOrgin.stream().map(StaticHelp::getCd001).collect(Collectors.toList());
+//            List<String> cd001sNow = cdsNow.stream().map(StaticHelp::getCd001).collect(Collectors.toList());
 
-                }else {
-                    vo.setNows("");
-                    vo.setNowsCount("0");
+            for (StaticHelp shNow:cdsNow) {
+
+                for (StaticHelp shOrg:cdsOrgin) {
+                    if(shOrg.getName().equals(shNow.getName())){
+                        shOrg.setNowsCount(shNow.getNowsCount());
+                    }else if(shOrg.getNowsCount()==null) {
+                        shOrg.setNowsCount("0");
+                    }else {
+                    }
+                    cdsOrginR.add(shOrg);
+
                 }
-                voList.add(vo);
+                cdsOrginR.add(shNow);
+
             }
 
+        }else{
+            cdsOrgin.forEach(aa->{
+                aa.setNowsCount("0");
+                cdsOrginR.add(aa);
+            });
+
+            //cdsOrginR=cdsOrgin;
         }
-        String filepath = ExcelUtil.toXls("人类活动巡查结果质量评估统计表", voList, configUtils.getExcel_PATH(), ActivityVo.class, response);
+        String filepath = ExcelUtil.toXlsSet("人类活动巡查结果质量评估统计表", cdsOrginR, configUtils.getExcel_PATH(), StaticHelp.class, response);
         Map map1 = new HashMap();
         map1.put("filepath", filepath.substring(2));
         return ResultVOUtil.success(map1);

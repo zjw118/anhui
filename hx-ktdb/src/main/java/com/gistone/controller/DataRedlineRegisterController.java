@@ -2,7 +2,6 @@ package com.gistone.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.gistone.VO.DataRedlineRegisterVO;
 import com.gistone.VO.ResultVO;
 import com.gistone.entity.DataRedlineRegister;
 import com.gistone.service.IDataRedlineRegisterService;
@@ -305,9 +304,37 @@ public class DataRedlineRegisterController {
     }
 
     @PostMapping("/exportredlineExcel")
-    public ResultVO exportredlineExcel(HttpServletResponse response){
-        List<DataRedlineRegisterVO> list = dataRedlineRegisterService.getList();
-        String filepath = ExcelUtil.toXls("预设红线斑块", list, configUtils.getExcel_PATH(), DataRedlineRegisterVO.class, response);
+    public ResultVO exportredlineExcel(@RequestBody Map<String, Object> paramsMap,HttpServletResponse response){
+
+        //请求参数格式校验
+        Map<String, Object> dataParam = (Map<String, Object>) paramsMap.get("data");
+        if (dataParam == null) {
+            return ResultVOUtil.error(ResultEnum.PARAMETEREMPTY.getCode(), "请求数据data不能为空！");
+        }
+        String param = (String) dataParam.get("param");
+
+        String code = (String) dataParam.get("code");
+
+        //截取code做模糊查询
+        String codes = null;
+        if (StringUtils.isNotBlank(code)) {
+            Integer level = iLmPointService.getLevelByCode(code);
+            if (level != null && level > 0) {
+                if (level == 1) {
+                    codes = code.substring(0, 2);
+                } else if (level == 2) {
+                    codes = code.substring(0, 4);
+                } else {
+                    codes = code;
+                }
+            } else {
+                codes = code;
+            }
+        }
+
+
+        List<DataRedlineRegister> list = dataRedlineRegisterService.getList(param,codes);
+        String filepath = ExcelUtil.toXls("预设红线斑块", list, configUtils.getExcel_PATH(), DataRedlineRegister.class, response);
         Map map1 = new HashMap();
         map1.put("filepath", filepath.substring(2));
         return ResultVOUtil.success(map1);

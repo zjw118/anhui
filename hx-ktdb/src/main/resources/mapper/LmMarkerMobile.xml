@@ -164,11 +164,11 @@
         a.type = 0 and del_flag = 1
 
         <if test="code!=null and code !='' ">
-            and a.code like concat( #{code}, '%')
+            and a.code like concat( '%',#{code}, '%')
         </if>
 
         <if test="param!=null and param !='' ">
-            and (c.srld_name=#{param} or a.jz_number  like concat( #{param}, '%'))
+            and (c.srld_name=#{param} or a.jz_number  like concat('%',#{param}, '%'))
         </if>
 
         limit #{startNum},#{pageSize}
@@ -214,11 +214,13 @@
         WHERE
         a.type = 0
 
+
         <if test="code!=null and code !='' ">
-            and a.code like concat( #{code}, '%')
+            and a.code like concat( '%',#{code}, '%')
         </if>
+
         <if test="param!=null and param !='' ">
-            and (c.srld_name=#{param} or a.jz_number = #{param})
+            and (c.srld_name=#{param} or a.jz_number  like concat('%',#{param}, '%'))
         </if>
     </select>
 
@@ -331,11 +333,11 @@
         WHERE
         a.type = 0 AND del_flag = 1
         <if test="code!=null and code !='' ">
-            and a.code like concat( #{code}, '%')
+            and a.code like concat('%', #{code}, '%')
         </if>
 
         <if test="param!=null and param !='' ">
-            and (c.srld_name=#{param} or a.jz_number = #{param})
+            and a.jz_number like concat('%', #{param}, '%')
         </if>
     </select>
 
@@ -368,11 +370,11 @@
         WHERE
         a.type = 1 AND del_flag = 1
         <if test="code!=null and code !='' ">
-            and a.code like concat( #{code}, '%')
+            and a.code like concat('%' ,#{code}, '%')
         </if>
 
         <if test="param!=null and param !='' ">
-            and (c.srld_name=#{param} or a.jz_number = #{param})
+            and a.jz_number like concat('%' ,#{param}, '%')
         </if>
     </select>
 

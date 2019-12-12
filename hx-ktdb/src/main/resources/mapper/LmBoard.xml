@@ -77,10 +77,10 @@
             WHERE
             a.del_flag = 1	AND a.type = 0
         <if test="code!=null and code !='' ">
-            and a.code like concat( #{code}, '%')
+            and a.code like concat('%', #{code}, '%')
         </if>
         <if test="param!=null and param !='' ">
-            and (b.srld_name=#{param} or a.number = #{param})
+            and  a.number like concat('%', #{param}, '%')
         </if>
     </select>
 

@@ -54,7 +54,7 @@ public class DataRedlineRegisterServiceImpl extends ServiceImpl<DataRedlineRegis
 		QueryWrapper<DataRedlineRegister> wrapper = new QueryWrapper<>();
 		Map<String, Object> result = new HashMap<>();
 		if (StringUtils.isNotBlank(redLineName)) {
-			wrapper.likeRight("srld_number", redLineName);
+			wrapper.like("srld_number", redLineName);
 		}
 		if (StringUtils.isNotBlank(code)) {
 			wrapper.likeRight("srld_code", code);
@@ -78,8 +78,18 @@ public class DataRedlineRegisterServiceImpl extends ServiceImpl<DataRedlineRegis
 	}
 
 	@Override
-	public List<DataRedlineRegisterVO> getList() {
-		List<DataRedlineRegisterVO> list = 	dataRedlineRegisterMapper.getList();
+	public List<DataRedlineRegister> getList(String param,String code) {
+
+		QueryWrapper<DataRedlineRegister> wrapper = new QueryWrapper<>();
+		Map<String, Object> result = new HashMap<>();
+		if (StringUtils.isNotBlank(param)) {
+			wrapper.like("srld_number", param);
+		}
+		if (StringUtils.isNotBlank(code)) {
+			wrapper.likeRight("srld_code", code);
+		}
+
+		List<DataRedlineRegister> list = 	dataRedlineRegisterMapper.selectList(wrapper);
 		return list;
 	}
 

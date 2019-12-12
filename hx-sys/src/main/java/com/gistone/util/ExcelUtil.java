@@ -257,6 +257,53 @@ public class ExcelUtil {
         return filepath;
     }
 
+    /**
+     *
+     * @param excelName
+     * @param list
+     * @param filePath
+     * @param pojoClass
+     * @param response
+     * @return
+     */
+    public static String  toXlsSet(String excelName,Set list,String filePath,Class<?> pojoClass,HttpServletResponse response){
+        ExportParams params1 = new ExportParams() ;
+        params1.setSheetName(excelName);
+        Map<String,Object> dataMap1 = new HashMap<>();
+        dataMap1.put("title",params1) ;
+        dataMap1.put("entity",pojoClass) ;
+        dataMap1.put("data",list) ;
+        List<Map<String, Object>> sheetsList = new ArrayList<>() ;
+        sheetsList.add(dataMap1);
+
+        Workbook workbook = ExcelExportUtil.exportExcel(sheetsList, ExcelType.HSSF) ;
+        if(workbook == null) {
+            return "出现错误!";
+        }
+        response.reset();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String dateStr = excelName+"-"+sdf.format(new Date());
+        response.setHeader("Content-Disposition", "attachment;filename=" +dateStr+".xls");
+        response.setContentType("application/vnd.ms-excel;charset=UTF-8");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setDateHeader("Expires", 0);
+        File savefile = new File(filePath);
+        String filepath = null;
+        if (!savefile.exists()) {
+            savefile.mkdirs();
+        }
+        try {
+            filepath = filePath+ dateStr+".xls";
+            FileOutputStream fos = new FileOutputStream(filepath);
+            workbook.write(fos);
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return filepath;
+    }
+
 
 
 

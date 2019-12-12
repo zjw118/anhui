@@ -241,7 +241,7 @@ public class LmPointServiceImpl extends ServiceImpl<LmPointMapper, LmPoint> impl
 		Map<String,Object> result = new HashMap<>();
 		QueryWrapper<LmPoint> wrapper = new QueryWrapper<>();
 		if(StringUtils.isNotBlank(pointNum)){
-			wrapper.likeRight("lp_code",pointNum);
+			wrapper.like("lp_code",pointNum);
 		}
 
 		IPage<LmPoint> IPage = lmPointMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);

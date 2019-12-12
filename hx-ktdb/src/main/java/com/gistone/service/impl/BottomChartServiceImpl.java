@@ -39,7 +39,7 @@ public class BottomChartServiceImpl extends ServiceImpl<BottomChartMapper, Botto
 
         QueryWrapper<BottomChart> wrapper = new QueryWrapper<>();
         if (StringUtils.isNotBlank(name)) {
-            wrapper.likeRight("name", name);
+            wrapper.like("name", name);
         }
         //按创建日期倒序
         wrapper.orderByDesc("createDate");

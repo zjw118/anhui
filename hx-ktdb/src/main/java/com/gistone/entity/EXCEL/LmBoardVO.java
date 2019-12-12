@@ -19,7 +19,7 @@ public class LmBoardVO{
     /**
      * 红线编码
      */
-    @Excel(name = "红线编码",height = 11, width = 15)
+    @Excel(name = "所属红线斑块",height = 11, width = 15)
     private String redlineName;
 
 
@@ -52,8 +52,8 @@ public class LmBoardVO{
     /**
      * 编号
      */
-    @Excel(name = "编号",height = 11, width = 15)
-    private String number;
+    @Excel(name = "预设标识牌编号",height = 11, width = 15)
+    private String number ;
 
     /**
      * 校正经度
