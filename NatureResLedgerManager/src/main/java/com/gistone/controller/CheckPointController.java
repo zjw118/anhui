@@ -188,8 +188,18 @@ public class CheckPointController {
                 JSONObject attributes = JSONObject.fromObject(jo.get("attributes"));
                 JSONObject jSONObject1 = new JSONObject();
 
+                /*String type = "农业用地";
+                if(null!=attributes.get("type"))
+                    type = attributes.get("type").toString();
+
+                ImageConfig ic = imageConfigMapper.like(type);
+                if(null!=ic){
+                    jSONObject1.put("type",ic.getId());
+                }else{
+                    jSONObject1.put("type",imageConfigMapper.like("未识别类型").getId());
+                }*/
                 //匹配类型
-                String type = attributes.get("二级类") == null ? "":attributes.get("二级类").toString();
+           /*     String type = attributes.get("二级类") == null ? "":attributes.get("二级类").toString();
                 if("".equals(type)){
                     type = attributes.get("一级类") == null ? "":attributes.get("一级类").toString();
                 }
@@ -198,12 +208,14 @@ public class CheckPointController {
                     jSONObject1.put("type",ic.getId());
                 }else{
                     jSONObject1.put("type",59);
-                }
+                }*/
+                //20191212暂时将解译结果设置为农业用地
+                jSONObject1.put("type","1");
                 jSONObject1.put("region",attributes.get("region"));
                 jSONObject1.put("position",attributes.get("position"));
                 jSONObject1.put("area",attributes.get("area")+"");
                 area += Double.valueOf(attributes.get("area")+"");
-
+                //gp服务分析出斑块中心点，进行转换存储
                 String j = ShpUtil.DddToDms(attributes.get("CENTROID_X") == null ? null : Double.valueOf(attributes.get("CENTROID_X").toString()));
                 String w = ShpUtil.DddToDms(attributes.get("CENTROID_Y") == null ? null :Double.valueOf( attributes.get("CENTROID_Y").toString()));
                 //String j = ShpUtil.DddToDms(101.366);
