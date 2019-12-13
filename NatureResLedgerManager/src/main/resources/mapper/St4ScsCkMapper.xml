@@ -2537,8 +2537,9 @@ unEmaminedNum,emaminedNum,backNum,
 
     <!--app同步问题点用-->
     <select id="sysPointAndLedgerData" resultMap="BaseResultMap" >
-        SELECT  cp.CP002, ci.*, cl.*, cd.*
-        , cdsa.*, cn.*, ck3.CK002, ck3.CD004, ck3.SG001
+        SELECT cd.*
+        , cp.CP002, ci.*, cl.*,
+         cdsa.*, cn.*, ck3.CK002, ck3.CD004, ck3.SG001
         , ck3.CK005, ck3.CK006, ck3.CK007, ck3.CK008, ck3.CK009
         , ck3.CK010, ck3.CK011, ck3.CK012, ck3.CK013, ck3.CK014
         , ck3.CK015, ck3.CK016, ck3.CK017, ck3.CK018, ck3.CK019
