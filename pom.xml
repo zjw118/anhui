@@ -51,7 +51,7 @@
         <dom4j_version>1.6.1</dom4j_version>
         <java_unrar_version>1.7.0-1</java_unrar_version>
         <commons_logging_version>1.1.1</commons_logging_version>
-        <httpclient_version>4.4.1</httpclient_version>
+        <httpclient_version>4.5.13</httpclient_version>
         <fluent_hc_version>4.4.1</fluent_hc_version>
         <core_version>3.2.0</core_version>
         <kaptcha_version>2.3.2</kaptcha_version>
