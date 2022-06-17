@@ -40,7 +40,7 @@
         <jwt_version>3.8.0</jwt_version>
         <commons_fileupload_veriosn>1.3.1</commons_fileupload_veriosn>
         <jxl_version>2.6.12</jxl_version>
-        <fastjson_version>1.2.37</fastjson_version>
+        <fastjson_version>1.2.83</fastjson_version>
         <commons_io_version>2.4</commons_io_version>
         <net_sf_json_version>2.4</net_sf_json_version>
         <commons_fileupload_version>1.3.1</commons_fileupload_version>
